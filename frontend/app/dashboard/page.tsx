@@ -15,6 +15,9 @@ export default function Dashboard() {
       "image/jpeg",
       "image/jpg",
       "application/zip",
+      "video/mp4",
+      "video/quicktime",
+      "video/webm",
     ];
 
     // Extract images from zip files and filter out incompatible files
@@ -54,8 +57,8 @@ export default function Dashboard() {
           <div className="flex flex-col gap-4 items-center justify-center max-w-[20rem]">
             <ImagePlus size={100} />
             <p className="text-2xl font-medium">
-              Pick a project or drag and drop some images or a .zip to create a
-              new one
+              Pick a project or drag and drop some images, videos or a .zip to
+              create a new one
             </p>
           </div>
         </AppDropzone>

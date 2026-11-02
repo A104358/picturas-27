@@ -33,6 +33,21 @@ export interface RotateToolParams {
   degrees: number; // 0 - 360
 }
 
+// Trim (time cut, video only), in seconds
+export interface TrimToolParams {
+  start: number;
+  end: number;
+  // the video this trim belongs to: trim times only make sense per video
+  imgId: string;
+}
+
+// Playback speed (video only), from 0.25x to 5x
+export interface SpeedToolParams {
+  factor: number;
+  // the video this speed change belongs to
+  imgId: string;
+}
+
 export interface SaturationToolParams {
   saturationFactor: number; // 0.0 - 2.0 (1.0 normal image)
 }
@@ -71,6 +86,8 @@ export type ToolParams =
   | ResizeToolParams
   | RotateToolParams
   | SaturationToolParams
+  | TrimToolParams
+  | SpeedToolParams
   | ExpandAiParams
   | object;
 
@@ -92,4 +109,6 @@ export type ToolNames =
   | "obj_ai"
   | "people_ai"
   | "expand_ai"
+  | "trim"
+  | "speed"
   | "project";

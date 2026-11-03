@@ -111,7 +111,7 @@ export default function Project({
   const projectImgs = project.data?.imgs ?? [];
   const projectVideos = projectImgs.filter((i) => isVideo(i));
   const imageToolCount = (project.data?.tools ?? []).filter(
-    (t) => t.procedure !== "trim" && t.procedure !== "speed",
+    (t) => !["trim", "speed", "subtitles", "extract_frames"].includes(t.procedure),
   ).length;
   const totalProcessingSteps =
     imageToolCount * (projectImgs.length - projectVideos.length) + projectVideos.length;
@@ -307,12 +307,12 @@ useEffect(() => {
 
       const progress =
         totalProcessingSteps > 0
-          ? Math.min(Math.round((nextSteps * 100) / totalProcessingSteps), 100)
+          ? Math.min(Math.round(((nextSteps - 1) * 100) / totalProcessingSteps), 100)
           : 100;
 
       setProcessingProgress(progress);
 
-      if (nextSteps >= totalProcessingSteps) {
+      if (nextSteps - 1 >= totalProcessingSteps) {
         setTimeout(() => {
           if (ignoreUpdatesRef.current) {
             // cancelar medição
@@ -680,6 +680,7 @@ const handleCancel = () => {
                         "text_ai",
                         "upgrade_ai",
                         "expand_ai",
+                        "subtitles",
                       ];
 
                       processIsAiRef.current = project.data.tools.some((t) =>
@@ -691,9 +692,25 @@ const handleCancel = () => {
                           projectVersion: project.data.version
                         },
                         {
-                          onSuccess: () => {
+                          onSuccess: async (result) => {
                             ignoreUpdatesRef.current = false;
-                            setProcessing(true);
+                            if (result.completed) {
+                              await projectResults.refetch();
+                              setProcessing(false);
+                              setProcessingProgress(0);
+                              setProcessingSteps(1);
+                              setVideoProgress({});
+                              processStartTimeRef.current = null;
+                              processIsAiRef.current = false;
+                              setWaitingForPreview("__APPLY_DONE__");
+                              if (!isMobile) sidebar.setOpen(true);
+                              const params = new URLSearchParams(searchParams.toString());
+                              params.set("mode", "results");
+                              params.set("view", "grid");
+                              router.push(`?${params.toString()}`);
+                            } else {
+                              setProcessing(true);
+                            }
 
                             updateSession.mutate({
                               userId: session.user._id,
@@ -701,6 +718,10 @@ const handleCancel = () => {
                             });
                           },
                           onError: (error: unknown) => {
+                            setProcessing(false);
+                            setProcessingProgress(0);
+                            setProcessingSteps(1);
+                            setVideoProgress({});
                             if (processStartTimeRef.current !== null) {
                               const durationMs =
                                 performance.now() - processStartTimeRef.current;

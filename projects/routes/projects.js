@@ -63,7 +63,11 @@ const {
   videoPipeline,
   unsupportedVideoTools,
   videoOps,
+  validateFrameExtraction,
+  insertPipelineTool,
 } = require("../utils/video");
+const { persistFrameResults } = require("../utils/frameResults");
+const { dispatchProcessBatch } = require("../utils/processBatch");
 
 const storage = multer.memoryStorage();
 var upload = multer({ storage: storage });
@@ -196,7 +200,13 @@ function process_msg() {
       const og_img_uri = process.og_img_uri;
       const img_id = process.img_id;
       
-      await Process.delete(process.user_id, process.project_id, process._id);
+      const project = await Project.getOne(process.user_id, process.project_id);
+      const sourceIsVideo = project.imgs.some((img) => String(img._id) === String(img_id) && isVideoMedia(img));
+      // In extraction runs keep every source job visible until its output is
+      // persisted, including ordinary images in mixed projects. Failed jobs stay
+      // as barriers so another source cannot commit a partial run.
+      const holdsRunCommit = project.tools.some((tool) => tool.procedure === "extract_frames") && !/preview/.test(msg_id);
+      if (!holdsRunCommit) await Process.delete(process.user_id, process.project_id, process._id);
       
       if (msg_content.status === "error") {
         console.log(JSON.stringify(msg_content));
@@ -218,7 +228,6 @@ function process_msg() {
       
       const output_file_uri = msg_content.output.imageURI;
       const type = msg_content.output.type;
-      const project = await Project.getOne(process.user_id, process.project_id);
 
       // Guard robusto: se o utilizador cancelou, activeToken muda e ignoramos outputs deste run
       const active = project.activeToken || 0;
@@ -230,6 +239,7 @@ function process_msg() {
 
       if (active !== tok) {
         console.log(`[RUN-GUARD] IGNORE msg=${msg_id} processTok=${tok} activeTok=${active}`);
+        if (holdsRunCommit) await Process.delete(process.user_id, process.project_id, process._id);
         return;
       }
 
@@ -239,12 +249,13 @@ function process_msg() {
       // a video is processed in one go by the video worker, so its reply is
       // always the last one of the chain.
       const imgTools = imageTools(project);
-      const isVideoOut = type === "video";
-      const chainEnd = isVideoOut || next_pos >= imgTools.length;
+      // A video worker also returns an image for extraction previews, or frames
+      // for full extraction. Neither should enter the image-effect chain.
+      const chainEnd = sourceIsVideo || type === "video" || type === "frames" || next_pos >= imgTools.length;
       const isLast = type == "text" || chainEnd;
 
 if (/preview/.test(msg_id) && isLast) {
-  const file_path = path.join(__dirname, `/../${output_file_uri}`);
+  const file_path = path.resolve(__dirname, "..", output_file_uri);
   const file_name = path.basename(file_path);
   const fileStream = fs.createReadStream(file_path);
 
@@ -361,15 +372,21 @@ if (/preview/.test(msg_id) && isLast) {
 
       if (/preview/.test(msg_id) && chainEnd) return;
 
-      if (!/preview/.test(msg_id))
-        send_msg_client(
-          user_msg_id,
-          timestamp,
-          runnerId
-        );
-
-      if (!/preview/.test(msg_id) && isLast) {
-        const file_path = path.join(__dirname, `/../${output_file_uri}`);
+      if (!/preview/.test(msg_id) && isLast && type === "frames") {
+        if (!holdsRunCommit || !sourceIsVideo) throw new Error("Unexpected extracted frames for this job");
+        await persistFrameResults(msg_content.output, process, {
+          upload: async (file, name) => {
+            const data = new FormData();
+            data.append("file", fs.createReadStream(file), { filename: name, contentType: mime.lookup(name) });
+            const response = await post_image(process.user_id, process.project_id, "out", data);
+            return response.data.data.imageKey.split("/").pop();
+          },
+          create: (result) => Result.create(result),
+          removeResult: (id) => Result.deleteById(process.user_id, process.project_id, id),
+          removeImage: (key) => delete_image(process.user_id, process.project_id, "out", key),
+        });
+      } else if (!/preview/.test(msg_id) && isLast) {
+        const file_path = path.resolve(__dirname, "..", output_file_uri);
         const file_name = path.basename(file_path);
         const fileStream = fs.createReadStream(file_path); // Use createReadStream for efficiency
 
@@ -407,8 +424,9 @@ if (/preview/.test(msg_id) && isLast) {
       // Se esta imagem acabou o pipeline, pode ser que a execução tenha terminado
       if (!/preview/.test(msg_id) && isLast) {
 
-        // Já eliminei este Process no início: await Process.delete(...)
-        // Agora verifica se ainda há processos desta run
+        if (holdsRunCommit && chainEnd) await Process.delete(process.user_id, process.project_id, process._id);
+        // A terminal source has all outputs stored; intermediate text results
+        // retain their barrier until their successor is registered below.
         const remaining = await Process.countByProjectAndToken(
           process.project_id,
           process.token || 0
@@ -434,13 +452,10 @@ if (/preview/.test(msg_id) && isLast) {
                 params: t.params,
               }));
 
-            await Project.updateRaw(process.user_id, process.project_id, { 
-              $set: {
-                committedToken: process.token || 0,
-                resultsToken: process.token || 0,
-                committedTools: toolsSnapshot,
-              }
-            });
+            const committed = await Project.commitRunIfActive(
+              process.user_id, process.project_id, process.token || 0, toolsSnapshot
+            );
+            if (!committed) return;
 
             console.log(`[COMMIT] project=${process.project_id} committedToken=${process.token || 0}`);
 
@@ -448,9 +463,23 @@ if (/preview/.test(msg_id) && isLast) {
             console.log(
               `[COMMIT-SKIP] project=${process.project_id} token=${process.token} activeToken=${freshProject.activeToken}`
             );
+            return;
           }
         }
       }
+
+      if (holdsRunCommit) {
+        const latest = await Project.getOne(process.user_id, process.project_id);
+        if (!latest || (latest.activeToken || 0) !== (process.token || 0)) return;
+      }
+
+      // Notify only after the result is stored and the completed run is committed.
+      if (!/preview/.test(msg_id))
+        send_msg_client(
+          user_msg_id,
+          timestamp,
+          runnerId
+        );
 
       if (chainEnd) return;
 
@@ -484,6 +513,7 @@ if (/preview/.test(msg_id) && isLast) {
 
       // Making sure database entry is created before sending message to avoid conflicts
       await Process.create(new_process);
+      if (holdsRunCommit) await Process.delete(process.user_id, process.project_id, process._id);
       send_msg_tool(
         new_msg_id,
         timestamp,
@@ -697,7 +727,10 @@ router.get("/share/:shareId/project", requireAuth,async (req, res) => {
           const url = resp.data.url;
 
           response.imgs.push({
-            _id: r.img_id,
+            _id: String(r._id),
+            result_id: String(r._id),
+            og_img_id: r.img_id,
+            media_type: r.type === "video" ? "video" : "image",
             name: r.file_name,
             url,
           });
@@ -1009,7 +1042,7 @@ router.get("/:user/:project/process/url", checkSharePermission, async (req, res)
       const url = resp.data.url;
 
       if (r.type === "text") ans.texts.push({ og_img_id: r.img_id, name: r.file_name, url });
-      else ans.imgs.push({ og_img_id: r.img_id, name: r.file_name, url, type: r.type });
+      else ans.imgs.push({ result_id: String(r._id), og_img_id: r.img_id, name: r.file_name, url, type: r.type });
     }
 
     return res.status(200).jsonp(ans);
@@ -1055,6 +1088,9 @@ router.post("/:user/:project/preview/:img", checkSharePermission, requireEditPer
       if (project.tools.length === 0) {
         return res.status(400).jsonp("No tools selected");
       }
+
+      const pipelineError = validateFrameExtraction(project.tools);
+      if (pipelineError) return res.status(400).jsonp(pipelineError);
 
       const previewImg = project.imgs.filter((i) => i._id == req.params.img)[0];
       if (!previewImg) {
@@ -1109,7 +1145,9 @@ router.post("/:user/:project/preview/:img", checkSharePermission, requireEditPer
       if (cached) {
         // gerar URLs atuais (assinadas) a partir das keys guardadas
         const urls = { imageUrl: "", textResults: [] };
-        if (previewIsVideo) urls.mediaType = "video";
+        if (previewIsVideo && !project.tools.some((tool) => tool.procedure === "extract_frames")) {
+          urls.mediaType = "video";
+        }
         if (cached.image_key) {
           const u = await get_image_public_url(ownerId, req.params.project, "preview_cache", cached.image_key);
           urls.imageUrl = u.data.url;
@@ -1383,8 +1421,11 @@ router.post("/:user/:project/tool", checkSharePermission, requireEditPermission,
       // Get project and insert new tool
       Project.getOne(req.params.user, req.params.project)
         .then(async (project) => {
-          const tool = { position: project.tools.length, ...req.body };
-          project.tools.push(tool);
+          const tool = { procedure: req.body.procedure, params: req.body.params };
+          const tools = insertPipelineTool(project.tools, tool);
+          const pipelineError = validateFrameExtraction(tools);
+          if (pipelineError) return res.status(400).jsonp(pipelineError);
+          project.tools = tools;
 
           const updated = await Project.updateIfVersion(
             req.params.user,
@@ -1413,7 +1454,7 @@ router.post("/:user/:project/tool", checkSharePermission, requireEditPermission,
               actorId: getCallerId(req),
               baseVersion: req.expectedVersion,
               newVersion: updated.version,
-              payload: { tool }, // tool criado acima
+              payload: { tools: updated.tools }, // insertion may move the terminal extractor
             },
           });
 
@@ -1434,14 +1475,11 @@ router.post(
   (req, res) => {
     Project.getOne(req.params.user, req.params.project)
       .then(async (project) => {
-        project.tools = [];
-
-        for (let t of req.body) {
-          project.tools.push({
-            position: project.tools.length,
-            ...t,
-          });
-        }
+        if (!Array.isArray(req.body)) return res.status(400).jsonp("Tools must be an array");
+        const tools = req.body.map((tool, position) => ({ ...tool, position }));
+        const pipelineError = validateFrameExtraction(tools);
+        if (pipelineError) return res.status(400).jsonp(pipelineError);
+        project.tools = tools;
 
         const updated = await Project.updateIfVersion(
           req.params.user,
@@ -1505,6 +1543,9 @@ router.post("/:user/:project/process", checkSharePermission, requireEditPermissi
         return;
       }
 
+      const pipelineError = validateFrameExtraction(project.tools);
+      if (pipelineError) return res.status(400).jsonp(pipelineError);
+
       // Video
       const hasVideos = project.imgs.some(isVideoMedia);
       if (hasVideos) {
@@ -1557,7 +1598,7 @@ router.post("/:user/:project/process", checkSharePermission, requireEditPermissi
 
         fs.mkdirSync(path.join(__dirname, result_path), { recursive: true });
 
-        let error = false;
+        const pendingJobs = [];
 
         for (let img of project.imgs) {
           let url = "";
@@ -1618,29 +1659,21 @@ router.post("/:user/:project/process", checkSharePermission, requireEditPermissi
             token: runToken,
           };
 
-          await Process.create(process)
-            .then(() => {
-              send_msg_tool(
-                msg_id,
-                timestamp,
-                og_img_uri,
-                new_img_uri,
-                tool_name,
-                params
-              );
-            })
-            .catch(() => (error = true));
+          pendingJobs.push({ process, msg_id, timestamp, og_img_uri, new_img_uri, tool_name, params });
         }
 
-        if (error) {
-          res
-            .status(603)
-            .jsonp(
-              `There were some erros creating all process requests. Some results can be invalid.`
-            );
-        } else {
-          res.sendStatus(201);
+        // Register the complete batch before dispatching anything. Otherwise a
+        // short first video can commit while a later source is still downloading.
+        try {
+          await dispatchProcessBatch(pendingJobs, {
+            create: (job) => Process.create(job),
+            remove: (job) => Process.delete(job.user_id, job.project_id, job._id),
+            send: (job) => send_msg_tool(job.msg_id, job.timestamp, job.og_img_uri, job.new_img_uri, job.tool_name, job.params),
+          });
+        } catch (error) {
+          return res.status(603).jsonp("Could not start all processing requests. Please try again.");
         }
+        res.sendStatus(201);
       };
 
       // Caso 1: sem advanced tools -> não é preciso falar com users-ms
@@ -1657,15 +1690,9 @@ router.post("/:user/:project/process", checkSharePermission, requireEditPermissi
               `[T-03][PROCESS][SKIP] user=${ownerId} project=${req.params.project} token=${project.committedToken}`
             );
 
-            // Notificar frontend imediatamente (não há work para fazer)
-            send_msg_client(
-              `update-client-process-${uuidv4()}`,
-              new Date().toISOString(),
-              runnerUserId
-            );
-
-            // Mantém o contrato: “process pedido” -> resposta rápida
-            return res.sendStatus(201);
+            // No worker events will follow: complete explicitly in the HTTP response.
+            // A synthetic single step cannot complete multi-image/tool pipelines.
+            return res.status(201).json({ completed: true });
           }
 
           // antes de abrir execução nova
@@ -1841,6 +1868,9 @@ router.put(
             params: req.body.params,
             _id: prev_tool._id,
           };
+
+          const pipelineError = validateFrameExtraction(project.tools);
+          if (pipelineError) return res.status(400).jsonp(pipelineError);
 
           const updated = await Project.updateIfVersion(
             req.params.user,

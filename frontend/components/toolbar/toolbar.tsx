@@ -33,6 +33,8 @@ import { useState } from "react";
 import ExpandAITool from "./expand-ai-tool";
 import TrimTool from "./trim-tool";
 import SpeedTool from "./speed-tool";
+import SubtitlesTool from "./subtitles-tool";
+import ExtractFramesTool from "./extract-frames-tool";
 import { isVideo } from "@/lib/projects";
 
 export function Toolbar() {
@@ -79,6 +81,8 @@ export function Toolbar() {
         {/* Only shown when the project has videos */}
         <TrimTool disabled={disabled} />
         <SpeedTool disabled={disabled} />
+        {hasVideos && <SubtitlesTool disabled={disabled} />}
+        {hasVideos && <ExtractFramesTool disabled={disabled} />}
         {!hasVideos && (
           <>
             <WatermarkTool disabled={disabled} />

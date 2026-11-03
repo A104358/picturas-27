@@ -847,6 +847,7 @@ export const fetchProjectResults = async (
   const pathUid = pathUidFor(uid, ownerId, shareId);
   const response = await api.get<{
     imgs: {
+      result_id?: string;
       og_img_id: string;
       name: string;
       url: string;
@@ -886,7 +887,7 @@ export const fetchProjectResults = async (
     imgs: response.data.imgs.map(
       (img) =>
         ({
-          _id: img.og_img_id,
+          _id: img.result_id ?? `${img.og_img_id}:${img.name}`,
           name: img.name,
           url: img.url,
           media_type: img.type === "video" ? "video" : "image",
@@ -916,7 +917,7 @@ export const processProject = async ({
   try {
     const query = buildQuery({ ownerId, shareId });
     const pathUid = pathUidFor(uid, ownerId, shareId);
-    const response = await api.post<string>(
+    const response = await api.post<string | { completed: boolean }>(
       `/projects/${pathUid}/${pid}/process${query}`,
       { runnerUserId },   // importante
       { 
@@ -931,7 +932,10 @@ export const processProject = async ({
       throw new Error("Failed to request project processing");
     }
 
-    return response.headers?.["x-project-version"];
+    return {
+      version: response.headers?.["x-project-version"],
+      completed: typeof response.data === "object" && response.data.completed === true,
+    };
 
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {

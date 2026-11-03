@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   Carousel,
   CarouselContent,
@@ -50,12 +50,19 @@ export function ProjectImageList({
   const [current, setCurrent] = useState(0);
   const [count, setCount] = useState(0);
   const [jumpTo, setJumpTo] = useState<number | null>(null);
+  const previewVideoRef = useRef<HTMLVideoElement>(null);
   const [previewOpen, setPreviewOpen] = useState<boolean>(false);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [previewText, setPreviewText] = useState<string[] | null>(null);
   const [previewIsVideo, setPreviewIsVideo] = useState<boolean>(false);
 
+  useEffect(() => {
+    const video = previewVideoRef.current;
+    return () => video?.pause();
+  }, [previewOpen, previewImage]);
+
   const project = useProjectInfo();
+  const mediaItems = mode === "results" ? results.imgs : project.imgs;
   const session = useSession();
   const { toast } = useToast();
   const preview = usePreview();
@@ -149,21 +156,16 @@ useEffect(() => {
       return;
     }
 
-    setCount(api.scrollSnapList().length);
-    setCurrent(api.selectedScrollSnap() + 1);
-    if (project.imgs) setCurrentImageId(project.imgs[api.selectedScrollSnap()]);
-
     const handleSelect = () => {
+      setCount(api.scrollSnapList().length);
       setCurrent(api.selectedScrollSnap() + 1);
-      if (project.imgs)
-        setCurrentImageId(project.imgs[api.selectedScrollSnap()]);
+      if (mediaItems[api.selectedScrollSnap()])
+        setCurrentImageId(mediaItems[api.selectedScrollSnap()]);
     };
 
-    api.on("select", () => {
-      setCurrent(api.selectedScrollSnap() + 1);
-      if (project.imgs)
-        setCurrentImageId(project.imgs[api.selectedScrollSnap()]);
-    });
+    handleSelect();
+    api.on("select", handleSelect);
+    api.on("reInit", handleSelect);
 
     if (jumpTo !== null && jumpTo !== api.selectedScrollSnap()) {
       api.scrollTo(jumpTo, true);
@@ -172,13 +174,15 @@ useEffect(() => {
 
     return () => {
       api.off("select", handleSelect);
+      api.off("reInit", handleSelect);
     };
-  }, [api, jumpTo, project.imgs, setCurrentImageId]);
+  }, [api, jumpTo, mediaItems, setCurrentImageId]);
 
   return (
     <Dialog
       open={previewOpen}
       onOpenChange={() => {
+        previewVideoRef.current?.pause();
         setPreviewOpen(false);
         setPreviewImage(null);
       }}
@@ -268,16 +272,16 @@ useEffect(() => {
               <CarouselContent className="aspect-auto h-[calc(100vh-99px-0.5rem-36px)] xl:h-[calc(100vh-55px-0.5rem-36px)]">
                 {mode === "edit" &&
                   project.imgs.length > 0 &&
-                  project.imgs.map((image) => (
+                  project.imgs.map((image, index) => (
                     <CarouselItem key={image._id}>
-                      <ProjectImage image={image} animation={false} />
+                      <ProjectImage image={image} animation={false} active={index === current - 1} />
                     </CarouselItem>
                   ))}
                 {mode === "results" &&
                   results.imgs.length > 0 &&
-                  results.imgs.map((image) => (
+                  results.imgs.map((image, index) => (
                     <CarouselItem key={image._id}>
-                      <ProjectImage image={image} animation={false} />
+                      <ProjectImage image={image} animation={false} active={index === current - 1} />
                     </CarouselItem>
                   ))}
                 {mode === "results" &&
@@ -304,12 +308,11 @@ useEffect(() => {
           </DialogTitle>
         </DialogHeader>
         <div className="flex justify-center items-center">
-          {previewImage && previewIsVideo && (
+          {previewOpen && previewImage && previewIsVideo && (
             <video
+              ref={previewVideoRef}
               src={previewImage}
               controls
-              autoPlay
-              loop
               playsInline
               className="rounded-md w-full max-h-[80vh] bg-black"
             />

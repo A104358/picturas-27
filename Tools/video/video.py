@@ -74,12 +74,16 @@ class VideoWorker:
                                     body=json.dumps(msg))
 
     def _reply_success(self, msg_id, started, output_uri, video_info):
+        output = {"type": video_info.get("output_type", "video"),
+                  "imageURI": video_info.get("output_path", output_uri)}
+        if output["type"] == "frames":
+            output["frames"] = video_info["frames"]
         self._publish(PROJECT_QUEUE, {
             "messageId": f"video-{uuid.uuid4()}",
             "correlationId": msg_id,
             "timestamp": now().isoformat(),
             "status": "success",
-            "output": {"type": "video", "imageURI": output_uri},
+            "output": output,
             "metadata": {
                 "processingTime": (now() - started).total_seconds() * 1000,
                 "microservice": MICROSERVICE,

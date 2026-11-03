@@ -77,6 +77,13 @@ export type ExpandAiParams = {
   guidance?: number;
 };
 
+export interface ExtractFramesParams {
+  mode: "count" | "interval";
+  count: number;
+  interval: number;
+  format: "png" | "jpeg";
+}
+
 export type ToolParams =
   | BinarizationToolParams
   | BorderToolParams
@@ -89,6 +96,7 @@ export type ToolParams =
   | TrimToolParams
   | SpeedToolParams
   | ExpandAiParams
+  | ExtractFramesParams
   | object;
 
 export type ToolNames =
@@ -111,4 +119,6 @@ export type ToolNames =
   | "expand_ai"
   | "trim"
   | "speed"
+  | "subtitles"
+  | "extract_frames"
   | "project";

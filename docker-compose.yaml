@@ -260,6 +260,9 @@ services:
     restart: on-failure
     environment:
       VIDEO_PREVIEW_SECONDS: 3
+      WHISPER_MODEL: small
+      WHISPER_CACHE_DIR: /models/whisper
+      WHISPER_CPU_THREADS: 2
     networks:
       - elk
     depends_on:
@@ -267,6 +270,7 @@ services:
         condition: service_healthy
     volumes:
       - image_data:/app/images
+      - whisper_models:/models/whisper
 
   border_tool:
     build:
@@ -554,6 +558,7 @@ networks:
     driver: bridge
 
 volumes:
+  whisper_models:
   rabbitmq_data:
   project_data:
   user_data:

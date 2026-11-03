@@ -15,10 +15,10 @@ const ALLOWED_VIDEO_CODECS = ["h264", "hevc", "vp8", "vp9", "av1", "mpeg4"];
 // Effects the video worker can apply
 const VIDEO_TOOLS = [
   "brightness", "contrast", "saturation", "rotate", "resize",
-  "binarization", "cut", "border", "trim", "speed",
+  "binarization", "cut", "border", "trim", "speed", "subtitles", "extract_frames",
 ];
 // Effects that only exist for video (images ignore them)
-const VIDEO_ONLY_TOOLS = ["trim", "speed"];
+const VIDEO_ONLY_TOOLS = ["trim", "speed", "subtitles", "extract_frames"];
 
 // Effects that belong to the video they were defined on (params.imgId),
 // because their values only make sense for that video
@@ -172,6 +172,36 @@ function unsupportedVideoTools(project) {
     .filter((p) => !VIDEO_TOOLS.includes(p));
 }
 
+// Extraction changes the output from video to images, so it must be terminal.
+function validateFrameExtraction(tools) {
+  const ordered = [...(tools || [])].sort((a, b) => (a.position ?? 0) - (b.position ?? 0));
+  const extractors = ordered.filter((tool) => tool.procedure === "extract_frames");
+  if (extractors.length === 0) return null;
+  if (extractors.length !== 1) return "Only one frame extraction tool is allowed";
+  const tool = extractors[0];
+  if (ordered[ordered.length - 1] !== tool) return "Frame extraction must be the last tool in the pipeline";
+  const params = tool.params;
+  if (!params || typeof params !== "object" || Array.isArray(params)) return "Frame extraction parameters are required";
+  if (params.imgId !== undefined) return "Frame extraction applies to all videos, not a single video";
+  if (!["count", "interval"].includes(params.mode)) return "Frame extraction mode must be count or interval";
+  if (!["png", "jpeg"].includes(params.format)) return "Frame extraction format must be png or jpeg";
+  if (params.mode === "count" && (!Number.isInteger(params.count) || params.count < 1 || params.count > 100)) {
+    return "Frame count must be an integer between 1 and 100";
+  }
+  if (params.mode === "interval" && (typeof params.interval !== "number" || !Number.isFinite(params.interval) || params.interval <= 0)) {
+    return "Frame interval must be a positive number of seconds";
+  }
+  return null;
+}
+
+// Newly added effects run before the terminal extractor, regardless of client position.
+function insertPipelineTool(tools, tool) {
+  const ordered = [...(tools || [])].sort((a, b) => (a.position ?? 0) - (b.position ?? 0));
+  const terminal = ordered.findIndex((item) => item.procedure === "extract_frames");
+  ordered.splice(terminal < 0 || tool.procedure === "extract_frames" ? ordered.length : terminal, 0, tool);
+  return ordered.map((item, position) => ({ ...(item.toObject ? item.toObject() : item), position }));
+}
+
 // One operation per applied effect, per video, regardless of duration
 function videoOps(project) {
   return (project.imgs || [])
@@ -192,4 +222,6 @@ module.exports = {
   videoPipeline,
   unsupportedVideoTools,
   videoOps,
+  validateFrameExtraction,
+  insertPipelineTool,
 };

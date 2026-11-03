@@ -15,10 +15,10 @@ const ALLOWED_VIDEO_CODECS = ["h264", "hevc", "vp8", "vp9", "av1", "mpeg4"];
 // Effects the video worker can apply
 const VIDEO_TOOLS = [
   "brightness", "contrast", "saturation", "rotate", "resize",
-  "binarization", "cut", "border", "trim", "speed",
+  "binarization", "cut", "border", "trim", "speed", "subtitles",
 ];
 // Effects that only exist for video (images ignore them)
-const VIDEO_ONLY_TOOLS = ["trim", "speed"];
+const VIDEO_ONLY_TOOLS = ["trim", "speed", "subtitles"];
 
 // Effects that belong to the video they were defined on (params.imgId),
 // because their values only make sense for that video

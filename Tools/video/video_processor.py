@@ -16,6 +16,7 @@ import json
 import os
 import subprocess
 import tempfile
+from pathlib import Path
 from fractions import Fraction
 
 from PIL import Image
@@ -148,13 +149,13 @@ def atempo_chain(factor: float) -> str:
 
 def validate_tools(tools: list) -> None:
     for tool in tools:
-        if tool.get("procedure") not in SUPPORTED:
+        if tool.get("procedure") not in SUPPORTED | {"subtitles"}:
             raise UnsupportedEffect(
                 f"Effect '{tool.get('procedure')}' is not available for video"
             )
 
 
-def process_video(input_path: str, output_path: str, tools: list,
+def _process_video(input_path: str, output_path: str, tools: list,
                   progress_cb=None, preview: bool = False) -> dict:
     """Applies `tools` (ordered) to the video at `input_path` and writes MP4 to `output_path`.
 
@@ -271,3 +272,67 @@ def _start_encoder(input_path, out_path, size, info, start, duration, speed, err
 def _read(f) -> str:
     f.seek(0)
     return f.read().decode(errors="replace").strip()[-500:]
+
+
+def process_video(input_path: str, output_path: str, tools: list,
+                  progress_cb=None, preview: bool = False) -> dict:
+    """Run caption stages in order, keeping the existing fast path for other tools.
+
+    Captioning is a video-to-video effect. Effects after it act on the captioned
+    frames too. Work stays temporary until the entire pipeline succeeds.
+    """
+    validate_tools(tools)
+    if not any(t.get("procedure") == "subtitles" for t in tools):
+        return _process_video(input_path, output_path, tools, progress_cb, preview)
+
+    from subtitles import caption_video
+
+    stages, pending = [], []
+    for tool in tools:
+        if tool.get("procedure") == "subtitles":
+            # Normalize the first input to MP4/H.264 even when captioning is a no-op.
+            if pending or not stages:
+                stages.append(pending)
+                pending = []
+            stages.append(None)
+        else:
+            pending.append(tool)
+    if pending:
+        stages.append(pending)
+
+    # A preview is the first seconds of the final timeline. Cutting the initial
+    # input before a later trim/speed would discard needed frames or produce the
+    # wrong preview length. Keep preceding stages complete until the final
+    # temporal stage; ordinary pipelines still limit input before recognition.
+    # This deliberately trades more recognition work for correct downstream cuts.
+    preview_stage = max(
+        (index for index, stage in enumerate(stages)
+         if stage is not None and any(
+             tool.get("procedure") in {"trim", "speed"} for tool in stage)),
+        default=0,
+    )
+
+    target = Path(output_path).resolve()
+    target.parent.mkdir(parents=True, exist_ok=True)
+    with tempfile.TemporaryDirectory(prefix="captions-", dir=target.parent) as work:
+        current = input_path
+        for index, stage in enumerate(stages):
+            next_path = str(Path(work) / f"stage-{index}.mp4")
+
+            def progress(percent):
+                if progress_cb:
+                    progress_cb(min(99, int((index + percent / 100) * 100 / len(stages))))
+
+            progress(0)
+            if stage is None:
+                caption_video(current, next_path, probe(current), progress)
+            else:
+                _process_video(current, next_path, stage, progress,
+                               preview=preview and index == preview_stage)
+            current = next_path
+        result = probe(current)
+        result["frames"] = round(result["duration"] * result["fps"])
+        os.replace(current, target)
+    if progress_cb:
+        progress_cb(100)
+    return result

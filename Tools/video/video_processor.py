@@ -47,7 +47,7 @@ class ProcessingError(Exception):
     """ffmpeg failure while decoding or encoding."""
 
 
-def probe(path: str) -> dict:
+def probe(path: str, prefer_video_duration: bool = False) -> dict:
     """Reads the video characteristics with ffprobe."""
     cmd = [
         "ffprobe", "-v", "error", "-print_format", "json",
@@ -65,7 +65,10 @@ def probe(path: str) -> dict:
         raise InvalidVideo("The file has no video stream")
 
     fmt = data.get("format", {})
-    duration = float(fmt.get("duration") or video.get("duration") or 0)
+    duration = float(
+        (video.get("duration") if prefer_video_duration else None)
+        or fmt.get("duration") or video.get("duration") or 0
+    )
     if duration <= 0:
         raise InvalidVideo("Could not determine the video duration")
 
@@ -148,8 +151,14 @@ def atempo_chain(factor: float) -> str:
 
 
 def validate_tools(tools: list) -> None:
+    extractors = [i for i, tool in enumerate(tools) if tool.get("procedure") == "extract_frames"]
+    if extractors:
+        from frame_extraction import InvalidExtraction, validate_params
+        if extractors != [len(tools) - 1]:
+            raise InvalidExtraction("Frame extraction must appear once, at the end of the pipeline")
+        validate_params(tools[-1].get("params", {}))
     for tool in tools:
-        if tool.get("procedure") not in SUPPORTED | {"subtitles"}:
+        if tool.get("procedure") not in SUPPORTED | {"subtitles", "extract_frames"}:
             raise UnsupportedEffect(
                 f"Effect '{tool.get('procedure')}' is not available for video"
             )
@@ -282,6 +291,28 @@ def process_video(input_path: str, output_path: str, tools: list,
     frames too. Work stays temporary until the entire pipeline succeeds.
     """
     validate_tools(tools)
+    if tools and tools[-1].get("procedure") == "extract_frames":
+        from frame_extraction import extract_frames
+        if len(tools) == 1:
+            # With no preceding edits, seek directly in the original. Extracting
+            # a few stills must not transcode an entire long video or add a lossy
+            # generation before a PNG export. Use video duration when available
+            # so a longer audio stream does not create out-of-range sample times.
+            return extract_frames(input_path, output_path,
+                                  probe(input_path, prefer_video_duration=True),
+                                  tools[-1].get("params", {}),
+                                  progress_cb or (lambda _: None), preview=preview)
+        target = Path(output_path).resolve()
+        target.parent.mkdir(parents=True, exist_ok=True)
+        with tempfile.TemporaryDirectory(prefix="frame-source-", dir=target.parent) as work:
+            edited = str(Path(work) / "edited.mp4")
+            # Sampling spans the complete edited timeline, including in preview.
+            info = process_video(input_path, edited, tools[:-1],
+                                 lambda pct: progress_cb(int(pct * 0.7)) if progress_cb else None,
+                                 preview=False)
+            return extract_frames(edited, output_path, info, tools[-1].get("params", {}),
+                                  lambda pct: progress_cb(70 + int(pct * 0.3)) if progress_cb else None,
+                                  preview=preview)
     if not any(t.get("procedure") == "subtitles" for t in tools):
         return _process_video(input_path, output_path, tools, progress_cb, preview)
 

@@ -61,6 +61,10 @@ Behind the gateway:
 - `trim` (`start`/`end` in seconds) and `speed` (`factor` 0.25–5) are video-only and apply to
   one video (`params.imgId`); every other effect applies to all media. Images skip video-only
   tools. Each effect on a video counts as one operation.
+- `subtitles` is video-only and project-wide (no `imgId`): Faster-Whisper CPU/int8
+  detects the spoken language and burns captions into the MP4. No audio/speech is a no-op.
+  It runs as an ordered stage inside the existing video worker; contiguous ordinary
+  effects still share one decode/encode pass. Models persist in `whisper_models`.
 - In projects with videos the frontend hides image-only tools (AI, watermark) and PDF export.
 
 ## Running and testing

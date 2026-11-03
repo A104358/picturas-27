@@ -411,6 +411,45 @@ picturas-27/
 
 ---
 
+### Automatic video subtitles
+
+In a project containing videos, select a media item, choose **Automatic subtitles**
+in the toolbar and **Save**. The tool appears in **Applied**. **Apply** processes
+every video in the project; images skip this tool. Captions are burned into the
+exported video, in the detected spoken language (not translated). No audio or no
+detected speech leaves the video unchanged by this stage. Original uploads are
+never overwritten. Recognition is automatic and can make transcription errors.
+
+Order matters: tools after subtitles affect the captioned video too. Prefer placing
+subtitles after trim/speed and other edits. Preview uses only the first three
+seconds of the final timeline. If trim or speed comes after subtitles, recognition
+may need to read more of the source before the preview can be shortened. This
+version does not provide editable text tracks or SRT export.
+
+The existing `video_tool` performs recognition locally, with Faster-Whisper `small`
+on CPU/int8, inspired by the PL2-G5 submission. No external transcription API or
+API key is needed. The first use downloads model weights; later runs reuse the
+`whisper_models` Docker volume. `WHISPER_MODEL`, `WHISPER_CACHE_DIR`, and
+`WHISPER_CPU_THREADS` configure the worker. Rebuild `video_tool` and `projects`,
+and rebuild the frontend if using production mode. The worker includes Noto fonts
+for multilingual captions. Subtitle previews allow up to ten minutes for model
+downloads and queued CPU work; a timeout does not cancel an already queued job.
+
+Validation:
+
+```bash
+docker compose run --rm --no-deps video_tool sh -c "pip install -q -r requirements-dev.txt && python -m pytest -q tests"
+docker compose run --rm --no-deps projects node --test tests/video-pipeline.test.js
+```
+
+The media tests use real FFmpeg with simulated speech recognition. Separately,
+local end-to-end testing covered English and Portuguese speech with the real
+`small` model, silent/no-audio videos, downstream trim/speed previews, batch Apply
+on two videos plus an image, downloadable results, and an unchanged source image.
+Regression tests also cover model/encoder failures without publishing partial
+output, invalid caption timestamps, and markup removal. Repeated Apply on an
+unchanged image pipeline completes immediately using the existing results.
+
 ## 💻 Development Workflow
 
 ### Rebuilding a single service

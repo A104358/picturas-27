@@ -111,4 +111,5 @@ export type ToolNames =
   | "expand_ai"
   | "trim"
   | "speed"
+  | "subtitles"
   | "project";

@@ -916,7 +916,7 @@ export const processProject = async ({
   try {
     const query = buildQuery({ ownerId, shareId });
     const pathUid = pathUidFor(uid, ownerId, shareId);
-    const response = await api.post<string>(
+    const response = await api.post<string | { completed: boolean }>(
       `/projects/${pathUid}/${pid}/process${query}`,
       { runnerUserId },   // importante
       { 
@@ -931,7 +931,10 @@ export const processProject = async ({
       throw new Error("Failed to request project processing");
     }
 
-    return response.headers?.["x-project-version"];
+    return {
+      version: response.headers?.["x-project-version"],
+      completed: typeof response.data === "object" && response.data.completed === true,
+    };
 
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {

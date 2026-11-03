@@ -361,13 +361,6 @@ if (/preview/.test(msg_id) && isLast) {
 
       if (/preview/.test(msg_id) && chainEnd) return;
 
-      if (!/preview/.test(msg_id))
-        send_msg_client(
-          user_msg_id,
-          timestamp,
-          runnerId
-        );
-
       if (!/preview/.test(msg_id) && isLast) {
         const file_path = path.join(__dirname, `/../${output_file_uri}`);
         const file_name = path.basename(file_path);
@@ -451,6 +444,14 @@ if (/preview/.test(msg_id) && isLast) {
           }
         }
       }
+
+      // Notify only after the result is stored and the completed run is committed.
+      if (!/preview/.test(msg_id))
+        send_msg_client(
+          user_msg_id,
+          timestamp,
+          runnerId
+        );
 
       if (chainEnd) return;
 
@@ -1657,15 +1658,9 @@ router.post("/:user/:project/process", checkSharePermission, requireEditPermissi
               `[T-03][PROCESS][SKIP] user=${ownerId} project=${req.params.project} token=${project.committedToken}`
             );
 
-            // Notificar frontend imediatamente (não há work para fazer)
-            send_msg_client(
-              `update-client-process-${uuidv4()}`,
-              new Date().toISOString(),
-              runnerUserId
-            );
-
-            // Mantém o contrato: “process pedido” -> resposta rápida
-            return res.sendStatus(201);
+            // No worker events will follow: complete explicitly in the HTTP response.
+            // A synthetic single step cannot complete multi-image/tool pipelines.
+            return res.status(201).json({ completed: true });
           }
 
           // antes de abrir execução nova

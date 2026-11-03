@@ -847,6 +847,7 @@ export const fetchProjectResults = async (
   const pathUid = pathUidFor(uid, ownerId, shareId);
   const response = await api.get<{
     imgs: {
+      result_id?: string;
       og_img_id: string;
       name: string;
       url: string;
@@ -886,7 +887,7 @@ export const fetchProjectResults = async (
     imgs: response.data.imgs.map(
       (img) =>
         ({
-          _id: img.og_img_id,
+          _id: img.result_id ?? `${img.og_img_id}:${img.name}`,
           name: img.name,
           url: img.url,
           media_type: img.type === "video" ? "video" : "image",

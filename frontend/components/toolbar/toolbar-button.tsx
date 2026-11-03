@@ -37,6 +37,7 @@ interface ToolbarButtonProps {
   label: string;
   disabled?: boolean;
   previewDisabled?: boolean;
+  saveDisabled?: boolean;
   isDefault?: boolean;
   isPremium?: boolean;
   tool: Omit<ProjectTool, "position">;
@@ -56,6 +57,7 @@ export function ToolbarButton({
   label,
   disabled = false,
   previewDisabled = false,
+  saveDisabled = false,
   isDefault = false,
   isPremium = false,
   tool,
@@ -180,7 +182,9 @@ export function ToolbarButton({
     preview.setWaiting(tool.procedure);
     const hasSubtitles = tool.procedure === "subtitles" ||
       project.tools.some((item) => item.procedure === "subtitles");
-    const timeoutMs = hasSubtitles ? 10 * 60 * 1000 : 10000 * (project.tools.length + 1);
+    const hasExtraction = tool.procedure === "extract_frames" ||
+      project.tools.some((item) => item.procedure === "extract_frames");
+    const timeoutMs = hasSubtitles || hasExtraction ? 10 * 60 * 1000 : 10000 * (project.tools.length + 1);
     previewTimer.current = setTimeout(() => {
       previewTimer.current = null;
       setWaiting(false);
@@ -189,7 +193,9 @@ export function ToolbarButton({
         title: "Preview timed out",
         description: hasSubtitles
           ? "Subtitles are taking longer than expected. The worker may still be downloading the speech model or processing another video. Try again later."
-          : "The preview took too long to load.",
+          : hasExtraction
+            ? "Frame extraction may process the complete edited video. The worker may still be busy. Try again later."
+            : "The preview took too long to load.",
         variant: "destructive",
       });
     }, timeoutMs);
@@ -386,14 +392,14 @@ export function ToolbarButton({
             variant="outline"
             onClick={() => handleAddTool(true)}
             className="h-6 text-xs"
-            disabled={isDefault || previewDisabled}
+            disabled={isDefault || previewDisabled || saveDisabled}
           >
             Preview
           </Button>
 
           <Button
             onClick={() => handleAddTool(false)}
-            disabled={isDefault}
+            disabled={isDefault || saveDisabled}
             className="h-6 text-xs w-full"
           >
             Save

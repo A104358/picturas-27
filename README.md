@@ -411,6 +411,31 @@ picturas-27/
 
 ---
 
+### Extract video frames
+
+In a project with videos, choose **Extract frames**, select a frame count (1–100)
+or an interval in seconds, choose PNG or JPEG, and **Save**. **Apply** extracts
+images from every video in the project. Original images skip this tool.
+
+Extraction is the final pipeline step. New effects are inserted before it, and
+invalid reorderings are rejected. Trim, speed, captions and other preceding edits
+are reflected in the extracted images. Sampling starts at zero on the edited
+video timeline and excludes its endpoint. Interval mode rejects requests exceeding
+100 frames per video instead of silently dropping frames.
+
+**Preview** shows a contact sheet of up to six samples across the complete edited
+video. **Results** contains individual images instead of a processed video, with
+unique names for separate downloads or the project ZIP. Original uploads remain
+available. A failed batch does not replace the previous completed results.
+
+This adapts the frame extraction idea from PL2-G5 and PL5-G6 to the existing video
+worker, with no additional service or dependency. Rebuild `video_tool` and
+`projects`, plus the frontend when using production mode. Validate with the video
+suite below and `node --test tests/*.test.js` inside `projects`.
+
+Videos play only when explicitly started, stop when leaving their carousel slide,
+and stop when the preview closes.
+
 ### Automatic video subtitles
 
 In a project containing videos, select a media item, choose **Automatic subtitles**

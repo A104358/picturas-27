@@ -111,7 +111,7 @@ export default function Project({
   const projectImgs = project.data?.imgs ?? [];
   const projectVideos = projectImgs.filter((i) => isVideo(i));
   const imageToolCount = (project.data?.tools ?? []).filter(
-    (t) => !["trim", "speed", "subtitles"].includes(t.procedure),
+    (t) => !["trim", "speed", "subtitles", "extract_frames"].includes(t.procedure),
   ).length;
   const totalProcessingSteps =
     imageToolCount * (projectImgs.length - projectVideos.length) + projectVideos.length;

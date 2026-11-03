@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import { Card } from "@/components/ui/card";
 import { Download, Film, Trash } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -33,9 +33,16 @@ import { getErrorMessage } from "@/lib/error-messages";
 interface ImageItemProps {
   image: ProjectImage;
   animation?: boolean;
+  active?: boolean;
 }
 
-export function ProjectImage({ image, animation = true }: ImageItemProps) {
+export function ProjectImage({ image, animation = true, active = true }: ImageItemProps) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!active) video?.pause();
+    return () => video?.pause();
+  }, [active, image.url]);
   const searchParams = useSearchParams();
   const mode = searchParams.get("mode") ?? "edit";
 
@@ -63,15 +70,14 @@ export function ProjectImage({ image, animation = true }: ImageItemProps) {
       <ContextMenu>
         <ContextMenuTrigger>
           <Card className="group relative overflow-hidden size-full">
-            {/* Video (player in the carousel, animated thumbnail in the grid) */}
+            {/* Video (player in the carousel, still thumbnail in the grid) */}
             {isVideo(image) ? (
               <div className="size-full relative bg-black flex items-center justify-center">
                 <video
+                  ref={videoRef}
                   src={image.url}
                   controls={!animation}
                   muted={animation}
-                  loop={animation}
-                  autoPlay={animation}
                   playsInline
                   preload="metadata"
                   className="size-full object-contain"

@@ -65,6 +65,11 @@ Behind the gateway:
   detects the spoken language and burns captions into the MP4. No audio/speech is a no-op.
   It runs as an ordered stage inside the existing video worker; contiguous ordinary
   effects still share one decode/encode pass. Models persist in `whisper_models`.
+- `extract_frames` is video-only and project-wide, terminal and unique. It reuses the
+  video worker: count (1–100) or interval, PNG/JPEG, max100 images per video. Full output
+  is a frame manifest; preview is a contact sheet across the edited timeline. The
+  orchestrator saves each frame as a separate image Result with the source `img_id`
+  and unique result ID/name. Register all batch Process records before dispatch.
 - In projects with videos the frontend hides image-only tools (AI, watermark) and PDF export.
 
 ## Running and testing

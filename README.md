@@ -4,6 +4,9 @@
 
 PictuRAS is a web-based image and video editing platform that combines traditional image processing with AI-powered tools. It is built as a **microservices architecture** orchestrated with Docker Compose, and it is the code base for the group project of the curricular unit _Requisitos e Arquitetura de Software_ (RAS), University of Minho.
 
+Academic requirements, architecture reports, course material and exercise deliverables
+are listed in the [documentation index](docs/README.md).
+
 > **This repository is a starting point, not a finished product.**
 > It is the result of two previous academic years of student work (see [AUTHORS.md](AUTHORS.md)). It contains working features, known limitations and technical debt — finding, documenting and improving those is part of your job this semester.
 
@@ -424,6 +427,7 @@ picturas-27/
 │   ├── binarization/  border/  brightness/  contrast/  cut/  resize/  rotate/  saturation/
 │   └── video/                #   video_tool: ffmpeg worker for whole video pipelines
 ├── samples/video/            # Sample videos for manual tests (valid, MOV, too long, corrupted)
+├── docs/                     # Academic references and exercise deliverables (see docs/README.md)
 ├── rabbitMQ/                 # Broker image with queue/exchange definitions
 ├── nginx/nginx.conf          # Reverse proxy, TLS, CORS, WebSocket routing
 ├── certs/                    # Self-signed TLS certificate for Nginx

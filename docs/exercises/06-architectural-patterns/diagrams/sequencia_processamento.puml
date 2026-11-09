@@ -1,0 +1,124 @@
+@startuml
+title Pedido completo de um projeto misto com vídeo
+hide footbox
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam sequenceMessageAlign center
+skinparam defaultFontName DejaVu Sans
+skinparam sequenceArrowColor #64748B
+skinparam sequenceLifeLineBorderColor #94A3B8
+skinparam sequenceParticipantBorderColor #64748B
+skinparam sequenceParticipantBackgroundColor #F8FAFC
+skinparam sequenceActorBorderColor #64748B
+skinparam sequenceGroupBorderColor #94A3B8
+skinparam sequenceGroupBackgroundColor #F8FAFC
+skinparam noteBackgroundColor #FFF7ED
+skinparam noteBorderColor #FDBA74
+actor "Utilizador / browser" as UI
+participant "nginx" as N
+participant "API Gateway" as G
+participant "projects" as P
+participant "users" as U
+database "MongoDB projects" as DB
+participant "imageStorageService\n+ SeaweedFS" as S
+collections "image_data" as V
+queue "RabbitMQ\npicturas" as Q
+participant "Worker de imagem" as I
+participant "video_tool" as W #FDE7D3
+participant "wsGateway" as WS
+
+UI -> N : POST /api-gateway/projects/:u/:p/video\nmultipart video + JWT + X-Project-Version
+N -> G : /projects/:u/:p/video
+G -> G : multer.memoryStorage + validar JWT
+G -> P : POST /:u/:p/video\nficheiro + identidade + versão
+P -> U : GET /:caller/type
+U --> P : free / premium
+P -> P : ffprobe + validar codec e limites
+P -> S : POST /upload/:u/:p/src
+S --> P : imageKey
+P -> DB : guardar media_type=video e metadados\natualização condicional por versão
+P --> G : 204 + X-Project-Version
+G --> N : 204 + X-Project-Version
+N --> UI : 204 + X-Project-Version
+note over UI,P : Imagens: percurso equivalente em /img, campo multipart image.
+
+UI -> N : POST .../:u/:p/tool\nprocedure + params + JWT + versão
+N -> G
+G -> P : POST /:u/:p/tool
+P -> P : inserir por posição; validar extração terminal
+P -> DB : guardar pipeline do projeto
+P --> G : 204 + versão
+G --> N : 201 + versão
+N --> UI : 201 + versão
+note over UI,WS : Socket.IO ligado via nginx /socket.io; JWT associa a room do utilizador.
+
+UI -> N : Apply: POST .../:u/:p/process
+N -> G
+G -> P : POST /:u/:p/process\nJWT + caller + versão
+P -> P : validar pipeline e separar tipos de media
+P -> U : GET /:caller/process/:nOps\nreservar operações
+U --> P : autorizado
+loop todos os media do projeto
+P -> S : obter URL interno src e descarregar
+S --> P : stream do original
+P -> V : copiar original
+end
+P -> DB : criar TODOS os Process do lote\ncom msg_id e token antes de publicar
+loop cada imagem
+P -> Q : <tool>_queue: primeira ferramenta
+end
+loop cada vídeo
+P -[#C2410C]> Q : video_queue: procedure=video\ntools[] completo + URIs + progress
+end
+P --> G : 201 (pedidos despachados)
+G --> N : 201
+N --> UI : 201; aguardar eventos
+
+par cadeia das imagens
+Q -> I : <tool>_queue (auto-ack)
+I -> V : ler / escrever imagem
+I -> Q : project_queue: correlationId + output
+Q -> P : process_msg
+P -> DB : criar Process sucessor, se existir
+P -> Q : próxima <tool>_queue, se existir
+else pipeline do vídeo
+Q -[#C2410C]> W : video_queue (prefetch=1; ack manual)
+W -> V : ler original
+W -> W : FFmpeg + PIL; estágios ordenados\nlegendas / extração quando presentes
+loop progresso percentual
+W -[#C2410C]> Q : ws_queue: update-client-video-progress-...\nuser + projectId + imgId + preview + percent
+Q -> WS : consumir ws_queue
+WS -> N : Socket.IO video-progress
+N -> UI : atualizar percentagem
+end
+W -> V : publicar saída completa local\nos.replace; temporários em caso de erro
+W -[#C2410C]> Q : project_queue: status=success\ncorrelationId=request-...; output
+W -> Q : ack do pedido em video_queue
+end
+
+Q -> P : resposta terminal em project_queue
+alt saída de vídeo
+P -> S : upload do MP4 para out
+P -> DB : criar Result(type=video, token)
+else extração terminal
+P -> P : validar manifesto e caminhos
+loop cada fotograma
+P -> S : upload PNG/JPEG para out
+P -> DB : Result(type=image, img_id=vídeo, ID único)
+end
+end
+P -> DB : terminar Process; commit se lote completo\ne token ainda ativo
+P -> Q : ws_queue: update-client-process-...
+Q -> WS : mensagem de conclusão
+WS -> N : Socket.IO process-update
+N -> UI : atualizar resultados
+UI -> N : GET .../:u/:p/process/url\nou GET .../:u/:p/process (ZIP)
+N -> G
+G -> P
+P -> DB : obter Results do committedToken
+P -> S : pedir URLs assinados / obter ficheiros
+P --> G : URLs por resultado / ZIP
+G --> N
+N --> UI : resultados disponíveis
+note over W,P : O ack do worker antecede a persistência do resultado no S3/MongoDB.\nNão constitui uma transação distribuída.
+@enduml

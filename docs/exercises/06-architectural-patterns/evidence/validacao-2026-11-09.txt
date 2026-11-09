@@ -1,0 +1,76 @@
+DOCUMENTATION LAYOUT NOTE
+The execution transcript below preserves the paths used at the time of the run.
+The script now lives at docs/exercises/06-architectural-patterns/evidence/preparacao.cjs.
+Current reproduction command (from the repository root):
+docker exec -i picturas-projects-1 node < docs/exercises/06-architectural-patterns/evidence/preparacao.cjs
+
+Execution record — Exercise 6, Block 1 — PL2-G4
+Date: 2026-11-09 (Europe/Lisbon, UTC+00:00)
+Checkout: 484be13b4c8e96c70e7e694a2c368d5601749438
+Upstream application base: 052310226c51fa57a17101c7bd1ad795674aac95
+git diff --name-only 0523102 HEAD: documentation and agent infrastructure only.
+
+ENVIRONMENT
+Ubuntu 22.04.5 LTS, Linux 6.8.0-138-generic, x86_64
+Intel Core i7-13700H, 14 cores, 20 logical CPUs
+RAM: 15 GiB reported by free -h; swap: 2 GiB
+Docker version 29.9.2, build a82e528
+Docker Compose version v5.6.1
+The stack was already running; no fresh build or restart was performed.
+docker compose ps --format '{{.Service}} {{.State}} {{.Health}}':
+32 services running; RabbitMQ, generative-mock and all 3 MongoDB services healthy.
+Other services have no health status in this output (running does not imply healthy).
+Initial Docker inspection required access to /var/run/docker.sock outside the sandbox.
+
+SOURCE CONSISTENCY
+sha256sum on the checkout and corresponding /app files in the running containers:
+51afe2603e9fdc1aa788c6b4cf460841a149920f7475f1837f184c9bd7e8336c  projects/routes/projects.js
+1713a7c3a0299c260ea488ce1a769e5103cf1783a87c68c0d5c2b0f5f43b4ebe  projects/utils/video.js
+b80c0df63d212bdf0ce4bfaae551e805acee290c483dacbfa4c7b7b820d1c45c  Tools/video/video.py
+f7734e0c24df0f11914b02b185368a8fb74fe937cbe092e5f9ee3577d27a8305  Tools/video/video_processor.py
+a259d3653af7809a4aeb4be31fdffd7b9ef8e8b2e95ca6afb47158e4b260f397  Tools/video/subtitles.py
+b8df35126502980caeec1a7d0ce66f00da08e8dd878b125e9b1f685104cefbf3  Tools/video/frame_extraction.py
+All six hashes matched. This does not pin every image/dependency in the stack.
+
+EXISTING ORCHESTRATOR TESTS
+Command:
+docker exec picturas-projects-1 node --test tests/video-pipeline.test.js tests/frame-extraction.test.js tests/process-batch.test.js
+Result:
+tests 8; suites 0; pass 8; fail 0; cancelled 0; skipped 0; todo 0
+duration_ms 73.939866
+
+EXISTING VIDEO TESTS
+Initial command failed because pytest was not installed in the production container.
+Temporary installation (application dependencies were not replaced):
+docker exec picturas-video_tool-1 python -m pip install --target /tmp/picturas-ex6-pytest pytest
+Installed: pytest 9.2.0, iniconfig 2.3.1, packaging 26.3, pluggy 1.7.0, pygments 2.21.0.
+Command:
+docker exec -e PYTHONPATH=/tmp/picturas-ex6-pytest picturas-video_tool-1 python -m pytest -q -p no:cacheprovider tests
+Result:
+74 passed in 41.97s
+FFmpeg is real; speech recognition is mocked by the existing tests.
+Test suite duration is not video processing latency or a performance baseline.
+
+MIXED PROJECT THROUGH NGINX AND API GATEWAY
+Script: docs/Praticas/06/evidencias/preparacao.cjs
+Command (run from the repository root):
+docker exec -i picturas-projects-1 node < docs/Praticas/06/evidencias/preparacao.cjs
+Standard output:
+Date: 2026-11-09T18:53:23.482Z
+Scope: API smoke check through nginx; no browser or performance baseline.
+Dedicated account: 6af216a36d3b7a04e2101643 project: 6af216a30de2db3d8ee9fc8e
+Upload: 1 PNG + 1 MP4, 4 s, 160x120, 10 fps, AAC audio.
+Apply brightness: committed image + MP4/H.264/AAC; public download succeeded.
+Apply brightness + extract_frames: 1 edited image + 3 frames; unique result IDs and source video ID.
+ZIP: 4 files. Remaining daily operations: 2
+PASS. Test account/project retained; no credentials written to the evidence.
+
+The script generates its input deterministically with FFmpeg testsrc2/sine and sharp.
+Input: 160x120 PNG (#8090a0), 4 s 160x120 MP4 at 10 fps with 440 Hz AAC audio.
+Run 1: brightness=0.6. Run 2: brightness=0.6 then extract_frames(count=3, format=png).
+Uses a new free account per execution; the diagnostic script does not save or
+print the generated password/JWT. Application-side storage/logging is unchanged.
+The account/project and S3 results remain for inspection; local script media are removed.
+TLS verification is disabled only for this local self-signed endpoint in the diagnostic client.
+Does not exercise a browser, measure Socket.IO cadence, run real Whisper recognition,
+inject broker/worker failures, test concurrent Apply requests, or establish RNF targets.

@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Padrões Arquiteturais Comuns para Análise</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+  :root {
+    --paper: #FBFAF8; --surface: #FFFFFF; --surface-alt: #F3F2EE;
+    --ink: #1C1E22; --muted: #63686F; --rule: #E3E0D9;
+    --accent: #1F5F63; --accent-ink: #14464A; --accent-wash: #E8F1F1;
+    --flag: #9A4A16; --flag-wash: #F8EEE5;
+    --shadow: 0 1px 2px rgba(28,30,34,.05);
+    --on-accent: #FFFFFF;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #16181B; --surface: #1D2024; --surface-alt: #22262A;
+      --ink: #E8E6E1; --muted: #A0A5AC; --rule: #32373C;
+      --accent: #6FBFC2; --accent-ink: #9AD6D8; --accent-wash: #1B2E30;
+      --flag: #E0955C; --flag-wash: #2E2318;
+      --shadow: 0 1px 2px rgba(0,0,0,.35);
+      --on-accent: #10282A;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #16181B; --surface: #1D2024; --surface-alt: #22262A;
+    --ink: #E8E6E1; --muted: #A0A5AC; --rule: #32373C;
+    --accent: #6FBFC2; --accent-ink: #9AD6D8; --accent-wash: #1B2E30;
+    --flag: #E0955C; --flag-wash: #2E2318;
+    --shadow: 0 1px 2px rgba(0,0,0,.35);
+    --on-accent: #10282A;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font-family: "Source Serif 4", Georgia, "Times New Roman", serif;
+    font-size: 17px; line-height: 1.62;
+  }
+  img { max-width: 100%; }
+
+  .masthead { border-bottom: 1px solid var(--rule); background: var(--surface); }
+  .wrap { width: 100%; max-width: 48rem; margin: 0 auto; padding-inline: 20px; }
+  .masthead .wrap { padding-block: 26px 22px; }
+
+  .eyebrow {
+    font-family: Archivo, "Helvetica Neue", Arial, sans-serif;
+    font-size: 12px; font-weight: 600; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--muted); margin: 0 0 14px;
+  }
+  h1 {
+    font-family: Archivo, "Helvetica Neue", Arial, sans-serif;
+    font-weight: 700; font-size: clamp(1.7rem, 1.2rem + 2.1vw, 2.35rem);
+    line-height: 1.12; letter-spacing: -.02em; text-wrap: balance; margin: 0 0 6px;
+  }
+  .subtitle { font-size: 1.05rem; font-style: italic; color: var(--muted); margin: 0 0 20px; text-wrap: balance; }
+
+  /* Percurso das cinco aulas: a aula corrente fica marcada */
+  .roadmap { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 20px; padding: 0; list-style: none; }
+  .roadmap li {
+    font-family: Archivo, sans-serif; font-size: 12px; font-weight: 600;
+    letter-spacing: .01em; color: var(--muted); background: var(--surface-alt);
+    border: 1px solid var(--rule); border-radius: 100px; padding: 4px 11px; margin: 0;
+  }
+  .roadmap li[aria-current="step"] {
+    background: var(--accent); border-color: var(--accent); color: var(--on-accent);
+  }
+
+  .facts {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 2px; background: var(--rule); border: 1px solid var(--rule);
+    border-radius: 3px; overflow: hidden;
+  }
+  .fact { background: var(--surface); padding: 10px 14px; }
+  .fact dt {
+    font-family: Archivo, sans-serif; font-size: 11px; font-weight: 600;
+    letter-spacing: .08em; text-transform: uppercase; color: var(--muted);
+  }
+  .fact dd { margin: 2px 0 0; font-family: Archivo, sans-serif; font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums; }
+
+  main .wrap { padding-block: 8px 64px; }
+  section { padding-block: 32px 0; }
+  h2 {
+    font-family: Archivo, sans-serif; font-size: 1.3rem; font-weight: 700;
+    letter-spacing: -.01em; margin: 0 0 4px; padding-bottom: 8px;
+    border-bottom: 2px solid var(--ink); text-wrap: balance;
+  }
+  h3 { font-family: Archivo, sans-serif; font-size: 1.02rem; font-weight: 600; margin: 24px 0 6px; }
+  p { margin: 0 0 14px; }
+  a { color: var(--accent-ink); }
+  ul, ol { margin: 0 0 14px; padding-left: 1.3em; }
+  li { margin-bottom: 7px; }
+  li::marker { color: var(--muted); }
+  strong { font-weight: 600; }
+  em.term { font-style: italic; }
+  code, .id {
+    font-family: "JetBrains Mono", ui-monospace, Menlo, monospace; font-size: .84em;
+    background: var(--surface-alt); border: 1px solid var(--rule);
+    border-radius: 3px; padding: .08em .34em; white-space: nowrap;
+  }
+  .bad, .good { display: block; margin-bottom: 6px; }
+  .bad { color: var(--flag); }
+  .good { color: var(--accent-ink); }
+
+  .lede { font-size: 1.1rem; border-left: 3px solid var(--accent); padding-left: 18px; margin-block: 26px 0; }
+  .lede p:last-child { margin-bottom: 0; }
+
+  .panel {
+    background: var(--surface); border: 1px solid var(--rule); border-radius: 4px;
+    box-shadow: var(--shadow); padding: 18px 20px; margin-block: 18px;
+  }
+  .panel > :last-child { margin-bottom: 0; }
+  .panel-label {
+    font-family: Archivo, sans-serif; font-size: 11px; font-weight: 600;
+    letter-spacing: .09em; text-transform: uppercase; color: var(--accent-ink); margin: 0 0 10px;
+  }
+  .panel.flagged { background: var(--flag-wash); border-color: var(--flag); }
+  .panel.flagged .panel-label { color: var(--flag); }
+
+  ol.steps { list-style: none; margin: 22px 0 0; padding: 0; counter-reset: step; }
+  ol.steps > li {
+    counter-increment: step; position: relative; padding-left: 52px;
+    padding-bottom: 24px; margin-bottom: 0; border-left: 1px solid var(--rule); margin-left: 15px;
+  }
+  ol.steps > li:last-child { border-left-color: transparent; padding-bottom: 6px; }
+  ol.steps > li::before {
+    content: counter(step); position: absolute; left: -15px; top: -2px;
+    width: 30px; height: 30px; display: grid; place-items: center;
+    background: var(--accent); color: var(--on-accent); border-radius: 50%;
+    font-family: Archivo, sans-serif; font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums;
+  }
+  ol.steps h3 { margin-top: 0; }
+
+  .io {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 2px; background: var(--rule); border: 1px solid var(--rule);
+    border-radius: 3px; overflow: hidden; margin-block: 16px;
+  }
+  .io > div { background: var(--surface); padding: 10px 13px; }
+  .io dt {
+    font-family: Archivo, sans-serif; font-size: 10px; font-weight: 600;
+    letter-spacing: .09em; text-transform: uppercase; color: var(--muted);
+  }
+  .io dd { margin: 3px 0 0; font-size: 15px; line-height: 1.45; }
+
+  .checklist { list-style: none; padding-left: 0; }
+  .checklist li { position: relative; padding-left: 30px; margin-bottom: 9px; }
+  .checklist li::before {
+    content: ""; position: absolute; left: 0; top: .45em;
+    width: 14px; height: 14px; border: 1.5px solid var(--accent); border-radius: 2px;
+  }
+
+  .table-scroll { overflow-x: auto; margin-block: 16px; }
+  table { border-collapse: collapse; width: 100%; font-family: Archivo, sans-serif; font-size: 14px; }
+  th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  th {
+    font-size: 11px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase;
+    color: var(--muted); border-bottom: 1px solid var(--ink); white-space: nowrap;
+  }
+  td.aula { font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+  footer {
+    border-top: 1px solid var(--rule); margin-top: 48px; padding-block: 20px 8px;
+    font-family: Archivo, sans-serif; font-size: 13px; color: var(--muted);
+    display: flex; flex-wrap: wrap; gap: 6px 18px; justify-content: space-between;
+  }
+
+  @media (max-width: 480px) {
+    body { font-size: 16px; }
+    ol.steps > li { padding-left: 42px; }
+  }
+  @media print {
+    body { background: #fff; font-size: 11pt; }
+    .panel, .facts, .io, table { box-shadow: none; }
+    section, ol.steps > li { break-inside: avoid; }
+  }
+
+  /* Ajustes para documentos longos gerados a partir de Markdown */
+  section > section { padding-block: 0; }
+  section > section > h3 { margin-top: 28px; }
+  code { white-space: normal; overflow-wrap: anywhere; }
+  th { white-space: normal; }
+  td, th { min-width: 7rem; }
+  blockquote {
+    margin: 18px 0; padding: 12px 18px; background: var(--accent-wash);
+    border-left: 3px solid var(--accent); border-radius: 0 3px 3px 0;
+  }
+  blockquote > :last-child { margin-bottom: 0; }
+  ul ul, ol ul, ul ol, ol ol { margin-top: 6px; margin-bottom: 6px; }
+  a code { color: inherit; }
+  main .wrap > p:first-child { margin-top: 28px; }
+  .roadmap li a { color: inherit; text-decoration: none; }
+  .roadmap li a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <p class="eyebrow">Requisitos e Arquiteturas de Software · MEI · Universidade do Minho</p>
+    <h1>Padrões Arquiteturais Comuns para Análise</h1>
+    <p class="subtitle">Material de apoio ao Exercício 6</p>
+    <dl class="facts">
+      <div class="fact"><dt>Tipo</dt><dd>Material de apoio</dd></div>
+      <div class="fact"><dt>Usado em</dt><dd>Exercício 6 · Bloco 1</dd></div>
+      <div class="fact"><dt>Padrões</dt><dd>7</dd></div>
+      <div class="fact"><dt>Contexto</dt><dd>PictuRAS · vídeo</dd></div>
+    </dl>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+
+<p>Documento de apoio ao <strong>Exercício 6</strong>, usado sobretudo no <strong>Bloco 1</strong> (<a href="RAS-exercicio_6_bloco1_SWdesign_PT.html"><code>RAS-exercicio_6_bloco1_SWdesign_PT.html</code></a>: identificação e comparação de padrões) e como referência no <strong>Bloco 2</strong> (<a href="RAS-exercicio_6_bloco2_SWdesign_PT.html"><code>RAS-exercicio_6_bloco2_SWdesign_PT.html</code></a>).</p>
+<p>Reúne os padrões arquiteturais mais comuns a considerar na identificação do padrão atual e na escolha das alternativas a comparar. Para cada padrão, indica-se o nível de análise e a relevância para o processamento de vídeo no PictuRAS.</p>
+<section id="níveis-de-análise-padrão-global-e-padrões-locais" class="level2">
+<h2>Níveis de análise: padrão global e padrões locais</h2>
+<p>Um sistema combina, em regra, vários estilos arquiteturais em <strong>níveis diferentes</strong>. Antes de comparar alternativas, identifica o nível a que cada padrão atua:</p>
+<ul>
+<li><strong>Global:</strong> organiza a solução como um todo (decomposição em serviços, comunicação, entrada, implantação). É o <strong>padrão dominante</strong> e o contexto de todas as decisões locais.</li>
+<li><strong>Processamento de vídeo:</strong> organiza o caminho do vídeo dentro da solução. Pode <strong>seguir</strong> o padrão global ou <strong>afastar-se</strong> dele.</li>
+<li><strong>Interno a cada serviço:</strong> organização do código de um serviço (e.g., camadas).</li>
+</ul>
+<p>Ao comparar alternativas, indica sempre se <strong>mantêm</strong> ou <strong>alteram</strong> o padrão global e avalia a coerência e o custo dessa opção. Um padrão local que se afasta do global pode ser uma escolha justificada ou uma fragilidade; em ambos os casos tem de ser fundamentado.</p>
+</section>
+<section id="1-padrões-em-camadas-layered" class="level2">
+<h2>1. Padrões em Camadas (Layered)</h2>
+<ul>
+<li><strong>Características:</strong>
+<ul>
+<li>Organização hierárquica</li>
+<li>Separação clara de responsabilidades</li>
+<li>Dependências unidirecionais</li>
+</ul></li>
+<li><strong>Variantes:</strong>
+<ul>
+<li>Strict Layered (comunicação apenas entre camadas adjacentes)</li>
+<li>Relaxed Layered (permite bypass de camadas)</li>
+<li>N-Tier Architecture</li>
+</ul></li>
+<li><strong>Nível de análise:</strong> interno a cada serviço.</li>
+<li><strong>Relevância:</strong> descreve a organização interna de cada serviço (e.g., rotas → controladores → modelos no <code>projects</code>), mais do que o processamento de vídeo.</li>
+</ul>
+</section>
+<section id="2-padrão-monolítico" class="level2">
+<h2>2. Padrão Monolítico</h2>
+<ul>
+<li><strong>Características:</strong>
+<ul>
+<li>Aplicação como única unidade</li>
+<li>Simplicidade de desenvolvimento</li>
+<li>Deploy único</li>
+</ul></li>
+<li><strong>Variantes:</strong>
+<ul>
+<li>Modular Monolith</li>
+<li>Pipeline Monolith</li>
+<li>Microkernel</li>
+</ul></li>
+<li><strong>Nível de análise:</strong> processamento de vídeo; como <em>Modular Monolith</em>, seria uma alternativa ao nível global.</li>
+<li><strong>Relevância:</strong> o <code>video_tool</code> concentra todos os efeitos de vídeo, a legendagem e a extração de fotogramas num único serviço (<em>pipeline monolith</em> dentro de uma arquitetura de microserviços).</li>
+</ul>
+</section>
+<section id="3-microserviços" class="level2">
+<h2>3. Microserviços</h2>
+<ul>
+<li><strong>Características:</strong>
+<ul>
+<li>Serviços independentes</li>
+<li>Deploy independente</li>
+<li>Bases de dados dedicadas</li>
+</ul></li>
+<li><strong>Variantes:</strong>
+<ul>
+<li>API Gateway</li>
+<li>Sidecar Pattern</li>
+<li>Service Mesh</li>
+</ul></li>
+<li><strong>Nível de análise:</strong> global (estilo dominante da solução); candidato também ao nível do vídeo.</li>
+<li><strong>Relevância:</strong> estilo global do PictuRAS e do caminho de imagens (um serviço por ferramenta); candidato para decompor o processamento de vídeo.</li>
+</ul>
+</section>
+<section id="4-event-driven" class="level2">
+<h2>4. Event-Driven</h2>
+<ul>
+<li><strong>Características:</strong>
+<ul>
+<li>Comunicação assíncrona</li>
+<li>Desacoplamento</li>
+<li>Escalabilidade</li>
+</ul></li>
+<li><strong>Variantes:</strong>
+<ul>
+<li>Publish-Subscribe</li>
+<li>Event Sourcing</li>
+<li>CQRS</li>
+</ul></li>
+<li><strong>Nível de análise:</strong> global (comunicação assíncrona entre serviços), com impacto no vídeo.</li>
+<li><strong>Relevância:</strong> RabbitMQ (<code>video_queue</code>, <code>project_queue</code>, <code>ws_queue</code>) e eventos <code>video-progress</code>; condiciona o modelo de progresso, de cancelamento e de recuperação.</li>
+</ul>
+</section>
+<section id="5-service-oriented-architecture-soa" class="level2">
+<h2>5. Service-Oriented Architecture (SOA)</h2>
+<ul>
+<li><strong>Características:</strong>
+<ul>
+<li>Serviços reutilizáveis</li>
+<li>Contratos bem definidos</li>
+<li>Enterprise Service Bus</li>
+</ul></li>
+<li><strong>Variantes:</strong>
+<ul>
+<li>Enterprise SOA</li>
+<li>Domain-Driven SOA</li>
+<li>RESTful SOA</li>
+</ul></li>
+<li><strong>Nível de análise:</strong> global (comunicação síncrona entre serviços).</li>
+<li><strong>Relevância:</strong> contratos REST entre <code>apiGateway</code>, <code>projects</code> e <code>imageStorageService</code>.</li>
+</ul>
+</section>
+<section id="6-pipes-and-filters--pipeline" class="level2">
+<h2>6. Pipes and Filters / Pipeline</h2>
+<ul>
+<li><strong>Características:</strong>
+<ul>
+<li>Sequência de transformações independentes</li>
+<li>Cada filtro tem entradas e saídas bem definidas</li>
+<li>Reordenação e reutilização de filtros</li>
+</ul></li>
+<li><strong>Variantes:</strong>
+<ul>
+<li>Pipeline numa só unidade de processamento (decode uma vez, encode uma vez)</li>
+<li>Pipeline distribuído (um serviço por filtro, como nas ferramentas de imagem)</li>
+</ul></li>
+<li><strong>Nível de análise:</strong> global (encadeamento de ferramentas) e processamento de vídeo (<em>pipeline</em> do vídeo).</li>
+<li><strong>Relevância:</strong> o encadeamento de ferramentas é a génese do PictuRAS; é o eixo principal da comparação imagem/vídeo.</li>
+</ul>
+</section>
+<section id="7-competing-consumers--work-queue" class="level2">
+<h2>7. Competing Consumers / Work Queue</h2>
+<ul>
+<li><strong>Características:</strong>
+<ul>
+<li>Vários consumidores sobre a mesma fila</li>
+<li>Escalabilidade horizontal e balanceamento de carga</li>
+<li>Isolamento de cargas pesadas por fila dedicada</li>
+</ul></li>
+<li><strong>Variantes:</strong>
+<ul>
+<li>Réplicas estáticas</li>
+<li>Autoscaling por tamanho da fila</li>
+<li>Filas separadas por tipo de trabalho</li>
+</ul></li>
+<li><strong>Nível de análise:</strong> processamento de vídeo (alternativa que mantém o padrão global).</li>
+<li><strong>Relevância:</strong> o <code>video_tool</code> é um consumidor único (<code>prefetch_count=1</code>, sem réplicas), pelo que os vídeos são processados um de cada vez.</li>
+</ul>
+</section>
+<section id="considerações-para-análise" class="level2">
+<h2>Considerações para Análise</h2>
+<ul>
+<li>Contexto do sistema</li>
+<li>Padrão global da solução: coerência com ele e custo de se afastar dele ou de o alterar</li>
+<li>Requisitos não funcionais críticos</li>
+<li>Necessidades de evolução</li>
+<li>Restrições tecnológicas</li>
+<li>Custos operacionais</li>
+<li>Risco de regressão funcional e custo do <em>refactoring</em></li>
+<li>Possibilidade de medir de forma reprodutível o efeito da alteração</li>
+</ul>
+</section>
+
+    <footer>
+      <span>RAS · Fase 2 · Material de apoio</span>
+      <span>Universidade do Minho · 2026/2027</span>
+    </footer>
+
+  </div>
+</main>
+
+</body>
+</html>

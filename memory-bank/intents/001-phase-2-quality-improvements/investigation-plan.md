@@ -3,7 +3,7 @@ intent: 001-phase-2-quality-improvements
 phase: inception
 status: draft
 created: 2026-11-14T17:31:51Z
-updated: 2026-11-14T17:31:51Z
+updated: 2026-11-14T18:06:50Z
 ---
 
 # Investigation Plan for the Six Quality Directions
@@ -15,17 +15,22 @@ The user selected continuation of the exploration and confirmed delivery on
 unknown. This plan defines bounded investigations before the team chooses two
 requirements. It does not approve requirement targets or architectural changes.
 
-The current source revision is `5678c7cecca1e78ad54ce80e68a3f8f8988bd125`.
+The initial source revision was `5678c7cecca1e78ad54ce80e68a3f8f8988bd125`.
 `git diff 484be13 HEAD --name-only` restricted to application code, Compose and
 RabbitMQ configuration returned no changes. The previous architectural diagnosis
 therefore remains structurally relevant; its historical runtime results still
 need to be distinguished from the new experiments.
 
-At inspection, `docker compose ps` listed no running services for this project.
+At the initial inspection, `docker compose ps` listed no running services for this project.
 Local application images are available. The new video experiment ran in a separate
 temporary container without application volumes or network access. It used current
 source mounted read-only, a fixed image ID, 2 CPU and 1 GiB of memory. No stack was
-started, scaled or interrupted, and no existing application data were changed.
+started, scaled or interrupted at that stage, and no existing application data
+were changed. A subsequent live stage used a separate 13-service deployment at
+source revision `24484b7`, with matching application sources. Its
+[findings and limitations](live-findings.md) include upload/resource measurements,
+three processing batches, a finite access matrix and one worker restart. These
+candidate measurements complement the protocols below; no final pair is selected.
 
 See the [evidence index](evidence/README.md) for commands, hashes, raw results,
 the local acknowledgement-order demonstration and the host regression run.
@@ -57,12 +62,12 @@ characteristics. Neither the pair table nor ALT-1/ALT-2 exhausts the possibiliti
 
 | Direction | New evidence or renewed inspection | What remains unproven |
 |-----------|------------------------------------|-----------------------|
-| QC-01 | The real Node AMQP helper, evaluated with a fake transport, called `ack` while an asynchronous callback was still pending. Video manual ack, non-persistent publication and shared execution paths were rechecked. | Broker/database crash outcomes, loss frequency, duplicate commits and recovery time. |
-| QC-02 | One configured video service and prefetch 1 were confirmed. Twelve processor runs completed in a fixed-resource isolated container, across ordinary/preview/extraction cases. | Queueing, concurrent capacity, real Whisper contention, benefits of replicas or dynamic scaling. |
+| QC-01 | The Node helper acknowledges before its asynchronous callback finishes. One live early worker kill/restart recovered one result with one charge; the request was ready in the queue before restart. | Other failure windows, repeated fault trials, broker/orchestrator failure and duplicate publication. |
+| QC-02 | One service/prefetch 1 confirmed; processor pilot plus three live batches yielded nine committed video results with queueing/resource measurements. | Benefits of replicas under a fixed budget, real Whisper contention and dynamic scaling. |
 | QC-03 | Eight ordinary effects in `FRAME_EFFECTS` and their image-tool counterparts were confirmed; video processing has internal modules but shares deployment. | Maintenance-task effort, change propagation and the benefit of internal extraction versus ALT-1. |
-| QC-04 | Tool visibility, browser-local progress, overlay and percentage-triggered updates were rechecked. Local callback timings were captured by the processor probe. | User task success/comprehension, browser refresh/navigation behavior in a live session and WebSocket event cadence. |
-| QC-05 | Memory-backed upload handling was confirmed in gateway, projects and storage. Source limits distinguish free and premium uploads. | Peak memory, disconnect cleanup, successful concurrency envelope and upload latency under controlled load. |
-| QC-06 | Gateway JWT verification contrasts with internal caller-header trust and JWT decoding; storage routes lack equivalent authentication middleware and internal ports are published. | Reachable cross-owner read/write bypasses under the actual deployment and correctness of any proposed enforcement. |
+| QC-04 | UI/state inspection plus live Socket.IO polling measured active-job events and delayed first progress for queued jobs. | Participant task success, browser refresh/navigation/cancellation and heavy-stage cadence. |
+| QC-05 | Valid 10/50 MiB uploads were measured with a separate generator, per-service Node RSS and cgroup samples. | More repetitions/sizes, cold/steady-state differences, disconnect cleanup and concurrency envelope. |
+| QC-06 | Cross-owner project reads, forged caller identity, tokenless object reads and writes were demonstrated inside the isolated Docker network. | Broader access matrix, host/internet reachability, TLS/secrets changes and proposed enforcement. |
 
 The host video suite passed 74 tests. Its fake recognizer does not evaluate real
 speech recognition. Local processing kept the original input hash unchanged and
@@ -290,12 +295,12 @@ not measured effort or stakeholder scores. None is a selected or excluded direct
 
 | Direction | Narrow investigation available | Main prerequisite | Scope risk to discuss |
 |-----------|--------------------------------|-------------------|-----------------------|
-| QC-01 | Acknowledgement-order demonstration completed | Disposable services and deterministic interruption points | Recovery can cross publication, persistence, files and quota. |
-| QC-02 | Processor pilot completed | Live queue, headroom, safe work paths and real-speech setup | A worker pool is narrower than full dynamic elasticity. |
+| QC-01 | Acknowledgement-order demonstration and one worker recovery completed | Further failure windows and deterministic repetitions | Recovery can cross publication, persistence, files and quota. |
+| QC-02 | Processor pilot and three live batches completed | Headroom, safe variants and real-speech setup | A worker pool is narrower than full dynamic elasticity. |
 | QC-03 | Register/dependency inspection completed | Comparable maintenance task and reviewer | ALT-1 adds contracts, deployment and recoding risks. |
-| QC-04 | UI/state inspection completed | Running browser and participants | Pipeline clarity and background operation need separate measures. |
-| QC-05 | Buffering path inspection completed | Live transfer, memory collector and valid corpus | Streaming can shift buffering upstream or add disk cost. |
-| QC-06 | Trust-boundary inspection completed | Isolated deployment, synthetic owners and expected access matrix | Broad security reform is larger than one enforced boundary. |
+| QC-04 | UI/state inspection and Socket.IO timing completed | Rendered-browser tasks and participants | Pipeline clarity and background operation need separate measures. |
+| QC-05 | Source inspection and 10/50 MiB RSS samples completed | Final corpus, repetitions and resource target | Streaming can shift buffering upstream or add disk cost. |
+| QC-06 | Finite internal access matrix completed | Exact enforcement boundary and legitimate-call inventory | Broad security reform is larger than one enforced boundary. |
 
 Before shortlisting, have each team member review stakeholder impact, evidence
 strength, measurable outcome, implementation complexity, effort, functional risk
@@ -313,11 +318,14 @@ report/evidence review. These are planning suggestions, not agreed team dates.
 ## Remaining Decisions
 
 - Available person-hours, participants and resource budget.
-- Live baseline deployment and measurement corpus for the retained candidates.
+- Match retained candidate measurements to the final protocols, or define the
+  additional baseline corpus/conditions needed before refactoring.
 - Evidence-based shortlist and agreement from all four members.
 - Final two quantitative RNFs, numerical origins and regression scope.
 
-The [team decision record](quality-exploration.md#decision-record--pending) remains
+The [live findings](live-findings.md) now supply a provisional discussion shortlist
+and initial candidate measurements; no pair is approved. The
+[team decision record](quality-exploration.md#decision-record--pending) remains
 pending. Investigation and instrumentation can continue without selecting a pair.
 Construction planning follows approved requirements; this exploration does not
 create units, stories or implementation bolts prematurely.

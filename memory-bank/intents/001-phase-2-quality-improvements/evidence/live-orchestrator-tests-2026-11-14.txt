@@ -1,0 +1,16 @@
+Observed existing suite in the isolated, source-verified projects container.
+Command:
+docker exec picturas-quality-20261114-projects-1 node --test tests/video-pipeline.test.js tests/frame-extraction.test.js tests/process-batch.test.js
+
+Final output excerpt:
+tests 8
+suites 0
+pass 8
+fail 0
+cancelled 0
+skipped 0
+todo 0
+duration_ms 179.737427
+
+This is functional regression evidence for the existing covered rules, not a
+processing-time baseline or operational reliability rate.

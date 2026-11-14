@@ -3,7 +3,7 @@ intent: 001-phase-2-quality-improvements
 phase: inception
 status: draft
 created: 2026-11-14T17:16:06Z
-updated: 2026-11-14T17:35:54Z
+updated: 2026-11-14T18:06:50Z
 ---
 
 # Quality Options and Team Decision
@@ -19,10 +19,12 @@ This document contains a qualitative analysis of the six directions and their
 15 possible pairs. It is not an exhaustive catalog of every possible refactoring.
 Candidate benefits, effort and risks are engineering hypotheses. The subsequent
 [investigation plan](investigation-plan.md) adds a local acknowledgement-order
-demonstration, host regression results and small processor-only experiments on
-the host and in an isolated video-image container. Full application load,
-fault-injection, security and participant usability experiments remain pending.
-No final requirements or team approvals are recorded.
+demonstration, host regression results and processor-only experiments. The
+[live findings](live-findings.md) now add measurements through a 13-service
+application slice, an internal access matrix and one worker kill/restart. Broader
+load/fault coverage, real Whisper, scaling, maintenance-task experiments and
+participant usability remain pending. No final requirements or team approvals
+are recorded.
 
 The [Exercise 6 resolution](../../../docs/exercises/06-architectural-patterns/resolution.md)
 provides the EV/H evidence identifiers used below. Targeted source checks during
@@ -216,7 +218,8 @@ still needs an explicit scenario and independent measure for each requirement.
 4. **Compare and shortlist:** Assess stakeholder impact, strength of evidence,
    measurement feasibility, delivery effort, regression risk and trade-offs. Every
    exclusion needs a reason. Shortlist pairs only after reviewing all six directions;
-   no pair is currently preferred or selected.
+   the [live findings](live-findings.md) now provide provisional discussion pairs;
+   no pair is selected or approved.
 5. **Obtain whole-team agreement:** All four members review the same revision,
    proposed pair, evidence and scope. Record each person's explicit agreement or
    concerns. Discussion resolves concerns before acceptance; a majority vote or
@@ -237,7 +240,7 @@ goal. Historical EV-28 test passes and smoke checks do not supply these baseline
 | Field | Current value |
 |-------|---------------|
 | Reviewed document revision / commit | Pending |
-| Experiment records and limitations | [Preliminary evidence available](evidence/README.md): acknowledgement order, 74 host video tests and processor pilots; whole-application measurements pending |
+| Experiment records and limitations | [Live findings available](live-findings.md): candidate upload/queue/progress/access measurements and one recovery scenario, plus prior processor/helper probes. Broader evaluation limits are explicit. |
 | Selected requirement 1 / metric | Pending |
 | Selected requirement 2 / metric | Pending |
 | Rationale and rejected alternatives | Pending |
@@ -270,5 +273,5 @@ Codex, using the local
 prepared this qualitative comparison and investigation procedure from existing
 project evidence and targeted source reads. Subsequent AI-assisted exploratory
 scripts, raw results and validation are documented in the
-[evidence index](evidence/README.md). Team review, whole-application validation,
+[evidence index](evidence/README.md). Team review, final requirement evaluation,
 final selection and quantitative requirement approval remain pending.

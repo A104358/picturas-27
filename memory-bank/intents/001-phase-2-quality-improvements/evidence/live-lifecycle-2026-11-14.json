@@ -1,0 +1,85 @@
+{
+  "recorded_at": "2026-11-14T18:13:34Z",
+  "project": "picturas-quality-20261114",
+  "action": "stop; no volumes removed",
+  "services": [
+    {
+      "Service": "api_gateway",
+      "State": "exited",
+      "Health": "",
+      "ExitCode": 1
+    },
+    {
+      "Service": "brightness_tool",
+      "State": "exited",
+      "Health": "",
+      "ExitCode": 137
+    },
+    {
+      "Service": "frontend",
+      "State": "exited",
+      "Health": "",
+      "ExitCode": 0
+    },
+    {
+      "Service": "img_storage",
+      "State": "exited",
+      "Health": "",
+      "ExitCode": 1
+    },
+    {
+      "Service": "nginx",
+      "State": "exited",
+      "Health": "",
+      "ExitCode": 0
+    },
+    {
+      "Service": "projects",
+      "State": "exited",
+      "Health": "",
+      "ExitCode": 1
+    },
+    {
+      "Service": "projects_mongoDB",
+      "State": "exited",
+      "Health": "",
+      "ExitCode": 0
+    },
+    {
+      "Service": "rabbitmq",
+      "State": "exited",
+      "Health": "",
+      "ExitCode": 0
+    },
+    {
+      "Service": "seaweedfs",
+      "State": "exited",
+      "Health": "",
+      "ExitCode": 137
+    },
+    {
+      "Service": "users",
+      "State": "exited",
+      "Health": "",
+      "ExitCode": 1
+    },
+    {
+      "Service": "users_mongoDB",
+      "State": "exited",
+      "Health": "",
+      "ExitCode": 0
+    },
+    {
+      "Service": "video_tool",
+      "State": "exited",
+      "Health": "",
+      "ExitCode": 137
+    },
+    {
+      "Service": "ws_gateway",
+      "State": "exited",
+      "Health": "",
+      "ExitCode": 1
+    }
+  ]
+}

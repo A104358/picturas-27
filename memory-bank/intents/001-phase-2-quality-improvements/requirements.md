@@ -3,7 +3,7 @@ intent: 001-phase-2-quality-improvements
 phase: inception
 status: draft
 created: 2026-11-14T17:10:27Z
-updated: 2026-11-14T17:35:54Z
+updated: 2026-11-14T18:06:50Z
 ---
 
 # Requirements: Phase 2 Quality Improvements
@@ -29,6 +29,12 @@ The [investigation plan](investigation-plan.md) and [evidence index](evidence/RE
 now include renewed source checks, an acknowledgement-order demonstration,
 74 passing host video tests and processor-only pilots. Final requirement baselines
 and numerical acceptance values remain pending.
+
+The subsequent [live findings](live-findings.md) add candidate measurements from
+an isolated 13-service deployment: upload RSS, three video batches, Socket.IO
+progress, internal access tests and one worker-recovery scenario. These results
+support a provisional discussion shortlist; no pair or quantitative targets have
+been approved by the team.
 
 ## Business Goals
 

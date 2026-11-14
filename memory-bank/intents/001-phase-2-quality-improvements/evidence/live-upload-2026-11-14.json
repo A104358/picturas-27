@@ -1,0 +1,146 @@
+{
+  "recorded_at": "2026-11-14T17:52:11.194Z",
+  "source_commit": "24484b7",
+  "load_generator": "separate-container",
+  "scope": "Isolated 13-service image/video slice through nginx; three processing batches and a finite access matrix.",
+  "accounts": [
+    {
+      "label": "owner",
+      "id": "6af89ff3f2142e34ce313f72",
+      "profile": "free"
+    },
+    {
+      "label": "outsider",
+      "id": "6af89ff3f2142e34ce313f74",
+      "profile": "free"
+    }
+  ],
+  "uploads": [
+    {
+      "size_mib": 10,
+      "bytes": 10485760,
+      "sha256": "048675d4ccc7f9ed95d4199aa40a41b56e3a5712c8ee526e9fd1982d9ea0dc8b",
+      "started_at_ms": 1794678773019,
+      "ended_at_ms": 1794678773374,
+      "elapsed_ms": 355,
+      "status": 204
+    },
+    {
+      "size_mib": 50,
+      "bytes": 52428800,
+      "sha256": "71aac942e5fd32bfbd1f711003f8ef6f4e76c5c0c4fab6de84c2ecbf25ceabae",
+      "started_at_ms": 1794678774411,
+      "ended_at_ms": 1794678776043,
+      "elapsed_ms": 1632,
+      "status": 204
+    }
+  ],
+  "access": [
+    {
+      "case": "gateway-owner",
+      "operation": "read-project",
+      "expected_allowed": true,
+      "status": 200,
+      "protected_data_returned": true
+    },
+    {
+      "case": "gateway-no-token",
+      "operation": "read-project",
+      "expected_allowed": false,
+      "status": 401,
+      "protected_data_returned": false
+    },
+    {
+      "case": "gateway-invalid-token",
+      "operation": "read-project",
+      "expected_allowed": false,
+      "status": 401,
+      "protected_data_returned": false
+    },
+    {
+      "case": "gateway-outsider-token",
+      "operation": "read-project",
+      "expected_allowed": false,
+      "status": 401,
+      "protected_data_returned": false
+    },
+    {
+      "case": "direct-project-no-token",
+      "operation": "read-project",
+      "expected_allowed": false,
+      "status": 401,
+      "protected_data_returned": false
+    },
+    {
+      "case": "direct-project-outsider-token",
+      "operation": "read-project",
+      "expected_allowed": false,
+      "status": 200,
+      "protected_data_returned": true
+    },
+    {
+      "case": "direct-storage-no-token",
+      "operation": "read-object",
+      "expected_allowed": false,
+      "status": 200,
+      "protected_data_returned": false
+    },
+    {
+      "case": "direct-storage-no-token-write",
+      "operation": "write-owner-prefix",
+      "expected_allowed": false,
+      "status": 201,
+      "write_accepted": true
+    }
+  ],
+  "batches": [],
+  "outputs": [],
+  "amqp": [],
+  "phases": [
+    {
+      "label": "upload-warmup",
+      "started_at_ms": 1794678771823,
+      "status": "completed",
+      "ended_at_ms": 1794678772006
+    },
+    {
+      "label": "upload-10MiB",
+      "started_at_ms": 1794678773017,
+      "status": "completed",
+      "ended_at_ms": 1794678773388
+    },
+    {
+      "label": "upload-50MiB",
+      "started_at_ms": 1794678774410,
+      "status": "completed",
+      "ended_at_ms": 1794678776098
+    },
+    {
+      "label": "access-matrix",
+      "started_at_ms": 1794678776098,
+      "status": "completed",
+      "ended_at_ms": 1794678776238
+    }
+  ],
+  "failures": [],
+  "limits": [
+    "Pilot sample sizes; no p95 or approved acceptance targets.",
+    "No real Whisper, worker scaling, fault injection or participant study.",
+    "Socket.IO polling client exercises the gateway protocol, not a rendered browser.",
+    "Upload sizes are controlled with an MP4 free box; not representative content entropy."
+  ],
+  "input": {
+    "bytes": 3996212,
+    "sha256": "bd65f6b25d3ae1fcecdc76caf3d36b2480e137387db610c41667c5c46786e3a8",
+    "seconds": 10,
+    "width": 1280,
+    "height": 720,
+    "fps": 30,
+    "audio": "AAC"
+  },
+  "upload_project": {
+    "owner_id": "6af89ff3f2142e34ce313f72",
+    "project_id": "6af89ff3c79de7ef31236824"
+  },
+  "finished_at": "2026-11-14T17:52:56.262Z"
+}

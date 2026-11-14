@@ -1,0 +1,281 @@
+{
+  "controller": {
+    "recorded_at": "2026-11-14T18:00:37Z",
+    "worker": "picturas-quality-20261114-video_tool-1",
+    "project_label_verified": true,
+    "interrupted": true,
+    "kill_started_at_ms": 1794679309082.09,
+    "kill_completed_at_ms": 1794679309470.164,
+    "queue_before_restart": {
+      "ready": 1,
+      "consumers": 0
+    },
+    "restart_completed_at_ms": 1794679310442.2163
+  },
+  "probe": {
+    "recorded_at": "2026-11-14T18:00:38.404Z",
+    "scenario": "Abrupt kill after first >=2% progress, then restart the same isolated video worker.",
+    "progress": [
+      {
+        "unix_ms": 1794679308609,
+        "percent": 1
+      },
+      {
+        "unix_ms": 1794679309081,
+        "percent": 3
+      },
+      {
+        "unix_ms": 1794679311160,
+        "percent": 1
+      },
+      {
+        "unix_ms": 1794679311659,
+        "percent": 3
+      },
+      {
+        "unix_ms": 1794679312073,
+        "percent": 5
+      },
+      {
+        "unix_ms": 1794679312541,
+        "percent": 7
+      },
+      {
+        "unix_ms": 1794679313082,
+        "percent": 9
+      },
+      {
+        "unix_ms": 1794679313673,
+        "percent": 11
+      },
+      {
+        "unix_ms": 1794679314079,
+        "percent": 13
+      },
+      {
+        "unix_ms": 1794679314549,
+        "percent": 15
+      },
+      {
+        "unix_ms": 1794679315067,
+        "percent": 17
+      },
+      {
+        "unix_ms": 1794679315470,
+        "percent": 19
+      },
+      {
+        "unix_ms": 1794679315961,
+        "percent": 21
+      },
+      {
+        "unix_ms": 1794679316378,
+        "percent": 23
+      },
+      {
+        "unix_ms": 1794679316853,
+        "percent": 25
+      },
+      {
+        "unix_ms": 1794679317477,
+        "percent": 27
+      },
+      {
+        "unix_ms": 1794679318155,
+        "percent": 29
+      },
+      {
+        "unix_ms": 1794679318764,
+        "percent": 31
+      },
+      {
+        "unix_ms": 1794679319180,
+        "percent": 33
+      },
+      {
+        "unix_ms": 1794679319645,
+        "percent": 35
+      },
+      {
+        "unix_ms": 1794679319944,
+        "percent": 37
+      },
+      {
+        "unix_ms": 1794679320126,
+        "percent": 39
+      },
+      {
+        "unix_ms": 1794679320311,
+        "percent": 41
+      },
+      {
+        "unix_ms": 1794679320549,
+        "percent": 43
+      },
+      {
+        "unix_ms": 1794679320741,
+        "percent": 45
+      },
+      {
+        "unix_ms": 1794679320906,
+        "percent": 47
+      },
+      {
+        "unix_ms": 1794679321160,
+        "percent": 49
+      },
+      {
+        "unix_ms": 1794679321352,
+        "percent": 51
+      },
+      {
+        "unix_ms": 1794679321554,
+        "percent": 53
+      },
+      {
+        "unix_ms": 1794679321807,
+        "percent": 55
+      },
+      {
+        "unix_ms": 1794679321995,
+        "percent": 57
+      },
+      {
+        "unix_ms": 1794679322190,
+        "percent": 59
+      },
+      {
+        "unix_ms": 1794679322455,
+        "percent": 61
+      },
+      {
+        "unix_ms": 1794679322648,
+        "percent": 63
+      },
+      {
+        "unix_ms": 1794679322807,
+        "percent": 65
+      },
+      {
+        "unix_ms": 1794679322981,
+        "percent": 67
+      },
+      {
+        "unix_ms": 1794679323351,
+        "percent": 69
+      },
+      {
+        "unix_ms": 1794679324068,
+        "percent": 71
+      },
+      {
+        "unix_ms": 1794679324753,
+        "percent": 73
+      },
+      {
+        "unix_ms": 1794679325286,
+        "percent": 75
+      },
+      {
+        "unix_ms": 1794679325891,
+        "percent": 77
+      },
+      {
+        "unix_ms": 1794679326442,
+        "percent": 79
+      },
+      {
+        "unix_ms": 1794679326943,
+        "percent": 81
+      },
+      {
+        "unix_ms": 1794679327271,
+        "percent": 83
+      },
+      {
+        "unix_ms": 1794679327773,
+        "percent": 85
+      },
+      {
+        "unix_ms": 1794679328443,
+        "percent": 87
+      },
+      {
+        "unix_ms": 1794679328971,
+        "percent": 89
+      },
+      {
+        "unix_ms": 1794679329481,
+        "percent": 91
+      },
+      {
+        "unix_ms": 1794679329997,
+        "percent": 93
+      },
+      {
+        "unix_ms": 1794679330440,
+        "percent": 95
+      },
+      {
+        "unix_ms": 1794679330851,
+        "percent": 97
+      },
+      {
+        "unix_ms": 1794679331275,
+        "percent": 99
+      },
+      {
+        "unix_ms": 1794679336478,
+        "percent": 100
+      }
+    ],
+    "responses": [
+      {
+        "unix_ms": 1794679336541,
+        "status": "success",
+        "correlation_id": "request-dbcd19b4-f326-49c5-9358-ab8f77224b59",
+        "processing_ms": 25951.882999999998
+      }
+    ],
+    "requests": [
+      {
+        "unix_ms": 1794679308005,
+        "message_id": "request-dbcd19b4-f326-49c5-9358-ab8f77224b59"
+      }
+    ],
+    "failures": [],
+    "input": {
+      "duration_s": 30,
+      "width": 1280,
+      "height": 720,
+      "sha256": "e99fea4e54f14baf11463e669a38b68d88ca928090d173f05fd91f383c00a5f8",
+      "bytes": 12009300
+    },
+    "owner_id": "6af8a20bf2142e34ce313fbd",
+    "project_id": "6af8a20bc79de7ef312381fe",
+    "started_at_ms": 1794679307822,
+    "accepted_at_ms": 1794679307955,
+    "dispatch_status": 201,
+    "interruption_ready_at_ms": 1794679309081,
+    "observed_completion_at_ms": 1794679336722,
+    "output_count": 1,
+    "completed": true,
+    "remaining_operations": 4,
+    "output": {
+      "bytes": 6146361,
+      "video_codec": "h264",
+      "audio_codec": "aac",
+      "duration_s": 30
+    },
+    "source_object_unchanged": true,
+    "persisted": {
+      "result_count": 1,
+      "process_count": 0,
+      "active_token": 1,
+      "committed_token": 1
+    },
+    "input_unchanged": true,
+    "limits": "One video, one interruption point, no orchestrator/broker failure. A successful recovery is not a general reliability rate or proof of exactly-once execution.",
+    "finished_at": "2026-11-14T18:02:17.097Z"
+  }
+}

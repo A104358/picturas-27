@@ -1,0 +1,424 @@
+{
+  "source": "live-api-isolated-2026-11-14.json",
+  "resource_source": "live-resources-isolated-2026-11-14.jsonl.gz",
+  "load_generator": "separate-container",
+  "failures": [],
+  "sampling": {
+    "count": 5369,
+    "median_interval_ms": 50.222900390625,
+    "max_interval_ms": 80.40478515625
+  },
+  "upload_method": "Median of 500 ms before request; maximum from request start through 500 ms after response. Warm services, no forced GC.",
+  "uploads": [
+    {
+      "size_mib": 10,
+      "bytes": 10485760,
+      "sha256": "048675d4ccc7f9ed95d4199aa40a41b56e3a5712c8ee526e9fd1982d9ea0dc8b",
+      "started_at_ms": 1794679007041,
+      "ended_at_ms": 1794679007630,
+      "elapsed_ms": 589,
+      "status": 204,
+      "baseline_samples": 10,
+      "observation_samples": 21,
+      "resources": {
+        "api_gateway": {
+          "memory_current_bytes": {
+            "baseline": 106434560.0,
+            "peak": 133599232,
+            "delta": 27164672.0
+          },
+          "node_rss_sum_bytes": {
+            "baseline": 184180736.0,
+            "peak": 208846848,
+            "delta": 24666112.0
+          }
+        },
+        "projects": {
+          "memory_current_bytes": {
+            "baseline": 284471296.0,
+            "peak": 307318784,
+            "delta": 22847488.0
+          },
+          "node_rss_sum_bytes": {
+            "baseline": 180936704.0,
+            "peak": 181248000,
+            "delta": 311296.0
+          }
+        },
+        "img_storage": {
+          "memory_current_bytes": {
+            "baseline": 122212352.0,
+            "peak": 134119424,
+            "delta": 11907072.0
+          },
+          "node_rss_sum_bytes": {
+            "baseline": 104886272.0,
+            "peak": 115703808,
+            "delta": 10817536.0
+          }
+        },
+        "nginx": {
+          "memory_current_bytes": {
+            "baseline": 40468480.0,
+            "peak": 51548160,
+            "delta": 11079680.0
+          }
+        }
+      }
+    },
+    {
+      "size_mib": 50,
+      "bytes": 52428800,
+      "sha256": "71aac942e5fd32bfbd1f711003f8ef6f4e76c5c0c4fab6de84c2ecbf25ceabae",
+      "started_at_ms": 1794679008682,
+      "ended_at_ms": 1794679011144,
+      "elapsed_ms": 2462,
+      "status": 204,
+      "baseline_samples": 10,
+      "observation_samples": 59,
+      "resources": {
+        "api_gateway": {
+          "memory_current_bytes": {
+            "baseline": 110313472.0,
+            "peak": 272945152,
+            "delta": 162631680.0
+          },
+          "node_rss_sum_bytes": {
+            "baseline": 187994112.0,
+            "peak": 350396416,
+            "delta": 162402304.0
+          }
+        },
+        "projects": {
+          "memory_current_bytes": {
+            "baseline": 284782592.0,
+            "peak": 404877312,
+            "delta": 120094720.0
+          },
+          "node_rss_sum_bytes": {
+            "baseline": 181248000.0,
+            "peak": 235782144,
+            "delta": 54534144.0
+          }
+        },
+        "img_storage": {
+          "memory_current_bytes": {
+            "baseline": 133054464.0,
+            "peak": 208945152,
+            "delta": 75890688.0
+          },
+          "node_rss_sum_bytes": {
+            "baseline": 115703808.0,
+            "peak": 188907520,
+            "delta": 73203712.0
+          }
+        },
+        "nginx": {
+          "memory_current_bytes": {
+            "baseline": 40468480.0,
+            "peak": 98172928,
+            "delta": 57704448.0
+          }
+        }
+      }
+    }
+  ],
+  "batches": [
+    {
+      "repetition": 1,
+      "project_id": "6af8a0e3c79de7ef312368c6",
+      "account_id": "6af8a0e3f2142e34ce313f8d",
+      "started_at_ms": 1794679012743,
+      "count": 3,
+      "accepted_at_ms": 1794679012903,
+      "dispatch_status": 201,
+      "observed_commit_at_ms": 1794679056105,
+      "output_count": 3,
+      "completed": true,
+      "elapsed_ms": 43362,
+      "poll_interval_ms": 100,
+      "socket_error": null,
+      "remaining_operations": 2,
+      "reconnect_observation_ms": 782,
+      "replayed_events_after_completion": 0,
+      "observed_videos_per_minute": 4.151100041511,
+      "jobs": [
+        {
+          "media_id": "6af8a0e4c79de7ef312368ef",
+          "request_observed_at_ms": 1794679012955,
+          "response_observed_at_ms": 1794679027248,
+          "worker_processing_ms": 14293.184,
+          "request_to_response_ms": 14293,
+          "non_processing_residual_ms": -0.18399999999928696,
+          "status": "success",
+          "progress_event_count": 51,
+          "dispatch_to_first_progress_ms": 908,
+          "max_inter_progress_gap_ms": 487,
+          "progress_monotonic": true,
+          "final_percent": 100
+        },
+        {
+          "media_id": "6af8a0e4c79de7ef312368dc",
+          "request_observed_at_ms": 1794679012956,
+          "response_observed_at_ms": 1794679042784,
+          "worker_processing_ms": 15534.312,
+          "request_to_response_ms": 29828,
+          "non_processing_residual_ms": 14293.688,
+          "status": "success",
+          "progress_event_count": 51,
+          "dispatch_to_first_progress_ms": 15315,
+          "max_inter_progress_gap_ms": 572,
+          "progress_monotonic": true,
+          "final_percent": 100
+        },
+        {
+          "media_id": "6af8a0e3c79de7ef312368ce",
+          "request_observed_at_ms": 1794679012956,
+          "response_observed_at_ms": 1794679055997,
+          "worker_processing_ms": 13212.101999999999,
+          "request_to_response_ms": 43041,
+          "non_processing_residual_ms": 29828.898,
+          "status": "success",
+          "progress_event_count": 51,
+          "dispatch_to_first_progress_ms": 30827,
+          "max_inter_progress_gap_ms": 452,
+          "progress_monotonic": true,
+          "final_percent": 100
+        }
+      ],
+      "max_project_event_gap_with_boundaries_ms": 908,
+      "video_worker_mean_cpu_cores": 1.966580704318772,
+      "video_worker_peak_cgroup_bytes": 593887232
+    },
+    {
+      "repetition": 2,
+      "project_id": "6af8a111c79de7ef3123711e",
+      "account_id": "6af8a111f2142e34ce313f9d",
+      "started_at_ms": 1794679058438,
+      "count": 3,
+      "accepted_at_ms": 1794679058627,
+      "dispatch_status": 201,
+      "observed_commit_at_ms": 1794679103439,
+      "output_count": 3,
+      "completed": true,
+      "elapsed_ms": 45001,
+      "poll_interval_ms": 100,
+      "socket_error": null,
+      "remaining_operations": 2,
+      "reconnect_observation_ms": 764,
+      "replayed_events_after_completion": 0,
+      "observed_videos_per_minute": 3.999911113086376,
+      "jobs": [
+        {
+          "media_id": "6af8a111c79de7ef31237134",
+          "request_observed_at_ms": 1794679058692,
+          "response_observed_at_ms": 1794679074652,
+          "worker_processing_ms": 15959.4,
+          "request_to_response_ms": 15960,
+          "non_processing_residual_ms": 0.6000000000003638,
+          "status": "success",
+          "progress_event_count": 51,
+          "dispatch_to_first_progress_ms": 1015,
+          "max_inter_progress_gap_ms": 544,
+          "progress_monotonic": true,
+          "final_percent": 100
+        },
+        {
+          "media_id": "6af8a111c79de7ef31237126",
+          "request_observed_at_ms": 1794679058692,
+          "response_observed_at_ms": 1794679089241,
+          "worker_processing_ms": 14587.109,
+          "request_to_response_ms": 30549,
+          "non_processing_residual_ms": 15961.891,
+          "status": "success",
+          "progress_event_count": 51,
+          "dispatch_to_first_progress_ms": 16834,
+          "max_inter_progress_gap_ms": 486,
+          "progress_monotonic": true,
+          "final_percent": 100
+        },
+        {
+          "media_id": "6af8a112c79de7ef31237147",
+          "request_observed_at_ms": 1794679058692,
+          "response_observed_at_ms": 1794679103251,
+          "worker_processing_ms": 14009.072,
+          "request_to_response_ms": 44559,
+          "non_processing_residual_ms": 30549.928,
+          "status": "success",
+          "progress_event_count": 51,
+          "dispatch_to_first_progress_ms": 31401,
+          "max_inter_progress_gap_ms": 466,
+          "progress_monotonic": true,
+          "final_percent": 100
+        }
+      ],
+      "max_project_event_gap_with_boundaries_ms": 1015,
+      "video_worker_mean_cpu_cores": 1.9667469947219842,
+      "video_worker_peak_cgroup_bytes": 596762624
+    },
+    {
+      "repetition": 3,
+      "project_id": "6af8a140c79de7ef312379b2",
+      "account_id": "6af8a140f2142e34ce313fad",
+      "started_at_ms": 1794679105969,
+      "count": 3,
+      "accepted_at_ms": 1794679106344,
+      "dispatch_status": 201,
+      "observed_commit_at_ms": 1794679148634,
+      "output_count": 3,
+      "completed": true,
+      "elapsed_ms": 42665,
+      "poll_interval_ms": 100,
+      "socket_error": null,
+      "remaining_operations": 2,
+      "reconnect_observation_ms": 774,
+      "replayed_events_after_completion": 0,
+      "observed_videos_per_minute": 4.218914801359428,
+      "jobs": [
+        {
+          "media_id": "6af8a141c79de7ef312379ba",
+          "request_observed_at_ms": 1794679106497,
+          "response_observed_at_ms": 1794679120477,
+          "worker_processing_ms": 13979.248,
+          "request_to_response_ms": 13980,
+          "non_processing_residual_ms": 0.7520000000004075,
+          "status": "success",
+          "progress_event_count": 51,
+          "dispatch_to_first_progress_ms": 1305,
+          "max_inter_progress_gap_ms": 588,
+          "progress_monotonic": true,
+          "final_percent": 100
+        },
+        {
+          "media_id": "6af8a141c79de7ef312379c8",
+          "request_observed_at_ms": 1794679106498,
+          "response_observed_at_ms": 1794679134761,
+          "worker_processing_ms": 14282.458,
+          "request_to_response_ms": 28263,
+          "non_processing_residual_ms": 13980.542,
+          "status": "success",
+          "progress_event_count": 51,
+          "dispatch_to_first_progress_ms": 15337,
+          "max_inter_progress_gap_ms": 407,
+          "progress_monotonic": true,
+          "final_percent": 100
+        },
+        {
+          "media_id": "6af8a141c79de7ef312379db",
+          "request_observed_at_ms": 1794679106498,
+          "response_observed_at_ms": 1794679148557,
+          "worker_processing_ms": 13794.878999999999,
+          "request_to_response_ms": 42059,
+          "non_processing_residual_ms": 28264.121,
+          "status": "success",
+          "progress_event_count": 51,
+          "dispatch_to_first_progress_ms": 29502,
+          "max_inter_progress_gap_ms": 513,
+          "progress_monotonic": true,
+          "final_percent": 100
+        }
+      ],
+      "max_project_event_gap_with_boundaries_ms": 1305,
+      "video_worker_mean_cpu_cores": 1.9513038529555018,
+      "video_worker_peak_cgroup_bytes": 601874432
+    }
+  ],
+  "access": [
+    {
+      "case": "gateway-owner",
+      "operation": "read-project",
+      "expected_allowed": true,
+      "status": 200,
+      "protected_data_returned": true
+    },
+    {
+      "case": "gateway-no-token",
+      "operation": "read-project",
+      "expected_allowed": false,
+      "status": 401,
+      "protected_data_returned": false
+    },
+    {
+      "case": "gateway-invalid-token",
+      "operation": "read-project",
+      "expected_allowed": false,
+      "status": 401,
+      "protected_data_returned": false
+    },
+    {
+      "case": "gateway-outsider-token",
+      "operation": "read-project",
+      "expected_allowed": false,
+      "status": 401,
+      "protected_data_returned": false
+    },
+    {
+      "case": "direct-project-no-token",
+      "operation": "read-project",
+      "expected_allowed": false,
+      "status": 401,
+      "protected_data_returned": false
+    },
+    {
+      "case": "direct-project-outsider-token",
+      "operation": "read-project",
+      "expected_allowed": false,
+      "status": 200,
+      "protected_data_returned": true
+    },
+    {
+      "case": "direct-storage-no-token",
+      "operation": "read-object",
+      "expected_allowed": false,
+      "status": 200,
+      "protected_data_returned": true
+    },
+    {
+      "case": "direct-storage-no-token-write",
+      "operation": "write-owner-prefix",
+      "expected_allowed": false,
+      "status": 201,
+      "write_accepted": true
+    }
+  ],
+  "sampled_outputs": [
+    {
+      "batch": 1,
+      "bytes": 2062117,
+      "sha256": "6928b47deb2bb9c96984f6c8176fcc5ff9fe793ecf3977ee81f3644f9817006f",
+      "video_codec": "h264",
+      "audio_codec": "aac",
+      "duration_s": 10
+    },
+    {
+      "batch": 2,
+      "bytes": 2062117,
+      "sha256": "6928b47deb2bb9c96984f6c8176fcc5ff9fe793ecf3977ee81f3644f9817006f",
+      "video_codec": "h264",
+      "audio_codec": "aac",
+      "duration_s": 10
+    },
+    {
+      "batch": 3,
+      "bytes": 2062117,
+      "sha256": "6928b47deb2bb9c96984f6c8176fcc5ff9fe793ecf3977ee81f3644f9817006f",
+      "video_codec": "h264",
+      "audio_codec": "aac",
+      "duration_s": 10
+    }
+  ],
+  "limits": [
+    "Three batches and one upload per size; no population percentiles.",
+    "Cgroup memory includes cache/descendants; Node RSS sums may include shared pages.",
+    "Short memory peaks can occur between samples.",
+    "Queue residual includes publication/delivery overhead, not only queue wait.",
+    "Commit observation has polling/request overhead. Only one output per batch was downloaded and probed."
+  ],
+  "batch_summary": {
+    "n": 3,
+    "min_ms": 42665,
+    "median_ms": 43362,
+    "max_ms": 45001,
+    "committed_outputs": 9
+  }
+}

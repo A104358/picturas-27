@@ -25,6 +25,7 @@ Progress: [inception log](intents/001-phase-2-quality-improvements/inception-log
 Options and team review: [quality exploration](intents/001-phase-2-quality-improvements/quality-exploration.md).
 Measurement protocols: [investigation plan](intents/001-phase-2-quality-improvements/investigation-plan.md).
 Preliminary results: [exploration evidence](intents/001-phase-2-quality-improvements/evidence/README.md).
+Application measurements and team discussion: [live findings](intents/001-phase-2-quality-improvements/live-findings.md).
 
 Consult [AGENTS.md](../AGENTS.md), the [project README](../README.md) and the
 [documentation index](../docs/README.md) for project context.

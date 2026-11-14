@@ -1,0 +1,197 @@
+{
+  "recorded_at": "2026-11-14T17:43:37Z",
+  "source_commit": "24484b7c37f5780247a737577fea965409c7b89b",
+  "compose_sha256": "2607bfa77fcc05ead07da1d5b9b8accd24b71f007be522da57ec4e43c9b66c83",
+  "project": "picturas-quality-20261114",
+  "services": {
+    "nginx": {
+      "image_id": "sha256:1ebe58b0003b24dba231deb1861ee48821c107d83510b8178fb448e399a024e3",
+      "cpus": 1,
+      "memory_limit": "128m",
+      "host_ports": [
+        {
+          "target": 443,
+          "published": "8080",
+          "host_ip": "127.0.0.1",
+          "protocol": "tcp"
+        }
+      ],
+      "named_volumes": []
+    },
+    "frontend": {
+      "image_id": "sha256:0993ae7771ebf8b9f29c69f19eada547d5297af1325983b44bd2721d90afdd68",
+      "cpus": 1,
+      "memory_limit": "512m",
+      "host_ports": [],
+      "named_volumes": []
+    },
+    "api_gateway": {
+      "image_id": "sha256:4ce850c92caf90a101c8245c05a1cc3079715cb2b5f99fa31abe5df963cf377e",
+      "cpus": 1,
+      "memory_limit": "512m",
+      "host_ports": [],
+      "named_volumes": []
+    },
+    "ws_gateway": {
+      "image_id": "sha256:c7ab730c71eb5e5fb536bbae116e9b83132cfb119ab8ce074ce690963cb228eb",
+      "cpus": 1,
+      "memory_limit": "512m",
+      "host_ports": [
+        {
+          "target": 4000,
+          "published": "4000",
+          "host_ip": "127.0.0.1",
+          "protocol": "tcp"
+        }
+      ],
+      "named_volumes": []
+    },
+    "projects": {
+      "image_id": "sha256:5c21e207f6ad56fa1764b5d7b62bee8cd7ba94f8ef7565ab4fe4464e3bf3a950",
+      "cpus": 1,
+      "memory_limit": "1g",
+      "host_ports": [
+        {
+          "target": 9001,
+          "published": "9002",
+          "host_ip": "127.0.0.1",
+          "protocol": "tcp"
+        }
+      ],
+      "named_volumes": [
+        "image_data"
+      ]
+    },
+    "users": {
+      "image_id": "sha256:ec6ea12e0b54751b0363390fb2c300105fb504d6156d2b480492bdf064286bb6",
+      "cpus": 1,
+      "memory_limit": "512m",
+      "host_ports": [
+        {
+          "target": 10001,
+          "published": "10001",
+          "host_ip": "127.0.0.1",
+          "protocol": "tcp"
+        }
+      ],
+      "named_volumes": []
+    },
+    "img_storage": {
+      "image_id": "sha256:cac08eb9b0f5a2884a5dce1ea6e2792a126104c7440aeaf47f29d46249112d9e",
+      "cpus": 1,
+      "memory_limit": "512m",
+      "host_ports": [
+        {
+          "target": 11000,
+          "published": "11000",
+          "host_ip": "127.0.0.1",
+          "protocol": "tcp"
+        }
+      ],
+      "named_volumes": []
+    },
+    "seaweedfs": {
+      "image_id": "sha256:31d61f5e8771cbd5993912cd051be0c7bcdc207faaa12c50e1a3b8371631c927",
+      "cpus": 1,
+      "memory_limit": "1g",
+      "host_ports": [
+        {
+          "target": 9000,
+          "published": "9000",
+          "host_ip": "127.0.0.1",
+          "protocol": "tcp"
+        },
+        {
+          "target": 8888,
+          "published": "9090",
+          "host_ip": "127.0.0.1",
+          "protocol": "tcp"
+        }
+      ],
+      "named_volumes": [
+        "seaweedfs_data"
+      ]
+    },
+    "rabbitmq": {
+      "image_id": "sha256:f5d40cd204607a7cbd0557e3a58323b0dfaa200d8e35a7f983f81e3eec292848",
+      "cpus": 1,
+      "memory_limit": "512m",
+      "host_ports": [
+        {
+          "target": 5672,
+          "published": "5672",
+          "host_ip": "127.0.0.1",
+          "protocol": "tcp"
+        },
+        {
+          "target": 15672,
+          "published": "15672",
+          "host_ip": "127.0.0.1",
+          "protocol": "tcp"
+        }
+      ],
+      "named_volumes": [
+        "rabbitmq_data"
+      ]
+    },
+    "projects_mongoDB": {
+      "image_id": "sha256:0010f63d26952bd3960fac5513c64a1cf7d6299f31fa7b54ac1b36633ee04333",
+      "cpus": 1,
+      "memory_limit": "512m",
+      "host_ports": [
+        {
+          "target": 27018,
+          "published": "27018",
+          "host_ip": "127.0.0.1",
+          "protocol": "tcp"
+        }
+      ],
+      "named_volumes": [
+        "project_data"
+      ]
+    },
+    "users_mongoDB": {
+      "image_id": "sha256:0010f63d26952bd3960fac5513c64a1cf7d6299f31fa7b54ac1b36633ee04333",
+      "cpus": 1,
+      "memory_limit": "512m",
+      "host_ports": [
+        {
+          "target": 27019,
+          "published": "27019",
+          "host_ip": "127.0.0.1",
+          "protocol": "tcp"
+        }
+      ],
+      "named_volumes": [
+        "user_data"
+      ]
+    },
+    "video_tool": {
+      "image_id": "sha256:4beaa475d81ef9317a63cc14cf0b2dacdb7bb24a6836bc55bf8cdd16b0b64d43",
+      "cpus": 2,
+      "memory_limit": "1g",
+      "host_ports": [],
+      "named_volumes": [
+        "image_data",
+        "whisper_models"
+      ]
+    },
+    "brightness_tool": {
+      "image_id": "sha256:23c8f2828e9b58bcdb079da4005a694ead47ecffd5d0ece15ad9f7d4979c84ff",
+      "cpus": 1,
+      "memory_limit": "512m",
+      "host_ports": [],
+      "named_volumes": [
+        "image_data"
+      ]
+    }
+  },
+  "differences": [
+    "13-service slice; omitted tools/billing/backup are not evaluated.",
+    "Fresh project-scoped volumes and internal Docker network.",
+    "Host ports retain their original numbers but bind to loopback only.",
+    "Resource ceilings recorded per service; not the unrestricted default deployment.",
+    "Local immutable image IDs; development source/node_modules binds removed.",
+    "No downloads or model loading from the internet."
+  ]
+}

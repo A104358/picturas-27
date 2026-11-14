@@ -1,0 +1,24 @@
+{
+  "recorded_at": "2026-11-14T17:54:06.819Z",
+  "scope": "Docker-network access to synthetic isolated project; no bearer token.",
+  "owner_id": "6af89ff3f2142e34ce313f72",
+  "project_id": "6af89ff3c79de7ef31236824",
+  "direct_project_without_identity": {
+    "status": 401
+  },
+  "direct_project_forged_caller_header": {
+    "status": 200,
+    "protected_data_returned": true
+  },
+  "storage_read": {
+    "signing_status": 200,
+    "download_status": 200,
+    "bytes": 3996212,
+    "sha256": "bd65f6b25d3ae1fcecdc76caf3d36b2480e137387db610c41667c5c46786e3a8",
+    "matches_original": true
+  },
+  "limitations": [
+    "Published host-port request was connection-refused in the internal-network deployment; host/internet reachability is not established.",
+    "The earlier harness read used an absent API field as an object key; that result is invalid for authorization assessment. This probe derives the actual key from the owner response."
+  ]
+}

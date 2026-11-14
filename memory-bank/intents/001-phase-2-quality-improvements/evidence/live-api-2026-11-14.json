@@ -1,0 +1,4126 @@
+{
+  "recorded_at": "2026-11-14T17:48:51.415Z",
+  "source_commit": "24484b7",
+  "scope": "Isolated 13-service image/video slice through nginx; three processing batches and a finite access matrix.",
+  "accounts": [
+    {
+      "label": "owner",
+      "id": "6af89f2ef2142e34ce313f35",
+      "profile": "free"
+    },
+    {
+      "label": "outsider",
+      "id": "6af89f2ef2142e34ce313f37",
+      "profile": "free"
+    },
+    {
+      "label": "batch-1",
+      "id": "6af89f33f2142e34ce313f42",
+      "profile": "free"
+    },
+    {
+      "label": "batch-2",
+      "id": "6af89f57f2142e34ce313f52",
+      "profile": "free"
+    },
+    {
+      "label": "batch-3",
+      "id": "6af89f7ff2142e34ce313f62",
+      "profile": "free"
+    }
+  ],
+  "uploads": [
+    {
+      "size_mib": 10,
+      "bytes": 10485760,
+      "sha256": "048675d4ccc7f9ed95d4199aa40a41b56e3a5712c8ee526e9fd1982d9ea0dc8b",
+      "started_at_ms": 1794678576025,
+      "ended_at_ms": 1794678576389,
+      "elapsed_ms": 364,
+      "status": 204
+    },
+    {
+      "size_mib": 50,
+      "bytes": 52428800,
+      "sha256": "71aac942e5fd32bfbd1f711003f8ef6f4e76c5c0c4fab6de84c2ecbf25ceabae",
+      "started_at_ms": 1794678577421,
+      "ended_at_ms": 1794678579136,
+      "elapsed_ms": 1715,
+      "status": 204
+    }
+  ],
+  "access": [
+    {
+      "case": "gateway-owner",
+      "operation": "read-project",
+      "expected_allowed": true,
+      "status": 200,
+      "protected_data_returned": true
+    },
+    {
+      "case": "gateway-no-token",
+      "operation": "read-project",
+      "expected_allowed": false,
+      "status": 401,
+      "protected_data_returned": false
+    },
+    {
+      "case": "gateway-invalid-token",
+      "operation": "read-project",
+      "expected_allowed": false,
+      "status": 401,
+      "protected_data_returned": false
+    },
+    {
+      "case": "gateway-outsider-token",
+      "operation": "read-project",
+      "expected_allowed": false,
+      "status": 401,
+      "protected_data_returned": false
+    },
+    {
+      "case": "direct-project-no-token",
+      "operation": "read-project",
+      "expected_allowed": false,
+      "status": 401,
+      "protected_data_returned": false
+    },
+    {
+      "case": "direct-project-outsider-token",
+      "operation": "read-project",
+      "expected_allowed": false,
+      "status": 200,
+      "protected_data_returned": true
+    },
+    {
+      "case": "direct-storage-no-token",
+      "operation": "read-object",
+      "expected_allowed": false,
+      "status": 200,
+      "protected_data_returned": false
+    },
+    {
+      "case": "direct-storage-no-token-write",
+      "operation": "write-owner-prefix",
+      "expected_allowed": false,
+      "status": 201,
+      "write_accepted": true
+    }
+  ],
+  "batches": [
+    {
+      "repetition": 1,
+      "project_id": "6af89f33c79de7ef3123527c",
+      "account_id": "6af89f33f2142e34ce313f42",
+      "started_at_ms": 1794678580407,
+      "count": 3,
+      "accepted_at_ms": 1794678580906,
+      "dispatch_status": 201,
+      "observed_commit_at_ms": 1794678614515,
+      "output_count": 3,
+      "completed": true,
+      "elapsed_ms": 34108,
+      "poll_interval_ms": 100,
+      "socket_events": [
+        {
+          "unix_ms": 1794678581564,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235284",
+          "percent": 1,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678581697,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235284",
+          "percent": 3,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678581884,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235284",
+          "percent": 5,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678582093,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235284",
+          "percent": 7,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678582408,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235284",
+          "percent": 9,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678582582,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235284",
+          "percent": 11,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678582900,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235284",
+          "percent": 13,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678583257,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235284",
+          "percent": 15,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678583508,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235284",
+          "percent": 17,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678583822,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235284",
+          "percent": 19,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678584083,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235284",
+          "percent": 21,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678584302,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235284",
+          "percent": 23,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678584597,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235284",
+          "percent": 25,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678584891,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235284",
+          "percent": 27,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678585103,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235284",
+          "percent": 29,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678585460,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235284",
+          "percent": 31,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678585565,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235284",
+          "percent": 33,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678585693,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235284",
+          "percent": 35,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678585990,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235284",
+          "percent": 37,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678586271,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235284",
+          "percent": 39,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678586463,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235284",
+          "percent": 41,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678586687,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235284",
+          "percent": 43,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678586880,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235284",
+          "percent": 45,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678587086,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235284",
+          "percent": 47,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678587195,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235284",
+          "percent": 49,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678587468,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235284",
+          "percent": 51,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678587601,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235284",
+          "percent": 53,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678587907,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235284",
+          "percent": 55,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678588195,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235284",
+          "percent": 57,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678588492,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235284",
+          "percent": 59,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678588767,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235284",
+          "percent": 61,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678588901,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235284",
+          "percent": 63,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678589161,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235284",
+          "percent": 65,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678589397,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235284",
+          "percent": 67,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678589597,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235284",
+          "percent": 69,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678589955,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235284",
+          "percent": 71,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678590189,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235284",
+          "percent": 73,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678590459,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235284",
+          "percent": 75,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678590663,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235284",
+          "percent": 77,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678590803,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235284",
+          "percent": 79,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678591082,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235284",
+          "percent": 81,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678591393,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235284",
+          "percent": 83,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678591509,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235284",
+          "percent": 85,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678591710,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235284",
+          "percent": 87,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678591969,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235284",
+          "percent": 89,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678592088,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235284",
+          "percent": 91,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678592196,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235284",
+          "percent": 93,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678592354,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235284",
+          "percent": 95,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678592491,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235284",
+          "percent": 97,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678592596,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235284",
+          "percent": 99,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678592901,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235284",
+          "percent": 100,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678593047,
+          "event": "process-update"
+        },
+        {
+          "unix_ms": 1794678593548,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235292",
+          "percent": 1,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678593675,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235292",
+          "percent": 3,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678593878,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235292",
+          "percent": 5,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678594055,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235292",
+          "percent": 7,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678594172,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235292",
+          "percent": 9,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678594292,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235292",
+          "percent": 11,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678594484,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235292",
+          "percent": 13,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678594604,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235292",
+          "percent": 15,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678594780,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235292",
+          "percent": 17,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678594990,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235292",
+          "percent": 19,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678595264,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235292",
+          "percent": 21,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678595474,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235292",
+          "percent": 23,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678595591,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235292",
+          "percent": 25,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678595885,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235292",
+          "percent": 27,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678596091,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235292",
+          "percent": 29,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678596203,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235292",
+          "percent": 31,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678596403,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235292",
+          "percent": 33,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678596604,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235292",
+          "percent": 35,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678596869,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235292",
+          "percent": 37,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678597106,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235292",
+          "percent": 39,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678597272,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235292",
+          "percent": 41,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678597555,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235292",
+          "percent": 43,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678597810,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235292",
+          "percent": 45,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678597994,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235292",
+          "percent": 47,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678598276,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235292",
+          "percent": 49,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678598461,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235292",
+          "percent": 51,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678598770,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235292",
+          "percent": 53,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678599001,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235292",
+          "percent": 55,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678599189,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235292",
+          "percent": 57,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678599479,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235292",
+          "percent": 59,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678599785,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235292",
+          "percent": 61,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678599861,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235292",
+          "percent": 63,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678600076,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235292",
+          "percent": 65,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678600387,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235292",
+          "percent": 67,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678600600,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235292",
+          "percent": 69,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678600868,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235292",
+          "percent": 71,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678601079,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235292",
+          "percent": 73,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678601267,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235292",
+          "percent": 75,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678601500,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235292",
+          "percent": 77,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678601762,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235292",
+          "percent": 79,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678601893,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235292",
+          "percent": 81,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678602171,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235292",
+          "percent": 83,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678602386,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235292",
+          "percent": 85,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678602648,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235292",
+          "percent": 87,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678602710,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235292",
+          "percent": 89,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678602875,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235292",
+          "percent": 91,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678603100,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235292",
+          "percent": 93,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678603264,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235292",
+          "percent": 95,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678603361,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235292",
+          "percent": 97,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678603412,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235292",
+          "percent": 99,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678603964,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f33c79de7ef31235292",
+          "percent": 100,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678604126,
+          "event": "process-update"
+        },
+        {
+          "unix_ms": 1794678604637,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f34c79de7ef312352a5",
+          "percent": 1,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678604760,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f34c79de7ef312352a5",
+          "percent": 3,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678604897,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f34c79de7ef312352a5",
+          "percent": 5,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678605199,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f34c79de7ef312352a5",
+          "percent": 7,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678605474,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f34c79de7ef312352a5",
+          "percent": 9,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678605603,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f34c79de7ef312352a5",
+          "percent": 11,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678605754,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f34c79de7ef312352a5",
+          "percent": 13,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678605887,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f34c79de7ef312352a5",
+          "percent": 15,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678606167,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f34c79de7ef312352a5",
+          "percent": 17,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678606301,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f34c79de7ef312352a5",
+          "percent": 19,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678606556,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f34c79de7ef312352a5",
+          "percent": 21,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678606694,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f34c79de7ef312352a5",
+          "percent": 23,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678606904,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f34c79de7ef312352a5",
+          "percent": 25,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678607088,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f34c79de7ef312352a5",
+          "percent": 27,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678607356,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f34c79de7ef312352a5",
+          "percent": 29,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678607458,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f34c79de7ef312352a5",
+          "percent": 31,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678607564,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f34c79de7ef312352a5",
+          "percent": 33,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678607848,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f34c79de7ef312352a5",
+          "percent": 35,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678607980,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f34c79de7ef312352a5",
+          "percent": 37,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678608155,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f34c79de7ef312352a5",
+          "percent": 39,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678608383,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f34c79de7ef312352a5",
+          "percent": 41,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678608583,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f34c79de7ef312352a5",
+          "percent": 43,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678608781,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f34c79de7ef312352a5",
+          "percent": 45,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678608980,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f34c79de7ef312352a5",
+          "percent": 47,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678609171,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f34c79de7ef312352a5",
+          "percent": 49,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678609281,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f34c79de7ef312352a5",
+          "percent": 51,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678609491,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f34c79de7ef312352a5",
+          "percent": 53,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678609686,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f34c79de7ef312352a5",
+          "percent": 55,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678609870,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f34c79de7ef312352a5",
+          "percent": 57,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678610094,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f34c79de7ef312352a5",
+          "percent": 59,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678610270,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f34c79de7ef312352a5",
+          "percent": 61,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678610400,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f34c79de7ef312352a5",
+          "percent": 63,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678610563,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f34c79de7ef312352a5",
+          "percent": 65,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678610752,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f34c79de7ef312352a5",
+          "percent": 67,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678610999,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f34c79de7ef312352a5",
+          "percent": 69,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678611195,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f34c79de7ef312352a5",
+          "percent": 71,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678611487,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f34c79de7ef312352a5",
+          "percent": 73,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678611686,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f34c79de7ef312352a5",
+          "percent": 75,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678611856,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f34c79de7ef312352a5",
+          "percent": 77,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678612265,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f34c79de7ef312352a5",
+          "percent": 79,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678612453,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f34c79de7ef312352a5",
+          "percent": 81,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678612599,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f34c79de7ef312352a5",
+          "percent": 83,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678612790,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f34c79de7ef312352a5",
+          "percent": 85,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678612896,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f34c79de7ef312352a5",
+          "percent": 87,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678613004,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f34c79de7ef312352a5",
+          "percent": 89,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678613190,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f34c79de7ef312352a5",
+          "percent": 91,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678613408,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f34c79de7ef312352a5",
+          "percent": 93,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678613594,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f34c79de7ef312352a5",
+          "percent": 95,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678613786,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f34c79de7ef312352a5",
+          "percent": 97,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678613880,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f34c79de7ef312352a5",
+          "percent": 99,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678614372,
+          "event": "video-progress",
+          "project_id": "6af89f33c79de7ef3123527c",
+          "media_id": "6af89f34c79de7ef312352a5",
+          "percent": 100,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678614522,
+          "event": "process-update"
+        }
+      ],
+      "socket_error": null,
+      "remaining_operations": 2,
+      "reconnect_observation_ms": 780,
+      "replayed_events_after_completion": 0
+    },
+    {
+      "repetition": 2,
+      "project_id": "6af89f57c79de7ef31235948",
+      "account_id": "6af89f57f2142e34ce313f52",
+      "started_at_ms": 1794678616652,
+      "count": 3,
+      "accepted_at_ms": 1794678617108,
+      "dispatch_status": 201,
+      "observed_commit_at_ms": 1794678654447,
+      "output_count": 3,
+      "completed": true,
+      "elapsed_ms": 37795,
+      "poll_interval_ms": 100,
+      "socket_events": [
+        {
+          "unix_ms": 1794678617829,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f57c79de7ef31235950",
+          "percent": 1,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678617890,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f57c79de7ef31235950",
+          "percent": 3,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678617983,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f57c79de7ef31235950",
+          "percent": 5,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678618300,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f57c79de7ef31235950",
+          "percent": 7,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678618596,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f57c79de7ef31235950",
+          "percent": 9,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678618788,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f57c79de7ef31235950",
+          "percent": 11,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678618968,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f57c79de7ef31235950",
+          "percent": 13,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678619148,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f57c79de7ef31235950",
+          "percent": 15,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678619273,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f57c79de7ef31235950",
+          "percent": 17,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678619471,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f57c79de7ef31235950",
+          "percent": 19,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678619869,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f57c79de7ef31235950",
+          "percent": 21,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678620093,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f57c79de7ef31235950",
+          "percent": 23,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678620269,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f57c79de7ef31235950",
+          "percent": 25,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678620462,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f57c79de7ef31235950",
+          "percent": 27,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678620585,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f57c79de7ef31235950",
+          "percent": 29,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678620957,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f57c79de7ef31235950",
+          "percent": 31,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678621155,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f57c79de7ef31235950",
+          "percent": 33,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678621382,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f57c79de7ef31235950",
+          "percent": 35,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678621574,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f57c79de7ef31235950",
+          "percent": 37,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678621766,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f57c79de7ef31235950",
+          "percent": 39,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678621977,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f57c79de7ef31235950",
+          "percent": 41,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678622263,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f57c79de7ef31235950",
+          "percent": 43,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678622486,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f57c79de7ef31235950",
+          "percent": 45,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678622683,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f57c79de7ef31235950",
+          "percent": 47,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678622906,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f57c79de7ef31235950",
+          "percent": 49,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678623063,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f57c79de7ef31235950",
+          "percent": 51,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678623280,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f57c79de7ef31235950",
+          "percent": 53,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678623656,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f57c79de7ef31235950",
+          "percent": 55,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678623990,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f57c79de7ef31235950",
+          "percent": 57,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678624208,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f57c79de7ef31235950",
+          "percent": 59,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678624447,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f57c79de7ef31235950",
+          "percent": 61,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678624606,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f57c79de7ef31235950",
+          "percent": 63,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678624989,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f57c79de7ef31235950",
+          "percent": 65,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678625202,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f57c79de7ef31235950",
+          "percent": 67,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678625461,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f57c79de7ef31235950",
+          "percent": 69,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678625662,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f57c79de7ef31235950",
+          "percent": 71,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678625898,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f57c79de7ef31235950",
+          "percent": 73,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678626156,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f57c79de7ef31235950",
+          "percent": 75,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678626560,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f57c79de7ef31235950",
+          "percent": 77,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678626981,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f57c79de7ef31235950",
+          "percent": 79,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678627365,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f57c79de7ef31235950",
+          "percent": 81,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678627502,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f57c79de7ef31235950",
+          "percent": 83,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678627773,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f57c79de7ef31235950",
+          "percent": 85,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678627905,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f57c79de7ef31235950",
+          "percent": 87,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678628061,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f57c79de7ef31235950",
+          "percent": 89,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678628164,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f57c79de7ef31235950",
+          "percent": 91,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678628291,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f57c79de7ef31235950",
+          "percent": 93,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678628495,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f57c79de7ef31235950",
+          "percent": 95,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678628577,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f57c79de7ef31235950",
+          "percent": 97,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678628689,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f57c79de7ef31235950",
+          "percent": 99,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678629196,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f57c79de7ef31235950",
+          "percent": 100,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678629338,
+          "event": "process-update"
+        },
+        {
+          "unix_ms": 1794678629632,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef3123595e",
+          "percent": 1,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678629782,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef3123595e",
+          "percent": 3,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678630058,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef3123595e",
+          "percent": 5,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678630187,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef3123595e",
+          "percent": 7,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678630575,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef3123595e",
+          "percent": 9,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678630812,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef3123595e",
+          "percent": 11,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678631085,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef3123595e",
+          "percent": 13,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678631367,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef3123595e",
+          "percent": 15,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678631495,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef3123595e",
+          "percent": 17,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678631717,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef3123595e",
+          "percent": 19,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678631955,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef3123595e",
+          "percent": 21,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678632095,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef3123595e",
+          "percent": 23,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678632365,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef3123595e",
+          "percent": 25,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678632569,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef3123595e",
+          "percent": 27,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678632777,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef3123595e",
+          "percent": 29,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678632889,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef3123595e",
+          "percent": 31,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678633093,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef3123595e",
+          "percent": 33,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678633370,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef3123595e",
+          "percent": 35,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678633593,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef3123595e",
+          "percent": 37,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678633953,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef3123595e",
+          "percent": 39,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678634261,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef3123595e",
+          "percent": 41,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678634486,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef3123595e",
+          "percent": 43,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678634697,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef3123595e",
+          "percent": 45,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678634969,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef3123595e",
+          "percent": 47,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678635197,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef3123595e",
+          "percent": 49,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678635494,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef3123595e",
+          "percent": 51,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678635785,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef3123595e",
+          "percent": 53,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678636065,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef3123595e",
+          "percent": 55,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678636277,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef3123595e",
+          "percent": 57,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678636585,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef3123595e",
+          "percent": 59,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678636866,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef3123595e",
+          "percent": 61,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678637165,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef3123595e",
+          "percent": 63,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678637502,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef3123595e",
+          "percent": 65,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678637764,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef3123595e",
+          "percent": 67,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678637887,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef3123595e",
+          "percent": 69,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678638089,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef3123595e",
+          "percent": 71,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678638349,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef3123595e",
+          "percent": 73,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678638772,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef3123595e",
+          "percent": 75,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678638984,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef3123595e",
+          "percent": 77,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678639372,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef3123595e",
+          "percent": 79,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678639677,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef3123595e",
+          "percent": 81,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678639785,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef3123595e",
+          "percent": 83,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678640089,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef3123595e",
+          "percent": 85,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678640291,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef3123595e",
+          "percent": 87,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678640570,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef3123595e",
+          "percent": 89,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678640710,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef3123595e",
+          "percent": 91,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678640968,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef3123595e",
+          "percent": 93,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678641153,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef3123595e",
+          "percent": 95,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678641408,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef3123595e",
+          "percent": 97,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678641504,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef3123595e",
+          "percent": 99,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678642084,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef3123595e",
+          "percent": 100,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678642241,
+          "event": "process-update"
+        },
+        {
+          "unix_ms": 1794678642859,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef31235971",
+          "percent": 1,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678642994,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef31235971",
+          "percent": 3,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678643092,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef31235971",
+          "percent": 5,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678643289,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef31235971",
+          "percent": 7,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678643491,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef31235971",
+          "percent": 9,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678643600,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef31235971",
+          "percent": 11,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678643884,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef31235971",
+          "percent": 13,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678644158,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef31235971",
+          "percent": 15,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678644353,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef31235971",
+          "percent": 17,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678644578,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef31235971",
+          "percent": 19,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678644871,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef31235971",
+          "percent": 21,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678645083,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef31235971",
+          "percent": 23,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678645190,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef31235971",
+          "percent": 25,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678645412,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef31235971",
+          "percent": 27,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678645675,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef31235971",
+          "percent": 29,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678645882,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef31235971",
+          "percent": 31,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678646190,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef31235971",
+          "percent": 33,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678646488,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef31235971",
+          "percent": 35,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678646773,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef31235971",
+          "percent": 37,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678646904,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef31235971",
+          "percent": 39,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678647201,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef31235971",
+          "percent": 41,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678647490,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef31235971",
+          "percent": 43,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678647785,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef31235971",
+          "percent": 45,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678647966,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef31235971",
+          "percent": 47,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678648251,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef31235971",
+          "percent": 49,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678648485,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef31235971",
+          "percent": 51,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678648663,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef31235971",
+          "percent": 53,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678648857,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef31235971",
+          "percent": 55,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678649060,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef31235971",
+          "percent": 57,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678649347,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef31235971",
+          "percent": 59,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678649656,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef31235971",
+          "percent": 61,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678649886,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef31235971",
+          "percent": 63,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678650087,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef31235971",
+          "percent": 65,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678650275,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef31235971",
+          "percent": 67,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678650475,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef31235971",
+          "percent": 69,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678650610,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef31235971",
+          "percent": 71,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678650787,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef31235971",
+          "percent": 73,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678651091,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef31235971",
+          "percent": 75,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678651390,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef31235971",
+          "percent": 77,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678651772,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef31235971",
+          "percent": 79,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678652069,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef31235971",
+          "percent": 81,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678652284,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef31235971",
+          "percent": 83,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678652500,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef31235971",
+          "percent": 85,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678652602,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef31235971",
+          "percent": 87,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678652806,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef31235971",
+          "percent": 89,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678653087,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef31235971",
+          "percent": 91,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678653255,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef31235971",
+          "percent": 93,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678653360,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef31235971",
+          "percent": 95,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678653490,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef31235971",
+          "percent": 97,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678653679,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef31235971",
+          "percent": 99,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678654209,
+          "event": "video-progress",
+          "project_id": "6af89f57c79de7ef31235948",
+          "media_id": "6af89f58c79de7ef31235971",
+          "percent": 100,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678654383,
+          "event": "process-update"
+        }
+      ],
+      "socket_error": null,
+      "remaining_operations": 2,
+      "reconnect_observation_ms": 781,
+      "replayed_events_after_completion": 0
+    },
+    {
+      "repetition": 3,
+      "project_id": "6af89f7fc79de7ef312360b0",
+      "account_id": "6af89f7ff2142e34ce313f62",
+      "started_at_ms": 1794678656755,
+      "count": 3,
+      "accepted_at_ms": 1794678657310,
+      "dispatch_status": 201,
+      "observed_commit_at_ms": 1794678694162,
+      "output_count": 3,
+      "completed": true,
+      "elapsed_ms": 37407,
+      "poll_interval_ms": 100,
+      "socket_events": [
+        {
+          "unix_ms": 1794678657980,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f7fc79de7ef312360b8",
+          "percent": 1,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678658167,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f7fc79de7ef312360b8",
+          "percent": 3,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678658357,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f7fc79de7ef312360b8",
+          "percent": 5,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678658680,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f7fc79de7ef312360b8",
+          "percent": 7,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678658976,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f7fc79de7ef312360b8",
+          "percent": 9,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678659265,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f7fc79de7ef312360b8",
+          "percent": 11,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678659493,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f7fc79de7ef312360b8",
+          "percent": 13,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678659780,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f7fc79de7ef312360b8",
+          "percent": 15,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678659999,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f7fc79de7ef312360b8",
+          "percent": 17,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678660184,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f7fc79de7ef312360b8",
+          "percent": 19,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678660563,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f7fc79de7ef312360b8",
+          "percent": 21,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678660789,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f7fc79de7ef312360b8",
+          "percent": 23,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678661083,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f7fc79de7ef312360b8",
+          "percent": 25,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678661311,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f7fc79de7ef312360b8",
+          "percent": 27,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678661576,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f7fc79de7ef312360b8",
+          "percent": 29,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678661694,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f7fc79de7ef312360b8",
+          "percent": 31,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678661865,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f7fc79de7ef312360b8",
+          "percent": 33,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678661996,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f7fc79de7ef312360b8",
+          "percent": 35,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678662365,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f7fc79de7ef312360b8",
+          "percent": 37,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678662592,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f7fc79de7ef312360b8",
+          "percent": 39,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678662783,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f7fc79de7ef312360b8",
+          "percent": 41,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678662982,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f7fc79de7ef312360b8",
+          "percent": 43,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678663268,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f7fc79de7ef312360b8",
+          "percent": 45,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678663388,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f7fc79de7ef312360b8",
+          "percent": 47,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678663607,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f7fc79de7ef312360b8",
+          "percent": 49,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678663798,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f7fc79de7ef312360b8",
+          "percent": 51,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678663996,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f7fc79de7ef312360b8",
+          "percent": 53,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678664367,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f7fc79de7ef312360b8",
+          "percent": 55,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678664571,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f7fc79de7ef312360b8",
+          "percent": 57,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678664760,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f7fc79de7ef312360b8",
+          "percent": 59,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678664959,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f7fc79de7ef312360b8",
+          "percent": 61,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678665196,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f7fc79de7ef312360b8",
+          "percent": 63,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678665561,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f7fc79de7ef312360b8",
+          "percent": 65,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678665795,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f7fc79de7ef312360b8",
+          "percent": 67,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678665995,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f7fc79de7ef312360b8",
+          "percent": 69,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678666359,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f7fc79de7ef312360b8",
+          "percent": 71,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678666591,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f7fc79de7ef312360b8",
+          "percent": 73,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678666782,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f7fc79de7ef312360b8",
+          "percent": 75,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678666885,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f7fc79de7ef312360b8",
+          "percent": 77,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678667283,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f7fc79de7ef312360b8",
+          "percent": 79,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678667459,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f7fc79de7ef312360b8",
+          "percent": 81,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678667867,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f7fc79de7ef312360b8",
+          "percent": 83,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678668068,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f7fc79de7ef312360b8",
+          "percent": 85,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678668283,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f7fc79de7ef312360b8",
+          "percent": 87,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678668517,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f7fc79de7ef312360b8",
+          "percent": 89,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678668607,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f7fc79de7ef312360b8",
+          "percent": 91,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678668854,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f7fc79de7ef312360b8",
+          "percent": 93,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678669105,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f7fc79de7ef312360b8",
+          "percent": 95,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678669262,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f7fc79de7ef312360b8",
+          "percent": 97,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678669365,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f7fc79de7ef312360b8",
+          "percent": 99,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678669792,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f7fc79de7ef312360b8",
+          "percent": 100,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678669933,
+          "event": "process-update"
+        },
+        {
+          "unix_ms": 1794678670463,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360d9",
+          "percent": 1,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678670595,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360d9",
+          "percent": 3,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678670858,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360d9",
+          "percent": 5,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678671193,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360d9",
+          "percent": 7,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678671386,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360d9",
+          "percent": 9,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678671595,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360d9",
+          "percent": 11,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678671894,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360d9",
+          "percent": 13,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678672158,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360d9",
+          "percent": 15,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678672394,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360d9",
+          "percent": 17,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678672675,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360d9",
+          "percent": 19,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678672791,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360d9",
+          "percent": 21,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678672997,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360d9",
+          "percent": 23,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678673266,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360d9",
+          "percent": 25,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678673494,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360d9",
+          "percent": 27,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678673686,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360d9",
+          "percent": 29,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678673952,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360d9",
+          "percent": 31,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678674173,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360d9",
+          "percent": 33,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678674385,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360d9",
+          "percent": 35,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678674779,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360d9",
+          "percent": 37,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678675071,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360d9",
+          "percent": 39,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678675358,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360d9",
+          "percent": 41,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678675581,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360d9",
+          "percent": 43,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678675767,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360d9",
+          "percent": 45,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678676003,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360d9",
+          "percent": 47,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678676295,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360d9",
+          "percent": 49,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678676583,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360d9",
+          "percent": 51,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678676892,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360d9",
+          "percent": 53,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678677197,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360d9",
+          "percent": 55,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678677500,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360d9",
+          "percent": 57,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678677777,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360d9",
+          "percent": 59,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678678060,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360d9",
+          "percent": 61,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678678384,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360d9",
+          "percent": 63,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678678597,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360d9",
+          "percent": 65,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678678866,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360d9",
+          "percent": 67,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678679090,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360d9",
+          "percent": 69,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678679302,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360d9",
+          "percent": 71,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678679480,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360d9",
+          "percent": 73,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678679760,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360d9",
+          "percent": 75,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678679910,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360d9",
+          "percent": 77,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678680077,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360d9",
+          "percent": 79,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678680368,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360d9",
+          "percent": 81,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678680571,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360d9",
+          "percent": 83,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678680781,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360d9",
+          "percent": 85,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678680987,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360d9",
+          "percent": 87,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678681214,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360d9",
+          "percent": 89,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678681301,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360d9",
+          "percent": 91,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678681576,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360d9",
+          "percent": 93,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678681700,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360d9",
+          "percent": 95,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678681972,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360d9",
+          "percent": 97,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678682100,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360d9",
+          "percent": 99,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678682275,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360d9",
+          "percent": 100,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678682467,
+          "event": "process-update"
+        },
+        {
+          "unix_ms": 1794678683149,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360c6",
+          "percent": 1,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678683265,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360c6",
+          "percent": 3,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678683667,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360c6",
+          "percent": 5,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678683701,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360c6",
+          "percent": 7,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678683960,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360c6",
+          "percent": 9,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678684190,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360c6",
+          "percent": 11,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678684400,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360c6",
+          "percent": 13,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678684605,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360c6",
+          "percent": 15,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678684797,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360c6",
+          "percent": 17,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678685068,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360c6",
+          "percent": 19,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678685346,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360c6",
+          "percent": 21,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678685491,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360c6",
+          "percent": 23,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678685686,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360c6",
+          "percent": 25,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678685960,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360c6",
+          "percent": 27,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678686158,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360c6",
+          "percent": 29,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678686463,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360c6",
+          "percent": 31,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678686705,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360c6",
+          "percent": 33,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678686960,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360c6",
+          "percent": 35,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678687195,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360c6",
+          "percent": 37,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678687496,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360c6",
+          "percent": 39,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678687791,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360c6",
+          "percent": 41,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678687981,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360c6",
+          "percent": 43,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678688187,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360c6",
+          "percent": 45,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678688581,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360c6",
+          "percent": 47,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678688865,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360c6",
+          "percent": 49,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678689060,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360c6",
+          "percent": 51,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678689381,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360c6",
+          "percent": 53,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678689569,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360c6",
+          "percent": 55,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678689762,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360c6",
+          "percent": 57,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678689966,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360c6",
+          "percent": 59,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678690073,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360c6",
+          "percent": 61,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678690257,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360c6",
+          "percent": 63,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678690480,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360c6",
+          "percent": 65,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678690682,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360c6",
+          "percent": 67,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678690875,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360c6",
+          "percent": 69,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678690987,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360c6",
+          "percent": 71,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678691195,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360c6",
+          "percent": 73,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678691371,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360c6",
+          "percent": 75,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678691570,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360c6",
+          "percent": 77,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678691860,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360c6",
+          "percent": 79,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678692001,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360c6",
+          "percent": 81,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678692270,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360c6",
+          "percent": 83,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678692397,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360c6",
+          "percent": 85,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678692492,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360c6",
+          "percent": 87,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678692680,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360c6",
+          "percent": 89,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678692794,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360c6",
+          "percent": 91,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678692981,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360c6",
+          "percent": 93,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678693161,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360c6",
+          "percent": 95,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678693215,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360c6",
+          "percent": 97,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678693314,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360c6",
+          "percent": 99,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678693867,
+          "event": "video-progress",
+          "project_id": "6af89f7fc79de7ef312360b0",
+          "media_id": "6af89f80c79de7ef312360c6",
+          "percent": 100,
+          "preview": false
+        },
+        {
+          "unix_ms": 1794678694113,
+          "event": "process-update"
+        }
+      ],
+      "socket_error": null,
+      "remaining_operations": 2,
+      "reconnect_observation_ms": 783,
+      "replayed_events_after_completion": 0
+    }
+  ],
+  "outputs": [
+    {
+      "batch": 1,
+      "bytes": 2062117,
+      "sha256": "6928b47deb2bb9c96984f6c8176fcc5ff9fe793ecf3977ee81f3644f9817006f",
+      "video_codec": "h264",
+      "audio_codec": "aac",
+      "duration_s": 10
+    },
+    {
+      "batch": 2,
+      "bytes": 2062117,
+      "sha256": "6928b47deb2bb9c96984f6c8176fcc5ff9fe793ecf3977ee81f3644f9817006f",
+      "video_codec": "h264",
+      "audio_codec": "aac",
+      "duration_s": 10
+    },
+    {
+      "batch": 3,
+      "bytes": 2062117,
+      "sha256": "6928b47deb2bb9c96984f6c8176fcc5ff9fe793ecf3977ee81f3644f9817006f",
+      "video_codec": "h264",
+      "audio_codec": "aac",
+      "duration_s": 10
+    }
+  ],
+  "amqp": [
+    {
+      "unix_ms": 1794678580996,
+      "routing_key": "video_queue",
+      "message_id": "request-be9b2591-3653-4f33-9aac-4222a982b098",
+      "project_id": "6af89f33c79de7ef3123527c",
+      "media_id": "6af89f33c79de7ef31235284",
+      "worker_timestamp": "2026-11-14T17:49:40.586Z"
+    },
+    {
+      "unix_ms": 1794678580997,
+      "routing_key": "video_queue",
+      "message_id": "request-412adfc7-3ed7-4d7f-9a92-06a3ee7df45a",
+      "project_id": "6af89f33c79de7ef3123527c",
+      "media_id": "6af89f33c79de7ef31235292",
+      "worker_timestamp": "2026-11-14T17:49:40.802Z"
+    },
+    {
+      "unix_ms": 1794678580997,
+      "routing_key": "video_queue",
+      "message_id": "request-98a75995-9a98-4ba6-aad8-b56fcfc7d493",
+      "project_id": "6af89f33c79de7ef3123527c",
+      "media_id": "6af89f34c79de7ef312352a5",
+      "worker_timestamp": "2026-11-14T17:49:40.856Z"
+    },
+    {
+      "unix_ms": 1794678592967,
+      "routing_key": "project_queue",
+      "message_id": "video-1ccf0f54-fc65-4cd8-aa66-35977476cd2d",
+      "correlation_id": "request-be9b2591-3653-4f33-9aac-4222a982b098",
+      "status": "success",
+      "worker_processing_ms": 11972.984,
+      "worker_timestamp": "2026-11-14T17:49:52.966166+00:00"
+    },
+    {
+      "unix_ms": 1794678604032,
+      "routing_key": "project_queue",
+      "message_id": "video-a3001c9d-5e13-4f69-8387-0c48b165c6fb",
+      "correlation_id": "request-412adfc7-3ed7-4d7f-9a92-06a3ee7df45a",
+      "status": "success",
+      "worker_processing_ms": 11064.734,
+      "worker_timestamp": "2026-11-14T17:50:04.031966+00:00"
+    },
+    {
+      "unix_ms": 1794678614443,
+      "routing_key": "project_queue",
+      "message_id": "video-0cbf0b84-657b-43a0-9e69-4b7891d127ad",
+      "correlation_id": "request-98a75995-9a98-4ba6-aad8-b56fcfc7d493",
+      "status": "success",
+      "worker_processing_ms": 10409.418,
+      "worker_timestamp": "2026-11-14T17:50:14.442168+00:00"
+    },
+    {
+      "unix_ms": 1794678617161,
+      "routing_key": "video_queue",
+      "message_id": "request-0a4c3d94-2e07-444c-88f5-c5f79ae14069",
+      "project_id": "6af89f57c79de7ef31235948",
+      "media_id": "6af89f57c79de7ef31235950",
+      "worker_timestamp": "2026-11-14T17:50:16.734Z"
+    },
+    {
+      "unix_ms": 1794678617162,
+      "routing_key": "video_queue",
+      "message_id": "request-95f4ab7a-9e50-45aa-91f7-328fcfd6abcc",
+      "project_id": "6af89f57c79de7ef31235948",
+      "media_id": "6af89f58c79de7ef3123595e",
+      "worker_timestamp": "2026-11-14T17:50:16.811Z"
+    },
+    {
+      "unix_ms": 1794678617162,
+      "routing_key": "video_queue",
+      "message_id": "request-99ee3bb8-b15f-4850-9090-d1b4a8d1ea73",
+      "project_id": "6af89f57c79de7ef31235948",
+      "media_id": "6af89f58c79de7ef31235971",
+      "worker_timestamp": "2026-11-14T17:50:17.006Z"
+    },
+    {
+      "unix_ms": 1794678629263,
+      "routing_key": "project_queue",
+      "message_id": "video-5c84969d-c4f0-432e-ac3b-e7301ab6887e",
+      "correlation_id": "request-0a4c3d94-2e07-444c-88f5-c5f79ae14069",
+      "status": "success",
+      "worker_processing_ms": 12100.723,
+      "worker_timestamp": "2026-11-14T17:50:29.262401+00:00"
+    },
+    {
+      "unix_ms": 1794678642160,
+      "routing_key": "project_queue",
+      "message_id": "video-c841ac7c-e07a-462d-9c4d-ee1f96c5b0d1",
+      "correlation_id": "request-95f4ab7a-9e50-45aa-91f7-328fcfd6abcc",
+      "status": "success",
+      "worker_processing_ms": 12895.794,
+      "worker_timestamp": "2026-11-14T17:50:42.159075+00:00"
+    },
+    {
+      "unix_ms": 1794678654286,
+      "routing_key": "project_queue",
+      "message_id": "video-f0615a1f-5ac1-41ee-9738-1f16d99c04c6",
+      "correlation_id": "request-99ee3bb8-b15f-4850-9090-d1b4a8d1ea73",
+      "status": "success",
+      "worker_processing_ms": 12125.949,
+      "worker_timestamp": "2026-11-14T17:50:54.286031+00:00"
+    },
+    {
+      "unix_ms": 1794678657354,
+      "routing_key": "video_queue",
+      "message_id": "request-b0583c5b-623e-4b08-8a44-11e289dfcdde",
+      "project_id": "6af89f7fc79de7ef312360b0",
+      "media_id": "6af89f7fc79de7ef312360b8",
+      "worker_timestamp": "2026-11-14T17:50:56.882Z"
+    },
+    {
+      "unix_ms": 1794678657356,
+      "routing_key": "video_queue",
+      "message_id": "request-be9debff-3a30-4b84-b459-e081543cb3e9",
+      "project_id": "6af89f7fc79de7ef312360b0",
+      "media_id": "6af89f80c79de7ef312360d9",
+      "worker_timestamp": "2026-11-14T17:50:57.296Z"
+    },
+    {
+      "unix_ms": 1794678657356,
+      "routing_key": "video_queue",
+      "message_id": "request-3eee6d8e-5bcb-48af-9ded-8359d8ea8d19",
+      "project_id": "6af89f7fc79de7ef312360b0",
+      "media_id": "6af89f80c79de7ef312360c6",
+      "worker_timestamp": "2026-11-14T17:50:57.016Z"
+    },
+    {
+      "unix_ms": 1794678669857,
+      "routing_key": "project_queue",
+      "message_id": "video-7f7c9252-855b-420b-8c6c-70853d70a1f2",
+      "correlation_id": "request-b0583c5b-623e-4b08-8a44-11e289dfcdde",
+      "status": "success",
+      "worker_processing_ms": 12501.748,
+      "worker_timestamp": "2026-11-14T17:51:09.856698+00:00"
+    },
+    {
+      "unix_ms": 1794678682383,
+      "routing_key": "project_queue",
+      "message_id": "video-1ccb41e5-92ac-49ce-b8ed-591cc416b68d",
+      "correlation_id": "request-be9debff-3a30-4b84-b459-e081543cb3e9",
+      "status": "success",
+      "worker_processing_ms": 12524.964,
+      "worker_timestamp": "2026-11-14T17:51:22.382420+00:00"
+    },
+    {
+      "unix_ms": 1794678694002,
+      "routing_key": "project_queue",
+      "message_id": "video-19247492-c92b-4088-94cf-ab8d972d002c",
+      "correlation_id": "request-3eee6d8e-5bcb-48af-9ded-8359d8ea8d19",
+      "status": "success",
+      "worker_processing_ms": 11617.796,
+      "worker_timestamp": "2026-11-14T17:51:34.001137+00:00"
+    }
+  ],
+  "phases": [
+    {
+      "label": "upload-warmup",
+      "started_at_ms": 1794678574434,
+      "status": "completed",
+      "ended_at_ms": 1794678575014
+    },
+    {
+      "label": "upload-10MiB",
+      "started_at_ms": 1794678576024,
+      "status": "completed",
+      "ended_at_ms": 1794678576400
+    },
+    {
+      "label": "upload-50MiB",
+      "started_at_ms": 1794678577420,
+      "status": "completed",
+      "ended_at_ms": 1794678579187
+    },
+    {
+      "label": "access-matrix",
+      "started_at_ms": 1794678579187,
+      "status": "completed",
+      "ended_at_ms": 1794678579409
+    },
+    {
+      "label": "batch-1",
+      "started_at_ms": 1794678579409,
+      "status": "completed",
+      "ended_at_ms": 1794678615606
+    },
+    {
+      "label": "batch-2",
+      "started_at_ms": 1794678615606,
+      "status": "completed",
+      "ended_at_ms": 1794678655610
+    },
+    {
+      "label": "batch-3",
+      "started_at_ms": 1794678655610,
+      "status": "completed",
+      "ended_at_ms": 1794678695321
+    }
+  ],
+  "failures": [],
+  "limits": [
+    "Pilot sample sizes; no p95 or approved acceptance targets.",
+    "No real Whisper, worker scaling, fault injection or participant study.",
+    "Socket.IO polling client exercises the gateway protocol, not a rendered browser.",
+    "Upload sizes are controlled with an MP4 free box; not representative content entropy."
+  ],
+  "input": {
+    "bytes": 3996212,
+    "sha256": "bd65f6b25d3ae1fcecdc76caf3d36b2480e137387db610c41667c5c46786e3a8",
+    "seconds": 10,
+    "width": 1280,
+    "height": 720,
+    "fps": 30,
+    "audio": "AAC"
+  },
+  "upload_project": {
+    "owner_id": "6af89f2ef2142e34ce313f35",
+    "project_id": "6af89f2ec79de7ef3123522f"
+  },
+  "finished_at": "2026-11-14T17:51:35.363Z"
+}

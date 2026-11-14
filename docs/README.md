@@ -11,6 +11,8 @@ decision record](../memory-bank/intents/001-phase-2-quality-improvements/quality
 The [investigation plan](../memory-bank/intents/001-phase-2-quality-improvements/investigation-plan.md)
 defines measurement protocols; the [evidence index](../memory-bank/intents/001-phase-2-quality-improvements/evidence/README.md)
 records preliminary runs and reproduction commands.
+The [live findings and decision brief](../memory-bank/intents/001-phase-2-quality-improvements/live-findings.md)
+summarize the scoped application measurements and provisional discussion pairs.
 
 ## Reference documents
 

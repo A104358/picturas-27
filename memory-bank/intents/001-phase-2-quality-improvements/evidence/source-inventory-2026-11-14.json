@@ -1,0 +1,40 @@
+{
+  "recorded_at": "2026-11-14T17:30:55Z",
+  "commit": "5678c7cecca1e78ad54ce80e68a3f8f8988bd125",
+  "application_diff_from_previous_analysis": "",
+  "platform": "Linux-6.8.0-149-generic-x86_64-with-glibc2.35",
+  "logical_cpus": 20,
+  "memory": {
+    "MemTotal": "16066828 kB",
+    "MemAvailable": "7454584 kB",
+    "SwapTotal": "2097148 kB"
+  },
+  "disk_free_bytes": 111145017344,
+  "source_hashes": {
+    "projects/utils/rabbit_mq.js": "616407a4a4cd9d7e19275e650d664580ee5596a757bfcc043a9d77cf5cdf913f",
+    "Tools/video/video.py": "b80c0df63d212bdf0ce4bfaae551e805acee290c483dacbfa4c7b7b820d1c45c",
+    "Tools/video/video_processor.py": "f7734e0c24df0f11914b02b185368a8fb74fe937cbe092e5f9ee3577d27a8305",
+    "Tools/video/effects.py": "4c833c05e37b8510646a34974b6a1cca3b5d2de6aa0046372f96af542b0406d9",
+    "projects/utils/video.js": "1713a7c3a0299c260ea488ce1a769e5103cf1783a87c68c0d5c2b0f5f43b4ebe",
+    "projects/utils/caller.js": "69dc568943a466d6ab3fe2fa8450d7697c4ec16adf82645da1a2eb31e0e47e6f",
+    "projects/middleware/shareAuth.js": "db61983f3dab9b7f07be77326018a9af8e9563c4be374560b3f005f7bfcbd097",
+    "imageStorageService/server.js": "e6903aabc385c2851b4e975b62cab8d6201368434f78fb085ab2cd4f4be70615",
+    "imageStorageService/route/upload.js": "686a9a099a3f4f5b9bd5de8798a669b5abfc2163c34467384ba8521661c1223c",
+    "imageStorageService/route/images.js": "a50385689fc443e58e124b1e144bc56ff80db91369bde9046670d3d9605bb52a",
+    "apiGateway/auth/auth.js": "773726d60639736a3c6e60c4e8d64449b29d6224c3a3276c62a26a39c2dc5136",
+    "apiGateway/routes/projects.js": "00c4b260d48679051fb252bd3a75ac06b788a56b9c740df7e78fc29f6fa1093c",
+    "projects/routes/projects.js": "51afe2603e9fdc1aa788c6b4cf460841a149920f7475f1837f184c9bd7e8336c",
+    "docker-compose.yaml": "2607bfa77fcc05ead07da1d5b9b8accd24b71f007be522da57ec4e43c9b66c83",
+    "frontend/components/toolbar/toolbar.tsx": "f77f4223753d64c3d5c5b4cd8b9afea601e4e73ff2440ac94c6297603ee571b6",
+    "frontend/app/dashboard/[pid]/page.tsx": "970d0b37e3461713f60ce9a5ee94f94b907618f1a2a89d3491f504ab88188aee",
+    "wsGateway/index.js": "0a0e67cc9e01906b8cc34bc2a0183c291f5e55018f4204d61827844de6905769",
+    "nginx/nginx.conf": "e29d716b6ce3133f9a88f14c783813aed6ff4a123503b0f000606eb3a409489e"
+  },
+  "collection_methods": [
+    "git rev-parse HEAD",
+    "git diff 484be13 HEAD --name-only -- Tools projects apiGateway imageStorageService frontend wsGateway docker-compose.yaml rabbitMQ",
+    "SHA-256 of listed source files",
+    "/proc/meminfo and shutil.disk_usage"
+  ],
+  "limitations": "Host memory is a point-in-time observation, not a container budget or peak under workload."
+}

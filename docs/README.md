@@ -6,6 +6,12 @@ deliverables. For application setup and usage, see the [project README](../READM
 Start with the [Exercise 6 resolution](exercises/06-architectural-patterns/resolution.md)
 or its [artifact index](exercises/06-architectural-patterns/README.md).
 
+For Phase 2 planning, see the [comparison of six quality directions and team
+decision record](../memory-bank/intents/001-phase-2-quality-improvements/quality-exploration.md).
+The [investigation plan](../memory-bank/intents/001-phase-2-quality-improvements/investigation-plan.md)
+defines measurement protocols; the [evidence index](../memory-bank/intents/001-phase-2-quality-improvements/evidence/README.md)
+records preliminary runs and reproduction commands.
+
 ## Reference documents
 
 | Topic | Document | Period / purpose |

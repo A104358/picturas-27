@@ -1,0 +1,19 @@
+{
+  "recorded_at": "2026-11-14T17:23:26.225Z",
+  "commit": "5678c7cecca1e78ad54ce80e68a3f8f8988bd125",
+  "source": "projects/utils/rabbit_mq.js",
+  "source_sha256": "616407a4a4cd9d7e19275e650d664580ee5596a757bfcc043a9d77cf5cdf913f",
+  "node": "v20.19.6",
+  "method": "Real helper evaluated with a fake AMQP channel and a controlled asynchronous callback.",
+  "events_while_callback_pending": [
+    "callback-start",
+    "ack"
+  ],
+  "events": [
+    "callback-start",
+    "ack",
+    "callback-complete"
+  ],
+  "ack_precedes_callback_completion": true,
+  "limits": "No real broker, database, crash or end-to-end job. Demonstrates callback order only; not message loss frequency."
+}

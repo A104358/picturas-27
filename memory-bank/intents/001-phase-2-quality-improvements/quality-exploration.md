@@ -3,7 +3,7 @@ intent: 001-phase-2-quality-improvements
 phase: inception
 status: draft
 created: 2026-11-14T17:16:06Z
-updated: 2026-11-14T18:06:50Z
+updated: 2026-11-14T18:19:23Z
 ---
 
 # Quality Options and Team Decision
@@ -236,6 +236,10 @@ they come from source requirements, stakeholder agreement or a proposed engineer
 goal. Historical EV-28 test passes and smoke checks do not supply these baselines.
 
 ## Decision Record — Pending
+
+The [team review packet](team-review.md) provides the proposal to discuss against
+evidence commit `793df2e`. This record remains the single source for actual team
+agreement; the packet's recommendation and numerical options are not approvals.
 
 | Field | Current value |
 |-------|---------------|

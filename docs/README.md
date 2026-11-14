@@ -13,6 +13,9 @@ defines measurement protocols; the [evidence index](../memory-bank/intents/001-p
 records preliminary runs and reproduction commands.
 The [live findings and decision brief](../memory-bank/intents/001-phase-2-quality-improvements/live-findings.md)
 summarize the scoped application measurements and provisional discussion pairs.
+The [team review packet](../memory-bank/intents/001-phase-2-quality-improvements/team-review.md)
+consolidates the recommendation, alternative pairs and scope/measurement proposals
+for agreement by all four members.
 
 ## Reference documents
 

@@ -3,7 +3,7 @@ intent: 001-phase-2-quality-improvements
 phase: inception
 status: draft
 created: 2026-11-14T17:10:27Z
-updated: 2026-11-14T18:06:50Z
+updated: 2026-11-14T18:19:23Z
 ---
 
 # Requirements: Phase 2 Quality Improvements
@@ -35,6 +35,12 @@ an isolated 13-service deployment: upload RSS, three video batches, Socket.IO
 progress, internal access tests and one worker-recovery scenario. These results
 support a provisional discussion shortlist; no pair or quantitative targets have
 been approved by the team.
+
+The [team review packet](team-review.md) now consolidates all six directions,
+the recommended discussion pair QC-05 + QC-06, proposed boundaries and numerical
+options. Its proposed percentages and zero-bypass criterion are unapproved
+engineering proposals. They do not change the count of selected requirements
+or replace the later full requirements review.
 
 ## Business Goals
 
@@ -122,8 +128,8 @@ will be maintained separately from these intent-specific requirements.
 
 | Question | Owner | Resolution |
 |----------|-------|------------|
-| Which two quality weaknesses should this intent prioritize? | All four PL2-G4 members | Explore all six directions first; select a pair after evidence review and unanimous agreement. No pair selected. |
-| What hardware/resource budget, time, representative workloads and participants are available? | PL2-G4 | Needed to assess exploration feasibility before shortlisting; refine for the final pair. |
+| Which two quality weaknesses should this intent prioritize? | All four PL2-G4 members | Evidence committed as 793df2e and a team review packet prepared. QC-05 + QC-06 is recommended for discussion; no pair selected and no individual agreement recorded. |
+| What hardware/resource budget, time, representative workloads and participants are available? | PL2-G4 | Pilot resources are recorded. Team hours, final workload scope and participant access remain open for the team review. |
 | What delivery deadline applies? | PL2-G4 | User confirmed 20 November 2026. |
 | What target and minimum acceptable values are justified by the baseline and stakeholder needs? | PL2-G4 | To quantify after the measurement method and initial results are available. |
 

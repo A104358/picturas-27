@@ -2,10 +2,17 @@
 
 This workspace reuses the specs.md AI-DLC infrastructure from
 `Fase1/picturas-27-extension` (version 0.1.74).
-Inception has started for the first Phase 2 quality-improvement intent. Its
-requirements file contains the known goal and scope; selection of the two quality
-requirements and detailed elicitation remain pending. All six candidate directions
-will be explored before the final pair is selected with whole-team agreement.
+Inception is active for the first Phase 2 quality-improvement intent. The agreed
+pair is QC-06 security/end-to-end authorization + QC-05 upload resource efficiency,
+as communicated by the user. Detailed elicitation, remaining metric approvals and
+the formal baseline remain incomplete. Individual identity/WS validations retain
+their recorded scope and do not imply whole-team approval of all details.
+The user corrected delivery to **27 November 2026**, superseding 20 November for
+current planning. Team hours remain unknown.
+Security coverage option A is individually validated: internal APIs use mTLS;
+other channels require verified server TLS and service-specific least-privilege
+credentials where applicable. Exact configuration/proof and session transition
+remain open; prior JWT/WS decisions are preserved.
 Construction has not started.
 
 - `intents/`: draft requirements and future units/stories.
@@ -21,12 +28,16 @@ Phase 1 requirements, stories, bolts, standards and progress were not imported.
 Project standards and story indexes have not been authored yet.
 
 Current intent: [001-phase-2-quality-improvements](intents/001-phase-2-quality-improvements/requirements.md).
+Agreed pair: QC-06 security/end-to-end authorization + QC-05 performance efficiency/upload resource utilization;
+[collective agreement communicated by the user](intents/001-phase-2-quality-improvements/quality-exploration.md#decision-record--pair-agreement).
 Progress: [inception log](intents/001-phase-2-quality-improvements/inception-log.md).
 Options and team review: [quality exploration](intents/001-phase-2-quality-improvements/quality-exploration.md).
 Measurement protocols: [investigation plan](intents/001-phase-2-quality-improvements/investigation-plan.md).
 Preliminary results: [exploration evidence](intents/001-phase-2-quality-improvements/evidence/README.md).
 Application measurements and team discussion: [live findings](intents/001-phase-2-quality-improvements/live-findings.md).
 Current decision preparation: [team review packet](intents/001-phase-2-quality-improvements/team-review.md).
+Latest communicated choices and rationale: [November 16 ideas 1/2](../docs/fase2-ideias-1-e-2.md).
+Current metric definitions and initial values: [measurement plan](../docs/fase2-metricas-e-baseline.md).
 
 Consult [AGENTS.md](../AGENTS.md), the [project README](../README.md) and the
 [documentation index](../docs/README.md) for project context.

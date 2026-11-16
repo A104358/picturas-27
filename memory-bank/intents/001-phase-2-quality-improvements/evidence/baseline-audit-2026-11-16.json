@@ -1,0 +1,839 @@
+{
+  "recorded_at": "2026-11-16T13:59:32Z",
+  "review_commit": "7d994d81d101b00c206f9fc4091df97f92e7b31e",
+  "source_hashes": {
+    "memory-bank/intents/001-phase-2-quality-improvements/evidence/nfr-2026-11-16/uploads-result.json": "224c4b50ec161168c5169934ce49e6d323f1397fdc385f78753cfe7e4d937e69",
+    "memory-bank/intents/001-phase-2-quality-improvements/evidence/nfr-2026-11-16/security-result.json": "24279a363b2bbb24d60a25556e908086d1edf74d7ca63e8f26530c97415a36db",
+    "memory-bank/intents/001-phase-2-quality-improvements/evidence/nfr-2026-11-16/reliability-R0-result.json": "a0c7a7d3d7871e7a542f477eaf41070b84027a2d15a20b6f7211416a84c7e252",
+    "memory-bank/intents/001-phase-2-quality-improvements/evidence/nfr-2026-11-16/reliability-R1-result.json": "97a8f4f8f853c1966017e3832f1d8f4407079dd27eafb11665e8e937e6d371e1",
+    "memory-bank/intents/001-phase-2-quality-improvements/evidence/nfr-2026-11-16/reliability-R2-result.json": "f6d9d0809a450893ef6ebbef2a51258b93959247886b011c64c4e6e3361e5f74",
+    "memory-bank/intents/001-phase-2-quality-improvements/evidence/nfr-2026-11-16/reliability-R3-result.json": "19cb961dc7c397b075120b732045d7cce37725b056049cfff5f28317848e8d01"
+  },
+  "environment": "Reported Apple M4 Pro / Docker Desktop ARM64, 2 CPU / 2 GiB for four Node/video services. Not the earlier Linux x86_64 experiment.",
+  "runtime_rerun": false,
+  "upload_groups": [
+    {
+      "label": "10MiB-cold-first",
+      "runs": [
+        "free-10MiB-#1"
+      ],
+      "total_ms": {
+        "n": 1,
+        "min": 1523.3,
+        "median": 1523.3,
+        "max": 1523.3
+      },
+      "client_post_send_ms": {
+        "n": 1,
+        "min": 1447.4,
+        "median": 1447.4,
+        "max": 1447.4
+      },
+      "services": {
+        "api_gateway": {
+          "pre_rss_mib": {
+            "n": 1,
+            "min": 81.1,
+            "median": 81.1,
+            "max": 81.1
+          },
+          "peak_rss_mib": {
+            "n": 1,
+            "min": 122.2,
+            "median": 122.2,
+            "max": 122.2
+          },
+          "delta_mib": {
+            "n": 1,
+            "min": 41.1,
+            "median": 41.1,
+            "max": 41.1
+          },
+          "post_rss_mib": {
+            "n": 1,
+            "min": 102.3,
+            "median": 102.3,
+            "max": 102.3
+          }
+        },
+        "projects": {
+          "pre_rss_mib": {
+            "n": 1,
+            "min": 100.3,
+            "median": 100.3,
+            "max": 100.3
+          },
+          "peak_rss_mib": {
+            "n": 1,
+            "min": 126,
+            "median": 126,
+            "max": 126
+          },
+          "delta_mib": {
+            "n": 1,
+            "min": 25.7,
+            "median": 25.7,
+            "max": 25.7
+          },
+          "post_rss_mib": {
+            "n": 1,
+            "min": 126,
+            "median": 126,
+            "max": 126
+          }
+        },
+        "img_storage": {
+          "pre_rss_mib": {
+            "n": 1,
+            "min": 77.7,
+            "median": 77.7,
+            "max": 77.7
+          },
+          "peak_rss_mib": {
+            "n": 1,
+            "min": 100.6,
+            "median": 100.6,
+            "max": 100.6
+          },
+          "delta_mib": {
+            "n": 1,
+            "min": 22.9,
+            "median": 22.9,
+            "max": 22.9
+          },
+          "post_rss_mib": {
+            "n": 1,
+            "min": 100.6,
+            "median": 100.6,
+            "max": 100.6
+          }
+        }
+      }
+    },
+    {
+      "label": "10MiB-warm-observed",
+      "runs": [
+        "free-10MiB-#2",
+        "free-10MiB-#3",
+        "premium-10MiB-#1",
+        "premium-10MiB-#2",
+        "premium-10MiB-#3"
+      ],
+      "total_ms": {
+        "n": 5,
+        "min": 234.9,
+        "median": 238.2,
+        "max": 266.6
+      },
+      "client_post_send_ms": {
+        "n": 5,
+        "min": 154.7,
+        "median": 161.8,
+        "max": 192.9
+      },
+      "services": {
+        "api_gateway": {
+          "pre_rss_mib": {
+            "n": 5,
+            "min": 102.3,
+            "median": 183.7,
+            "max": 283.1
+          },
+          "peak_rss_mib": {
+            "n": 5,
+            "min": 123,
+            "median": 183.7,
+            "max": 283.6
+          },
+          "delta_mib": {
+            "n": 5,
+            "min": 0,
+            "median": 0.5,
+            "max": 30.8
+          },
+          "post_rss_mib": {
+            "n": 5,
+            "min": 103.2,
+            "median": 183.7,
+            "max": 183.8
+          }
+        },
+        "projects": {
+          "pre_rss_mib": {
+            "n": 5,
+            "min": 126.7,
+            "median": 255.9,
+            "max": 345.9
+          },
+          "peak_rss_mib": {
+            "n": 5,
+            "min": 147.5,
+            "median": 256.1,
+            "max": 355.9
+          },
+          "delta_mib": {
+            "n": 5,
+            "min": 0.2,
+            "median": 10,
+            "max": 20.8
+          },
+          "post_rss_mib": {
+            "n": 5,
+            "min": 137.7,
+            "median": 255.9,
+            "max": 256.2
+          }
+        },
+        "img_storage": {
+          "pre_rss_mib": {
+            "n": 5,
+            "min": 100.6,
+            "median": 203.2,
+            "max": 283.2
+          },
+          "peak_rss_mib": {
+            "n": 5,
+            "min": 121.3,
+            "median": 203.2,
+            "max": 303.3
+          },
+          "delta_mib": {
+            "n": 5,
+            "min": 0,
+            "median": 16.5,
+            "max": 20.7
+          },
+          "post_rss_mib": {
+            "n": 5,
+            "min": 111.4,
+            "median": 183.4,
+            "max": 203.2
+          }
+        }
+      }
+    },
+    {
+      "label": "100MiB-observed",
+      "runs": [
+        "free-100MiB-#1",
+        "free-100MiB-#2",
+        "free-100MiB-#3",
+        "premium-100MiB-#1",
+        "premium-100MiB-#2"
+      ],
+      "total_ms": {
+        "n": 5,
+        "min": 1354.8,
+        "median": 1687.7,
+        "max": 2107.8
+      },
+      "client_post_send_ms": {
+        "n": 5,
+        "min": 664.6,
+        "median": 991.6,
+        "max": 1319.8
+      },
+      "services": {
+        "api_gateway": {
+          "pre_rss_mib": {
+            "n": 5,
+            "min": 114,
+            "median": 211.9,
+            "max": 282.5
+          },
+          "peak_rss_mib": {
+            "n": 5,
+            "min": 480.3,
+            "median": 482.6,
+            "max": 483.2
+          },
+          "delta_mib": {
+            "n": 5,
+            "min": 200.3,
+            "median": 269.2,
+            "max": 366.3
+          },
+          "post_rss_mib": {
+            "n": 5,
+            "min": 211.9,
+            "median": 282.5,
+            "max": 283.1
+          }
+        },
+        "projects": {
+          "pre_rss_mib": {
+            "n": 5,
+            "min": 138.3,
+            "median": 310.6,
+            "max": 354.8
+          },
+          "peak_rss_mib": {
+            "n": 5,
+            "min": 309.9,
+            "median": 345.8,
+            "max": 355.4
+          },
+          "delta_mib": {
+            "n": 5,
+            "min": 0.6,
+            "median": 22.2,
+            "max": 171.6
+          },
+          "post_rss_mib": {
+            "n": 5,
+            "min": 309.9,
+            "median": 345.8,
+            "max": 355.4
+          }
+        },
+        "img_storage": {
+          "pre_rss_mib": {
+            "n": 5,
+            "min": 118,
+            "median": 281,
+            "max": 305
+          },
+          "peak_rss_mib": {
+            "n": 5,
+            "min": 281,
+            "median": 305,
+            "max": 328.9
+          },
+          "delta_mib": {
+            "n": 5,
+            "min": 0.1,
+            "median": 46.7,
+            "max": 163
+          },
+          "post_rss_mib": {
+            "n": 5,
+            "min": 281,
+            "median": 283.2,
+            "max": 328.9
+          }
+        }
+      }
+    },
+    {
+      "label": "500MiB-observed",
+      "runs": [
+        "premium-500MiB-#1",
+        "premium-500MiB-#2",
+        "premium-500MiB-#3"
+      ],
+      "total_ms": {
+        "n": 3,
+        "min": 10249.6,
+        "median": 10525.4,
+        "max": 11564.2
+      },
+      "client_post_send_ms": {
+        "n": 3,
+        "min": 6704,
+        "median": 6923.1,
+        "max": 7976.6
+      },
+      "services": {
+        "api_gateway": {
+          "pre_rss_mib": {
+            "n": 3,
+            "min": 282.1,
+            "median": 798.6,
+            "max": 1039.9
+          },
+          "peak_rss_mib": {
+            "n": 3,
+            "min": 2041.1,
+            "median": 2041.1,
+            "max": 2049.6
+          },
+          "delta_mib": {
+            "n": 3,
+            "min": 1001.2,
+            "median": 1242.5,
+            "max": 1767.5
+          },
+          "post_rss_mib": {
+            "n": 3,
+            "min": 797.3,
+            "median": 1039.9,
+            "max": 1040
+          }
+        },
+        "projects": {
+          "pre_rss_mib": {
+            "n": 3,
+            "min": 355.4,
+            "median": 1079.6,
+            "max": 1092.9
+          },
+          "peak_rss_mib": {
+            "n": 3,
+            "min": 1092.9,
+            "median": 1093.9,
+            "max": 1114.2
+          },
+          "delta_mib": {
+            "n": 3,
+            "min": 0,
+            "median": 14.3,
+            "max": 758.8
+          },
+          "post_rss_mib": {
+            "n": 3,
+            "min": 1078.5,
+            "median": 1092,
+            "max": 1092.3
+          }
+        },
+        "img_storage": {
+          "pre_rss_mib": {
+            "n": 3,
+            "min": 328.9,
+            "median": 1054.9,
+            "max": 1071.2
+          },
+          "peak_rss_mib": {
+            "n": 3,
+            "min": 1058,
+            "median": 1072.1,
+            "max": 1073.7
+          },
+          "delta_mib": {
+            "n": 3,
+            "min": 0.9,
+            "median": 18.8,
+            "max": 729.1
+          },
+          "post_rss_mib": {
+            "n": 3,
+            "min": 1054.8,
+            "median": 1070.4,
+            "max": 1071
+          }
+        }
+      }
+    }
+  ],
+  "security_case_audit": [
+    {
+      "id": "C00",
+      "raw_observation": "HTTP 200, upload HTTP 204, media=1",
+      "raw_admitted": false,
+      "audit_status": "recorded-response",
+      "interpretation": "Retain raw observation; repeat with case-specific payload/state assertions and positive controls."
+    },
+    {
+      "id": "G01",
+      "raw_observation": "HTTP 401",
+      "raw_admitted": false,
+      "audit_status": "recorded-response",
+      "interpretation": "Retain raw observation; repeat with case-specific payload/state assertions and positive controls."
+    },
+    {
+      "id": "G02",
+      "raw_observation": "HTTP 200, returned project of user ?",
+      "raw_admitted": false,
+      "audit_status": "inconclusive-assertion",
+      "interpretation": "HTTP 200 is recorded, but user_id is absent from the public response and the test uses it for ownership. verify.mjs stdout is not archived."
+    },
+    {
+      "id": "G03",
+      "raw_observation": "HTTP 201; owner's tools 1, version 1->2",
+      "raw_admitted": true,
+      "audit_status": "recorded-state-effect",
+      "interpretation": "Retain raw observation; repeat with case-specific payload/state assertions and positive controls."
+    },
+    {
+      "id": "G04",
+      "raw_observation": "HTTP 204; owner's media 2",
+      "raw_admitted": true,
+      "audit_status": "recorded-state-effect",
+      "interpretation": "Retain raw observation; repeat with case-specific payload/state assertions and positive controls."
+    },
+    {
+      "id": "G05",
+      "raw_observation": "HTTP 200; fields=_id,name,type,operations,__v,email,id,remaining_operations",
+      "raw_admitted": true,
+      "audit_status": "recorded-state-effect",
+      "interpretation": "Retain raw observation; repeat with case-specific payload/state assertions and positive controls."
+    },
+    {
+      "id": "G06",
+      "raw_observation": "HTTP 201; stored profile=premium",
+      "raw_admitted": true,
+      "audit_status": "recorded-state-effect",
+      "interpretation": "Retain raw observation; repeat with case-specific payload/state assertions and positive controls."
+    },
+    {
+      "id": "G07",
+      "raw_observation": "HTTP 204; profile now=premium",
+      "raw_admitted": true,
+      "audit_status": "recorded-state-effect",
+      "interpretation": "Retain raw observation; repeat with case-specific payload/state assertions and positive controls."
+    },
+    {
+      "id": "G08",
+      "raw_observation": "HTTP 500",
+      "raw_admitted": false,
+      "audit_status": "not-measured-dependency-absent",
+      "interpretation": "Subscription service absent; HTTP 500 is neither an authorization denial nor a successful unauthorized read."
+    },
+    {
+      "id": "G09",
+      "raw_observation": "HTTP 500 (no auth check ran; 4xx/5xx here comes from the missing subscription)",
+      "raw_admitted": true,
+      "audit_status": "not-measured-dependency-absent",
+      "interpretation": "HTTP 500 cannot prove a cancellation took effect; do not count as an admitted unauthorized operation."
+    },
+    {
+      "id": "D01",
+      "raw_observation": "HTTP 401",
+      "raw_admitted": false,
+      "audit_status": "recorded-response",
+      "interpretation": "Retain raw observation; repeat with case-specific payload/state assertions and positive controls."
+    },
+    {
+      "id": "D02",
+      "raw_observation": "HTTP 200",
+      "raw_admitted": true,
+      "audit_status": "recorded-response",
+      "interpretation": "Retain raw observation; repeat with case-specific payload/state assertions and positive controls."
+    },
+    {
+      "id": "D03",
+      "raw_observation": "HTTP 200",
+      "raw_admitted": true,
+      "audit_status": "recorded-response",
+      "interpretation": "Retain raw observation; repeat with case-specific payload/state assertions and positive controls."
+    },
+    {
+      "id": "D04",
+      "raw_observation": "HTTP 401",
+      "raw_admitted": false,
+      "audit_status": "malformed-token-only",
+      "interpretation": "The hand-made x.payload.x token does not prove rejection of a validly structured forged JWT."
+    },
+    {
+      "id": "D05",
+      "raw_observation": "HTTP 204",
+      "raw_admitted": true,
+      "audit_status": "status-only-empty-fixture",
+      "interpretation": "HTTP 204 against an account without projects; nonempty deletion needs state verification. verify.mjs output is not archived."
+    },
+    {
+      "id": "D06",
+      "raw_observation": "HTTP 200; bytes match original=false",
+      "raw_admitted": true,
+      "audit_status": "signer-issued-object-not-verified",
+      "interpretation": "og_img_key is absent from the public response, and bytes match=false. This demonstrates signer issuance, not retrieval of this source."
+    },
+    {
+      "id": "D07",
+      "raw_observation": "HTTP 201",
+      "raw_admitted": true,
+      "audit_status": "write-status-only",
+      "interpretation": "HTTP 201; final protocol must read back the created marker and verify the target prefix/content."
+    },
+    {
+      "id": "D08",
+      "raw_observation": "HTTP 201",
+      "raw_admitted": true,
+      "audit_status": "delete-status-only",
+      "interpretation": "HTTP 201; final protocol must verify the known marker existed and is absent afterward."
+    },
+    {
+      "id": "D09",
+      "raw_observation": "HTTP 204; profile now=premium",
+      "raw_admitted": true,
+      "audit_status": "recorded-state-effect",
+      "interpretation": "Retain raw observation; repeat with case-specific payload/state assertions and positive controls."
+    },
+    {
+      "id": "D10",
+      "raw_observation": "HTTP 200",
+      "raw_admitted": true,
+      "audit_status": "known-credential-observation",
+      "interpretation": "Known committed management credentials granted access; separate from user ownership and credential-free access."
+    },
+    {
+      "id": "D11",
+      "raw_observation": "count returned (numeric)",
+      "raw_admitted": true,
+      "audit_status": "database-configuration-observation",
+      "interpretation": "Unauthenticated Mongo read inside DB container; host reachability is not established by docker exec."
+    },
+    {
+      "id": "W01",
+      "raw_observation": "received project-op TOOL_ADDED, pipeline payload=true",
+      "raw_admitted": true,
+      "audit_status": "recorded-state-effect",
+      "interpretation": "Retain raw observation; repeat with case-specific payload/state assertions and positive controls."
+    },
+    {
+      "id": "Q01",
+      "raw_observation": "20 granted; remaining_operations=2; statuses=200",
+      "raw_admitted": true,
+      "audit_status": "separate-concurrency-scenario",
+      "interpretation": "20 grants, remaining 2; not the same binary authorization metric as G/D/W cases."
+    }
+  ],
+  "limits": [
+    "Original records do not contain a complete environment/image/source manifest.",
+    "HWM baseline reset precedes a 300 ms idle and post-read follows 700 ms idle plus sequential Docker calls.",
+    "Node request completion is a client/OS send marker, not server receipt.",
+    "Tiny samples; no p95 or cross-architecture speedup is inferred."
+  ],
+  "uploads_completed": 14,
+  "upload_failures_or_rejections": [
+    {
+      "label": "no-token-100MiB",
+      "status": 401,
+      "bytes": 104857600,
+      "total_ms": 978.3,
+      "send_ms": 816.1,
+      "post_send_ms": 162.3,
+      "mem": {
+        "api_gateway": {
+          "pre_rss_mib": 1039.9,
+          "peak_rss_mib": 1041.9,
+          "delta_mib": 2,
+          "post_rss_mib": 544.2,
+          "restarted": false,
+          "oom_killed": "false"
+        },
+        "projects": {
+          "pre_rss_mib": 1092.3,
+          "peak_rss_mib": 1092.3,
+          "delta_mib": 0,
+          "post_rss_mib": 1092.3,
+          "restarted": false,
+          "oom_killed": "false"
+        },
+        "img_storage": {
+          "pre_rss_mib": 1070.4,
+          "peak_rss_mib": 1070.4,
+          "delta_mib": 0,
+          "post_rss_mib": 1070.4,
+          "restarted": false,
+          "oom_killed": "false"
+        }
+      }
+    },
+    {
+      "label": "no-token-500MiB",
+      "status": 401,
+      "bytes": 524288000,
+      "total_ms": 4283.9,
+      "send_ms": 3578.7,
+      "post_send_ms": 705.1,
+      "mem": {
+        "api_gateway": {
+          "pre_rss_mib": 544.3,
+          "peak_rss_mib": 1044.4,
+          "delta_mib": 500.1,
+          "post_rss_mib": 1044.4,
+          "restarted": false,
+          "oom_killed": "false"
+        },
+        "projects": {
+          "pre_rss_mib": 1092.4,
+          "peak_rss_mib": 1092.4,
+          "delta_mib": 0,
+          "post_rss_mib": 1092.4,
+          "restarted": false,
+          "oom_killed": "false"
+        },
+        "img_storage": {
+          "pre_rss_mib": 1070.4,
+          "peak_rss_mib": 1070.4,
+          "delta_mib": 0,
+          "post_rss_mib": 1070.4,
+          "restarted": false,
+          "oom_killed": "false"
+        }
+      }
+    },
+    {
+      "label": "free-500MiB-over-limit",
+      "status": 502,
+      "bytes": 524288000,
+      "total_ms": 4779.2,
+      "send_ms": 3728.4,
+      "post_send_ms": 1050.8,
+      "mem": {
+        "api_gateway": {
+          "pre_rss_mib": 1044.9,
+          "process_died": true,
+          "restarted": false,
+          "oom_killed": "true"
+        },
+        "projects": {
+          "pre_rss_mib": 1093.6,
+          "peak_rss_mib": 1093.6,
+          "delta_mib": 0,
+          "post_rss_mib": 1091.4,
+          "restarted": false,
+          "oom_killed": "false"
+        },
+        "img_storage": {
+          "pre_rss_mib": 1070.4,
+          "peak_rss_mib": 1070.4,
+          "delta_mib": 0,
+          "post_rss_mib": 1069.3,
+          "restarted": false,
+          "oom_killed": "false"
+        }
+      }
+    }
+  ],
+  "reported_security_summary": {
+    "negative_cases": 22,
+    "admitted": 17,
+    "not_measured": 0
+  },
+  "security_global_adjusted_rate": null,
+  "security_global_adjusted_rate_reason": "Heterogeneous scopes and incomplete assertions must be repaired and rerun; no replacement population-like percentage is manufactured.",
+  "reliability": {
+    "reliability-R0-result": {
+      "recorded_at": "2026-11-16T00:46:37.770Z",
+      "experiments": [
+        {
+          "id": "R0",
+          "what": "valid image + brightness (control)",
+          "apply_status": 201,
+          "events": [
+            "process-update@229ms"
+          ],
+          "pending_process_docs": 0
+        }
+      ]
+    },
+    "reliability-R1-result": {
+      "recorded_at": "2026-11-16T00:47:03.036Z",
+      "experiments": [
+        {
+          "id": "R1",
+          "what": "image + border with invalid borderWidth; observed 30 s",
+          "add_tool_status": 201,
+          "apply_status": 201,
+          "client_events_in_30s": [],
+          "border_tool_restarts": 1,
+          "border_tool_restarted": true,
+          "pending_process_docs_delta": 1,
+          "border_queue": {
+            "consumers": 1,
+            "messages": 0
+          },
+          "tool_log_tail": ""
+        }
+      ]
+    },
+    "reliability-R2-result": {
+      "recorded_at": "2026-11-16T00:47:59.374Z",
+      "experiments": [
+        {
+          "id": "R2",
+          "what": "docker restart rabbitmq while idle",
+          "broker_api_back_ms": 5609,
+          "consumers_before": {
+            "project_queue": 1,
+            "ws_queue": 1,
+            "video_queue": 1,
+            "brightness_queue": 1,
+            "border_queue": 1
+          },
+          "consumers_after": [
+            {
+              "s": 5,
+              "consumers": {
+                "project_queue": 1,
+                "ws_queue": 1,
+                "video_queue": 1,
+                "brightness_queue": 1,
+                "border_queue": 1
+              }
+            },
+            {
+              "s": 15,
+              "consumers": {
+                "project_queue": 1,
+                "ws_queue": 1,
+                "video_queue": 1,
+                "brightness_queue": 1,
+                "border_queue": 1
+              }
+            },
+            {
+              "s": 30,
+              "consumers": {
+                "project_queue": 1,
+                "ws_queue": 1,
+                "video_queue": 1,
+                "brightness_queue": 1,
+                "border_queue": 1
+              }
+            },
+            {
+              "s": 60,
+              "consumers": {
+                "project_queue": 1,
+                "ws_queue": 1,
+                "video_queue": 1,
+                "brightness_queue": 1,
+                "border_queue": 1
+              }
+            }
+          ],
+          "services": {
+            "projects": {
+              "state": "running",
+              "container_restarted": true
+            },
+            "ws_gateway": {
+              "state": "running",
+              "container_restarted": false
+            },
+            "video_tool": {
+              "state": "running",
+              "container_restarted": true
+            },
+            "brightness_tool": {
+              "state": "running",
+              "container_restarted": true
+            },
+            "border_tool": {
+              "state": "running",
+              "container_restarted": true
+            }
+          },
+          "job_after_restart": {
+            "apply_status": 201,
+            "events_in_20s": [
+              "process-update@151ms"
+            ]
+          },
+          "projects_log_tail": "\u001b[0mPOST /6afa5301a7fc7a4c788b37d9/6afa530155550421e17ba4be/process \u001b[32m201\u001b[0m 15.809 ms - 7\u001b[0m | [T-03][RABBIT] msg=request-97016474-36aa-4079-9581-d4fef4556dcb status=success outType=image curPos=0 key= | [RUN-DEBUG] msg=request-97016474-36aa-4079-9581-d4fef4556dcb curPos=0 processTok=1 activeTok=1 | [COMMIT] project=6afa530155550421e17ba4be committedToken=1"
+        }
+      ]
+    },
+    "reliability-R3-result": {
+      "recorded_at": "2026-11-16T00:50:39.962Z",
+      "experiments": [
+        {
+          "id": "R3",
+          "what": "video job accepted (worker stopped) -> broker restart -> worker started; observed 45 s",
+          "upload_status": 204,
+          "apply_status": 201,
+          "video_queue_before_restart": "1 msgs / consumers 0",
+          "video_queue_after_restart": "0 msgs / consumers 0",
+          "ops_before": 5,
+          "ops_after": 4,
+          "pending_process_docs_delta": 1,
+          "results_endpoint_status": 200,
+          "results": "PK\u0005\u0006\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
+        }
+      ]
+    }
+  }
+}

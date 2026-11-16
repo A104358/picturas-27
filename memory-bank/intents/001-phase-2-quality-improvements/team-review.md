@@ -3,10 +3,28 @@ intent: 001-phase-2-quality-improvements
 phase: inception
 status: draft
 created: 2026-11-14T18:19:23Z
-updated: 2026-11-14T18:19:23Z
+updated: 2026-11-16T15:51:14Z
 ---
 
 # Team Review: Evidence, Proposed Scope and Selection
+
+**Historical November 14 proposal.** The November 16 documents communicate a
+broader security scope and a different preferred upload design. Use the current
+[decision rationale](../../../docs/fase2-ideias-1-e-2.md) and
+[measurement specification](../../../docs/fase2-metricas-e-baseline.md) for that
+review. The old 50%/75% suggestions below are preserved as history, not combined
+with the newer unapproved 64/32 MiB proposals. No team approval is inferred.
+
+**Deadline correction:** The user later corrected delivery to **27 November
+2026**. Use that date for current planning. The 20 November date in this historical
+packet records the earlier constraint, not the current deadline.
+
+**Later outcome, 2026-11-16T15:12:33Z:** The user explicitly requested recording
+agreement on QC-06 security/end-to-end authorization + QC-05 performance efficiency/
+upload resource utilization. The [canonical pair agreement](quality-exploration.md#decision-record--pair-agreement)
+records its source and limits. The selection questions below are historical;
+remaining numerical targets and implementation details still need review. This
+agreement does not create separate nominal declarations by the four members.
 
 ## Review State
 
@@ -181,12 +199,12 @@ Each member reviews this document together with the evidence revision. Discuss:
    repeated baselines? Pair agreement does not automatically approve thresholds.
 5. What concerns remain for any member, and what evidence will resolve them?
 
-Use the [single canonical team decision record](quality-exploration.md#decision-record--pending)
-for the chosen pair, rationale, reviewed revision and each member's actual agreement
-or concerns. All four named entries remain pending. The user may provide an
-explicit outcome on behalf of a team meeting; no direct contact with teammates is
-required or performed. Silence, a majority preference or a request to continue
-does not record the unanimous agreement the user requested.
+Use the [single canonical team decision record](quality-exploration.md#decision-record--pair-agreement)
+for the chosen pair, rationale and source of agreement. The later explicit user
+instruction now records the collective pair agreement; no separately reviewed
+commit, individual statements or meeting are invented. No direct contact with
+teammates is required or performed. Earlier silence or continuation requests are
+not the source of the recorded agreement.
 
 Once a pair is explicitly agreed, complete the detailed FR preservation criteria
 and two quantitative NFRs for requirements review. Freeze or renew their initial

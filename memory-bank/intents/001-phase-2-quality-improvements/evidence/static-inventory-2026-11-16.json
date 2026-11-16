@@ -1,0 +1,403 @@
+{
+  "recorded_at": "2026-11-16T14:11:17Z",
+  "source_commit": "7d994d81d101b00c206f9fc4091df97f92e7b31e",
+  "application_diff_from_66bc6f9": [],
+  "method": "Read tracked source/configuration and public certificate metadata only; no services started and no secret values emitted.",
+  "services": 32,
+  "published_service_count": 11,
+  "published_binding_count": 13,
+  "published_bindings": [
+    {
+      "service": "nginx",
+      "bindings": [
+        "8080:443"
+      ]
+    },
+    {
+      "service": "seaweedfs",
+      "bindings": [
+        "9000:9000",
+        "9090:8888"
+      ]
+    },
+    {
+      "service": "img_storage",
+      "bindings": [
+        "11000:11000"
+      ]
+    },
+    {
+      "service": "rabbitmq",
+      "bindings": [
+        "5672:5672",
+        "15672:15672"
+      ]
+    },
+    {
+      "service": "projects_mongoDB",
+      "bindings": [
+        "27018:27018"
+      ]
+    },
+    {
+      "service": "projects",
+      "bindings": [
+        "9002:9001"
+      ]
+    },
+    {
+      "service": "users_mongoDB",
+      "bindings": [
+        "27019:27019"
+      ]
+    },
+    {
+      "service": "users",
+      "bindings": [
+        "10001:10001"
+      ]
+    },
+    {
+      "service": "subscriptions",
+      "bindings": [
+        "11001:11001"
+      ]
+    },
+    {
+      "service": "generative-mock",
+      "bindings": [
+        "7860:7860"
+      ]
+    },
+    {
+      "service": "ws_gateway",
+      "bindings": [
+        "4000:4000"
+      ]
+    }
+  ],
+  "healthcheck_count": 5,
+  "explicit_memory_limit_count": 0,
+  "private_key_file_paths": [
+    "apiGateway/certs/selfsigned.key",
+    "certs/selfsigned.key",
+    "frontend/certs/selfsigned.key",
+    "projects/certs/selfsigned.key",
+    "subscriptions/certs/selfsigned.key",
+    "users/certs/selfsigned.key"
+  ],
+  "certificate_public_validity": [
+    {
+      "file": "apiGateway/certs/selfsigned.crt",
+      "validity": [
+        "notBefore=Jan 11 02:02:41 2025 GMT",
+        "notAfter=Jan 11 02:02:41 2026 GMT"
+      ],
+      "expired_now": true
+    },
+    {
+      "file": "certs/selfsigned.crt",
+      "validity": [
+        "notBefore=Sep 14 23:13:09 2026 GMT",
+        "notAfter=Sep 14 23:13:09 2027 GMT"
+      ],
+      "expired_now": false
+    },
+    {
+      "file": "frontend/certs/selfsigned.crt",
+      "validity": [
+        "notBefore=Jan 12 20:10:25 2025 GMT",
+        "notAfter=Jan 12 20:10:25 2026 GMT"
+      ],
+      "expired_now": true
+    },
+    {
+      "file": "projects/certs/selfsigned.crt",
+      "validity": [
+        "notBefore=Jan  9 18:16:56 2025 GMT",
+        "notAfter=Jan  9 18:16:56 2026 GMT"
+      ],
+      "expired_now": true
+    },
+    {
+      "file": "subscriptions/certs/selfsigned.crt",
+      "validity": [
+        "notBefore=Jan 17 19:45:42 2025 GMT",
+        "notAfter=Jan 17 19:45:42 2026 GMT"
+      ],
+      "expired_now": true
+    },
+    {
+      "file": "users/certs/selfsigned.crt",
+      "validity": [
+        "notBefore=Jan  9 18:04:59 2025 GMT",
+        "notAfter=Jan  9 18:04:59 2026 GMT"
+      ],
+      "expired_now": true
+    }
+  ],
+  "tls_verification_disabled": [
+    {
+      "file": "apiGateway/routes/projects.js",
+      "line": 18
+    },
+    {
+      "file": "apiGateway/routes/subscriptions.js",
+      "line": 13
+    },
+    {
+      "file": "apiGateway/routes/users.js",
+      "line": 10
+    },
+    {
+      "file": "frontend/lib/queries/projects.ts",
+      "line": 68
+    },
+    {
+      "file": "projects/routes/projects.js",
+      "line": 80
+    },
+    {
+      "file": "projects/utils/httpsAgent.js",
+      "line": 8
+    },
+    {
+      "file": "projects/utils/imageStorage.js",
+      "line": 10
+    },
+    {
+      "file": "users/routes/users.js",
+      "line": 17
+    }
+  ],
+  "source_hashes": {
+    "Tools/__init__.py": "090c49585693ee78375015644882752890e4ae0a1609eb7881de3d949695b8be",
+    "Tools/bg_remove_ai/bg_remove_ai.py": "9354495659d3c61f7c9ab62ceb40784cd6f4f76f5408e106d849558f23a87173",
+    "Tools/binarization/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "Tools/binarization/binarization.py": "a530e6a448ebf88c49f66fdb6bfb82a970effba31abec6a8affe3500d67939f5",
+    "Tools/border/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "Tools/border/border.py": "2a5183aad950437e55480bd49f8355b2233ecddbe888c0b2f16961546a1a72ad",
+    "Tools/brightness/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "Tools/brightness/brightness.py": "860887fce678bc4c20e00023ba9fb9ae14820e8ce0990fb4f801a430a8eef79f",
+    "Tools/contrast/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "Tools/contrast/contrast.py": "828a3788953787e018608e5f69e1f80492143279751f465e0d1eb7968b72790b",
+    "Tools/cut/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "Tools/cut/cut.py": "dab82b5dc36f39f49249ecd3bd1d59f305fca5709457d8fd6f503898d980f789",
+    "Tools/cut/processor.py": "10c71ff8ab10fe96ac4c2829619568b17c9e0b8470fba5dcbc8b83a00ca61ef2",
+    "Tools/cut_ai/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "Tools/cut_ai/cut_ai.py": "e9ebeef6408da2e7022787255ffc87fd711c2b5e70f9455d07514b37c6186c24",
+    "Tools/expand_ai/expand_ai.py": "003e000093f3edffcce0bcd1ec9a5db4cb0c7fa4c4e9a298540b3b0dca7e0e03",
+    "Tools/obj_ai/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "Tools/obj_ai/obj_ai.py": "6b785c11a7db9ddeea7a4cb2103a6c3445562588f5978d2e016ca1c25f40cb83",
+    "Tools/people_ai/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "Tools/people_ai/people_ai.py": "b07d9e840b47b04190c5bbaec05fea02cf34474c19ac55d9a2aa27a3cc9df70e",
+    "Tools/resize/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "Tools/resize/resize.py": "d87423cd535884c8a4deead2c9fa86d39283eb31a0fe431f0419e1cb3dbec86e",
+    "Tools/rotate/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "Tools/rotate/rotate.py": "260791463a84a2c95a7abc0a6085caec7b85809e39262eeb49ea9e71a400e787",
+    "Tools/saturation/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "Tools/saturation/saturation.py": "407d2c53043c6343f22e0bed36e9b6b761462c1661f5ba29d76d486ed7489ed9",
+    "Tools/text_ai/text_ai.py": "50d08fcf9983240b4e56f48f12c20906ee80c61ef988ef7329266879b7d9c4cc",
+    "Tools/upgrade_ai/upgrade_ai.py": "297ab47acbe5e9f4171ca2a10ec44a4fceadd60454a793b50f2a26c95a3ae1a0",
+    "Tools/utils/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "Tools/utils/env.py": "11380b3aa2971e6d360081dfebf2494d85dc3535cbcba3bb568f0dba485c27f9",
+    "Tools/utils/img_handler.py": "0fb95ae759a70b26b9a8a8e6cfa6c66e2e8112f7892b5f32b13a5ecbcf4a843f",
+    "Tools/utils/rabbit_mq.py": "79a4b5e1dd1d76500ecc4889768f73b569565ab593ccd423b3a01d05116db1f6",
+    "Tools/utils/tool_msg.py": "9fadf3c436f34b7519ae67bbac0aeb3437f2a7b0e22a1f259175d85ca71d4de9",
+    "Tools/video/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "Tools/video/effects.py": "4c833c05e37b8510646a34974b6a1cca3b5d2de6aa0046372f96af542b0406d9",
+    "Tools/video/frame_extraction.py": "b8df35126502980caeec1a7d0ce66f00da08e8dd878b125e9b1f685104cefbf3",
+    "Tools/video/subtitles.py": "a259d3653af7809a4aeb4be31fdffd7b9ef8e8b2e95ca6afb47158e4b260f397",
+    "Tools/video/video.py": "b80c0df63d212bdf0ce4bfaae551e805acee290c483dacbfa4c7b7b820d1c45c",
+    "Tools/video/video_processor.py": "f7734e0c24df0f11914b02b185368a8fb74fe937cbe092e5f9ee3577d27a8305",
+    "apiGateway/app.js": "a8e42d31dc132fe222a9407c1c7bdb4114dd9240e94991f4a8d5dfa7d0865049",
+    "apiGateway/auth/auth.js": "773726d60639736a3c6e60c4e8d64449b29d6224c3a3276c62a26a39c2dc5136",
+    "apiGateway/package.json": "34f4c97b355d31414c75c0de91390d8ddb08f92ef0384954c9391ad915609759",
+    "apiGateway/routes/projects.js": "00c4b260d48679051fb252bd3a75ac06b788a56b9c740df7e78fc29f6fa1093c",
+    "apiGateway/routes/subscriptions.js": "bb8b23072ec22e00f4670d16b2d0e62e322d9293afea02715b2f89cd4f7fcd58",
+    "apiGateway/routes/users.js": "1113c7463545a946c4442bbcbcac6d95aad90689a97023d837bc99070ec67668",
+    "frontend/app/dashboard/[pid]/page.tsx": "970d0b37e3461713f60ce9a5ee94f94b907618f1a2a89d3491f504ab88188aee",
+    "frontend/app/dashboard/account/billing/page.tsx": "e80443a124e23323471566552a4b38e17c120ccac5f8b9f09ff8620cad7f0c0f",
+    "frontend/app/dashboard/account/layout.tsx": "dae39a56772d5807ed23ffab9c27b9cb3ac2270eb33bee95b27fa4077d0aac74",
+    "frontend/app/dashboard/account/page.tsx": "39ca628fc2ec76a3655043d9bc80f0e7e6204c374e52067f511a70ea1c308741",
+    "frontend/app/dashboard/account/upgrade/page.tsx": "7bbc34bbbc66da71b2937a3435f5ae1193b2b7019b5b90fe10a321cadd20466c",
+    "frontend/app/dashboard/layout.tsx": "d8ca2e99673379996615ffe09391aee09b6b9979d8e865f90be996b88dd1ae1e",
+    "frontend/app/dashboard/page.tsx": "10b7382b4452e63702044961e5f5b8fc7b801fb734379930ce19c07d89177a05",
+    "frontend/app/layout.tsx": "306b4dac093291931e60e6e1b2cc95c88ee59837864bbcddfb4ef7db2e201eaa",
+    "frontend/app/login/page.tsx": "28cfc09a765e8b5043668439dc368aa4ebcacef05b7faaf5bbee12de88b8a211",
+    "frontend/app/page.tsx": "d7786e314f5beb20fe5bc3ae2f9dbe317e89aa3778bc1624a95e51b178c156ad",
+    "frontend/app/privacy-policy/page.tsx": "1b891f11a030b81cd9c018f5d095cf1e3108897fd093a5e4198bdbb3bdbd6adc",
+    "frontend/app/register/page.tsx": "9637e3c74309b33fba403b39cc73eb21472b3e1a37ec624f9dcb9b6f8b215481",
+    "frontend/app/share/[linkId]/page.tsx": "d26234bf32dae2aa0efe0b954d6717ff61abcf8e2bb6d72703f725410d8e5e1e",
+    "frontend/app/terms-of-service/page.tsx": "5455edf1eb82fafd085909f8c7b8dbfa037703cf64c45dc53fe5fdc515eed979",
+    "frontend/components.json": "3ea4467763c42c86de1907ce1f5cf1f1dcd1a5025f9fb2a1190322020679272e",
+    "frontend/components/account-sidebar.tsx": "60513e3bebf8f3b68b0cd1fed73c44ce5341626c924c2826bce44a28ccc5ee87",
+    "frontend/components/app-dropzone.tsx": "1afc703664d2973977eb4c20dcd679f5717c6cef3edd68cfc4ad41af6b57801d",
+    "frontend/components/assistant/ai-assistant-dialog.tsx": "c454c5acb22bea30bb7e3437644be08936e0baa45b2417884bc7d54b63010ad0",
+    "frontend/components/assistant/ai-suggestion-editor.tsx": "7dc652221450a9b8c56cba8b1ea3e57a21646e5d8e850c4fae8e7fc4adaf4b93",
+    "frontend/components/authentication/login-form.tsx": "df908642a337bb4a581e980cbf074315e03439fef66e2dfb4a09e14e060b7164",
+    "frontend/components/authentication/register-form.tsx": "30d131b4032658124784ec69ef79c5f5244bf719736ee218933a40dcb6abaa74",
+    "frontend/components/card-form.tsx": "b66389c353c9230fd430693b7e53fb1622086fd54f99d1a7f2b369fc12713848",
+    "frontend/components/dashboard-sidebar/dashboard-sidebar.tsx": "2d8c2c7dbaffda4bb6a1326cf9b2c185e1d696e7a6f5f8d583169ae4fd3ff592",
+    "frontend/components/dashboard-sidebar/nav-user-sidebar.tsx": "68e8c4f4692f74d3c7d8b29c25135a9a6245b4cefb2a564c579bdadb0385dabc",
+    "frontend/components/dashboard-sidebar/new-project-dialog.tsx": "42bb95de9fd1225b5e922004aee194bcd7c6c4de64297d4ca21c0ae62567e11b",
+    "frontend/components/dashboard-sidebar/project-item.tsx": "baa6e7c80f20a4fd32eccc8acf28186dc2bfdc646601642f1e6615517a9b8d79",
+    "frontend/components/dashboard-sidebar/project-list.tsx": "455b4601b3e2caf5b8809418d0d57318612b70d6a5b15a3269d71c2820605687",
+    "frontend/components/image-preview.tsx": "3784c898237e3667504f75e2a08cca488e52b178c120d420b417ce701f2d4be7",
+    "frontend/components/image-submission-area.tsx": "db95acbd6664637b2f877e7237dade838677334be7b5e0f27f292dac1b6caeec",
+    "frontend/components/loading.tsx": "c9ffd569e0babbfca16e9a070550db783b4f0392c1c7ed0dddb89183475f72c9",
+    "frontend/components/nav-user.tsx": "605fb3a29aa4c44c8cf7bcacd7054630f7e45f07d398c570ad559b58a96cc468",
+    "frontend/components/operations-counter.tsx": "38027441f10b22dbde620d90f3cc61918a3eb1c79019fed6a1183243fd495669",
+    "frontend/components/presets/presets-dialog.tsx": "b0fe27f962b8bef1a99e06410686c9a10327ca1a37464701eb1b738de942b60c",
+    "frontend/components/project-page/add-images-dialog.tsx": "00882addd1b8e8a80260fa30d96cea2ea46e291ec3564b5015287e289403b1f0",
+    "frontend/components/project-page/mode-toggle.tsx": "45be7448e9a68931687428e456e58a6e7a8f6a6b2c4876927e9ff440aacde016",
+    "frontend/components/project-page/project-image-list.tsx": "3795a41096eb4c4afa0ada5f15c591e6811e99418402f9885bff983b7a01ff8c",
+    "frontend/components/project-page/project-image.tsx": "6b192648315ef6e87bdd37621abe35fa5e3479d6c4d50ea0675e6d17d075665b",
+    "frontend/components/project-page/project-text.tsx": "d20eedfd25f331d109b402d4e99f121b2b9b361405bd5462367bc1c785c8e151",
+    "frontend/components/project-page/view-toggle.tsx": "cc8a8fa9bc29157519cfccfd58aa153629d1318b4b7626e1bb816385f5da6a52",
+    "frontend/components/projects/share-dialog.tsx": "021b4759d86d6323bd6c87fc528514bb6df2d8ac9726923c32742340fcf6080a",
+    "frontend/components/query-client.tsx": "49d50a8c0e4bfe8084f096c11c6fbc19877ad0f843ad706e146d618af46933ad",
+    "frontend/components/settings/delete-account-button.tsx": "8ca559db84aea0eabf2c7b672feb80c15dd409fdc096c695d42f683859cb0092",
+    "frontend/components/toolbar/ai-bg-removal.tsx": "01938b4bed36ededf1fe31d30ee4c9a99d0ce2cba62bbf6652e441ee01921199",
+    "frontend/components/toolbar/ai-crop-tool.tsx": "151f1d9a6b6dc5d22304afea8473bd5616f82586eb01a784d2f89ecee8691195",
+    "frontend/components/toolbar/applied-tools-list.tsx": "59cac4fd714b0dbc722192e5ba4ae403cd9b015419701287aec2cc45f8c485bd",
+    "frontend/components/toolbar/binarization-tool.tsx": "01c6bc9203f2343a424441fc042bafc66ed778a7aa49ddfacf9bd8228396daee",
+    "frontend/components/toolbar/border-tool.tsx": "2b510a068374ad03afe6fdd8cbc6df141122281b641606c801132d803a80d771",
+    "frontend/components/toolbar/brightness-tool.tsx": "c96c7ed63deab1bf2d78a6fda95954a22f718f111193a6164341a2c6d8ea694a",
+    "frontend/components/toolbar/contrast-tool.tsx": "2d10b3a1cb55a8617de1508f0f3f9d28ee9e4a80826696fbf6e4ea1111926f71",
+    "frontend/components/toolbar/crop-tool.tsx": "007699cbc4e75b537fa327c66b48ee520b01c16c80ee5b21cf9d34783d4f1d31",
+    "frontend/components/toolbar/expand-ai-tool.tsx": "a9eff3b55f0f1f80ea8785aa58eb372402602cef9c2b865091d000cc459a3772",
+    "frontend/components/toolbar/extract-frames-tool.tsx": "f0e52a1dfb6bcd0199a14e2e7b4cc7714c9b2b57fcce1b22a3860dceccf5be0e",
+    "frontend/components/toolbar/object-ai-tool.tsx": "69fa13f8d272c50b41545f9d45ae09a9dba4e58e3406c9daeb5090fac02bd442",
+    "frontend/components/toolbar/people-ai-tool.tsx": "d0db3e003be5b7216d8f7101dd85e93fb6fbf7ae2727d5a8221ecf8f888ab328",
+    "frontend/components/toolbar/resize-tool.tsx": "07ebbf417717eb2b3cd29806ef0caf1388ccba50d18b7c18fc2a91792b8193be",
+    "frontend/components/toolbar/rotate-tool.tsx": "d6ee256736f3bf3d16c5a9540ef5123885e30537573896d8d6a3e534d31d7239",
+    "frontend/components/toolbar/saturation-tool.tsx": "6cc20310ac4eea49f088c4123d0805879b1fb62a331c5a4a3f1335a68f1fb6fc",
+    "frontend/components/toolbar/sortable-tool-item.tsx": "f4f72a575246e6c6c7f79b9858f9a04d6ea1ace41686f05f234818c5bfaf2377",
+    "frontend/components/toolbar/speed-tool.tsx": "35e093f180715772d428ca6d065cc2f25e29e83a0b9da35599d23f0b92ac9630",
+    "frontend/components/toolbar/subtitles-tool.tsx": "abc73d3554d6369dd57b8cf79a4c50eb5bcf7e54de412b5d8e4055dbebc1b49f",
+    "frontend/components/toolbar/text-ai-tool.tsx": "23aaa66a62784b34a04131a801f761c753c18c8c139e726755dd4f25b18c8689",
+    "frontend/components/toolbar/toolbar-button.tsx": "1529d9a6f086a616be813d9c9cd9f88dd1d6bd4cf5a62ea55dc2011b3fe4a699",
+    "frontend/components/toolbar/toolbar.tsx": "f77f4223753d64c3d5c5b4cd8b9afea601e4e73ff2440ac94c6297603ee571b6",
+    "frontend/components/toolbar/trim-tool.tsx": "385cfa72d86bbb0bbb578bd3e7217b026eeff0e1f6442baf8bf602edd2dad488",
+    "frontend/components/toolbar/upgrade-ai-tool.tsx": "57847186df49ff1b7528ff7f5dd0daa48dcb7f0d29d1d7804f0c4173c12b3228",
+    "frontend/components/toolbar/watermark-tool.tsx": "28c2c976eaec8e340e7748b86031a3e4a677a4b906c95456d60c7f2f27bbf708",
+    "frontend/components/ui/alert-dialog.tsx": "bdd194a41d984264b072dd3d82f8ec350feedb3fafd5248c13fa79f97030d1de",
+    "frontend/components/ui/alert.tsx": "68a1e91ae6bbe02a7066a050b81184d93ac56435ae995529695066e20d510895",
+    "frontend/components/ui/avatar.tsx": "e2b6f731d970cee67cd7ce2b03872c2b6d2e63b7390a62e5384afe14cffa36ff",
+    "frontend/components/ui/badge.tsx": "81f4ea78729e7d77be773664b4a58c6b714333cec3c92fd82bcbb24136759bb0",
+    "frontend/components/ui/breadcrumb.tsx": "ff3f734333ea49c0c605bf24d2f977adb835e8ed4c88e158ac557468224ac485",
+    "frontend/components/ui/button.tsx": "d8e31f8a1e2baba44d1a67abd375892ac65c487572e4a2f2e5fea7135753eaa1",
+    "frontend/components/ui/card.tsx": "e78fcf14aff878d9aee58eb974bcb2b66cad3ab26da14b152dc459f9bc5b3008",
+    "frontend/components/ui/carousel.tsx": "51895e47bd755c31f58229f7daf4eee52fec33de44503ad471540c087d3680e3",
+    "frontend/components/ui/checkbox.tsx": "fa731ee7870ea0e364d0ea1e8eb36086fbaecd8f3c41b7fcbbe6d008898ce800",
+    "frontend/components/ui/context-menu.tsx": "72b689fe170c8c52a6737d6edf463896cb57ec0f9040021a0044e62e94c40f6e",
+    "frontend/components/ui/dialog.tsx": "b8ed14317571b869933a63bd00bd19d4761bddd905485bc5ab4ac29a6a1802e1",
+    "frontend/components/ui/dropdown-menu.tsx": "0869df79c4f079495bf6951d8adc2e9a73572a452273f1525951a70763e3b2a8",
+    "frontend/components/ui/hover-card.tsx": "d1703dd005a39d242f6e7be380eb75c17396139f5ed87ad493f2ba3e85fbbea5",
+    "frontend/components/ui/input.tsx": "92debb7d6d2d96d9e607a42d5ce8f37b2d63384ae5dd9ffbbf5f047b680ffb85",
+    "frontend/components/ui/label.tsx": "969f8597a2b03f89461728c6e271fd3b6c0d3e781c2e615552e73b0db3d0a2cc",
+    "frontend/components/ui/popover.tsx": "2842531324582caeef8f01e0610a0b7fcd2f145db15c51da0dce744672ec9dfa",
+    "frontend/components/ui/progress.tsx": "23975b77c3d237ef1706a3618975208a24c56f21c70016dbf872af2c078d9d2e",
+    "frontend/components/ui/scroll-area.tsx": "ad37e5ee5647ae3cdb9fd35f35925e1b711e117803394d5119fba3d55a3eadcd",
+    "frontend/components/ui/select.tsx": "1b635f61ffda2d85c110c0fdd4f735b0cac29c29e83962503a7cf4bb52305842",
+    "frontend/components/ui/separator.tsx": "926c7b40d3b20ce52ebdc98851aa4820acd53d0f31b834e35f1c0b001d700fc3",
+    "frontend/components/ui/sheet.tsx": "4652e9adc760ae23acb0a6feb4d45d46c1d73b84e093393feaef8f3fdd1cdf9e",
+    "frontend/components/ui/sidebar.tsx": "9c325b1c96570b910f0c41a4135aac748688ffa3b153730ab7993ea30753bf59",
+    "frontend/components/ui/skeleton.tsx": "f442b258d40b3cff3cb0eac117886e70680e37c77f20afee08646c1ace6f6ed8",
+    "frontend/components/ui/slider.tsx": "1225bcb7f771a362fe973726196b95aca4a55d7d13a77f660305e00740b9c5f6",
+    "frontend/components/ui/tabs.tsx": "b578c16ab6cf50c1076a3c1a35c9151401c37ff2adb303514d9acc379dc17be8",
+    "frontend/components/ui/toast.tsx": "e3c082832fabe51c4288c678cc57e606e76fac5bda56a9aa7e94c88043ae69da",
+    "frontend/components/ui/toaster.tsx": "eb948dcddcbe374030e521077f33f5274065b114eef1305ba8d03f2238be9972",
+    "frontend/components/ui/tooltip.tsx": "6f6cb785bd57c1b4b5f331841bf31d219266f30623ecc6e7421b124845e39fcb",
+    "frontend/components/upgrade-dialog.tsx": "ad19fe8629442d0bcfd2621436fcd85a07cce2603acb1f621b9119f16dd86e50",
+    "frontend/envConfig.ts": "d8452223906f0a11dbd33ad1a06f6fac274733d1bef333cf5da73f97b3279876",
+    "frontend/hooks/use-mobile.tsx": "55c59de545adccc906f1a470e65bc8587708ceb817c969cf3ccce54b9339e400",
+    "frontend/hooks/use-toast.ts": "77b142103170d196c0685684071cc95695616f179ef29e70b5fe7b2cc5f9e8f9",
+    "frontend/lib/axios.ts": "84cee2f650d228b44679823dc921320b9766ff1f3b843d3fb2826ae48f80a769",
+    "frontend/lib/error-messages.ts": "eade93000db4d1aa0e7ae74b74eabc19cb36f57476d2055d0b69c94cbd849527",
+    "frontend/lib/mutations/presets.ts": "bd23236273e188c95454e6cfcaa57f1e7ecb51cc30d0a034fca859e91ff4d45c",
+    "frontend/lib/mutations/projects.ts": "5533fb4b99af705e62494eb1b26235cd8082c4637551bd4fe422fd22f68cf684",
+    "frontend/lib/mutations/session.ts": "09e00a86be3fb7e3d20f48cebdac5a201607e52ee6287624f46f27ce6cd9cf99",
+    "frontend/lib/mutations/subscriptions.ts": "efeed807ef68d01cfe02eebc0290d82db41660acd6d82f68b1461fc9fd33366c",
+    "frontend/lib/presets.ts": "5da12074bce1920c35aa2db77b2b25d0e3b2317e5d3d65427ee86db479f599be",
+    "frontend/lib/projects.ts": "f1857a3c01c52612719ccd04eb1c349a94b119f3636df02c42c719bf055e6255",
+    "frontend/lib/queries/presets.ts": "4d68d30decbd3e8617dea365805e49c06d697a1d51aa5a3fb5570e01a697bc88",
+    "frontend/lib/queries/projects.ts": "967f5fcbcf54e8ca5a7574437570c4ece28712911c999ec6fa8551f856c58bb4",
+    "frontend/lib/queries/session.ts": "b8db424e92f1103c736ca4e942032e192a1818b008d8ae4a0d201a5df5bf8d49",
+    "frontend/lib/queries/subscriptions.ts": "df6be2510bf7fb85d4e152ca21a6f1b10e6ea644c5231c72f1d17d5ce4c3e364",
+    "frontend/lib/session.ts": "22ed2853ca8e3bc26b6821ef20ce365b9a3b4d043cdc3a1862d7be8cc5b2453b",
+    "frontend/lib/subscriptions.ts": "cbe46f8d79a1e3f4501295a243fcfe767fb3e518c570e1ff71592359f82c2455",
+    "frontend/lib/tool-types.ts": "0332bd92daf198019837857d39d0efbd8e98dc72e4fb847b1a084fb9c47c249e",
+    "frontend/lib/users.ts": "2e60106c2d4eeaff685f98aaed414e552ffbafba9a99cdfddb46b0445e2160c8",
+    "frontend/lib/utils.ts": "e3fdd7955a8b61552031ad2e5639c715c64420e3ffb8f6b22a8716574418bfb0",
+    "frontend/next.config.ts": "05a63340c0dee72069ec4ed66312feb72a1bfd09757604a6542bca1e6217f1b4",
+    "frontend/package.json": "884603fffc5fa4127e4fa5125d93502329c5af5b2df3caacd0805068a0d613e8",
+    "frontend/providers/project-provider.tsx": "308cb4ce516357b67072613c26072beea32460f9dda5a76b35ccdfdf9adfdd0b",
+    "frontend/providers/session-provider.tsx": "b66256df9984eac42f3849def09fabcc797fe9f7cb414553295cd6ad91db3617",
+    "frontend/providers/theme-provider.tsx": "dbbe237333b60fcfdc5c68113f6ed4919ec0e0aea3414e4a66c3aaf052afb5b8",
+    "frontend/tailwind.config.ts": "8eccc4d321d4efbb003ca97ddffaaf2c3fe97e51c4a62b76b36547f79ad2db3a",
+    "frontend/tsconfig.json": "ed2bc19510589ae5c0940b5e4504c6c0413ba285ae35a3d4ad9db5f5d3a8eb51",
+    "imageStorageService/package.json": "0a4b54faf2c60670350c038a4ea454f6cd43f61594980a1307ad347992677894",
+    "imageStorageService/route/copy.js": "8c4ff68b52eea15b039aed82ad04ec0f9e6828314fb3e91e2a96522587d3f122",
+    "imageStorageService/route/delete.js": "68e7e60f0adbc042bf8be1af72f077cfbee05897791ba7a89d7ad9c4ed7af32f",
+    "imageStorageService/route/images.js": "a50385689fc443e58e124b1e144bc56ff80db91369bde9046670d3d9605bb52a",
+    "imageStorageService/route/upload.js": "686a9a099a3f4f5b9bd5de8798a669b5abfc2163c34467384ba8521661c1223c",
+    "imageStorageService/server.js": "e6903aabc385c2851b4e975b62cab8d6201368434f78fb085ab2cd4f4be70615",
+    "imageStorageService/services/copyFile.js": "a4498343902f779ee98eb1b0e50006bda810e4d02a8888c214cdbe516aef3ff5",
+    "imageStorageService/services/deleteFile.js": "1b9f87f53a00a80ee8efc6a37244fff4a20fbf3637b5442d61a780e78c310732",
+    "imageStorageService/services/getPresignedUrl.js": "9010dc3ea12a74df531650aaa8b76e8ba9cb9f8b61f0ff0fd8824fb2ea69f06f",
+    "imageStorageService/services/s3Client.js": "b2f049e7798b2cac00da234bc2190226fc1467d4d80a9bb72629322415fd43c6",
+    "imageStorageService/services/storage.js": "2af4f3a506a319ec96709809dbbd31bbc24c45cd4eb85cd9e61c5e40d98206d6",
+    "imageStorageService/services/uploadImage.js": "ec9a56acf3bfa539d0712513250cd4978141a6f4ea0bafefb416fad263ea20a5",
+    "imageStorageService/utils/stages.js": "cdd178c7a979e3b7243d9d14f154ec8b81691e8588fdc5635fe5625ff8592849",
+    "projects/app.js": "e9302ef143269f9e14993b6a9ab7b5c64b752d7c9caf898786c730f0a8835ba4",
+    "projects/controllers/preview.js": "b6679949e0abd3b7795a6fc36c0b5647c82a80b4c759a44032faa8d90b2bc8c6",
+    "projects/controllers/previewCache.js": "6d95d3e2b40f48579d415cc464f795ca04f4161443b5f96a60ed6adb2ac1b28e",
+    "projects/controllers/process.js": "9c50825afe759034de9370219153c37a6a635710b8de2b11ab063d95c891cafe",
+    "projects/controllers/project.js": "f3abeb46d1d7b227307f3f3fcc3c6d1dd5388216d54f76add2b2ce754697f2e8",
+    "projects/controllers/result.js": "3c857467c9b8074e8a5d7746e64d816c5bcd08265e2b050cc5de891f6cb3a279",
+    "projects/middleware/enforcePresenceLimit.js": "8412581e983444474e927a85dee24a54a0940c8258e5ec85f0cf9472dc20c07e",
+    "projects/middleware/projectVersion.js": "246998f88edc5b18dbfdac2323364f8837e41b82aa38c61ba3aa44cf5e951301",
+    "projects/middleware/shareAuth.js": "db61983f3dab9b7f07be77326018a9af8e9563c4be374560b3f005f7bfcbd097",
+    "projects/models/presence.js": "7fce39a7b3aff9bb95ae06dc347256fe04a102f12fc3881df89a7b86de359195",
+    "projects/models/preview.js": "3c579633b6bec3d4ab08ddefd1272c9d0b58f7c2f169a09668aa0713aa6240ad",
+    "projects/models/previewCache.js": "a9e60b63ab2514954f9a8b521adc1fee639bc6432ac1d46b4ef0e83d27b51ed2",
+    "projects/models/process.js": "d3aef680ff337477c7314a8da3da1c4c5f9c93d012b433cc192828f4eae7def2",
+    "projects/models/project.js": "dbc5558abbd24b46c6b06b6a7c127b5e44d46d0970851c5c078a73363f7c29dd",
+    "projects/models/result.js": "f107c45e06392d6b858bf7a125f03eedb3167c7fc5771513e422c633ec7eaed0",
+    "projects/package.json": "439d48b0937ff84d3de17b7bd8df40b9bc3417689a892b160cd0ce1709c1f419",
+    "projects/routes/projects.js": "51afe2603e9fdc1aa788c6b4cf460841a149920f7475f1837f184c9bd7e8336c",
+    "projects/utils/cacheKey.js": "fdb88ecac53d70bc73e65842557a2e5afff920db3c923de5327776ee0e3a7eb6",
+    "projects/utils/caller.js": "69dc568943a466d6ab3fe2fa8450d7697c4ec16adf82645da1a2eb31e0e47e6f",
+    "projects/utils/frameResults.js": "a1af92d73d114e4a2cfa43b41386f3ad12738dfb4165876b928a79e68515b37e",
+    "projects/utils/httpsAgent.js": "8d2d0d199287832f668c4cdc98014ced7b6e78b37a7939a44d1f9a65ab2b1636",
+    "projects/utils/imageFeatures.js": "5e1a5fcd66004f9cd147a47a949325425c1777986b8555c6ce1123d363dbba9e",
+    "projects/utils/imageStorage.js": "62ac2fa24457d588014a79b9bc066411444698fd28def61acb739c3f70c4a7a5",
+    "projects/utils/presence.js": "4e8565370e797d2659054ee7ba8068534a82234dff84aec93d7aa225027fecd0",
+    "projects/utils/processBatch.js": "055f1e1781ca0d6e6830b7ee915cf71e67e1837420cbc7c409192dd45aef4634",
+    "projects/utils/project_msg.js": "3197330bc7281cfd5a1219e6f43a5955af791db0d44f38c1e532b9b34447658c",
+    "projects/utils/rabbit_mq.js": "616407a4a4cd9d7e19275e650d664580ee5596a757bfcc043a9d77cf5cdf913f",
+    "projects/utils/video.js": "1713a7c3a0299c260ea488ce1a769e5103cf1783a87c68c0d5c2b0f5f43b4ebe",
+    "subscriptions/app.js": "104a5797aa9d08be2c806accdf2ab3c721913d94b9f465d84057e2d1b9da4e4f",
+    "subscriptions/controllers/card.js": "5a09b8c3b49e24e183469c34cd39671f395b3df5a53cb4465119c5d183d6f13b",
+    "subscriptions/controllers/subscription.js": "1cd6c9ad60cccba3b1b36bdcecb44c026c48f2e2f0885f043b0b08d9cbc72e92",
+    "subscriptions/models/card.js": "71b43464f2e3716ed136f4332b3172606243630622f62cac319168d012832f3b",
+    "subscriptions/models/subscription.js": "58821dad4580652710431301e54b86aaa22293e32918b96ac9c02608f502ab34",
+    "subscriptions/package.json": "24193294ae7037f127dcba37fa3f729a0b571d1bb6c392c762b3f77140cc9474",
+    "subscriptions/routes/subscriptions.js": "8e38ac46e442e7ff43eb3a773ae55877c9e9dba85986232c3067224ac83a5b30",
+    "users/app.js": "089c83d36166f07af2067b3f434f781a8ca074aedcd5e6454a12dac0255644c2",
+    "users/auth/auth.js": "cbcf38e0c46b64347ab1785d280f22499ac4913ea596e73a1eeb73d91e88031b",
+    "users/controllers/presets.js": "a9173e4ad8b4cf70205b946379415ec1c9a206e11f609d7305724f37f6ac2dc8",
+    "users/controllers/user.js": "8cae994a74c74af6e1cdab6a3b285c0fd715952841dc77cf3cc4e6a7fb2daac0",
+    "users/models/preset.js": "853e0cde78fbf92991e1c98e81b4570f97e411e8b3fbeb927590e35f38ead122",
+    "users/models/user.js": "98f4e02a3102c7f6e11c3234ff11e70491fe82d67b1082370630b674bdc43714",
+    "users/package.json": "7f03061afff78057c3f971ac24a2f76c8914f7f563c805ee7c93836dd08826d5",
+    "users/routes/presets.js": "81f8820bab388c3613acbe94c59511b67728fdee7347a82a0e2acd85fd8b5a2d",
+    "users/routes/users.js": "6b08b1c5b945bea25650a0bceac4f374ab3d5249d6c2e15e08f3f25f81f7c111",
+    "users/utils/fieldCrypto.js": "d996740f8e7213ab72e83eca1b1c0e4011a08eddb1060ebbe1de34971387d88f",
+    "wsGateway/index.js": "0a0e67cc9e01906b8cc34bc2a0183c291f5e55018f4204d61827844de6905769",
+    "wsGateway/package.json": "8df5daac4aab5ce84dbfa8cbcbf27ab2a8d04a148a43f1ef455d821c9703402c",
+    "wsGateway/utils/rabbit_mq.js": "3f82741a6e8ae78cc095594e2e5f540922e383b40509a3672a8cfb120160c702"
+  }
+}

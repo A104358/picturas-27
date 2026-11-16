@@ -17,6 +17,29 @@ The [team review packet](../memory-bank/intents/001-phase-2-quality-improvements
 consolidates the recommendation, alternative pairs and scope/measurement proposals
 for agreement by all four members.
 
+## Phase 2 decisions and measurement plan
+
+The following Portuguese documents are the current working material for the
+team's report and presentation. Choices explicitly marked open remain undecided.
+The agreed pair is security/end-to-end authorization and performance efficiency/
+upload resource utilization; the [agreement record](../memory-bank/intents/001-phase-2-quality-improvements/quality-exploration.md#decision-record--pair-agreement)
+identifies the user's instruction as its source. Detailed decisions and metrics
+retain their recorded approval states.
+
+The current planning deadline is **27 November 2026**, corrected by the user.
+Individually validated security coverage is option A: mTLS on internal APIs,
+verified server TLS on other channels, and service-specific least-privilege
+credentials where applicable. Exact configuration and experimental proof remain
+pending; prior JWT/WS decisions are preserved.
+
+| Document | Purpose |
+|----------|---------|
+| [Ideas 1 and 2, choices and rationale](fase2-ideias-1-e-2.md) | Communicated choices, unresolved questions, alternatives, risks and presentation answers. The final section is the canonical decision rationale. |
+| [Metrics, acceptance criteria and baseline](fase2-metricas-e-baseline.md) | 60 metrics, existing values, proposed minimums/targets and individually validated WS criteria (≤5 s/≤2 s, initial 1 s revalidation), with pending experimental proof and pre-implementation gates. |
+| [WebSocket authorization contract](architecture/fase2-contrato-websocket.md) | WS-C1 A/WS-C2 A individually validated: direct mTLS/delegation and initial 1 s total timeout/50 evaluations with limited concurrency/fair scheduling. Remaining contract proposed; no tests run. |
+| [Upgrade catalog](../memory-bank/intents/001-phase-2-quality-improvements/upgrade-ideas.md) | Broader 19-idea catalog and the original ARM pilot context; qualitative scores are not team approval. |
+| [November 16 evidence audit](../memory-bank/intents/001-phase-2-quality-improvements/evidence/nfr-2026-11-16/README.md) | Original raw results, reproducibility limits and links to the derived audit. |
+
 ## Reference documents
 
 | Topic | Document | Period / purpose |

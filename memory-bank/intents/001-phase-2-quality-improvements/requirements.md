@@ -3,7 +3,7 @@ intent: 001-phase-2-quality-improvements
 phase: inception
 status: draft
 created: 2026-11-14T17:10:27Z
-updated: 2026-11-14T18:19:23Z
+updated: 2026-11-16T16:31:00Z
 ---
 
 # Requirements: Phase 2 Quality Improvements
@@ -17,37 +17,302 @@ reproducible measurements before and after implementation.
 
 **Type:** Refactoring of an existing full-stack application.
 **Team:** PL2-G4.
-**Planning state:** Intent initialized; detailed requirements have not been elicited
-or approved. The two quality requirements and the implementation approach remain
-open. The user requested exploration of all six candidate directions before
+**Planning state:** Detailed requirements are being elicited; the complete set has
+not been approved. The pair is agreed: **QC-06 security, end-to-end authorization,
+and QC-05 performance efficiency, upload resource utilization**. The user requested
+recording the pair agreement in this conversation; the canonical collective record
+is in [quality exploration](quality-exploration.md#decision-record--pair-agreement).
+Partial individual architecture validations are recorded below.
+The user requested exploration of all six candidate directions before
 selection, followed by explicit agreement from all four team members. The
 [quality exploration](quality-exploration.md) records the comparison, investigation
-protocols and pending decision record. This draft is not a completed requirements
+protocols and agreement provenance. This draft is not a completed requirements
 specification.
 
 The [investigation plan](investigation-plan.md) and [evidence index](evidence/README.md)
 now include renewed source checks, an acknowledgement-order demonstration,
 74 passing host video tests and processor-only pilots. Final requirement baselines
-and numerical acceptance values remain pending.
+and overall numerical acceptance remain pending; later individual validations of
+specific WS criteria are recorded below.
 
 The subsequent [live findings](live-findings.md) add candidate measurements from
 an isolated 13-service deployment: upload RSS, three video batches, Socket.IO
 progress, internal access tests and one worker-recovery scenario. These results
-support a provisional discussion shortlist; no pair or quantitative targets have
-been approved by the team.
+originally supported a provisional shortlist. The pair has since been agreed as
+recorded below; this does not approve all quantitative targets or implementation details.
 
 The [team review packet](team-review.md) now consolidates all six directions,
 the recommended discussion pair QC-05 + QC-06, proposed boundaries and numerical
 options. Its proposed percentages and zero-bypass criterion are unapproved
-engineering proposals. They do not change the count of selected requirements
-or replace the later full requirements review.
+engineering proposals. Pair agreement selects two requirements and does not
+approve these numerical options or replace the later full requirements review.
+
+## Pair Agreement
+
+**Recorded:** 2026-11-16T15:12:33Z. **Team:** PL2-G4.
+**Source:** The user explicitly requested: “Podes registar o acordo do par”, after
+the conversation identified the pair and the outstanding whole-team agreement.
+Record this as the pair agreement communicated by the user for the team. No
+individual signatures, meeting date, separately reviewed commit or additional
+statements by the other members have been supplied or fabricated.
+
+1. **QC-06 — Security: end-to-end authorization.** Verify identity and effective
+   permissions at the gateway, services, storage and WebSocket boundaries in the
+   selected scope; confidentiality, integrity and authenticity are the relevant
+   ISO/IEC 25010:2011 subcharacteristics.
+2. **QC-05 — Performance efficiency: upload resource utilization.** Bound memory
+   consumption along the upload path and prevent large valid uploads from causing
+   resource exhaustion/service failure, preserving supported behavior. Time
+   behavior and functional correctness are guardrails.
+
+The rationale is the observed authorization weaknesses and high upload memory/OOM,
+with separate measurements and user impact. Detailed evidence and rejected
+alternatives remain linked in the canonical record. Agreement is on this pair and
+its stated improvement areas; architecture details, remaining metric proposals,
+formal baseline and full requirements review retain their existing states. Earlier
+individual validations remain individual; no construction readiness is inferred.
+
+## November 16 Scope Clarification
+
+The user supplied an expanded [idea catalog](upgrade-ideas.md) and
+[ideas 1/2 decision document](../../../docs/fase2-ideias-1-e-2.md), explicitly stating
+that not all decisions have been made. The new text communicates preferences for
+layered authorization, gateway-signed identity, mTLS, initially proposed WebSocket tickets, loopback
+ports, users/subscriptions and data access, plus nginx/S3 video uploads with
+post-upload validation and deferred hashing. These preferences are recorded as
+communicated choices, not blanket approval of algorithms, lifetimes, migration,
+API changes or every team member's agreement.
+
+The [measurement specification](../../../docs/fase2-metricas-e-baseline.md) now
+catalogs 60 security/upload/regression metrics, origins of proposed minimums/targets,
+audited existing values and missing formal baseline measurements. It supersedes
+the older percentage-reduction suggestion for discussion with the more recent
+64/32 MiB proposals; neither set is an approved requirement. The Mac/ARM pilot
+and the earlier Intel/Linux experiments must remain separate.
+
+The final rationale section of the decision document records each choice's reason,
+alternatives, costs, residual risks and tests. Changes to link expiration, upload
+API compatibility, quota admission and hash/cache state need an explicit
+functional-preservation decision before construction. No application code was
+changed during this review. Required runtime measurements are not marked complete.
+
+## Individual Validation of the First Decision Group
+
+The user explicitly validated options A for D3/JWT, D7 and D6.1. This is the user's
+individual validation, not confirmation of agreement by all four team members:
+
+- **D3/JWT:** Retain HS256 user JWTs in this phase, with a renewed secret outside
+  the repository. Use RS256 for gateway-issued internal identity. Define the session
+  transition, including anonymous sessions, before secret renewal. Transition
+  mechanics, token lifetimes and rotation details remain open.
+- **D7:** Permit absence of `owner`; when present, require one value matching the
+  owner in the path and reject contradictions. `projects` always verifies ownership
+  and sharing independently of that parameter check.
+- **D6.1:** Reject Socket.IO connections without a valid JWT, including anonymous
+  access, which already has a session JWT. Room entry still requires authorization;
+  the concrete mechanism remains for D6.2.
+
+These choices do not approve the metric thresholds, a session migration strategy,
+D6.2 or any other previously open point. No application changes are authorized
+by treating this validation as final construction readiness.
+
+## Individual Selection of Room Authorization and Removal
+
+The user subsequently selected **D6.2 B + D6.3 A**, conditional on technical
+confirmation; the assistant confirmed the combination as proportionate to the
+scope/deadline with medium confidence. This is still an individual position, not
+whole-team agreement:
+
+- **D6.2 B:** Consult `projects` over an authenticated service path for every room
+  entry and use its current authorization decision. Do not add signed room tickets.
+  If projects is unavailable, temporarily refuse new entries and allow a retry.
+- **D6.3 A:** Actively withdraw access to the affected room when effective
+  authorization ceases. Preserve other authorized rooms and alternative legitimate
+  access paths, such as another still-valid link presented by the user.
+- **Rationale:** Avoid an extra room-token issuer, keys, lifetime, renewal and
+  invalidation machinery. Reduced complexity is an engineering inference; no
+  measured need to eliminate per-entry calls has been demonstrated. Room tickets
+  may be reconsidered if measured load/latency or availability requirements justify it.
+- **Open at that point (see later validation below):** Authenticated consultation contract/timeout, continued-membership
+  revalidation, propagation failures, join/revocation races, measurable cutoff time,
+  behavior during revalidation failure, and session expiration during active
+  connections. A one-off event cannot guarantee the cutoff bound.
+
+The earlier first-group paragraph records the state at that time; this section
+updates D6.2/D6.3 only. No token lifetime, 5 s/2 s cutoff proposal or implementation
+has been approved by inference, and D3/JWT, D7 and D6.1 retain their validated rules.
+
+## Individual Validation of Periodic Membership and Session Expiry
+
+The user explicitly validated **A in all three permanence/failure/JWT proposals**
+and reconfirmed **D6.2 B: consult projects on every entry**, with these conditions:
+
+- **Periodic revalidation:** Initially every **1 s**, subject to load/latency
+  measurement. Group requests by project, retaining an individual authorization
+  decision for each member and their access context. Fewer HTTP requests do not
+  remove processing growth with the number of members/contexts.
+- **Cutoff:** Adopt **≤5 s as acceptance criterion and ≤2 s as target** after
+  confirmed revocation, both awaiting experimental validation in agreed scenarios.
+- **Local validity:** At most **5 s from the start of the query that returned a
+  positive result**, ending earlier on JWT or effective-permission expiry. Failures
+  never extend that deadline. Late/out-of-order responses must not restore improper
+  access; do not restart validity from response arrival.
+- **Denial and failure:** An explicit denial of effective authorization removes
+  access to the affected room immediately while preserving other valid
+  authorizations. Unavailability never permits new entries. Existing members may
+  retain access only until the existing bounded authorization expires.
+- **JWT expiry:** Terminate the connection at expiration. The frontend must handle
+  reconnection explicitly, presenting a valid JWT and requesting fresh authorization
+  for every room. Do not assume automatic reconnection after server disconnection.
+  Transition and renewal must preserve anonymous identities and their projects;
+  their concrete design remains open, before HS256 secret renewal.
+- **Deferred alternative:** Revocation events remain an evolution to reconsider if
+  consultations create relevant load or fail the criteria.
+- **Evidence limits:** Do not claim equal security of A/B during failures or that
+  active-connection expiry is rare; neither is demonstrated. No compliance, load
+  result or whole-team agreement is inferred from this individual validation.
+
+This updates the earlier historical open state of revalidation, cutoff, failure
+policy and active JWT expiry. The authenticated contract/timeout, batch limits,
+access-context representation, response ordering/join-race coordination, session
+transition/renewal, remaining token lifetimes and agreed experiment scenarios still
+need detail. The measurement plan §4.1 specifies the pending verification. This is
+partial requirements elicitation, not approval of the complete requirement set or
+construction readiness.
+
+## D4 Change and WebSocket Contract Validation
+
+The [WS authorization contract proposal](../../../docs/architecture/fase2-contrato-websocket.md)
+specifies candidate join/batch payloads, per-member/access-context decisions,
+membership generations/query sequences, expiry controls and race/error scenarios.
+It preserves the agreed pair and individually validated WS conditions.
+
+The user explicitly chose **D4 mTLS for internal service authentication**,
+superseding their previously chosen **HTTPS + asymmetric service JWT**. The earlier
+selection was reported by the user in this message; its original timestamp is not
+supplied. It is recorded as superseded, not silently rewritten. **D3 is unchanged:**
+HS256 user JWTs and gateway-issued RS256 internal identity retain their functions.
+mTLS authenticates services; it does not replace user identity or authorization.
+
+The user individually validated:
+
+- **WS-C1 A:** Direct ws_gateway → projects over mTLS. Projects authenticates the
+  specific WS service and authorizes its permitted operations; another certificate
+  from the CA is insufficient. WS transmits identity/expiry verified in the
+  connection JWT, bound to member-presented contexts. This is explicitly trusted
+  delegation from WS; projects always decides effective permissions. Projects does
+  not verify the original HS256 JWT in this option or receive that secret.
+- **WS-C2 A:** Initial configurable **1 s total timeout** including waiting,
+  connection, send and read, and **up to 50 member/context evaluations per request**.
+  Larger projects use multiple batches, **bounded concurrency and fair scheduling**;
+  there is no 50-participant limit or demonstrated capacity. Failure/retry never
+  extends authorization; cutoff acceptance ≤5 s/target ≤2 s remain.
+
+The [D4 certificate lifecycle and pair matrix](../../../docs/fase2-ideias-1-e-2.md#d4--mtls-entre-serviços-ciclo-de-certificados-e-pares)
+specifies the proposed operational detail: separate service identities/keys, CA key
+outside application containers, restricted read-only secret mounts outside repo/
+images/logs, verified chain/identity/purpose, reproducible issuance and renewal,
+controlled rotation and explicit withdrawal/revocation policy. No service gets the
+gateway RS256 private key or CA signing key by virtue of mTLS. The WS pair is
+explicitly validated; the other observed application pairs need route/action review.
+The later delivery-scope decision below fixes the required transport categories.
+Exact per-channel configuration/termination and support in the deployed versions
+remain to specify and verify, without claiming existing complete TLS/mTLS coverage.
+
+Certificate lifetime/renewal window/revocation mechanism, exact global concurrency/
+byte budgets and workload capacity remain open. **The rest of the contract remains
+a proposal for review.** Validation is individual, attributes no agreement to other
+members, declares no tests run and does not authorize application changes. The ten
+proposed verification cases map to existing metrics; full requirements review is
+still outstanding.
+
+## Delivery Security Coverage — Option A Validated
+
+The user explicitly selected **option A for delivery on 27 November 2026**:
+concentrate mTLS on internal application APIs and protect the remaining channels
+with verified server TLS, service-specific credentials and least privilege where
+applicable. This clarifies D4; it does not replace mTLS with service JWTs or reopen
+the agreed QC-06 + QC-05 pair.
+
+- **Internal APIs:** Require mTLS and authenticate the specific calling service,
+  destination and allowed operations. This includes ws_gateway → projects and
+  the application API pairs listed in D4. A certificate from the same CA alone
+  never grants all operations. Route/action details remain to review.
+- **Other channels:** Require TLS with server certificate-chain, validity and
+  hostname/identity verification. Universal client-certificate authentication is
+  not a delivery requirement. An unsupported protocol/version requires an explicit
+  implementation/termination decision; plaintext or disabled verification cannot
+  silently count as compliance.
+- **Data and messaging:** Use service-specific credentials and minimum necessary
+  permissions for MongoDB, RabbitMQ and S3 wherever applicable. Preserve legitimate
+  asynchronous workers, backup and public signed-media reads; shared administrator
+  credentials are not a substitute for the service identities/permissions required.
+- **Preservation:** Keep D3 HS256 user JWTs/gateway RS256 identity, domain ownership/
+  sharing checks, D7 and all individually validated WS entry, membership, failure,
+  expiry and batching conditions unchanged.
+- **Verification:** Check both negative and legitimate controls per channel. Use
+  S08/S09 for internal mTLS identity/operation checks, S16/S17 for data/broker TLS,
+  credentials and permissions, and S19/S20 for secret lifecycle/rotation. Confirm
+  the remaining transport coverage in the D4 matrix, including nginx and tools.
+
+This is individual scope validation, not measured compliance, full requirements
+approval or construction authorization. Certificate lifecycle parameters, exact
+pair/route policy, infrastructure configuration, session transition/renewal and
+remaining workload/metric decisions are still open. Option B, mandatory mTLS for
+every internal protocol, is not required for this delivery; it may be reconsidered
+if the threat model or evidence changes.
+
+## Session Transition — Source Findings, Decision Pending
+
+Source inspection during continued elicitation found:
+
+- [JWT issuance](../../../users/auth/auth.js) currently uses HS256 with a seven-day
+  lifetime. This is observed behavior, not a newly approved lifetime policy.
+- [Anonymous registration](../../../frontend/lib/session.ts) stores the returned
+  JWT; the inspected [user schema](../../../users/models/user.js) has no independent
+  anonymous recovery/session credential. No such recovery mechanism was found in
+  the inspected authentication/session paths; do not generalize that inspection
+  into a claim about every external deployment.
+- [Session-update error handling](../../../frontend/lib/mutations/session.ts)
+  currently logs out and creates an anonymous identity on error. That cannot be
+  treated as preservation of the previous anonymous identity/projects.
+- A JWT signed under an exposed signing secret is not, by itself, independent
+  proof of legitimate ownership for upgrading an old identity to new credentials.
+  Storing an old user ID in the browser is not additional proof. Do not claim
+  transparent safe migration solely by verifying/re-signing such a JWT.
+
+**Deployment/browser inventory status: unknown.** No inventory or explicit
+confirmation establishes that all existing anonymous sessions are in team-controlled
+browsers, or that external users exist. Repository inspection establishes neither
+population nor browser control. Do not turn missing evidence into zero external
+users or assume that all identities/data are disposable test fixtures.
+
+Before choosing the migration, inventory:
+
+- Deployments and retained datasets whose anonymous sessions/projects must survive.
+- Anonymous identities and their associated projects; distinguish test fixtures,
+  external users and unclassified cases without inventing counts.
+- Which browsers are controlled/accessibly recoverable by the team, based on
+  deployment/operator information rather than inferred from database records alone.
+- Available independent identity/ownership evidence or assisted recovery procedure,
+  expiry constraints and clients that cannot participate in a planned transition.
+
+Record source, time and responsible operator for the inventory; do not collect raw
+JWTs or private credentials in documentation/logs. This is a planning prerequisite,
+not an executed inventory or an approved migration mechanism. Until clarified,
+preserve the existing identity/project requirement; do not rotate the secret or
+substitute new anonymous identities as if preservation were achieved.
+
+Registered-account reauthentication, anonymous recovery proof/procedure, future
+renewal and token lifetimes remain undecided. No accounts, tokens or projects were
+modified; no statement about actual external users is attributed to the team.
 
 ## Business Goals
 
 | Goal | Evidence of success | Priority |
 |------|---------------------|----------|
 | Address two concrete quality weaknesses relevant to PictuRAS stakeholders. | Independently specified and evaluated requirements, classified under ISO/IEC 25010:2011. Quality priorities are awaiting team input. | Must |
-| Demonstrate improvement rather than assume it from an architectural change. | Comparable initial and final measurements with identified scenarios, data, environment and instruments. Numerical targets and minimum acceptable values remain to be defined. | Must |
+| Demonstrate improvement rather than assume it from an architectural change. | Comparable initial/final measurements with identified scenarios, data, environment and instruments. WS cutoff criteria have individual validation; remaining numerical targets and whole-team approval are pending. Compliance is not yet measured. | Must |
 | Preserve the existing editing product. | Regression evidence for images, video and mixed projects, including subtitles and frame extraction where affected. | Must |
 
 ## Stakeholders
@@ -62,9 +327,9 @@ defensible link between requirements, evidence, decisions and results.
 
 ### In Scope
 
-- Explore all six candidate directions and their possible pairs using the existing
-  diagnosis, then select and justify exactly two quality requirements with explicit
-  agreement from all four PL2-G4 members.
+- Retain the six-direction exploration and pair comparison as the rationale for
+  the agreed QC-06 + QC-05 pair; complete the two requirements without reopening
+  selection by default. Pair agreement is recorded as communicated by the user.
 - Specify each requirement's metric, unit, measurement method, baseline, target
   and minimum acceptable value, with the origin of each numerical value recorded.
 - Measure the unchanged application before refactoring the affected behavior.
@@ -93,14 +358,17 @@ must be distinguished wherever they differ.
 
 ## Non-Functional Requirements
 
-Neither of the two quality requirements has been selected. No numerical acceptance
-targets or unmeasured baseline values are asserted in this draft.
+The selected pair is **QC-06 security/end-to-end authorization** and **QC-05
+performance efficiency/upload resource utilization**, with agreement provenance
+above. Detailed quantitative NFRs remain in elicitation: the individually validated
+WS conditions are recorded, remaining targets are proposals, and formal baseline
+values must still be completed. No unmeasured value is asserted as a result.
 
 The six directions under exploration are reliability/recovery, video capacity,
 maintainability/modularity, pipeline usability and background-work feedback,
 upload resource use and internal-service security (QC-01 through QC-06 in the
-[comparison](quality-exploration.md)). These are options for elicitation, not
-commitments to implement every direction or to adopt ALT-1 or ALT-2.
+[comparison](quality-exploration.md)). This comparison is retained as selection
+rationale, not a commitment to implement every direction or adopt ALT-1 or ALT-2.
 
 ## Constraints
 
@@ -110,9 +378,11 @@ commitments to implement every direction or to adopt ALT-1 or ALT-2.
 - Preserve an identifiable application baseline before changing code or deployment.
 - Keep measurements reproducible and comparable; record CPU/RAM allocations,
   model warm/cold state and concurrent workloads when they influence the result.
-- Delivery is on 20 November 2026, confirmed by the user and consistent with the
-  supplied guidelines. The submission time, available team hours and participant
-  access have not been supplied.
+- Delivery is on **27 November 2026**, explicitly corrected by the user during
+  this conversation. This supersedes the earlier 20 November planning date. The
+  supplied guidelines still state 20 November; retain that source unchanged and
+  attribute the current planning deadline to the user's later correction. The
+  submission time, available team hours and participant access remain unknown.
 
 Project-wide implementation conventions remain in the repository guidance and
 will be maintained separately from these intent-specific requirements.
@@ -128,10 +398,12 @@ will be maintained separately from these intent-specific requirements.
 
 | Question | Owner | Resolution |
 |----------|-------|------------|
-| Which two quality weaknesses should this intent prioritize? | All four PL2-G4 members | Evidence committed as 793df2e and a team review packet prepared. QC-05 + QC-06 is recommended for discussion; no pair selected and no individual agreement recorded. |
+| Which two quality weaknesses should this intent prioritize? | PL2-G4 | Resolved: QC-06 security/end-to-end authorization + QC-05 performance efficiency/upload resource utilization. Pair agreement recorded on the user's explicit instruction at 2026-11-16T15:12:33Z; details and measurements remain open. |
 | What hardware/resource budget, time, representative workloads and participants are available? | PL2-G4 | Pilot resources are recorded. Team hours, final workload scope and participant access remain open for the team review. |
-| What delivery deadline applies? | PL2-G4 | User confirmed 20 November 2026. |
-| What target and minimum acceptable values are justified by the baseline and stakeholder needs? | PL2-G4 | To quantify after the measurement method and initial results are available. |
+| What delivery deadline applies? | PL2-G4 | User explicitly corrected delivery to 27 November 2026; the previous 20 November planning date is superseded. Submission time remains unknown. |
+| Are all existing anonymous sessions in team-controlled browsers? | PL2-G4 / deployment operators | Unknown: no deployment/browser inventory supplied. Inventory identities/projects, browser control and independent recovery evidence before selecting migration; do not assume absence of external users. |
+| What target and minimum acceptable values are justified by the baseline and stakeholder needs? | PL2-G4 | WS cutoff ≤5 s/target ≤2 s and initial 1 s revalidation are individually validated, awaiting experimental proof. Other metric proposals remain unapproved; complete applicable gate review, whole-team agreement and reproducible formal baseline before refactoring. |
+| Which architecture details remain undecided? | PL2-G4 | D10; remaining WS payload/order/race design, global concurrency/byte limits; certificate lifecycle and exact per-channel TLS configuration/termination; session transition/renewal, other lifetimes/rotation, legacy links, API compatibility, atomic upload token, pending visibility and hash recovery. Option A transport coverage is individually validated: mTLS on internal APIs; verified server TLS elsewhere, service credentials/least privilege for data/broker where applicable. D4, WS-C1 A/WS-C2 A and prior WS/JWT conditions retain their validations; rest remains proposed. |
 
 ## Sources
 

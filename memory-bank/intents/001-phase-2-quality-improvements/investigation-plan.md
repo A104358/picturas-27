@@ -3,17 +3,20 @@ intent: 001-phase-2-quality-improvements
 phase: inception
 status: draft
 created: 2026-11-14T17:31:51Z
-updated: 2026-11-14T18:06:50Z
+updated: 2026-11-16T15:51:14Z
 ---
 
 # Investigation Plan for the Six Quality Directions
 
 ## Scope and Confirmed Constraints
 
-The user selected continuation of the exploration and confirmed delivery on
-20 November 2026. Team hours and access to usability participants are still
-unknown. This plan defines bounded investigations before the team chooses two
-requirements. It does not approve requirement targets or architectural changes.
+The user initially confirmed delivery on 20 November 2026 and later explicitly
+corrected it to **27 November 2026**. Use the later date for current planning;
+the original guidelines and dated records retain the earlier date as history.
+Team hours and access to usability participants remain unknown. This plan was
+prepared to investigate the candidate directions; the later QC-06 + QC-05 pair
+agreement and individual architecture validations retain their recorded scope.
+This plan does not itself approve additional targets or architectural changes.
 
 The initial source revision was `5678c7cecca1e78ad54ce80e68a3f8f8988bd125`.
 `git diff 484be13 HEAD --name-only` restricted to application code, Compose and
@@ -323,9 +326,12 @@ report/evidence review. These are planning suggestions, not agreed team dates.
 - Evidence-based shortlist and agreement from all four members.
 - Final two quantitative RNFs, numerical origins and regression scope.
 
-The [live findings](live-findings.md) now supply a provisional discussion shortlist
-and initial candidate measurements; no pair is approved. The
-[team decision record](quality-exploration.md#decision-record--pending) remains
-pending. Investigation and instrumentation can continue without selecting a pair.
+The [live findings](live-findings.md) supplied a provisional discussion shortlist
+and initial candidate measurements. The later
+[team decision record](quality-exploration.md#decision-record--pair-agreement)
+now records QC-06 security/end-to-end authorization + QC-05 performance efficiency/
+upload resource utilization, as communicated by the user. Investigation and
+instrumentation now support completion of this pair's detailed requirements;
+remaining targets and formal baseline are still pending.
 Construction planning follows approved requirements; this exploration does not
 create units, stories or implementation bolts prematurely.

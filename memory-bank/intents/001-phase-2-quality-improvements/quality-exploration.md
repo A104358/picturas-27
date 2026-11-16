@@ -3,7 +3,7 @@ intent: 001-phase-2-quality-improvements
 phase: inception
 status: draft
 created: 2026-11-14T17:16:06Z
-updated: 2026-11-14T18:19:23Z
+updated: 2026-11-16T15:51:14Z
 ---
 
 # Quality Options and Team Decision
@@ -23,8 +23,10 @@ demonstration, host regression results and processor-only experiments. The
 [live findings](live-findings.md) now add measurements through a 13-service
 application slice, an internal access matrix and one worker kill/restart. Broader
 load/fault coverage, real Whisper, scaling, maintenance-task experiments and
-participant usability remain pending. No final requirements or team approvals
-are recorded.
+participant usability remain pending. The user has since requested recording
+agreement on **QC-06 security/end-to-end authorization + QC-05 performance
+efficiency/upload resource utilization**; see the canonical record below.
+Full quantitative requirements and remaining decisions still need review.
 
 The [Exercise 6 resolution](../../../docs/exercises/06-architectural-patterns/resolution.md)
 provides the EV/H evidence identifiers used below. Targeted source checks during
@@ -218,8 +220,9 @@ still needs an explicit scenario and independent measure for each requirement.
 4. **Compare and shortlist:** Assess stakeholder impact, strength of evidence,
    measurement feasibility, delivery effort, regression risk and trade-offs. Every
    exclusion needs a reason. Shortlist pairs only after reviewing all six directions;
-   the [live findings](live-findings.md) now provide provisional discussion pairs;
-   no pair is selected or approved.
+   the [live findings](live-findings.md) supplied provisional discussion pairs.
+   Selection has since been recorded as QC-06 + QC-05 below; retain this comparison
+   as the rationale for that choice.
 5. **Obtain whole-team agreement:** All four members review the same revision,
    proposed pair, evidence and scope. Record each person's explicit agreement or
    concerns. Discussion resolves concerns before acceptance; a majority vote or
@@ -235,7 +238,61 @@ sample sizes, exceptions and variability. Numerical targets must identify whethe
 they come from source requirements, stakeholder agreement or a proposed engineering
 goal. Historical EV-28 test passes and smoke checks do not supply these baselines.
 
-## Decision Record — Pending
+## Decision Record — Pair Agreement
+
+**Par acordado:** Segurança — autorização ponta a ponta (QC-06 / ideia 1) +
+Eficiência de desempenho — utilização de recursos nos uploads (QC-05 / ideia 2).
+**Equipa:** PL2-G4. **Registado em:** 2026-11-16T15:12:33Z.
+**Fonte:** instrução explícita do utilizador, “Podes registar o acordo do par”,
+na sequência da identificação deste par e da indicação de que faltava registar
+o acordo coletivo. O acordo do par fica registado como comunicado pelo utilizador
+para a equipa; não foram recolhidas declarações ou assinaturas nominais separadas.
+
+O registo seleciona estas duas áreas e não aprova por associação os detalhes ainda
+abertos, todas as métricas ou o início da implementação. As validações individuais
+anteriores mantêm esse âmbito. Não se inventa uma reunião nem um commit revisto
+por cada elemento.
+
+November 16: the user supplied expanded ideas 1/2 with some choices marked made
+and explicitly noted unresolved decisions. The
+[updated decision document](../../../docs/fase2-ideias-1-e-2.md) preserves that
+distinction; its final rationale and
+[measurement plan](../../../docs/fase2-metricas-e-baseline.md) are ready for review.
+No individual agreement is inferred from those documents.
+
+### Explicit Individual Decision Validation
+
+| Timestamp | Decision | User-validated rule | Scope of validation |
+|-----------|----------|---------------------|---------------------|
+| 2026-11-16T14:34:42Z | D3/JWT | User JWTs remain HS256 with renewed non-versioned secret; gateway-issued internal identity uses RS256. Session transition, including anonymous sessions, must be defined before renewal. | Explicit validation by the user in this conversation; no agreement of the other members declared. |
+| 2026-11-16T14:34:42Z | D7 | `owner` may be absent; if present, require one value matching the path owner and reject contradictions. `projects` always checks ownership/sharing. | Same individual validation; no metric/implementation approval inferred. |
+| 2026-11-16T14:34:42Z | D6.1 | Valid JWT required for Socket.IO connection, including anonymous sessions; room authorization remains mandatory and its mechanism is open in D6.2. | Same individual validation; remaining open choices stay open. |
+| 2026-11-16T14:43:28Z | D6.2 B | Consult projects for current authorization on every room entry. Temporarily refuse new entries if projects is unavailable and allow retry; no room tickets. | User selected B/A subject to technical confirmation; assistant confirmed proportionality with medium confidence. Individual decision, not whole-team approval. |
+| 2026-11-16T14:43:28Z | D6.3 A | Actively remove room access when effective authorization ceases; preserve other rooms and legitimate alternate access. | Same individual selection/technical confirmation. Permanence mechanism, cutoff bound, failure policy and active-session expiry remain open. |
+| 2026-11-16T15:05:43Z | D6.3 periodic A; D6.2 B reconfirmed | Initially revalidate every 1 s, subject to measured load/latency; batch by project with individual decisions for each member/access context. Consult projects on every entry. | Explicit individual validation; HTTP batching does not eliminate processing growth with members/contexts. Events deferred unless measured load or criteria justify reconsideration. |
+| 2026-11-16T15:05:43Z | D6.3 failure/cutoff A | Acceptance ≤5 s, target ≤2 s, pending experimental validation. Local authorization ≤5 s from positive query start, bounded by JWT/effective permission; failures never renew; obsolete responses never restore improper access; effective denial removes affected access immediately, preserving valid alternatives. No new entries during unavailability. | Criteria individually validated, not experimentally demonstrated or whole-team approved. No claim of equal A/B security during failures. |
+| 2026-11-16T15:05:43Z | D6.1 active JWT expiry A | Terminate at expiry. Frontend explicitly reconnects with valid JWT and fresh authorization per room; never assume automatic reconnection after server disconnection. Renewal/transition preserve anonymous identity/projects. | Explicit individual validation. Renewal/transition design remains open; no claim that active expiry is rare. |
+| 2026-11-16T15:30:57Z | D4 previous choice — superseded | HTTPS + asymmetric service JWT is replaced by mTLS for internal service authentication. | User explicitly identifies this as their earlier choice in the current message; original selection timestamp not supplied. Does not supersede D3's gateway-issued RS256 identity. |
+| 2026-11-16T15:30:57Z | D4 current choice | mTLS authenticates internal services; authorize specific service pairs/actions as well. Protect private keys and specify certificate issuance/renewal and peer permissions. | Explicit individual change. Operational lifecycle/pair elaboration remains for review where not specifically validated; no application changes or tests authorized/claimed. |
+| 2026-11-16T15:30:57Z | WS-C1 A | Direct WS → projects mTLS; authenticate specifically WS and permitted operations. WS delegates identity/expiry verified from the connection JWT with member-presented contexts; projects always decides permissions. | Explicit individual validation; any certificate of the CA is insufficient. D3 HS256 user JWT and gateway RS256 identity remain; rest of contract remains proposed. |
+| 2026-11-16T15:30:57Z | WS-C2 A | Initial configurable total timeout 1 s covering wait/connect/send/read; up to 50 member/context evaluations per request. Multiple batches with limited concurrency/fair scheduling; no extension on failures/retries. Cutoff ≤5 s/target ≤2 s retained. | Individual validation, subject to measurement, not demonstrated capacity. Global concurrency value/other limits remain to size; no agreement attributed to other members or tests claimed. |
+
+The timestamp records when this validation was entered in the workspace; it does
+not fabricate a separate team meeting or each member's approval. The roster below
+identifies the team covered by the collectively communicated pair agreement;
+it does not attribute separate personal statements or individual timestamps.
+The earlier D6.1 entry records its then-open D6.2 state; the later rows update that
+state without rewriting the historical first-group validation. Preference for
+consultation over tickets is a technical inference, not a benchmark result.
+The latest three entries close the previously open permanence mechanism, cutoff,
+failure policy and active JWT expiry at individual-validation level. Authenticated
+contract/timeout, access-context representation, batch limits, ordering/join races,
+session transition/renewal and experimental proof remain pending. They do not
+approve the remaining metrics or replace the full requirements/team review.
+The subsequent D4/WS-C1/WS-C2 entries supersede the open state of the service trust
+choice and initial timeout/batch parameters. The rest of the WS contract is still
+proposed; issuance/renewal/revocation parameters, pair coverage and concrete
+ordering/scheduling remain to review. No certificate/key was generated or app changed.
 
 The [team review packet](team-review.md) provides the proposal to discuss against
 evidence commit `793df2e`. This record remains the single source for actual team
@@ -243,26 +300,26 @@ agreement; the packet's recommendation and numerical options are not approvals.
 
 | Field | Current value |
 |-------|---------------|
-| Reviewed document revision / commit | Pending |
+| Reviewed document revision / commit | Pair text and source statement above; no jointly reviewed commit was supplied. Application evidence revisions remain identified separately. |
 | Experiment records and limitations | [Live findings available](live-findings.md): candidate upload/queue/progress/access measurements and one recovery scenario, plus prior processor/helper probes. Broader evaluation limits are explicit. |
-| Selected requirement 1 / metric | Pending |
-| Selected requirement 2 / metric | Pending |
-| Rationale and rejected alternatives | Pending |
-| Estimated effort and available resources | Delivery on 20 November confirmed by the user; team hours and participants unknown. Local Docker images available; investigation protocols prepared. |
+| Selected requirement 1 / metric | QC-06 Security: end-to-end authorization (confidentiality/integrity/authenticity); S01–S24 and affected guards in the measurement plan, remaining gates still under review. |
+| Selected requirement 2 / metric | QC-05 Performance efficiency: upload resource utilization; U01–U26 and affected guards; memory thresholds still proposals, formal baseline incomplete. |
+| Rationale and rejected alternatives | Authorization exposure/effects and high upload memory/OOM are observed. Distinct quality areas, independent evaluation and functional preservation. Six directions/15 pairs remain documented above; reliability/capacity/modularity/usability alternatives and limits are explained in the historical team packet and current decision rationale. No claim of measured lowest implementation effort. |
+| Estimated effort and available resources | Delivery corrected by the user to 27 November 2026, superseding the previous 20 November planning date; team hours and participants remain unknown. Local Docker images available; investigation protocols prepared. |
 | Functional-preservation checks | To specify for the selected paths |
-| Whole-team agreement | Not recorded |
+| Whole-team agreement | Pair agreement recorded as communicated by the user, 2026-11-16T15:12:33Z; limited to the stated pair, without separately collected nominal declarations. |
 
-| Team member | Student number | Decision / concerns | Reviewed revision | Timestamp |
-|-------------|----------------|---------------------|-------------------|-----------|
-| Luís Miguel Coelho | PG64000 | Pending | Pending | Pending |
-| Alexandre de Oliveira Monsanto | PG65397 | Pending | Pending | Pending |
-| Diogo Alexandre Gomes Silva | PG63941 | Pending | Pending | Pending |
-| José Miguel da Silva Santos | PG63522 | Pending | Pending | Pending |
+| Team member | Student number | Pair agreement provenance | Separate nominal statement / reviewed revision |
+|-------------|----------------|---------------------------|-----------------------------------------------|
+| Luís Miguel Coelho | PG64000 | Collective agreement communicated by the user; source above | Not separately supplied |
+| Alexandre de Oliveira Monsanto | PG65397 | Collective agreement communicated by the user; source above | Not separately supplied |
+| Diogo Alexandre Gomes Silva | PG63941 | Collective agreement communicated by the user; source above | Not separately supplied |
+| José Miguel da Silva Santos | PG63522 | Collective agreement communicated by the user; source above | Not separately supplied |
 
-The agreement record can be completed from an explicit team review or meeting
-record provided in this workspace. No approval is inferred from the user's request
-to explore options, and no messages have been sent to other team members. Changes
-to the selected pair or material scope require renewed agreement from all four.
+The source of agreement is the user's later explicit instruction to record it,
+not earlier exploration requests or silence. No messages have been sent to other
+team members. Changes to the selected pair or material scope require renewed
+agreement; remaining details and full requirements review are still outstanding.
 
 ## Traceability and AI Assistance
 
@@ -278,4 +335,6 @@ prepared this qualitative comparison and investigation procedure from existing
 project evidence and targeted source reads. Subsequent AI-assisted exploratory
 scripts, raw results and validation are documented in the
 [evidence index](evidence/README.md). Team review, final requirement evaluation,
-final selection and quantitative requirement approval remain pending.
+full quantitative requirement approval remain pending. Pair selection is recorded
+above from the user's explicit instruction; neither that agreement nor the
+individual validations approve all remaining details.

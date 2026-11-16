@@ -1,6 +1,6 @@
 # PictuRAS — Fase 2: catálogo de upgrades não funcionais
 
-Levantamento de **todas** as possibilidades de melhoria não funcional encontradas no checkout
+Levantamento das possibilidades de melhoria não funcional encontradas no checkout
 `66bc6f9`, com medições feitas a 16/11/2026. Estende o trabalho existente (QC-01 a QC-06,
 `team-review.md`, `live-findings.md`); onde uma ideia corresponde a uma direção já estudada, isso
 está indicado. Classificação segundo a ISO/IEC 25010:2011, como pedem as diretrizes.
@@ -17,11 +17,53 @@ carga: Node 22 no host. Scripts e resultados brutos em
 [`evidence/nfr-2026-11-16/`](evidence/nfr-2026-11-16/).
 
 **Limitações que valem para tudo.** Amostras pequenas (2–3 repetições): são pilotos, não
-percentis. Na mesma VM estavam parados-mas-ativos 26 contentores de outro checkout
-(`picturas-27-extension`), que podem ter introduzido ruído. `frontend`, `subscriptions` e as
+percentis. O relatório de origem refere 26 contentores de outro checkout
+(`picturas-27-extension`), mas a expressão «parados-mas-ativos» não permite saber o seu
+estado/carga. Esse ruído fica por caracterizar no manifesto da baseline formal. `frontend`, `subscriptions` e as
 ferramentas de IA não entraram no stack; o que lhes diz respeito está marcado como **não medido**.
 Os valores «mínimo aceitável» e «alvo» são **propostas de engenharia** para a equipa discutir,
 exceto quando vêm de um requisito existente (indicado caso a caso).
+
+**Estado da revisão de 16/11.** As notas AI são juízos qualitativos e não prioridades
+aprovadas ou classificação docente. As ideias 1/2 estão sincronizadas com
+[o extrato de decisões e justificação](../../../docs/fase2-ideias-1-e-2.md).
+O [plano de métricas e baseline](../../../docs/fase2-metricas-e-baseline.md) contém os
+critérios e a auditoria dos resultados. As lacunas não foram convertidas em zeros,
+nem as propostas em decisões fechadas. O acordo do par 1 + 2 está agora registado
+por instrução explícita do utilizador para PL2-G4; ver o
+[registo coletivo](quality-exploration.md#decision-record--pair-agreement).
+O acordo seleciona as áreas QC-06 Segurança/autorização ponta a ponta e QC-05
+Eficiência de desempenho/recursos dos uploads; os detalhes e métricas pendentes
+mantêm o seu estado.
+
+
+**Validação individual posterior à revisão:** o utilizador confirmou D3/JWT
+(HS256 utilizador e RS256 interno, com transição de sessões antes de renovar o
+segredo), D7 (`owner` opcional, único e coincidente) e D6.1 (JWT obrigatório na
+ligação Socket.IO, também para anónimos). Posteriormente escolheu D6.2 B + D6.3 A:
+consultar projects em cada entrada e retirar ativamente o acesso quando a autorização
+efetiva terminar. O assistente confirmou a proporcionalidade com confiança média;
+a simplicidade é uma inferência, não uma medição. Validou depois A/A/A: revalidar
+inicialmente a cada 1 s, agrupando por projeto com autorização individual/contextual;
+critério de corte ≤5 s, meta ≤2 s, local até 5 s desde início da consulta positiva,
+limitado por JWT/permissão, sem renovação por falhas ou restauro indevido por respostas
+obsoletas; negação efetiva retira já. JWT expirado termina a ligação; frontend trata
+reconexão explicitamente com JWT válido e nova autorização por sala. Eventos ficam
+como evolução. Critérios/carga ainda por ensaiar; transição/renovação deve preservar
+identidade e projetos anónimos. Estas validações de detalhe permanecem individuais;
+o restante contrato, corridas e outros pontos mantêm-se em aberto; ver a atualização
+seguinte para a escolha de mTLS e dos parâmetros iniciais de timeout/lote.
+
+**Atualização individual D4/WS-C1/WS-C2:** mTLS é a escolha para autenticar serviços
+internos; HTTPS + JWT assimétrico de serviço fica substituído, conforme a escolha
+anterior agora referida pelo utilizador. D3 mantém HS256 de utilizador/RS256 do
+gateway. WS-C1 A valida consulta direta com autenticação específica do WS e
+delegação explícita da identidade/expiração verificadas; projects decide permissões.
+WS-C2 A valida timeout total inicial 1 s/até 50 avaliações por pedido, configuráveis,
+com concorrência limitada e agendamento justo entre lotes; falhas/tentativas não
+prolongam autorização. Critérios de corte mantidos; sem capacidade demonstrada.
+O restante contrato e operacionalização da PKI continuam para revisão, sem atribuir
+aprovação aos restantes elementos, testes executados ou autorização para código.
 
 **Resumo ordenado por nota.**
 
@@ -47,11 +89,12 @@ exceto quando vêm de um requisito existente (indicado caso a caso).
 | 18 | Imagens reprodutíveis e leves | Portabilidade | 4,5 | novo |
 | 19 | Exportação ZIP em streaming | Eficiência de desempenho | 4 | QC-05 (extensão) |
 
-**Recomendação de par.** As três primeiras têm fragilidade demonstrada, métrica própria e
-refactoring exigente. O par **1 + 2** continua a ser o da `team-review.md`, agora com evidência
+**Par acordado — fundamentação.** As três primeiras têm fragilidade demonstrada, métrica própria e
+refactoring exigente. O par **1 + 2** corresponde à recomendação histórica da `team-review.md`, agora com evidência
 bem mais forte (o problema de autorização está no gateway público e não só na rede interna; o de
 memória derruba o gateway). **3** é a alternativa natural se a equipa quiser cobrir a prioridade
-do PL1-G4 (ack manual e retoma). As ideias 4, 5, 8 e 10 são pequenas e podem ser absorvidas
+do PL1-G4 (ack manual e retoma); fica como alternativa documentada ao par acordado.
+As ideias 4, 5, 8 e 10 são pequenas e podem ser absorvidas
 como parte de 1, 2 ou 3 sem serem um RNF autónomo.
 
 ---
@@ -142,10 +185,14 @@ verificando o efeito no estado do dono e, nas leituras, o SHA-256 dos bytes desc
 | D08 | img_storage:11000 | apagar objeto no prefixo do dono | **201** |
 | W01 | socket.io | socket **sem token** entra na sala do projeto | recebeu `project-op TOOL_ADDED` com o pipeline |
 
-Resultado: **10 operações não autorizadas admitidas em 13 casos negativos**, 3 delas pela entrada
-pública. O controlo positivo (dono lê o próprio projeto) passou. Os casos D usam as portas de
-loopback do stack isolado; no `docker-compose.yaml` original as mesmas portas são publicadas em
-`0.0.0.0`.
+O extrato original reportava **10 admissões em 13 casos**, mas esse total precisa de
+revalidação: G02 usa um campo ausente da resposta, D06 não confirma o hash do objeto e D05
+começa com uma fixture sem projetos. Os JSON, incluindo o conjunto maior de 22 casos, foram
+preservados. O plano de métricas distingue efeito verificado, resposta HTTP e caso inconclusivo.
+G03/G04 e W01 sustentam alterações/divulgação indevidas; não usar um total global corrigido
+sem voltar a executar a matriz com asserções completas. O controlo de leitura do dono passou.
+Os casos diretos usam loopback da stack ARM; a exposição da configuração original e a
+alcançabilidade efetiva são medições separadas.
 
 *Mínimo aceitável e alvo:* **0 admitidas** na matriz acordada, com **100% dos controlos
 positivos** a passar (dono, partilha de leitura, partilha de edição, worker a guardar
@@ -154,16 +201,19 @@ anula o objetivo. Guarda: sobrecarga por pedido medida e ≤ 10 ms em mediana (p
 
 **Solução proposta.**
 
-*Decisões tomadas:*
+*Escolhas assinaladas no documento de origem (não confundir com implementação ou aprovação final):*
 
 | # | Decisão | Escolha |
 |---|---------|---------|
 | D1 | Contra quem nos protegemos | Todos os casos: entrada pública (G, W), rede Docker e portas dos serviços (D), bases de dados e S3 diretos |
 | D2 | Quem decide a posse e a partilha | Em camadas: o gateway faz as verificações baratas, a `projects` decide |
-| D3 | Como a `projects` sabe quem chama | Identidade assinada pelo gateway, em substituição do `X-Caller-Id` |
-| D4 | Identidade de serviço nas chamadas sem utilizador | mTLS |
+| D3 | Como a `projects` sabe quem chama | RS256 na identidade interna do gateway, validado pelo utilizador; JWT de utilizador mantém HS256 com plano prévio de transição de sessões |
+| D4 | Autenticação entre serviços internos | mTLS validado individualmente; HTTPS + JWT assimétrico de serviço substituído; D3 mantém as funções dos JWT |
 | D5 | Rede e portas publicadas | Publicar só em `127.0.0.1` |
-| D6.2 | Quem entra na sala de um projeto | Bilhete assinado pela `projects` (na resposta do `GET` do projeto), verificado pelo `ws_gateway` |
+| D6.1 | Autenticação da ligação Socket.IO | JWT válido obrigatório, também para anónimos; validado pelo utilizador |
+| D6.2 | Quem entra na sala de um projeto | Consulta à projects por entrada, opção B escolhida pelo utilizador; bilhetes WS adiados |
+| D6.3 | Permanência na sala | Revalidação periódica inicial de 1 s, agrupada por projeto e individual por contexto; corte ≤5 s, meta ≤2 s, escolhidos individualmente e ainda por medir |
+| D7 | Tratamento de owner | Ausente permitido; se presente, único e igual ao dono no caminho; contraditório recusado; validado pelo utilizador |
 | D8 | Modelo de partilha | Links com expiração |
 | D9 | Serviços no âmbito | Incluir `users` e `subscriptions` |
 | D11 | Token de upload da ideia 2 | Verificação própria e simplificada |
@@ -172,26 +222,40 @@ anula o objetivo. Guarda: sobrecarga por pedido medida e ≤ 10 ms em mediana (p
 
 1. **Gateway (pedidos de utilizador).** Verifica o JWT como hoje e mantém a verificação barata
    (sem `share`, o utilizador do caminho tem de ser o do JWT). Depois emite uma **identidade
-   assinada** de curta duração, `{ sub, share?, aud, iat, exp }`, com uma chave própria do
-   gateway (diferente do segredo dos JWT de utilizador), e envia-a num cabeçalho dedicado. O
+   assinada em RS256** de curta duração, `{ sub, share?, aud, iat, exp }`, com uma chave
+   privada própria do gateway e apenas a chave pública nos verificadores; não partilha
+   o segredo HS256 dos JWT de utilizador. Envia-a num cabeçalho dedicado. O
    `X-Caller-Id` deixa de existir.
-2. **`projects`.** Verifica a assinatura, o destinatário (`aud`) e a validade dessa identidade e
+2. **`projects`.** Nos pedidos encaminhados pelo gateway, verifica a assinatura,
+   o destinatário (`aud`) e a validade dessa identidade e
    deriva dela o chamador (`getCallerId`). Não precisa do segredo dos JWT de utilizador. É ela
    que decide: sem `share`, exige chamador = dono em todas as rotas, incluindo `GET`, `POST` e
    `DELETE /:user` e `/presence`; com `share`, aplica a regra atual (`checkSharePermission`) e a
-   expiração (ponto 8).
-3. **Chamadas entre serviços sem utilizador** (hoje `projects` → `img_storage` e
-   `projects` → `users` para a quota). mTLS: o serviço chamado só aceita ligações com um
+   expiração (ponto 8). A rota interna WS autentica o serviço por mTLS e recebe a
+   delegação validada em WS-C1; não exige que WS emita identidade RS256 de gateway.
+3. **Chamadas entre serviços internos** (incluindo `projects` → `img_storage`,
+   `projects` → `users` para a quota e `ws_gateway` → `projects`). mTLS: o serviço chamado só aceita ligações com um
    certificado de cliente emitido por uma CA interna do projeto e com a identidade esperada. Os
-   certificados são novos (os atuais estão expirados, ideia 11), gerados por script e mantidos
-   fora do repositório.
-4. **`ws_gateway`.** A resposta do `GET` do projeto inclui um **bilhete**
-   `{ sub, project, perm, exp }` assinado pela `projects`. O frontend envia-o no `join-project`.
-   O `ws_gateway` verifica a assinatura, a validade e que `sub` coincide com o utilizador do JWT
-   do socket, e só então faz `join`. A assinatura é assimétrica: o `ws_gateway` só tem a chave
-   pública e não consegue emitir bilhetes.
-5. **`users` e `subscriptions`.** Entram na matriz. Passam a aceitar só pedidos vindos do
-   gateway (identidade assinada) ou de serviços (mTLS). Sobrepõe-se à ideia 5.
+   certificados são novos (os atuais estão expirados, ideia 11), com emissão/renovação
+   e proteção de chaves fora do repositório. A matriz de pares/operações de D4 limita
+   a confiança; mTLS não substitui HS256/RS256 de D3 nem autorização de domínio.
+4. **`ws_gateway` — D6.2 B + D6.3 A.** Exige JWT válido na ligação, incluindo sessões
+   anónimas. Em cada pedido de entrada, consulta a projects por um canal autenticado;
+   a projects verifica o acesso atual do utilizador ao projeto/sala. Só uma autorização
+   positiva permite o join. Indisponibilidade/timeout não concede acesso: a entrada é
+   recusada temporariamente e pode ser tentada de novo. Não são emitidos bilhetes de
+   sala. Para membros já presentes, retirar o acesso quando deixarem de ter autorização
+   efetiva, preservando outras salas e vias legítimas. Revalidar inicialmente a cada
+   1 s, agrupando por projeto sem agregar a decisão de cada membro/contexto. A
+   autorização local não excede 5 s desde o início da consulta positiva, nem a validade
+   do JWT/permissão; falhas não a prolongam e respostas obsoletas não restauram acesso.
+   Negação efetiva explícita retira imediatamente o acesso afetado. Critério de corte
+   ≤5 s, meta ≤2 s, ainda por ensaiar. Ao expirar o JWT, terminar a ligação; o frontend
+   trata explicitamente a reconexão válida e a nova autorização das salas.
+5. **`users` e `subscriptions`.** Entram na matriz. Autenticam o serviço chamador por
+   mTLS e limitam as operações conforme D4; pedidos delegados pelo gateway mantêm a
+   identidade RS256 de D3 quando aplicável, com exceções de login/registo explícitas.
+   Autenticação de serviço não substitui a autorização de conta/billing. Sobrepõe-se à ideia 5.
 6. **Bases de dados e S3.** MongoDB com utilizador e palavra-passe por serviço; SeaweedFS com
    credenciais fora do repositório. Sobrepõe-se à ideia 9.
 7. **Portas.** Todas as portas publicadas, exceto a do nginx (8080), passam a
@@ -202,28 +266,39 @@ anula o objetivo. Guarda: sobrecarga por pedido medida e ≤ 10 ms em mediana (p
 
 *Em aberto (por decidir):*
 
-- **D7, o parâmetro `owner`.** Facto verificado: com partilha, o frontend já põe o dono no
-  caminho (`pathUidFor` em `frontend/lib/projects.ts`); sem partilha, envia `owner=<o próprio>`.
-  O `?owner=` é portanto redundante em todos os casos. As opções são validá-lo (sem `share`,
-  igual ao JWT; com `share`, igual ao dono do projeto) ou ignorá-lo no gateway. Qualquer das
-  duas fecha G02–G04 sem mudar o frontend.
+- **D7 já validada individualmente:** parâmetro ausente permitido; presente exige valor
+  único igual ao dono no caminho. Não voltar a tratá-la como escolha entre validar/ignorar.
+  Testar ausência, coincidência, contradição e entradas multivalor, preservando partilha.
+  Em `buildQuery`, o cliente principal omite a query sem partilha; não é necessário
+  obrigá-lo a acrescentar `owner`.
 - **D10, como medir.** Com as portas em `127.0.0.1`, os casos D continuam alcançáveis a partir
-  do host, por isso medem-se como hoje e têm de dar 401/403. Fica por decidir se se repete a
+  do host, é possível ensaiar o host se a rede/configuração o permitir; rejeições HTTP, TLS e de rede devem ser registadas separadamente. Fica por decidir se se repete a
   matriz a partir de dentro de um contentor da rede `elk`, e que casos novos entram (partilha
-  expirada e revogada, leitura vs. edição, socket com e sem bilhete, token de upload da
+  expirada e revogada, leitura vs. edição, consulta de join e autorização indisponível, token de upload da
   ideia 2).
-- **D6.1:** recusar ligações WebSocket sem token, ou aceitá-las sem permitir `join`.
-- **D6.3:** expulsar os sockets já ligados quando uma partilha é revogada ou expira. Com
-  bilhete, a verificação só acontece no `join`.
-- **JWT de utilizador em HS256 ou RS256.** Com a D3, a `projects` deixa de precisar do segredo,
-  por isso a questão fica limitada aos três serviços que já o têm.
+- **D6.1 já validada individualmente:** recusar a ligação Socket.IO sem JWT válido.
+- **D6.2 B já escolhida individualmente:** consulta à projects por entrada; WS-C1 A
+  e WS-C2 A validam mTLS direto e timeout total inicial 1 s. Rever os payloads e o
+  tratamento de uma permissão que mude durante o join.
+- **D6.3 A e condições já validadas individualmente:** consultas iniciais a cada 1 s,
+  agrupadas por projeto e individualizadas por membro/contexto; corte ≤5 s, meta ≤2 s;
+  autorização local limitada desde o início da consulta positiva, sem extensão por
+  falha; negação efetiva retira de imediato; JWT expirado termina a ligação. Falta
+  rever o restante contrato, ordenação/corridas e limites globais; 50 avaliações por
+  pedido/timeout total inicial 1 s estão validados, ainda sem carga/latência medidas.
+  Não retirar acesso só porque um dos links terminou se outra via continuar válida.
+- **Transição das sessões antes da renovação HS256:** definir utilizadores registados,
+  sessões anónimas, projetos associados, reautenticação e comportamento dos sockets.
+  O algoritmo foi fechado nesta fase (HS256 utilizador, RS256 identidade interna),
+  mas a estratégia de transição e a validade/rotação das chaves não foram escolhidas.
 - **Links existentes** (sem `expiresAt`): sem validade, ou com uma validade por omissão.
-- **Validades** do bilhete e da identidade assinada.
+- **Validades** da identidade interna, sessões e tokens de upload; o desenho atual
+  não usa bilhetes WS, pelo que não há TTL de bilhete de sala a escolher nesta fase.
 
 *Onde mexer:*
 
 - `apiGateway/routes/projects.js`: deixar de usar `req.query.owner` como dono sem validação
-  (forma a decidir em D7); trocar `X-Caller-Id` pela identidade assinada nas 22 rotas;
+  (regra de valor único validada em D7); trocar `X-Caller-Id` pela identidade RS256 nas 22 rotas;
   `forwardAxiosError`; pôr `auth.checkToken` antes de `upload.single`.
 - `apiGateway/auth/auth.js`: `checkToken` mantém a dispensa da comparação quando há `share` (com
   partilha o caminho traz o dono, que é diferente do utilizador do JWT); a partilha passa a ser
@@ -235,17 +310,20 @@ anula o objetivo. Guarda: sobrecarga por pedido medida e ≤ 10 ms em mediana (p
 - `projects/models/project.js`: `sharedLinks[].expiresAt`.
 - `projects/routes/projects.js`: `requireOwner`, `requireAuth`; aplicar a `GET /:user`,
   `POST /:user`, `DELETE /:user` e às rotas `/:user/:project/presence` (hoje usam `getCallerId`,
-  que confia no `X-Caller-Id`); emitir o bilhete do WebSocket na resposta do `GET` do projeto.
+  que confia no `X-Caller-Id`); disponibilizar autorização de sala ao ws_gateway,
+  sem emitir bilhete WS no GET do projeto.
 - `projects/utils/imageStorage.js`, `projects/utils/presence.js` e as chamadas à `users`: cliente
   HTTPS com certificado de cliente (mTLS).
 - `imageStorageService/server.js`, `users/bin/www`, `subscriptions/bin/www`: servidor HTTPS a
   exigir certificado de cliente; `users` e `subscriptions` aceitam também a identidade assinada
   do gateway.
-- `wsGateway/index.js`: `join-project` verifica o bilhete; `connection` conforme D6.1.
-- `frontend/lib/projects.ts` e `frontend/app/dashboard/[pid]/page.tsx`: guardar o bilhete do
-  `GET` e enviá-lo no `join-project`; diálogo de partilha com validade.
+- `wsGateway/index.js`: JWT conforme D6.1, consulta autenticada à projects antes de
+  cada join, recusa temporária em falha e remoção de membros conforme D6.3.
+- `frontend/lib/projects.ts` e `frontend/app/dashboard/[pid]/page.tsx`: transmitir o
+  contexto necessário ao join e tratar recusa/nova tentativa; não gerir bilhetes WS.
+  O diálogo de partilha com validade mantém a revisão funcional/migração pendente.
 - `docker-compose.yaml`: portas em `127.0.0.1`; credenciais do MongoDB e do SeaweedFS; chaves
-  da identidade assinada e do bilhete e certificados mTLS montados a partir de fora do
+  da identidade assinada e certificados mTLS montados a partir de fora do
   repositório.
 - Script de geração da CA interna e dos certificados de serviço.
 - Testes: transformar `security.mjs` em suíte de regressão com os controlos positivos e os casos
@@ -304,8 +382,8 @@ prazo do requisito.
 *Cenário:* upload de vídeo válido (MP4/H.264/AAC, 10 s, 720p) preenchido com uma caixa `free` até
 exatamente 10, 100 e 500 MiB, através de nginx e gateway, concorrência 1; 10 e 100 MiB com perfil
 free e premium, 500 MiB com premium. *Instrumento:* `uploads.mjs`. Memória: `VmHWM` (pico de RSS
-do processo Node desde o `clear_refs` feito antes do pedido) lido em `/proc` — é o pico exato,
-sem amostragem. Tempo: cliente HTTP que regista o instante em que o último byte é entregue ao
+do processo Node desde o `clear_refs` feito antes do pedido) lido em `/proc` — é uma leitura de high-water mark do processo,
+com limitações de contabilização e de janela; não é um pico exato de todos os serviços. Tempo: cliente HTTP que regista o instante em que o último byte é entregue ao
 socket e o instante da resposta; «pós-envio» é a diferença.
 
 | Tamanho | Pico RSS gateway | Pico RSS projects | Pico RSS storage | Tempo total | Aceitação pós-envio |
@@ -315,17 +393,22 @@ socket e o instante da resposta; «pós-envio» é a diferença.
 | 100 MiB (n=5) | 114→**480 MiB** (+366 no 1.º) | 138→310 MiB (+172) | 118→281 MiB (+163) | 1,35–2,11 s | **665–1320 ms** (mediana 992) |
 | 500 MiB (n=3) | 282→**2050 MiB** (+1767 no 1.º) | 355→1114 MiB (+759) | 329→1058 MiB (+729) | 10,2–11,6 s | **6,7–8,0 s** (mediana 6,9) |
 
-Leituras: o gateway gasta ≈ 3,5× o tamanho do ficheiro; `projects` e storage ≈ 1,5× cada. A
-memória **não é devolvida**: depois dos uploads de 500 MiB o gateway ficou com ≈ 1040 MiB de RSS
+Leituras: no primeiro cenário de 500 MiB o incremento observado foi ≈3,5× no gateway e
+≈1,5× nos outros serviços. Não é uma lei para todos os tamanhos. Parte da memória ficou
+retida durante a observação: depois dos uploads de 500 MiB o gateway ficou com ≈ 1040 MiB de RSS
 em repouso (os incrementos seguintes são menores porque reutiliza o que reteve). Um upload de
 500 MiB feito a seguir matou o processo do gateway por OOM (2 GiB) e a resposta foi 502.
-`REQ-VID-SUBMIT-008` (MVP < 3 s, alvo < 1 s após o envio): **cumprido a 10 MiB, falhado a
-500 MiB** (6,7–8,0 s). Esta medição fecha a lacuna registada no exercício 6.
+No marcador de envio do cliente adotado pelo instrumento, os 500 MiB excederam 3 s
+(6,7–8,0 s); os 10 MiB cumpriram o MVP, embora o primeiro pedido de 1447 ms não cumprisse
+o alvo de 1 s. O evento de envio significa entrega ao SO do cliente, não receção final
+no servidor. Esta evidência reduz a lacuna anterior, mas não congela a baseline formal.
 
 *Mínimo aceitável:* pico de RSS adicional por upload ≤ 64 MiB em cada serviço, para qualquer
 tamanho até 500 MiB; aceitação pós-envio < 3 s a 500 MiB (valor MVP do requisito).
-*Alvo:* ≤ 32 MiB adicionais, independente do tamanho; pós-envio < 1 s a 10 MiB e < 3 s a
-500 MiB; 3 uploads simultâneos de 500 MiB sem reinício de nenhum serviço. Guardas: mesmo SHA-256
+*Alvo proposto para revisão:* ≤32 MiB adicionais por serviço e cenário, com 3 uploads
+simultâneos de 500 MiB sem reinícios. O plano de métricas propõe distinguir <3 s como
+mínimo pós-envio e <1 s como meta também a 500 MiB; isso corrige a ambiguidade anterior
+de repetir <3 s no mínimo e na meta. Os valores não ficam aprovados por esta revisão. Guardas: mesmo SHA-256
 guardado, mesmas respostas de validação (400 para duração, tamanho, codec), temporários removidos
 após sucesso e após erro, ocupação de disco temporário reportada.
 
@@ -359,10 +442,11 @@ Onde mexer na solução por streaming (alternativa (a)/(b), não escolhida):
 
 **Solução proposta: upload direto para o S3, com o nginx como porteiro.**
 
-Fica escolhida a alternativa (c), com três ajustes que resolvem as suas desvantagens: validação
-em dois momentos, hash fora do caminho crítico e S3 invisível para o cliente. Os bytes do vídeo
-passam só pelo nginx, que os encaminha em fluxo para o SeaweedFS. Nenhum serviço Node guarda o
-ficheiro em memória: o gateway e a `projects` só tratam pedidos JSON de poucos KB. Abrange os
+O documento de origem assinala a preferência pela alternativa (c), com três ajustes que resolvem as suas desvantagens: validação
+em dois momentos, hash fora do caminho crítico e S3 invisível para o cliente. No envio, os bytes do vídeo
+passariam pelo nginx para o SeaweedFS, retirando os serviços Node desse percurso. A
+`projects` continuaria a ler o objeto se o hash fosse calculado em segundo plano; essa
+leitura usa buffers e tem de entrar nas medições de CPU, rede e memória. Abrange os
 vídeos, onde está o problema medido. As imagens mantêm o caminho atual, com `limits.fileSize` no
 multer (ideia 8), e podem migrar para o mesmo fluxo mais tarde.
 
@@ -372,8 +456,10 @@ multer (ideia 8), e podem migrar para o mesmo fluxo mais tarde.
    JWT) com `{ name, size, type, duration, width, height }`. A duração e a resolução são lidas no
    browser por um elemento `<video preload="metadata">`, sem enviar o ficheiro.
 2. **Validação prévia.** A `projects` verifica perfil, quota diária e limites
-   (`VIDEO_FREE_*`, `VIDEO_PREMIUM_*`) sobre os valores declarados e recusa com as mesmas
-   respostas de hoje (400 por duração, tamanho ou tipo; 403 por quota). Se passar, cria o registo
+   (`VIDEO_FREE_*`, `VIDEO_PREMIUM_*`) sobre os valores declarados. A validação real continua no servidor. A pré-condição de
+   quota no upload exige uma decisão de preservação funcional: hoje a quota é debitada no
+   Apply, não no upload; não chamar «mesmas respostas de hoje» à recusa nova de um upload
+   só porque o saldo é zero. Se passar, cria o registo
    do media com `status: "pending"` e `expires_at`, fixa a chave definitiva no stage `src` e
    devolve um **token opaco** de uso único, válido por poucos minutos, com o endereço de envio
    (ex.: `/api-gateway/uploads/<token>`).
@@ -385,26 +471,31 @@ multer (ideia 8), e podem migrar para o mesmo fluxo mais tarde.
    pertence a esse utilizador. É uma verificação própria e simplificada (decisão D11 da
    ideia 1): não repete as regras de posse e partilha, porque essas já foram aplicadas no passo 2,
    quando o token foi emitido. A resposta traz num cabeçalho o caminho de `PUT` pré-assinado no
-   S3, com o tamanho fixado no valor declarado. O nginx encaminha o corpo para `seaweedfs:9000` em fluxo
-   (`proxy_request_buffering off`). O cliente nunca vê o bucket, a chave nem a assinatura.
+   S3, com a intenção de limitar o tamanho ao valor declarado (suporte a comprovar). O nginx encaminha o corpo para `seaweedfs:9000` em fluxo
+   (`proxy_request_buffering off`). O cliente não receberia o destino de escrita; os URLs de leitura atuais continuam a existir.
 5. **Confirmação e validação final.** O frontend faz
-   `POST /:user/:project/video/uploads/<token>/confirm`. A `projects` corre o `ffprobe` sobre um
-   URL interno de leitura (`getInternalUrl`). O `ffprobe` lê por *range requests* só o início do
-   ficheiro e o `moov`, mesmo que este esteja no fim, e não o vídeo inteiro. É esta a validação
+   `POST /:user/:project/video/uploads/<token>/confirm`. A `projects` correria o `ffprobe` sobre um
+   URL interno gerado pelo servidor (`getInternalUrl`). A leitura por HTTP pode usar seeks/
+   ranges se o servidor e o formato o permitirem; é uma hipótese medir menos bytes do que o
+   ficheiro, não uma garantia de ler apenas o início e o `moov` em todos os formatos. É esta a validação
    que manda, porque os valores do passo 1 podem ser falsos. Compara também o tamanho real
    (`HEAD`) com o declarado. Se falhar, apaga o objeto e o registo e responde 400 como hoje. Se
    passar, marca `status: "ready"` e responde ao utilizador.
 6. **Hash em segundo plano.** Depois de responder, a `projects` lê o objeto em fluxo, calcula o
-   SHA-256 e grava `og_sha256`. É o único passo que lê o ficheiro todo, mas deixa de contar para
-   o tempo de aceitação. O hash só serve de chave da cache de previews (`makePreviewCacheKey` em
-   `projects/utils/cacheKey.js`). Enquanto não existir, o preview gera-se sem cache.
+   SHA-256 e grava `og_sha256`. É uma leitura integral posterior à resposta; o
+   ffprobe pode também ler uma parte substancial, dependendo do ficheiro. O custo completo
+   tem de entrar na avaliação, mesmo fora do tempo até ready. No código inspecionado o hash participa na chave da cache de previews
+   (`makePreviewCacheKey` em `projects/utils/cacheKey.js`). Enquanto faltar, é necessário
+   contornar tanto a leitura como a escrita da cache, ou usar isolamento equivalente;
+   usar uma chave com hash vazio permite confundir media diferentes. A retoma/idempotência
+   do hash após reinício também tem de ser definida.
 7. **Limpeza.** Uma tarefa periódica na `projects` apaga os objetos e registos `pending` com
    `expires_at` ultrapassado: uploads abandonados ou interrompidos e clientes que declararam
    valores falsos e nunca confirmaram.
 
-*Validação em dois momentos.* A validação prévia apanha os erros honestos (vídeo longo demais,
-ficheiro grande demais, quota esgotada) antes de se enviar um único byte: o utilizador sabe em
-milissegundos, em vez de esperar pelo upload inteiro. A validação final, no servidor, continua a
+*Validação em dois momentos.* A validação prévia pode detetar os erros honestos de
+metadados antes de transferir o corpo; o prazo é uma meta a medir. O tratamento da quota
+no upload não está fechado, porque pode mudar uma condição funcional existente. A validação final, no servidor, continua a
 ser obrigatória e é a única em que se confia. Os objetos órfãos não desaparecem, mas passam a
 vir só de uploads interrompidos ou de clientes mal-intencionados, e o passo 7 remove-os.
 
@@ -424,8 +515,8 @@ podem passar mais tarde pelo mesmo esquema de token opaco.
 - `frontend/lib/projects.ts`: upload de vídeo em três passos (pedido com metadados lidos por
   `<video>`, `PUT` com progresso por `XMLHttpRequest.upload.onprogress`, confirmação).
 - `apiGateway/routes/projects.js`: rotas JSON de pedido e confirmação, sem multer; rota interna
-  para o `auth_request` (verifica o JWT e consulta a `projects`). A rota multipart
-  `POST /:user/:project/video` é retirada.
+  para o `auth_request` (verifica o JWT e consulta a `projects`). A retirada da rota multipart
+  `POST /:user/:project/video` precisa de decisão de compatibilidade/adaptação antes de código.
 - `projects/routes/projects.js`: rotas de pedido e confirmação; verificação simplificada do
   token; `addProjectMedia` deixa de receber vídeos; tarefa de limpeza.
 - `projects/models/project.js`: `og_sha256` deixa de ser `required`; novos campos `status`,
@@ -444,17 +535,20 @@ podem passar mais tarde pelo mesmo esquema de token opaco.
 
 *A confirmar antes de implementar:*
 
-- Se o SeaweedFS 4.47 respeita o `Content-Length` assinado num `PUT` pré-assinado. Se não, o
-  `HEAD` do passo 5 e o `client_max_body_size` cobrem o caso.
+- Se o SeaweedFS 4.47 respeita o tamanho assinado e como processa corpos chunked/interrompidos.
+  O `HEAD` deteta uma diferença **depois** de transferir os bytes; o limite global do nginx
+  não assegura o limite de cada perfil nem a declaração de cada upload. É preciso um
+  mecanismo de admissão/contagem por pedido para a proteção de recursos pretendida.
 - A assinatura v4 inclui o `Host`: o nginx tem de enviar a montante o host com que o URL foi
   assinado (`seaweedfs:9000`), e não o `$host` público.
 - O tempo do `ffprobe` por URL com o `moov` no fim (mais leituras por *range*) a 500 MiB.
 - Que um `PUT` interrompido a meio não deixa no SeaweedFS um objeto parcial visível.
 
 *Como se avalia:* com os mesmos instrumentos e cenários (`uploads.mjs`, `VmHWM`, 10/100/500 MiB).
-Esperado: pico de RSS adicional próximo de 0 nos três serviços Node, porque o gateway só vê JSON,
-e memória do nginx constante. O pós-envio passa a ser o `ffprobe` por *range* mais a escrita no
-MongoDB, independente do tamanho, previsivelmente < 1 s a 500 MiB (a medir). Guardas novas:
+Hipótese a testar: RSS adicional limitado nos serviços Node e no nginx, contando também
+o hash assíncrono, TLS e concorrência. O pós-envio tem de incluir a confirmação e validação
+final; não se demonstra independência do tamanho sem medir ranges, formatos e estágios.
+A meta <1 s a 500 MiB continua proposta, não resultado. Guardas novas:
 SHA-256 presente pouco depois da resposta e igual ao calculado hoje; mesmas respostas 400/403;
 nenhum objeto `pending` depois do prazo de limpeza; 3 uploads simultâneos de 500 MiB sem
 reinício de nenhum serviço.
@@ -467,12 +561,11 @@ porque a métrica (pico de RSS por serviço e tempo pós-envio) é objetiva e re
 mesmos ficheiros. Perde um ponto por o cenário medido ser de concorrência 1 e de conteúdo
 artificial (caixa `free`).
 
-**Nota: a solução proposta corrige também o incidente da ideia 7.** A queda medida na ideia 7
-foi provocada por um upload de 500 MiB que levou o gateway ao OOM. Com esta solução o gateway
-deixa de receber o ficheiro e só trata pedidos JSON de poucos KB. A sua memória deixa de crescer
-com o tamanho e o número de uploads, e esse gatilho desaparece. Pela mesma razão, o consumo de
-memória dos serviços Node passa a ser previsível, e o `mem_limit` pedido na ideia 7 pode ser
-fixado sem risco de matar um upload legítimo. Fica por resolver a parte de supervisão da 7: se
+**Relação com a ideia 7 — hipótese de reduzir o gatilho de OOM.** O ensaio sequencial
+registou OOM no gateway após um upload de 500 MiB. Retirar o corpo do gateway poderá
+eliminar esse tipo de buffer, mas pedidos simultâneos, TLS, hash e storage continuam a
+consumir recursos. Os budgets de memória e a disponibilidade precisam de medições completas;
+não se pode garantir ausência de OOM antes dos ensaios. Fica por resolver a supervisão: se
 o gateway cair por outro motivo (um bug, um `throw` num *callback*), o `nodemon` continua a
 impedir o reinício. Essa parte é barata (`node` em vez de `nodemon`, `healthcheck`) e pode entrar
 no mesmo trabalho, que assim cobre as duas ideias.
@@ -547,7 +640,8 @@ Ou seja: **1 trabalho aceite em 1 perdido** nesta janela, com débito de quota. 
 anterior que se mantém: `ack-order-2026-11-14.json` mostra o `ack` antes de o *callback*
 terminar; `live-recovery-2026-11-14.json` mostra que a morte do **worker de vídeo** a meio já é
 recuperada (1 resultado, 1 débito, 26,3 s) — é a única janela coberta hoje. *Cenário R2:*
-reinício do broker em repouso: os consumidores voltam em ≤ 5 s, mas porque `projects`,
+reinício do broker em repouso: os consumidores estavam presentes na primeira amostra
+5 s após o regresso da API de gestão (esta demorou 5609 ms), mas porque `projects`,
 `video_tool` e as ferramentas **crasham e são reiniciados** pelo Docker (4 de 5 contentores
 reiniciados; só o `ws_gateway` religa sozinho).
 
@@ -889,8 +983,8 @@ gateway. *Instrumento:* `uploads.mjs` + `docker inspect` + `curl` ao gateway.
 | Serviços com `healthcheck` | 5 de 32 |
 | Serviços com limite de memória | 0 de 32 |
 
-Em contraste, no reinício do broker (R2) os serviços sem `nodemon` voltaram em ≤ 5 s graças ao
-`restart: on-failure`.
+No R2 os consumidores estavam presentes na primeira amostra 5 s após o regresso
+da API de gestão; esse marcador não prova recuperação total em ≤5 s desde o início do reinício.
 
 *Mínimo aceitável:* após morte do processo de qualquer serviço Node (5 repetições de `kill -9`
 por serviço), o serviço volta a responder em ≤ 30 s sem intervenção, em 100% dos casos.
@@ -1272,7 +1366,7 @@ requisito pede intervalo entre atualizações ≤ 5 s (MVP) e ≤ 2 s (alvo).
 | Medida | Valor | Requisito |
 |--------|-------|-----------|
 | Intervalo máximo entre eventos de um vídeo **ativo** | < 0,6 s | ≤ 5 s — cumprido |
-| Primeiro evento do **último vídeo em fila** | 29,5–31,4 s após o envio | ≤ 5 s — **falha** |
+| Primeiro evento do **último vídeo em fila** | 29,5–31,4 s após o envio | Excede 5 s se o critério incluir fila; fechar essa interpretação antes da aceitação |
 | Eventos repetidos a uma ligação nova após o lote | 0 | — |
 | Recuo do progresso após reinício do worker | 3% → 1% | — |
 
@@ -1762,12 +1856,22 @@ Depois, na pasta `evidence/nfr-2026-11-16/`, gerar os ficheiros de teste com
 `free` até exatamente 10, 100 e 500 MiB) e correr, por esta ordem, `node uploads.mjs`,
 `node security.mjs`, `node verify.mjs`, `node reliability.mjs R0`, `R1`, `R2`, `R3` e
 `node churn.mjs`. O upload de 500 MiB acima do limite deixa o gateway em baixo: é preciso
-`docker restart picturas-nfr-api_gateway-1` antes de continuar. Para desfazer:
+`docker restart picturas-nfr-api_gateway-1` antes de continuar. Para parar apenas os serviços de ensaio, preservando os volumes:
 
 ```bash
-docker compose -p picturas-nfr down -v
+docker compose -p picturas-nfr -f docker-compose.yaml -f memory-bank/intents/001-phase-2-quality-improvements/evidence/nfr-2026-11-16/override.yaml stop
 ```
 
 **Assistência de IA.** Auditoria do código, scripts de medição, execução e redação feitas por
 Claude a pedido do Miguel. As medições são reais e os resultados brutos estão na pasta de
 evidência; as notas e os valores mínimo/alvo são propostas para a equipa validar, não decisões.
+
+
+## Justificação das decisões e preparação da defesa
+
+A [secção final das ideias 1 e 2](../../../docs/fase2-ideias-1-e-2.md#justificação-das-decisões)
+é a versão canónica: cada escolha indica motivo, alternativa, custo, risco residual e
+métricas de prova. Inclui também as decisões em aberto, sem as resolver por omissão.
+O [plano de avaliação](../../../docs/fase2-metricas-e-baseline.md) distingue piloto,
+baseline formal, métrica principal, guarda e diagnóstico. Para defender A em vez de B,
+usar esses argumentos e resultados observados, não as notas qualitativas da AI.

@@ -3,6 +3,10 @@
 These artifacts support the six-direction investigation. They are preliminary
 observations, not approved requirement baselines or team decisions. Source context
 and detailed protocols are in the [investigation plan](../investigation-plan.md).
+The November 16 supplied experiments and their methodological review are indexed
+in [nfr-2026-11-16/README.md](nfr-2026-11-16/README.md). Current metric definitions,
+proposed minimums/targets and explicit missing values are in the
+[measurement specification](../../../../docs/fase2-metricas-e-baseline.md).
 Read the [live findings and decision brief](../live-findings.md) for the subsequent
 application-level experiments and their explicit limits.
 

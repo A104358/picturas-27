@@ -3,10 +3,14 @@ intent: 001-phase-2-quality-improvements
 phase: inception
 status: draft
 created: 2026-11-14T18:06:50Z
-updated: 2026-11-14T18:06:50Z
+updated: 2026-11-16T15:51:14Z
 ---
 
 # Live Exploration Findings and Decision Brief
+
+**Historical findings:** The user later corrected delivery to **27 November
+2026**. The 20 November date below belongs to the original experiment context;
+use the corrected date for current planning. Measurements are unchanged.
 
 ## Scope and Reproducibility
 
@@ -227,13 +231,19 @@ Their absence from this provisional discussion list does not exclude them or any
 other well-founded pair. A narrow port-only change or a topology-only change must
 not be presented as a demonstrated improvement of an unmeasured quality attribute.
 
-Next, all four members review this evidence, available effort and stakeholder
+The next step identified on November 14 was for all four members to review this evidence, available effort and stakeholder
 priorities. Record actual agreement in the
-[existing decision record](quality-exploration.md#decision-record--pending), then
+[existing decision record](quality-exploration.md#decision-record--pair-agreement), then
 specify two distinct quantitative RNFs with target/minimum origins. Reuse these
 initial measurements only if the selected protocols and conditions match; otherwise
 measure the unchanged application again before refactoring. No team approval or
 construction authorization has been inferred.
+
+**Later selection update, 2026-11-16T15:12:33Z:** The user explicitly requested
+recording the pair agreement: QC-06 security/end-to-end authorization + QC-05
+performance efficiency/upload resource utilization. The linked canonical record
+states the source and limits. This updates the selection state only; it does not
+change these November 14 observations, approve remaining targets or authorize code.
 
 Codex and the invoked Inception skill prepared and executed the scripts and this
 analysis. Automated source/data checks are recorded; human review and participant

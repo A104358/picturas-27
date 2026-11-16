@@ -1,0 +1,14 @@
+{
+ "recorded_at": "2026-11-16T00:46:37.770Z",
+ "experiments": [
+  {
+   "id": "R0",
+   "what": "valid image + brightness (control)",
+   "apply_status": 201,
+   "events": [
+    "process-update@229ms"
+   ],
+   "pending_process_docs": 0
+  }
+ ]
+}

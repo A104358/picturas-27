@@ -1,0 +1,20 @@
+{
+ "recorded_at": "2026-11-16T00:47:03.036Z",
+ "experiments": [
+  {
+   "id": "R1",
+   "what": "image + border with invalid borderWidth; observed 30 s",
+   "add_tool_status": 201,
+   "apply_status": 201,
+   "client_events_in_30s": [],
+   "border_tool_restarts": 1,
+   "border_tool_restarted": true,
+   "pending_process_docs_delta": 1,
+   "border_queue": {
+    "consumers": 1,
+    "messages": 0
+   },
+   "tool_log_tail": ""
+  }
+ ]
+}

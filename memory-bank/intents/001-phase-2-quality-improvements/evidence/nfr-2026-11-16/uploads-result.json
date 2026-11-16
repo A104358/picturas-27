@@ -1,0 +1,808 @@
+{
+ "recorded_at": "2026-11-16T00:42:54.980Z",
+ "runs": [
+  {
+   "label": "free-10MiB-#1",
+   "status": 204,
+   "headers": {
+    "server": "nginx/1.31.6",
+    "date": "Mon, 16 Nov 2026 00:42:57 GMT",
+    "connection": "close",
+    "x-powered-by": "Express",
+    "access-control-allow-origin": "*, *",
+    "x-project-version": "1",
+    "etag": "W/\"a-bAsFyilMr4Ra1hIU5PyoyFRunpI\"",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+    "access-control-allow-headers": "Origin, Content-Type, Accept, Authorization, X-Project-Version, X-Caller-Id",
+    "access-control-expose-headers": "X-Project-Version"
+   },
+   "body": "",
+   "bytes": 10485760,
+   "total_ms": 1523.3,
+   "send_ms": 75.8,
+   "post_send_ms": 1447.4,
+   "mem": {
+    "api_gateway": {
+     "pre_rss_mib": 81.1,
+     "peak_rss_mib": 122.2,
+     "delta_mib": 41.1,
+     "post_rss_mib": 102.3,
+     "restarted": false,
+     "oom_killed": "false"
+    },
+    "projects": {
+     "pre_rss_mib": 100.3,
+     "peak_rss_mib": 126,
+     "delta_mib": 25.7,
+     "post_rss_mib": 126,
+     "restarted": false,
+     "oom_killed": "false"
+    },
+    "img_storage": {
+     "pre_rss_mib": 77.7,
+     "peak_rss_mib": 100.6,
+     "delta_mib": 22.9,
+     "post_rss_mib": 100.6,
+     "restarted": false,
+     "oom_killed": "false"
+    }
+   }
+  },
+  {
+   "label": "free-10MiB-#2",
+   "status": 204,
+   "headers": {
+    "server": "nginx/1.31.6",
+    "date": "Mon, 16 Nov 2026 00:43:00 GMT",
+    "connection": "close",
+    "x-powered-by": "Express",
+    "access-control-allow-origin": "*, *",
+    "x-project-version": "2",
+    "etag": "W/\"a-bAsFyilMr4Ra1hIU5PyoyFRunpI\"",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+    "access-control-allow-headers": "Origin, Content-Type, Accept, Authorization, X-Project-Version, X-Caller-Id",
+    "access-control-expose-headers": "X-Project-Version"
+   },
+   "body": "",
+   "bytes": 10485760,
+   "total_ms": 261.6,
+   "send_ms": 78.5,
+   "post_send_ms": 183.1,
+   "mem": {
+    "api_gateway": {
+     "pre_rss_mib": 102.3,
+     "peak_rss_mib": 123,
+     "delta_mib": 20.7,
+     "post_rss_mib": 103.2,
+     "restarted": false,
+     "oom_killed": "false"
+    },
+    "projects": {
+     "pre_rss_mib": 126.7,
+     "peak_rss_mib": 147.5,
+     "delta_mib": 20.8,
+     "post_rss_mib": 137.7,
+     "restarted": false,
+     "oom_killed": "false"
+    },
+    "img_storage": {
+     "pre_rss_mib": 100.6,
+     "peak_rss_mib": 121.3,
+     "delta_mib": 20.7,
+     "post_rss_mib": 111.4,
+     "restarted": false,
+     "oom_killed": "false"
+    }
+   }
+  },
+  {
+   "label": "free-10MiB-#3",
+   "status": 204,
+   "headers": {
+    "server": "nginx/1.31.6",
+    "date": "Mon, 16 Nov 2026 00:43:04 GMT",
+    "connection": "close",
+    "x-powered-by": "Express",
+    "access-control-allow-origin": "*, *",
+    "x-project-version": "3",
+    "etag": "W/\"a-bAsFyilMr4Ra1hIU5PyoyFRunpI\"",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+    "access-control-allow-headers": "Origin, Content-Type, Accept, Authorization, X-Project-Version, X-Caller-Id",
+    "access-control-expose-headers": "X-Project-Version"
+   },
+   "body": "",
+   "bytes": 10485760,
+   "total_ms": 266.6,
+   "send_ms": 73.8,
+   "post_send_ms": 192.9,
+   "mem": {
+    "api_gateway": {
+     "pre_rss_mib": 103.4,
+     "peak_rss_mib": 134.2,
+     "delta_mib": 30.8,
+     "post_rss_mib": 113.9,
+     "restarted": false,
+     "oom_killed": "false"
+    },
+    "projects": {
+     "pre_rss_mib": 137.7,
+     "peak_rss_mib": 148.2,
+     "delta_mib": 10.5,
+     "post_rss_mib": 138.3,
+     "restarted": false,
+     "oom_killed": "false"
+    },
+    "img_storage": {
+     "pre_rss_mib": 111.4,
+     "peak_rss_mib": 127.9,
+     "delta_mib": 16.5,
+     "post_rss_mib": 118,
+     "restarted": false,
+     "oom_killed": "false"
+    }
+   }
+  },
+  {
+   "label": "free-100MiB-#1",
+   "status": 204,
+   "headers": {
+    "server": "nginx/1.31.6",
+    "date": "Mon, 16 Nov 2026 00:43:09 GMT",
+    "connection": "close",
+    "x-powered-by": "Express",
+    "access-control-allow-origin": "*, *",
+    "x-project-version": "1",
+    "etag": "W/\"a-bAsFyilMr4Ra1hIU5PyoyFRunpI\"",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+    "access-control-allow-headers": "Origin, Content-Type, Accept, Authorization, X-Project-Version, X-Caller-Id",
+    "access-control-expose-headers": "X-Project-Version"
+   },
+   "body": "",
+   "bytes": 104857600,
+   "total_ms": 1687.7,
+   "send_ms": 696.1,
+   "post_send_ms": 991.6,
+   "mem": {
+    "api_gateway": {
+     "pre_rss_mib": 114,
+     "peak_rss_mib": 480.3,
+     "delta_mib": 366.3,
+     "post_rss_mib": 211.9,
+     "restarted": false,
+     "oom_killed": "false"
+    },
+    "projects": {
+     "pre_rss_mib": 138.3,
+     "peak_rss_mib": 309.9,
+     "delta_mib": 171.6,
+     "post_rss_mib": 309.9,
+     "restarted": false,
+     "oom_killed": "false"
+    },
+    "img_storage": {
+     "pre_rss_mib": 118,
+     "peak_rss_mib": 281,
+     "delta_mib": 163,
+     "post_rss_mib": 281,
+     "restarted": false,
+     "oom_killed": "false"
+    }
+   }
+  },
+  {
+   "label": "free-100MiB-#2",
+   "status": 204,
+   "headers": {
+    "server": "nginx/1.31.6",
+    "date": "Mon, 16 Nov 2026 00:43:14 GMT",
+    "connection": "close",
+    "x-powered-by": "Express",
+    "access-control-allow-origin": "*, *",
+    "x-project-version": "2",
+    "etag": "W/\"a-bAsFyilMr4Ra1hIU5PyoyFRunpI\"",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+    "access-control-allow-headers": "Origin, Content-Type, Accept, Authorization, X-Project-Version, X-Caller-Id",
+    "access-control-expose-headers": "X-Project-Version"
+   },
+   "body": "",
+   "bytes": 104857600,
+   "total_ms": 1385.8,
+   "send_ms": 694,
+   "post_send_ms": 691.8,
+   "mem": {
+    "api_gateway": {
+     "pre_rss_mib": 211.9,
+     "peak_rss_mib": 481.1,
+     "delta_mib": 269.2,
+     "post_rss_mib": 281.2,
+     "restarted": false,
+     "oom_killed": "false"
+    },
+    "projects": {
+     "pre_rss_mib": 310.6,
+     "peak_rss_mib": 332.8,
+     "delta_mib": 22.2,
+     "post_rss_mib": 332.8,
+     "restarted": false,
+     "oom_killed": "false"
+    },
+    "img_storage": {
+     "pre_rss_mib": 281,
+     "peak_rss_mib": 305,
+     "delta_mib": 24,
+     "post_rss_mib": 305,
+     "restarted": false,
+     "oom_killed": "false"
+    }
+   }
+  },
+  {
+   "label": "free-100MiB-#3",
+   "status": 204,
+   "headers": {
+    "server": "nginx/1.31.6",
+    "date": "Mon, 16 Nov 2026 00:43:18 GMT",
+    "connection": "close",
+    "x-powered-by": "Express",
+    "access-control-allow-origin": "*, *",
+    "x-project-version": "3",
+    "etag": "W/\"a-bAsFyilMr4Ra1hIU5PyoyFRunpI\"",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+    "access-control-allow-headers": "Origin, Content-Type, Accept, Authorization, X-Project-Version, X-Caller-Id",
+    "access-control-expose-headers": "X-Project-Version"
+   },
+   "body": "",
+   "bytes": 104857600,
+   "total_ms": 1354.8,
+   "send_ms": 690.2,
+   "post_send_ms": 664.6,
+   "mem": {
+    "api_gateway": {
+     "pre_rss_mib": 281.2,
+     "peak_rss_mib": 483.2,
+     "delta_mib": 202,
+     "post_rss_mib": 283.1,
+     "restarted": false,
+     "oom_killed": "false"
+    },
+    "projects": {
+     "pre_rss_mib": 332.9,
+     "peak_rss_mib": 345.8,
+     "delta_mib": 12.9,
+     "post_rss_mib": 345.8,
+     "restarted": false,
+     "oom_killed": "false"
+    },
+    "img_storage": {
+     "pre_rss_mib": 305,
+     "peak_rss_mib": 305.1,
+     "delta_mib": 0.1,
+     "post_rss_mib": 283.2,
+     "restarted": false,
+     "oom_killed": "false"
+    }
+   }
+  },
+  {
+   "label": "premium-10MiB-#1",
+   "status": 204,
+   "headers": {
+    "server": "nginx/1.31.6",
+    "date": "Mon, 16 Nov 2026 00:43:22 GMT",
+    "connection": "close",
+    "x-powered-by": "Express",
+    "access-control-allow-origin": "*, *",
+    "x-project-version": "1",
+    "etag": "W/\"a-bAsFyilMr4Ra1hIU5PyoyFRunpI\"",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+    "access-control-allow-headers": "Origin, Content-Type, Accept, Authorization, X-Project-Version, X-Caller-Id",
+    "access-control-expose-headers": "X-Project-Version"
+   },
+   "body": "",
+   "bytes": 10485760,
+   "total_ms": 234.9,
+   "send_ms": 80.3,
+   "post_send_ms": 154.7,
+   "mem": {
+    "api_gateway": {
+     "pre_rss_mib": 283.1,
+     "peak_rss_mib": 283.6,
+     "delta_mib": 0.5,
+     "post_rss_mib": 183.7,
+     "restarted": false,
+     "oom_killed": "false"
+    },
+    "projects": {
+     "pre_rss_mib": 345.9,
+     "peak_rss_mib": 355.9,
+     "delta_mib": 10,
+     "post_rss_mib": 255.9,
+     "restarted": false,
+     "oom_killed": "false"
+    },
+    "img_storage": {
+     "pre_rss_mib": 283.2,
+     "peak_rss_mib": 303.3,
+     "delta_mib": 20.1,
+     "post_rss_mib": 203.2,
+     "restarted": false,
+     "oom_killed": "false"
+    }
+   }
+  },
+  {
+   "label": "premium-10MiB-#2",
+   "status": 204,
+   "headers": {
+    "server": "nginx/1.31.6",
+    "date": "Mon, 16 Nov 2026 00:43:25 GMT",
+    "connection": "close",
+    "x-powered-by": "Express",
+    "access-control-allow-origin": "*, *",
+    "x-project-version": "2",
+    "etag": "W/\"a-bAsFyilMr4Ra1hIU5PyoyFRunpI\"",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+    "access-control-allow-headers": "Origin, Content-Type, Accept, Authorization, X-Project-Version, X-Caller-Id",
+    "access-control-expose-headers": "X-Project-Version"
+   },
+   "body": "",
+   "bytes": 10485760,
+   "total_ms": 237.9,
+   "send_ms": 76.1,
+   "post_send_ms": 161.8,
+   "mem": {
+    "api_gateway": {
+     "pre_rss_mib": 183.7,
+     "peak_rss_mib": 183.7,
+     "delta_mib": 0,
+     "post_rss_mib": 183.7,
+     "restarted": false,
+     "oom_killed": "false"
+    },
+    "projects": {
+     "pre_rss_mib": 255.9,
+     "peak_rss_mib": 256.1,
+     "delta_mib": 0.2,
+     "post_rss_mib": 255.9,
+     "restarted": false,
+     "oom_killed": "false"
+    },
+    "img_storage": {
+     "pre_rss_mib": 203.2,
+     "peak_rss_mib": 203.2,
+     "delta_mib": 0,
+     "post_rss_mib": 203.2,
+     "restarted": false,
+     "oom_killed": "false"
+    }
+   }
+  },
+  {
+   "label": "premium-10MiB-#3",
+   "status": 204,
+   "headers": {
+    "server": "nginx/1.31.6",
+    "date": "Mon, 16 Nov 2026 00:43:29 GMT",
+    "connection": "close",
+    "x-powered-by": "Express",
+    "access-control-allow-origin": "*, *",
+    "x-project-version": "3",
+    "etag": "W/\"a-bAsFyilMr4Ra1hIU5PyoyFRunpI\"",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+    "access-control-allow-headers": "Origin, Content-Type, Accept, Authorization, X-Project-Version, X-Caller-Id",
+    "access-control-expose-headers": "X-Project-Version"
+   },
+   "body": "",
+   "bytes": 10485760,
+   "total_ms": 238.2,
+   "send_ms": 77.5,
+   "post_send_ms": 160.7,
+   "mem": {
+    "api_gateway": {
+     "pre_rss_mib": 183.7,
+     "peak_rss_mib": 183.8,
+     "delta_mib": 0.1,
+     "post_rss_mib": 183.8,
+     "restarted": false,
+     "oom_killed": "false"
+    },
+    "projects": {
+     "pre_rss_mib": 255.9,
+     "peak_rss_mib": 256.2,
+     "delta_mib": 0.3,
+     "post_rss_mib": 256.2,
+     "restarted": false,
+     "oom_killed": "false"
+    },
+    "img_storage": {
+     "pre_rss_mib": 203.2,
+     "peak_rss_mib": 203.2,
+     "delta_mib": 0,
+     "post_rss_mib": 183.4,
+     "restarted": false,
+     "oom_killed": "false"
+    }
+   }
+  },
+  {
+   "label": "premium-100MiB-#1",
+   "status": 204,
+   "headers": {
+    "server": "nginx/1.31.6",
+    "date": "Mon, 16 Nov 2026 00:43:34 GMT",
+    "connection": "close",
+    "x-powered-by": "Express",
+    "access-control-allow-origin": "*, *",
+    "x-project-version": "1",
+    "etag": "W/\"a-bAsFyilMr4Ra1hIU5PyoyFRunpI\"",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+    "access-control-allow-headers": "Origin, Content-Type, Accept, Authorization, X-Project-Version, X-Caller-Id",
+    "access-control-expose-headers": "X-Project-Version"
+   },
+   "body": "",
+   "bytes": 104857600,
+   "total_ms": 1794.3,
+   "send_ms": 734.3,
+   "post_send_ms": 1060,
+   "mem": {
+    "api_gateway": {
+     "pre_rss_mib": 183.8,
+     "peak_rss_mib": 482.6,
+     "delta_mib": 298.8,
+     "post_rss_mib": 282.5,
+     "restarted": false,
+     "oom_killed": "false"
+    },
+    "projects": {
+     "pre_rss_mib": 256.2,
+     "peak_rss_mib": 354.2,
+     "delta_mib": 98,
+     "post_rss_mib": 354.2,
+     "restarted": false,
+     "oom_killed": "false"
+    },
+    "img_storage": {
+     "pre_rss_mib": 181.8,
+     "peak_rss_mib": 282.2,
+     "delta_mib": 100.4,
+     "post_rss_mib": 282.2,
+     "restarted": false,
+     "oom_killed": "false"
+    }
+   }
+  },
+  {
+   "label": "premium-100MiB-#2",
+   "status": 204,
+   "headers": {
+    "server": "nginx/1.31.6",
+    "date": "Mon, 16 Nov 2026 00:43:39 GMT",
+    "connection": "close",
+    "x-powered-by": "Express",
+    "access-control-allow-origin": "*, *",
+    "x-project-version": "2",
+    "etag": "W/\"a-bAsFyilMr4Ra1hIU5PyoyFRunpI\"",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+    "access-control-allow-headers": "Origin, Content-Type, Accept, Authorization, X-Project-Version, X-Caller-Id",
+    "access-control-expose-headers": "X-Project-Version"
+   },
+   "body": "",
+   "bytes": 104857600,
+   "total_ms": 2107.8,
+   "send_ms": 788.1,
+   "post_send_ms": 1319.8,
+   "mem": {
+    "api_gateway": {
+     "pre_rss_mib": 282.5,
+     "peak_rss_mib": 482.8,
+     "delta_mib": 200.3,
+     "post_rss_mib": 282.6,
+     "restarted": false,
+     "oom_killed": "false"
+    },
+    "projects": {
+     "pre_rss_mib": 354.8,
+     "peak_rss_mib": 355.4,
+     "delta_mib": 0.6,
+     "post_rss_mib": 355.4,
+     "restarted": false,
+     "oom_killed": "false"
+    },
+    "img_storage": {
+     "pre_rss_mib": 282.2,
+     "peak_rss_mib": 328.9,
+     "delta_mib": 46.7,
+     "post_rss_mib": 328.9,
+     "restarted": false,
+     "oom_killed": "false"
+    }
+   }
+  },
+  {
+   "label": "premium-500MiB-#1",
+   "status": 204,
+   "headers": {
+    "server": "nginx/1.31.6",
+    "date": "Mon, 16 Nov 2026 00:43:53 GMT",
+    "connection": "close",
+    "x-powered-by": "Express",
+    "access-control-allow-origin": "*, *",
+    "x-project-version": "1",
+    "etag": "W/\"a-bAsFyilMr4Ra1hIU5PyoyFRunpI\"",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+    "access-control-allow-headers": "Origin, Content-Type, Accept, Authorization, X-Project-Version, X-Caller-Id",
+    "access-control-expose-headers": "X-Project-Version"
+   },
+   "body": "",
+   "bytes": 524288000,
+   "total_ms": 10525.4,
+   "send_ms": 3602.3,
+   "post_send_ms": 6923.1,
+   "mem": {
+    "api_gateway": {
+     "pre_rss_mib": 282.1,
+     "peak_rss_mib": 2049.6,
+     "delta_mib": 1767.5,
+     "post_rss_mib": 797.3,
+     "restarted": false,
+     "oom_killed": "false"
+    },
+    "projects": {
+     "pre_rss_mib": 355.4,
+     "peak_rss_mib": 1114.2,
+     "delta_mib": 758.8,
+     "post_rss_mib": 1078.5,
+     "restarted": false,
+     "oom_killed": "false"
+    },
+    "img_storage": {
+     "pre_rss_mib": 328.9,
+     "peak_rss_mib": 1058,
+     "delta_mib": 729.1,
+     "post_rss_mib": 1054.8,
+     "restarted": false,
+     "oom_killed": "false"
+    }
+   }
+  },
+  {
+   "label": "premium-500MiB-#2",
+   "status": 204,
+   "headers": {
+    "server": "nginx/1.31.6",
+    "date": "Mon, 16 Nov 2026 00:44:07 GMT",
+    "connection": "close",
+    "x-powered-by": "Express",
+    "access-control-allow-origin": "*, *",
+    "x-project-version": "2",
+    "etag": "W/\"a-bAsFyilMr4Ra1hIU5PyoyFRunpI\"",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+    "access-control-allow-headers": "Origin, Content-Type, Accept, Authorization, X-Project-Version, X-Caller-Id",
+    "access-control-expose-headers": "X-Project-Version"
+   },
+   "body": "",
+   "bytes": 524288000,
+   "total_ms": 10249.6,
+   "send_ms": 3545.5,
+   "post_send_ms": 6704,
+   "mem": {
+    "api_gateway": {
+     "pre_rss_mib": 798.6,
+     "peak_rss_mib": 2041.1,
+     "delta_mib": 1242.5,
+     "post_rss_mib": 1039.9,
+     "restarted": false,
+     "oom_killed": "false"
+    },
+    "projects": {
+     "pre_rss_mib": 1079.6,
+     "peak_rss_mib": 1093.9,
+     "delta_mib": 14.3,
+     "post_rss_mib": 1092,
+     "restarted": false,
+     "oom_killed": "false"
+    },
+    "img_storage": {
+     "pre_rss_mib": 1054.9,
+     "peak_rss_mib": 1073.7,
+     "delta_mib": 18.8,
+     "post_rss_mib": 1071,
+     "restarted": false,
+     "oom_killed": "false"
+    }
+   }
+  },
+  {
+   "label": "premium-500MiB-#3",
+   "status": 204,
+   "headers": {
+    "server": "nginx/1.31.6",
+    "date": "Mon, 16 Nov 2026 00:44:21 GMT",
+    "connection": "close",
+    "x-powered-by": "Express",
+    "access-control-allow-origin": "*, *",
+    "x-project-version": "3",
+    "etag": "W/\"a-bAsFyilMr4Ra1hIU5PyoyFRunpI\"",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+    "access-control-allow-headers": "Origin, Content-Type, Accept, Authorization, X-Project-Version, X-Caller-Id",
+    "access-control-expose-headers": "X-Project-Version"
+   },
+   "body": "",
+   "bytes": 524288000,
+   "total_ms": 11564.2,
+   "send_ms": 3587.6,
+   "post_send_ms": 7976.6,
+   "mem": {
+    "api_gateway": {
+     "pre_rss_mib": 1039.9,
+     "peak_rss_mib": 2041.1,
+     "delta_mib": 1001.2,
+     "post_rss_mib": 1040,
+     "restarted": false,
+     "oom_killed": "false"
+    },
+    "projects": {
+     "pre_rss_mib": 1092.9,
+     "peak_rss_mib": 1092.9,
+     "delta_mib": 0,
+     "post_rss_mib": 1092.3,
+     "restarted": false,
+     "oom_killed": "false"
+    },
+    "img_storage": {
+     "pre_rss_mib": 1071.2,
+     "peak_rss_mib": 1072.1,
+     "delta_mib": 0.9,
+     "post_rss_mib": 1070.4,
+     "restarted": false,
+     "oom_killed": "false"
+    }
+   }
+  },
+  {
+   "label": "no-token-100MiB",
+   "status": 401,
+   "headers": {
+    "server": "nginx/1.31.6",
+    "date": "Mon, 16 Nov 2026 00:44:26 GMT",
+    "content-type": "application/json; charset=utf-8",
+    "content-length": "28",
+    "connection": "close",
+    "x-powered-by": "Express",
+    "access-control-allow-origin": "*, *",
+    "x-content-type-options": "nosniff",
+    "etag": "W/\"1c-fB8FO7eqD9sBGj2q/3UF0Oo/Xq4\"",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+    "access-control-allow-headers": "Origin, Content-Type, Accept, Authorization, X-Project-Version, X-Caller-Id",
+    "access-control-expose-headers": "X-Project-Version"
+   },
+   "body": "\"Please provide a JWT token\"",
+   "bytes": 104857600,
+   "total_ms": 978.3,
+   "send_ms": 816.1,
+   "post_send_ms": 162.3,
+   "mem": {
+    "api_gateway": {
+     "pre_rss_mib": 1039.9,
+     "peak_rss_mib": 1041.9,
+     "delta_mib": 2,
+     "post_rss_mib": 544.2,
+     "restarted": false,
+     "oom_killed": "false"
+    },
+    "projects": {
+     "pre_rss_mib": 1092.3,
+     "peak_rss_mib": 1092.3,
+     "delta_mib": 0,
+     "post_rss_mib": 1092.3,
+     "restarted": false,
+     "oom_killed": "false"
+    },
+    "img_storage": {
+     "pre_rss_mib": 1070.4,
+     "peak_rss_mib": 1070.4,
+     "delta_mib": 0,
+     "post_rss_mib": 1070.4,
+     "restarted": false,
+     "oom_killed": "false"
+    }
+   }
+  },
+  {
+   "label": "no-token-500MiB",
+   "status": 401,
+   "headers": {
+    "server": "nginx/1.31.6",
+    "date": "Mon, 16 Nov 2026 00:44:37 GMT",
+    "content-type": "application/json; charset=utf-8",
+    "content-length": "28",
+    "connection": "close",
+    "x-powered-by": "Express",
+    "access-control-allow-origin": "*, *",
+    "x-content-type-options": "nosniff",
+    "etag": "W/\"1c-fB8FO7eqD9sBGj2q/3UF0Oo/Xq4\"",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+    "access-control-allow-headers": "Origin, Content-Type, Accept, Authorization, X-Project-Version, X-Caller-Id",
+    "access-control-expose-headers": "X-Project-Version"
+   },
+   "body": "\"Please provide a JWT token\"",
+   "bytes": 524288000,
+   "total_ms": 4283.9,
+   "send_ms": 3578.7,
+   "post_send_ms": 705.1,
+   "mem": {
+    "api_gateway": {
+     "pre_rss_mib": 544.3,
+     "peak_rss_mib": 1044.4,
+     "delta_mib": 500.1,
+     "post_rss_mib": 1044.4,
+     "restarted": false,
+     "oom_killed": "false"
+    },
+    "projects": {
+     "pre_rss_mib": 1092.4,
+     "peak_rss_mib": 1092.4,
+     "delta_mib": 0,
+     "post_rss_mib": 1092.4,
+     "restarted": false,
+     "oom_killed": "false"
+    },
+    "img_storage": {
+     "pre_rss_mib": 1070.4,
+     "peak_rss_mib": 1070.4,
+     "delta_mib": 0,
+     "post_rss_mib": 1070.4,
+     "restarted": false,
+     "oom_killed": "false"
+    }
+   }
+  },
+  {
+   "label": "free-500MiB-over-limit",
+   "status": 502,
+   "headers": {
+    "server": "nginx/1.31.6",
+    "date": "Mon, 16 Nov 2026 00:44:48 GMT",
+    "content-type": "text/html",
+    "transfer-encoding": "chunked",
+    "connection": "close",
+    "access-control-allow-origin": "*",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+    "access-control-allow-headers": "Origin, Content-Type, Accept, Authorization, X-Project-Version, X-Caller-Id",
+    "access-control-expose-headers": "X-Project-Version"
+   },
+   "body": "<html>\r\n<head><title>502 Bad Gateway</title></head>\r\n<body>\r\n<center><h1>502 Bad Gateway</h1></center>\r\n<hr><center>nginx/1.31.6</center>\r\n</body>\r\n</html>\r\n",
+   "bytes": 524288000,
+   "total_ms": 4779.2,
+   "send_ms": 3728.4,
+   "post_send_ms": 1050.8,
+   "mem": {
+    "api_gateway": {
+     "pre_rss_mib": 1044.9,
+     "process_died": true,
+     "restarted": false,
+     "oom_killed": "true"
+    },
+    "projects": {
+     "pre_rss_mib": 1093.6,
+     "peak_rss_mib": 1093.6,
+     "delta_mib": 0,
+     "post_rss_mib": 1091.4,
+     "restarted": false,
+     "oom_killed": "false"
+    },
+    "img_storage": {
+     "pre_rss_mib": 1070.4,
+     "peak_rss_mib": 1070.4,
+     "delta_mib": 0,
+     "post_rss_mib": 1069.3,
+     "restarted": false,
+     "oom_killed": "false"
+    }
+   }
+  }
+ ],
+ "notes": [
+  "registered profile via public API: requested premium, got premium"
+ ]
+}

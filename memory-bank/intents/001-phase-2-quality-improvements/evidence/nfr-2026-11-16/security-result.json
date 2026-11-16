@@ -1,0 +1,194 @@
+{
+ "recorded_at": "2026-11-16T00:45:33.361Z",
+ "summary": {
+  "negative_cases": 22,
+  "admitted": 17,
+  "not_measured": 0
+ },
+ "cases": [
+  {
+   "id": "C00",
+   "surface": "gateway",
+   "description": "Owner reads own project (positive control)",
+   "expected": "permit",
+   "observed": "HTTP 200, upload HTTP 204, media=1",
+   "unauthorized_admitted": false
+  },
+  {
+   "id": "G01",
+   "surface": "gateway",
+   "description": "Other user's JWT reads owner's project (path user = owner)",
+   "expected": "reject",
+   "observed": "HTTP 401",
+   "unauthorized_admitted": false
+  },
+  {
+   "id": "G02",
+   "surface": "gateway",
+   "description": "Outsider JWT + ?owner=<victim> on GET project",
+   "expected": "reject",
+   "observed": "HTTP 200, returned project of user ?",
+   "unauthorized_admitted": false
+  },
+  {
+   "id": "G03",
+   "surface": "gateway",
+   "description": "Outsider JWT + ?owner=<victim> adds a tool to the owner's pipeline",
+   "expected": "reject",
+   "observed": "HTTP 201; owner's tools 1, version 1->2",
+   "unauthorized_admitted": true
+  },
+  {
+   "id": "G04",
+   "surface": "gateway",
+   "description": "Outsider JWT + ?owner=<victim> uploads media into the owner's project",
+   "expected": "reject",
+   "observed": "HTTP 204; owner's media 2",
+   "unauthorized_admitted": true
+  },
+  {
+   "id": "G05",
+   "surface": "gateway",
+   "description": "No token reads another user's profile",
+   "expected": "reject",
+   "observed": "HTTP 200; fields=_id,name,type,operations,__v,email,id,remaining_operations",
+   "unauthorized_admitted": true
+  },
+  {
+   "id": "G06",
+   "surface": "gateway",
+   "description": "Public registration with type=premium (no payment)",
+   "expected": "reject or downgrade to free",
+   "observed": "HTTP 201; stored profile=premium",
+   "unauthorized_admitted": true
+  },
+  {
+   "id": "G07",
+   "surface": "gateway",
+   "description": "Free user sets own profile to premium through profile update",
+   "expected": "reject",
+   "observed": "HTTP 204; profile now=premium",
+   "unauthorized_admitted": true
+  },
+  {
+   "id": "G08",
+   "surface": "gateway",
+   "description": "No token queries another user's subscription status",
+   "expected": "reject (401)",
+   "observed": "HTTP 500",
+   "unauthorized_admitted": false
+  },
+  {
+   "id": "G09",
+   "surface": "gateway",
+   "description": "No token calls cancel on another user's subscription",
+   "expected": "reject (401)",
+   "observed": "HTTP 500 (no auth check ran; 4xx/5xx here comes from the missing subscription)",
+   "unauthorized_admitted": true
+  },
+  {
+   "id": "D01",
+   "surface": "projects:9001",
+   "description": "No identity reads project",
+   "expected": "reject",
+   "observed": "HTTP 401",
+   "unauthorized_admitted": false
+  },
+  {
+   "id": "D02",
+   "surface": "projects:9001",
+   "description": "Forged X-Caller-Id header, no token",
+   "expected": "reject",
+   "observed": "HTTP 200",
+   "unauthorized_admitted": true
+  },
+  {
+   "id": "D03",
+   "surface": "projects:9001",
+   "description": "Outsider's JWT (decoded, never verified)",
+   "expected": "reject",
+   "observed": "HTTP 200",
+   "unauthorized_admitted": true
+  },
+  {
+   "id": "D04",
+   "surface": "projects:9001",
+   "description": "Unsigned hand-made JWT naming the owner",
+   "expected": "reject",
+   "observed": "HTTP 401",
+   "unauthorized_admitted": false
+  },
+  {
+   "id": "D05",
+   "surface": "projects:9001",
+   "description": "DELETE /:user with no identity (outsider's own synthetic account, no projects)",
+   "expected": "reject",
+   "observed": "HTTP 204",
+   "unauthorized_admitted": true
+  },
+  {
+   "id": "D06",
+   "surface": "img_storage:11000",
+   "description": "No token asks a signed URL for the owner's original",
+   "expected": "reject",
+   "observed": "HTTP 200; bytes match original=false",
+   "unauthorized_admitted": true
+  },
+  {
+   "id": "D07",
+   "surface": "img_storage:11000",
+   "description": "No token writes an object under the owner's prefix",
+   "expected": "reject",
+   "observed": "HTTP 201",
+   "unauthorized_admitted": true
+  },
+  {
+   "id": "D08",
+   "surface": "img_storage:11000",
+   "description": "No token deletes an object under the owner's prefix (the marker just written)",
+   "expected": "reject",
+   "observed": "HTTP 201",
+   "unauthorized_admitted": true
+  },
+  {
+   "id": "D09",
+   "surface": "users:10001",
+   "description": "No token changes a user's profile to premium",
+   "expected": "reject",
+   "observed": "HTTP 204; profile now=premium",
+   "unauthorized_admitted": true
+  },
+  {
+   "id": "D10",
+   "surface": "rabbitmq:15672",
+   "description": "Management API with the credentials committed in docker-compose.yaml",
+   "expected": "reject",
+   "observed": "HTTP 200",
+   "unauthorized_admitted": true
+  },
+  {
+   "id": "D11",
+   "surface": "projects_mongoDB:27018",
+   "description": "Database read with no credentials",
+   "expected": "reject",
+   "observed": "count returned (numeric)",
+   "unauthorized_admitted": true
+  },
+  {
+   "id": "W01",
+   "surface": "socket.io",
+   "description": "Socket with no token joins the owner's project room and receives edit events",
+   "expected": "reject",
+   "observed": "received project-op TOOL_ADDED, pipeline payload=true",
+   "unauthorized_admitted": true
+  },
+  {
+   "id": "Q01",
+   "surface": "users quota",
+   "description": "20 simultaneous 1-op reservations, daily limit 5",
+   "expected": "exactly 5 granted",
+   "observed": "20 granted; remaining_operations=2; statuses=200",
+   "unauthorized_admitted": true
+  }
+ ]
+}

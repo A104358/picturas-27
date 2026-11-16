@@ -1,0 +1,18 @@
+{
+ "recorded_at": "2026-11-16T00:50:39.962Z",
+ "experiments": [
+  {
+   "id": "R3",
+   "what": "video job accepted (worker stopped) -> broker restart -> worker started; observed 45 s",
+   "upload_status": 204,
+   "apply_status": 201,
+   "video_queue_before_restart": "1 msgs / consumers 0",
+   "video_queue_after_restart": "0 msgs / consumers 0",
+   "ops_before": 5,
+   "ops_after": 4,
+   "pending_process_docs_delta": 1,
+   "results_endpoint_status": 200,
+   "results": "PK\u0005\u0006\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
+  }
+ ]
+}

@@ -1,0 +1,88 @@
+{
+ "recorded_at": "2026-11-16T00:47:59.374Z",
+ "experiments": [
+  {
+   "id": "R2",
+   "what": "docker restart rabbitmq while idle",
+   "broker_api_back_ms": 5609,
+   "consumers_before": {
+    "project_queue": 1,
+    "ws_queue": 1,
+    "video_queue": 1,
+    "brightness_queue": 1,
+    "border_queue": 1
+   },
+   "consumers_after": [
+    {
+     "s": 5,
+     "consumers": {
+      "project_queue": 1,
+      "ws_queue": 1,
+      "video_queue": 1,
+      "brightness_queue": 1,
+      "border_queue": 1
+     }
+    },
+    {
+     "s": 15,
+     "consumers": {
+      "project_queue": 1,
+      "ws_queue": 1,
+      "video_queue": 1,
+      "brightness_queue": 1,
+      "border_queue": 1
+     }
+    },
+    {
+     "s": 30,
+     "consumers": {
+      "project_queue": 1,
+      "ws_queue": 1,
+      "video_queue": 1,
+      "brightness_queue": 1,
+      "border_queue": 1
+     }
+    },
+    {
+     "s": 60,
+     "consumers": {
+      "project_queue": 1,
+      "ws_queue": 1,
+      "video_queue": 1,
+      "brightness_queue": 1,
+      "border_queue": 1
+     }
+    }
+   ],
+   "services": {
+    "projects": {
+     "state": "running",
+     "container_restarted": true
+    },
+    "ws_gateway": {
+     "state": "running",
+     "container_restarted": false
+    },
+    "video_tool": {
+     "state": "running",
+     "container_restarted": true
+    },
+    "brightness_tool": {
+     "state": "running",
+     "container_restarted": true
+    },
+    "border_tool": {
+     "state": "running",
+     "container_restarted": true
+    }
+   },
+   "job_after_restart": {
+    "apply_status": 201,
+    "events_in_20s": [
+     "process-update@151ms"
+    ]
+   },
+   "projects_log_tail": "\u001b[0mPOST /6afa5301a7fc7a4c788b37d9/6afa530155550421e17ba4be/process \u001b[32m201\u001b[0m 15.809 ms - 7\u001b[0m | [T-03][RABBIT] msg=request-97016474-36aa-4079-9581-d4fef4556dcb status=success outType=image curPos=0 key= | [RUN-DEBUG] msg=request-97016474-36aa-4079-9581-d4fef4556dcb curPos=0 processTok=1 activeTok=1 | [COMMIT] project=6afa530155550421e17ba4be committedToken=1"
+  }
+ ]
+}

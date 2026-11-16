@@ -79,6 +79,24 @@ explícita, não restrição DELETE inequívoca herdada dos RF. Restantes decis�
 ensaios mantêm-se pendentes, sem alterações à aplicação. Ver justificação completa
 no [documento de decisões](../../../docs/fase2-ideias-1-e-2.md#justificação-das-decisões).
 
+**Validação individual operacional A/B/A:** WS-C4 A fixa 16 lotes pendentes,
+1 por projeto além de 4 ativos; plano mais recente substitui o pendente sem renovar
+o prazo e pedidos expirados saem da fila. PKI-C2 B substitui a proposta CRL: retirar
+confiança exige nova CA e todos os certificados da instalação. PKI-C3 A mantém
+isolamento/reinício até provas completas WS → projects, projects → armazenamento,
+restantes participantes e recusa da CA antiga/conexões/retomas antigas. Renovação
+normal pode manter CA; não revoga por si o anterior. Custo: interrupção de toda a
+instalação, duração NM. Ver [procedimento e alternativas](../../../docs/architecture/fase2-fila-ws-e-revogacao.md).
+
+**Validação individual operacional B/A/A:** [PKI-C4 B/PKI-C5 A/OPS-C1 A](../../../docs/architecture/fase2-criterios-operacionais-seguranca.md)
+fixam isolamento ≤30 s/meta ≤10 s com corte de novas/persistentes/consumidores;
+substituição medida, sem 15/5 min impostos, piloto planeado até 23/11 às 18:00 UTC
+com instalação/carga/bruto. Matriz atual/alvo completa e browser sem ultrapassar
+avisos; mTLS real do mock entra em esforço/recuo. Reconciliação administrativa tem
+de ser implementada/ensaiada até à entrega, ou é limitação explícita; sem replay
+automático, evidência prévia e quota não reaplicável. Nada foi medido/implementado
+nesta revisão e nenhuma aprovação coletiva de detalhe é inferida.
+
 **Resumo ordenado por nota.**
 
 | # | Ideia | Tipo (ISO 25010) | Nota | Origem |
@@ -300,8 +318,8 @@ anula o objetivo. Guarda: sobrecarga por pedido medida e ≤ 10 ms em mediana (p
   falha; negação efetiva retira de imediato; JWT expirado termina a ligação. Falta
   rever o restante contrato e ordenação/corridas; 50 avaliações/timeout total inicial
   1 s e WS-C3 (4 globais/1 por projeto/64 KiB) estão validados, sem capacidade medida.
-  O tamanho máximo da fila continua por decidir, com recusa e ausência de renovação
-  em saturação/espera excessiva.
+  WS-C4 A fixa inicialmente 16 lotes pendentes/1 por projeto, com substituição pelo
+  plano mais recente sem reiniciar prazo, recusa e ausência de renovação em falha.
   Não retirar acesso só porque um dos links terminou se outra via continuar válida.
 - **Transição das sessões antes da renovação HS256:** definir utilizadores registados,
   sessões anónimas, projetos associados, reautenticação e comportamento dos sockets.

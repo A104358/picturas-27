@@ -3,7 +3,7 @@ intent: 001-phase-2-quality-improvements
 phase: inception
 status: draft
 created: 2026-11-14T17:16:06Z
-updated: 2026-11-16T15:51:14Z
+updated: 2026-11-16T20:42:28Z
 ---
 
 # Quality Options and Team Decision
@@ -276,10 +276,15 @@ No individual agreement is inferred from those documents.
 | 2026-11-16T15:30:57Z | D4 current choice | mTLS authenticates internal services; authorize specific service pairs/actions as well. Protect private keys and specify certificate issuance/renewal and peer permissions. | Explicit individual change. Operational lifecycle/pair elaboration remains for review where not specifically validated; no application changes or tests authorized/claimed. |
 | 2026-11-16T15:30:57Z | WS-C1 A | Direct WS → projects mTLS; authenticate specifically WS and permitted operations. WS delegates identity/expiry verified from the connection JWT with member-presented contexts; projects always decides permissions. | Explicit individual validation; any certificate of the CA is insufficient. D3 HS256 user JWT and gateway RS256 identity remain; rest of contract remains proposed. |
 | 2026-11-16T15:30:57Z | WS-C2 A | Initial configurable total timeout 1 s covering wait/connect/send/read; up to 50 member/context evaluations per request. Multiple batches with limited concurrency/fair scheduling; no extension on failures/retries. Cutoff ≤5 s/target ≤2 s retained. | Individual validation, subject to measurement, not demonstrated capacity. Global concurrency value/other limits remain to size; no agreement attributed to other members or tests claimed. |
-
 | 2026-11-16T19:49:16Z | WS-C3 A | Initial 4 simultaneous global authorization HTTP queries, 1 per project, alternating batches and 64 KiB UTF-8 JSON request/response bodies, jointly with 50 evaluations. Total 1 s includes queue; bound/coalesce pending work, overflow/late wait never renew or grant joins; no silent truncation. | Individual validation with conditions. Queue maximum/final corpus open. Four concurrent queries do not prove 4/s or twenty-project capacity. Test >20 projects and 500-member project plus small ones, fairness, byte boundaries and cutoff ≤5 s/target ≤2 s; no runtime proof. |
 | 2026-11-16T19:49:16Z | PKI-C1 A | CA per installation 365 days; service-specific keys/certificates 30 days, renew with 7 days remaining. Include administrator-invoked local issuance/renewal script and verification in delivery, no background daemon. Startup/offline recovery before service; never issue beyond CA validity. | Individual validation. Keep 30 days rather than switch to 90; implementation still unauthorized. Source Git/build audit finds gaps (3 nonignored probes/6 tracked keys/7 broad-copy contexts), not proven exclusions. Revocation/trust withdrawal/persistent connections remain open. |
 | 2026-11-16T19:49:16Z | ACL-C1 A | Only owner deletes entire project; editor retains editing/media removal, reader neither. Preserve authorized account cleanup, verify/hide non-owner UI actions and test disposable fixtures. | Explicit individual policy change: current DELETE accepts edit; RF53–RF55 do not unequivocally reserve DELETE to owner. Security-correction rationale recorded without claiming existing rule, runtime tests or other members’ approval. |
+| 2026-11-16T20:14:36Z | WS-C4 A | Initial 16 pending batches/process besides 4 active, at most 1 pending/project; keep latest pending plan in the same slot, preserve original 1 s deadline, remove expired work and invalidate obsolete evaluations. | Explicit individual agreement. Complete superseded callbacks; preserve different members/contexts and bound hidden waiting. Queue capacity/justice/state costs remain unmeasured. |
+| 2026-11-16T20:14:36Z | PKI-C2 B | Withdraw certificate trust by replacing installation CA and reissuing all certificates, removing old trust everywhere. Replaces initial CRL recommendation. Normal expiry renewal can retain CA; 365 days is maximum, CA may be replaced earlier. | Individual validation, medium-confidence complexity assessment, no benchmark. One compromised service causes whole-installation interruption/coordination. Old-CA rejection in new connections, closed old connections/resumption and no partial reopening are mandatory controls. |
+| 2026-11-16T20:14:36Z | PKI-C3 A | Isolated maintenance/restart; before reopening verify complete WS → projects and projects → storage calls, remaining participants and rejected old CA after withdrawal. Partial installation stays isolated. Planned maintenance waits for idle; compromise isolates immediately. | Individual agreement only. PKI operational deadline, per-channel proof and emergency reconciliation remain open. WS 5 s/2 s is not PKI timing. No app changes or runtime tests claimed. |
+| 2026-11-16T20:33:46Z | PKI-C4 B | Isolation ≤30 s/target ≤10 s from administrative command until new/persistent/internal connections, consumers and worker effects are cut; incomplete isolation reported without resetting clock. Measure replacement without imposed 15/5 min; failed replacement remains isolated. | Individual choice. User requires installation/load/real duration and a pilot deadline; set planning milestone 23 November 18:00 UTC. Valid pilot before delivery yields contextual empirical comparison criterion, not universal SLA. No measured duration or installation selected. |
+| 2026-11-16T20:33:46Z | PKI-C5 A | Complete current/target channel matrix, automated probes and reproducible known-trust browser profile; no certificate-warning bypass counts as pass. Explicitly classify expand_ai_tool → generative-mock as internal mTLS API with actual implementation/test effort and rollback. | Individual validation. Runtime/termination and full channel proof pending; source HTTP client/Flask server are not protected by adding a row. Preliminary effort ranges remain engineering estimates, not approved availability. |
+| 2026-11-16T20:33:46Z | OPS-C1 A | Implement/test administrative reconciliation by delivery; preserve evidence first, exclude indeterminate results from committed state and prevent duplicate quota correction across reapply/crash. Without evidence, pending; without tool/tests by 27 November, explicit limitation rather than capability. | Individual validation. Automatic recovery future, early ack known defect; consumer restart not proof of completion. No application changes or runtime recovery tests claimed. |
 
 The timestamp records when this validation was entered in the workspace; it does
 not fabricate a separate team meeting or each member's approval. The roster below
@@ -331,6 +336,34 @@ The source of agreement is the user's later explicit instruction to record it,
 not earlier exploration requests or silence. No messages have been sent to other
 team members. Changes to the selected pair or material scope require renewed
 agreement; remaining details and full requirements review are still outstanding.
+
+## Operational Choice Follow-up — A/B/A Individually Validated
+
+The user answered the operational review with **WS-C4 A, PKI-C2 B, PKI-C3 A**.
+The [operational contract/runbook](../../../docs/architecture/fase2-fila-ws-e-revogacao.md)
+records conditions, acceptance controls, costs and remaining details. The earlier
+assistant recommendation PKI-C2 A/local CRL is superseded by B, not adopted by
+silence. Normal renewal and immediate trust withdrawal are distinguished; replacing
+a CA affects all participants and still requires distribution/connection tests.
+This later validation resolves the earlier pending-choice state. It does not
+approve the full requirements, imply a measured short outage or attribute agreement
+to the other members. Channel proof, PKI timing, emergency work reconciliation and
+remaining WS/session/upload details stay open. No application changes or new
+runtime tests were made.
+
+## Operational Criteria Follow-up — B/A/A Individually Validated
+
+The user selected **PKI-C4 B/PKI-C5 A/OPS-C1 A** with conditions. The
+[criteria contract](../../../docs/architecture/fase2-criterios-operacionais-seguranca.md)
+now specifies isolation endpoints/failure classification, a 23 November 18:00 UTC
+pilot planning milestone and mandatory environment/load/duration/evidence records,
+current/target state per channel, browser methodology, mock mTLS implementation/
+rollback effort and implemented/tested administrative recovery (or delivery limitation).
+The earlier 15/5-minute replacement recommendation is superseded, not validated.
+A measured pilot before delivery provides a contextual comparison criterion; no
+result has been invented. Installations/load, concrete isolation/termination,
+reconciliation tooling and runtime verification remain incomplete. The choice does
+not approve the full requirements or attribute agreement to the other members.
 
 ## Traceability and AI Assistance
 

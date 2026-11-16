@@ -3,7 +3,7 @@ intent: 001-phase-2-quality-improvements
 phase: inception
 status: draft
 created: 2026-11-14T17:10:27Z
-updated: 2026-11-16T19:49:16Z
+updated: 2026-11-16T20:42:28Z
 ---
 
 # Requirements: Phase 2 Quality Improvements
@@ -220,8 +220,9 @@ Exact per-channel configuration/termination and support in the deployed versions
 remain to specify and verify, without claiming existing complete TLS/mTLS coverage.
 
 Later WS-C3/PKI-C1 decisions below fix initial concurrency/JSON body limits and
-certificate lifetimes/renewal window. Queue capacity, revocation/persistent
-connections and demonstrated workload capacity remain open. **The rest of the contract remains
+certificate lifetimes/renewal window. WS-C4/PKI-C2/PKI-C3 below subsequently fix queue size and the trust-withdrawal/
+maintenance strategy; channel proof, PKI timing and demonstrated workload capacity
+remain open. **The rest of the contract remains
 a proposal for review.** Validation is individual, attributes no agreement to other
 members, declares no tests run and does not authorize application changes. The ten
 proposed verification cases map to existing metrics; full requirements review is
@@ -275,7 +276,7 @@ requirements set, measured compliance or authorization to change the application
   jointly; split before exceeding either, reject/log indivisible oversized bodies
   and never silently truncate. These parameters are configurable engineering
   choices. The 1 s total timeout includes queue waiting and never restarts when
-  HTTP begins. Bound the pending queue (numeric maximum still open), coalesce
+  HTTP begins. Bound the pending queue (subsequently fixed at 16 by WS-C4), coalesce
   repeated context revalidations without postponing their deadline, and apply
   failure/no-renewal/no-new-entry rules to overflow and excessive waiting.
 - **Capacity qualification:** Four concurrent queries do not imply a maximum of
@@ -301,8 +302,8 @@ requirements set, measured compliance or authorization to change the application
   built. Implement Git/build exclusions with external secret mounts and verify
   synthetic private-key markers are absent from Git, contexts and image layers.
   Ignore rules alone do not remove tracked keys. CA keys must stay outside Git,
-  build contexts and application containers. Revocation, withdrawal of trust and
-  existing persistent connections remain undecided; membership cutoff is not a
+  build contexts and application containers. PKI-C2 B/PKI-C3 A below subsequently choose CA replacement and maintenance;
+  operational timing/channel proof remain open; membership cutoff is not a
   certificate-revocation SLA.
 - **ACL-C1 A:** Only the owner may delete an entire project. Editors retain
   legitimate editing and media removal; readers may delete neither. The current
@@ -318,10 +319,97 @@ requirements set, measured compliance or authorization to change the application
 
 Confidence is medium for WS sizing/certificate durations, and high for the
 recommendation to separate editing from administration; these are engineering
-judgments, not benchmarks or evidence of academic acceptance. Queue capacity,
-final load corpus, revocation/persistent-connection handling and remaining contract/
-pair-operation details still require review. No application, ignore/build files,
+judgments, not benchmarks or evidence of academic acceptance. The subsequent
+A/B/A validation below resolves queue size and withdrawal/maintenance strategy;
+final load corpus, channel verification, emergency reconciliation and remaining
+contract/pair-operation details still require review. No application, ignore/build files,
 certificates or preserved data were changed, and no new runtime tests were run.
+
+## Operational Security Validation — WS-C4 A, PKI-C2 B and PKI-C3 A
+
+The user explicitly selected **A/B/A** with conditions, recorded at
+2026-11-16T20:14:36Z. This is individual validation, not whole-team/full-requirements
+approval or construction authorization. The [operational contract and testable
+runbook](../../../docs/architecture/fase2-fila-ws-e-revogacao.md) records:
+
+- **WS-C4 A:** Initially 16 pending batches per WS process, besides 4 active,
+  at most 1 pending per project. A second pending plan for the same project replaces
+  the old one in its slot, retaining original admission time/deadline and removing
+  expired work; never restart the total 1 s timeout. Complete replaced join
+  callbacks explicitly; discard obsolete evaluations without mixing different
+  members/contexts or creating hidden queues. Overflow/timeout never grant joins
+  or renew authorization. Membership-state limits/final workload remain open.
+- **PKI-C2 B:** Withdraw trust by replacing the installation CA, reissuing all its
+  certificates/keys and removing old CA trust from every participant. This replaces
+  the assistant's earlier CRL recommendation; CRL and its proposed durations are
+  not part of the selected mechanism. A single compromised service requires the
+  full procedure, with installation-wide coordination/downtime. Ordinary expiry
+  renewal can retain the CA and does not itself invalidate an old still-valid
+  certificate; if immediate withdrawal is required, use the full CA procedure.
+  CA 365 days is a maximum lifetime, not a minimum period of retaining trust.
+- **PKI-C3 A:** Isolate, update coherently and restart affected processes/clients/
+  verifiers, removing old sockets, pools, session caches/tickets. Partial updates
+  keep the installation isolated. Planned maintenance requires no active work;
+  compromise triggers isolation immediately, without waiting for jobs. Before
+  reopening, require complete WS → projects and projects → storage calls, all
+  other affected participants, old-CA rejection on a new connection and closure/
+  invalidation of previous connections and TLS resumption. Preserve volumes,
+  identity, quota and reconcile interrupted work rather than retry mutations blindly.
+
+The runbook, positive/negative controls, version manifest and failure outcomes are
+specified for implementation/evaluation, not executed. Confidence in proportionality
+is medium; there is no comparative benchmark or demonstrated short outage. No PKI
+operational deadline is selected; WS ≤5 s/target ≤2 s are separate. Channel/version
+checks, concrete emergency reconciliation, WS state/abuse limits, workload and
+remaining session/upload choices stay open. No application changes, certificates,
+PKI script implementation, new runtime tests or collective approval are inferred.
+
+## Operational Criteria Validation — PKI-C4 B, PKI-C5 A and OPS-C1 A
+
+The user explicitly selected **B/A/A**, recorded at 2026-11-16T20:33:46Z, with
+conditions in the [operational criteria contract](../../../docs/architecture/fase2-criterios-operacionais-seguranca.md).
+This remains individual validation, not measured compliance/full requirements
+approval or construction authorization:
+
+- **PKI-C4 B:** Isolation ≤30 s, target ≤10 s from administrative command entry,
+  including internal checks/wait, until new/persistent/internal connections,
+  RabbitMQ consumers and active workers' effects are cut. Test ongoing connections/
+  consumers and do not equate broker loss/zero queues with stopped processing.
+  Failure is incomplete isolation: continue and keep the original clock. Failed
+  replacement/checks keep the installation isolated. No 15/5-minute replacement
+  bound is imposed; measure actual duration, installation/load and all attempts.
+- **Pilot milestone:** Set **2026-11-23T18:00:00Z (18:00 Europe/Lisbon)** as the
+  planning deadline, leaving time before 27 November. This does not select either
+  preserved installation or assert team availability. Record installation, load,
+  participants/images/hardware, per-phase times, attempt count/raw evidence/failures
+  and conclusion. A valid pilot before delivery supplies an empirical, documented-
+  scenario comparison criterion based on observed time, not a universal SLA. If
+  missing/delayed, record status/limitation and explicit revised plan, no silent
+  extension or invented result. The former 15/5-minute recommendation is superseded.
+- **PKI-C5 A:** Full matrix with current/target state per channel, automated probes
+  and reproducible manual browser checks using a known-trust test profile; never
+  bypass certificate warnings to count a pass. **expand_ai_tool → generative-mock
+  is explicitly included as an internal mTLS API.** Its HTTP client/Flask server
+  need real implementation/tests, preliminary effort and a rollback plan; the new
+  matrix row alone is not protection. Other APIs/data/broker retain the validated
+  coverage distinction. Runtime versions/termination remain to prove per channel.
+- **OPS-C1 A:** Implement and test an administrative tool/executable procedure by
+  delivery, without automatic replay. Preserve evidence before correction; keep
+  indeterminate results out of committed results, and prevent duplicate quota
+  correction even across a crash/lost response. A journal written after an unsafe
+  refund is not proof of idempotence. Without evidence, keep the case pending/
+  isolated. Without implemented/tested procedure by 27 November, record a limitation,
+  never existing recovery capability. Automatic recovery is future evolution;
+  early acknowledgement remains a known defect. Restarted consumers do not prove
+  correct completion. Manual effort/downtime and integrity limits remain explicit.
+
+Preliminary effort estimates in the contract are engineering ranges, not measured
+work or approved team budgets. Chosen targets remain unverified; WS 5 s/2 s and F08
+have separate clocks/scenarios. Installation/load, concrete isolation, TLS/mTLS
+termination, executable reconciliation and tests, WS state/abuse limits, sessions/
+uploads and full baseline/review remain to complete. Only documents were changed;
+no application, Compose, credentials or preserved data were modified, and no new
+runtime tests or PKI/admin tool implementation were performed.
 
 ## Session Transition — Source Findings, Decision Pending
 
@@ -506,7 +594,7 @@ will be maintained separately from these intent-specific requirements.
 | What delivery deadline applies? | PL2-G4 | User explicitly corrected delivery to 27 November 2026; the previous 20 November planning date is superseded. Submission time remains unknown. |
 | What deployment/browser context must session migration preserve? | PL2-G4 / each local administrator | Local-only/no external users confirmed. Luís administers LOCAL-HOST-01 and requires both volume sets preserved. On isolated copies: picturas 4 accounts/2 projects (2 anonymous accounts, 0 anonymous projects); experiment 13 accounts/10 projects (0 anonymous accounts). Browser associations, presets/media integrity and other computers pending; no development/evaluation installation selected. |
 | What target and minimum acceptable values are justified by the baseline and stakeholder needs? | PL2-G4 | WS cutoff ≤5 s/target ≤2 s and initial 1 s revalidation are individually validated, awaiting experimental proof. Other metric proposals remain unapproved; complete applicable gate review, whole-team agreement and reproducible formal baseline before refactoring. |
-| Which architecture details remain undecided? | PL2-G4 | D10; remaining WS payload/order/race design, pending-queue maximum and final load corpus; certificate revocation/trust withdrawal/persistent connections and exact channel/pair-operation configuration; session transition/renewal, other lifetimes/rotation, legacy links, API compatibility, atomic upload token, pending visibility and hash recovery. WS-C3 A (4 global/1 project/64 KiB), PKI-C1 A (CA 365/service 30/renew at 7 days, manual local script in delivery), ACL-C1 A (owner-only whole-project deletion) are individually validated, not implemented/measured. Prior coverage/JWT/WS conditions remain. |
+| Which architecture details remain undecided? | PL2-G4 | Remaining WS payload/order/race/state-abuse details and final corpus; pilot installation/load, concrete isolation/termination and version/channel proof; executable administrative reconciliation, session transition/renewal, other JWT/link lifetimes/rotation and upload/API/token/hash decisions. WS-C4 A/PKI-C2 B/PKI-C3 A remain individually validated. PKI-C4 B adds isolation 30/10 s and measured replacement/pilot by 23 November 18:00 UTC; PKI-C5 A validates full current/target channel matrix and internal mock mTLS; OPS-C1 A requires implemented/tested administrative recovery or an explicit delivery limitation. No implementation/compliance inferred. |
 
 ## Sources
 

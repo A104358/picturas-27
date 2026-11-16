@@ -1,7 +1,7 @@
 ---
 intent: 001-phase-2-quality-improvements
 created: 2026-11-14T17:10:27Z
-updated: 2026-11-16T19:49:16Z
+updated: 2026-11-16T20:42:28Z
 completed: null
 status: in-progress
 ---
@@ -41,6 +41,8 @@ that instruction; no separate nominal declarations or reviewed commit are invent
 | Measurement specification | 60 metrics, methods, baseline values/limits, proposed minimums/targets and explicit pre-code gates; formal baseline incomplete | [Metrics and baseline](../../../docs/fase2-metricas-e-baseline.md) |
 | WS authorization contract | WS-C1 A/WS-C2 A/WS-C3 A individually validated; rest proposed. D4 mTLS replaces asymmetric service JWT; certificate/pair lifecycle detailed for review; 10 verification cases not run | [Contract proposal](../../../docs/architecture/fase2-contrato-websocket.md) |
 | WS/PKI/ACL source audit | Three synthetic key paths not ignored, six tracked legacy private-key paths and seven reviewed broad-copy build contexts; readonly planning evidence, not image/runtime testing | [Security planning audit](evidence/security-planning-audit-2026-11-16.json) |
+| Operational security review | WS-C4 A/PKI-C2 B/PKI-C3 A individually validated; 16 pending batches, new CA/all certificates for withdrawal, isolated maintenance/restart. CRL recommendation superseded; testable runbook/controls prepared, not executed | [Queue/revocation contract](../../../docs/architecture/fase2-fila-ws-e-revogacao.md) |
+| Operational criteria | PKI-C4 B/PKI-C5 A/OPS-C1 A individually validated; isolation 30/10 s, measured replacement/pilot milestone, full current/target channel matrix, actual mock mTLS and implemented/tested administrative reconciliation required. No runtime proof | [Operational criteria](../../../docs/architecture/fase2-criterios-operacionais-seguranca.md) |
 | Session transition inventory | Luís identified, both sets preserved. Isolated-copy counts: picturas 4 accounts/2 projects; experiment 13/10; originals hash-verified unchanged. Browser mappings/other computers and migration/source selection pending | [Inventory worksheet](../../../docs/architecture/fase2-inventario-sessoes.md) |
 | New evidence audit | 14 successful uploads summarized, 23 security/control case records reviewed, fresh static source/certificate inventory; raw ARM results unchanged | [Raw evidence index](evidence/nfr-2026-11-16/README.md) |
 | System Context | Not created | No artifact yet |
@@ -98,9 +100,12 @@ No units have been decomposed. Boundaries depend on the selected requirements.
 | 2026-11-16T18:25:38Z | Record user-supplied local-only deployment context and prepare the session inventory worksheet. | User selected inventory preparation, then confirmed use only on team computers through Docker Compose, each member administering their own installation, no shared installation/external users and no formal environment list. Source reads confirm localStorage/session effects and lack of central session inventory. | Deployment-scope uncertainty resolved by user statement, not technical measurement. Fields, administrator roster, historical candidates and collection/exit criteria prepared; actual counts, browser associations and migration still pending. No Docker/DB/browser inventory, application changes, token renewal or key rotation performed. Prior pair/security/WS decisions preserved. |
 | 2026-11-16T19:03:51Z | Collect read-only local Docker metadata and record stopped/retained PictuRAS data sets. | User requested continuation. Queries found 13 exited experiment containers/6 volumes and 8 `picturas` volumes/no matching containers; historical temporary Compose file absent. | Partial one-host metadata inventory only. No DB/volume contents/browser inspected, services started/stopped, credentials rotated or application/data changed. Identity/project counts remain NM; other computers, administrator mapping and retention/migration decisions pending. |
 | 2026-11-16T19:18:54Z | Record Luís as this machine's administrator and preservation of both volume sets; collect account/project counts through isolated temporary database copies. | User explicitly requested preservation/counting without original-data changes and deferred development/evaluation installation selection. Counts: picturas 4 accounts (2 anonymous/2 free), 2 projects; experiment 13 free accounts, 10 projects. No anonymously owned projects in either set. | Original volumes mounted read-only, four file manifests unchanged before/after, temporary copies/databases removed and no temporary DB containers found afterwards. First copy attempt failed and was preserved as diagnostic, also with unchanged originals/cleanup. Counts are not migration tests, active sessions or storage-integrity verification; browser mapping/presets/other computers remain pending. No original app/database started, credentials rotated or source installation selected. |
-
 | 2026-11-16T19:49:16Z | Record individual WS-C3 A, PKI-C1 A and ACL-C1 A with implementation/evaluation conditions. | User agrees to initial 4 global/1 per project/alternating batches/64 KiB; local CA 365 days, service certs 30 days, renew with 7 days remaining; whole-project deletion owner-only, editor retains media removal. | Keep parameters distinct from measured capacity: 4 simultaneous does not prove 4/s or a 20-project limit. Queue maximum/final corpus, certificate revocation and persistent connections remain open. Include administrator-run issuance/renewal script and checks in delivery, retaining 30 days/no background daemon. ACL is an explicit policy change, not an unequivocal inherited RF restriction. Individual validation only; no app/ignore/build changes or runtime tests. |
 | 2026-11-16T19:49:16Z | Audit source protections and ACL/UI paths without runtime changes. | Three synthetic key paths not ignored, six tracked legacy key paths, seven reviewed contexts copying broadly without demonstrated private-key exclusion. DELETE currently accepts edit; only found frontend call is current-user project list. | No secret contents gathered, images built, certificates generated or rendered UI verified. Plan Git/context/image-layer marker checks, startup/offline renewal tests and disposable-project owner/editor/reader tests; preserve authorized account cleanup and both retained datasets. |
+| 2026-11-16T20:12:29Z | Prepare concrete alternatives for the pending WS queue, certificate revocation and persistent-connection review. | User selected option 1 to close security details. Proposed WS-C4 A: 16 pending batches/process; PKI-C2 A: signed local CRL with proposed 30/7-day maintenance; PKI-C3 A: isolated maintenance/restart and verification before reopening. | Choices explicitly requested from the user and still pending; no validation attributed to anyone. Preserve prior JWT/WS/PKI/ACL choices. Official Node/OpenSSL documentation supports candidate instruments, not runtime capacity or universal per-channel support. No application changes, certificates, PKI implementation, Docker operations or new runtime tests. |
+| 2026-11-16T20:14:36Z | Record individual WS-C4 A, PKI-C2 B and PKI-C3 A; supersede CRL recommendation and specify maintenance controls. | User explicitly selects 16 pending batches/latest pending plan without deadline reset; replace CA/all certificates for trust withdrawal; isolation/restart and complete WS → projects/projects → storage controls before reopen. | Whole-installation downtime/coordination acknowledged, not measured short. Normal expiry renewal may retain CA and does not itself revoke old leaf; immediate withdrawal uses B. Compromise isolates without waiting for jobs; partial update stays isolated. Require old-CA rejection/new handshake and old-connection/session invalidation. PKI deadline, channel proof and emergency reconciliation pending; no app/PKI implementation, runtime tests or collective detail approval. |
+| 2026-11-16T20:30:06Z | Prepare PKI-C4/PKI-C5/OPS-C1 alternatives for operational criteria. | User selected option 1 after A/B/A. Recommend proposed isolation 30 s/target 10 s and prepared idle replacement 15 min/target 5 min; full channel coverage with manual browser evidence; administrative reconciliation without automatic replay. | Await individual choice; no metrics approved by association. Source review finds early image ack, non-awaited result callbacks, refund-before-version update and counters/day ambiguities. HTTP generative API classification flagged for explicit decision. Primary supplier docs do not prove deployed coverage; Mongo/Rabbit version links redirect. No application, Docker, credentials, volumes or runtime tests changed; no new whole-team approvals. |
+| 2026-11-16T20:33:46Z | Record PKI-C4 B, PKI-C5 A and OPS-C1 A with user conditions. | Explicit user choices: isolation ≤30 s/target ≤10 s including persistent connections/consumers; replacement measured, not imposed 15/5 min. Full current/target channel matrix and browser with known trust/no bypass. Mock API mTLS effort/rollback; administrative tool/procedure implemented/tested by delivery or explicit limitation. | Individual validation only. Pilot planning milestone set to 23 November 18:00 Europe/Lisbon/UTC; environment/load/results still pending. Isolate incomplete failures without clock reset; failed replacement remains isolated. Preserve evidence, exclude indeterminate outputs and prevent repeat quota corrections. No auto-recovery claim; early ack remains defect. No application, Docker, credentials, volumes or new runtime tests changed; preliminary effort estimates not measured/team-approved. |
 
 ## Scope Changes
 
@@ -156,6 +161,8 @@ maintenance task is claimed. The dedicated stack is stopped with volumes retaine
 - [x] A/A/A permanence conditions recorded, including individually validated 5 s/2 s criteria, initial 1 s grouped queries, bounded failure policy and explicit reconnection after JWT expiry.
 - [x] D4 supersession and WS-C1 A/WS-C2 A conditions recorded; D3 functions retained, PKI/pair operational detail made explicit as a proposal.
 - [x] WS-C3/PKI-C1/ACL-C1 individual choices and conditions recorded; source protection gaps audited, capacity correction explicit.
+- [x] WS-C4 A/PKI-C2 B/PKI-C3 A individually validated; maintenance runbook/controls prepared and CRL recommendation superseded.
+- [x] PKI-C4 B/PKI-C5 A/OPS-C1 A individually validated with pilot milestone, current/target channel matrix and actual implementation/test obligations.
 - [ ] Open architecture/compatibility decisions closed and applicable metric gates approved.
 - [ ] Formal initial baseline completed for every mandatory metric or justified NA mechanism.
 - [ ] Exploratory evidence and feasibility assessed with the team.
@@ -171,7 +178,36 @@ maintenance task is claimed. The dedicated stack is stopped with volumes retaine
 
 ## Next Steps
 
-**Documentation verification for the A/A/A update:** diff whitespace check passed;
+**Latest criteria result:** PKI-C4 B/PKI-C5 A/OPS-C1 A are individually validated.
+The [criteria contract](../../../docs/architecture/fase2-criterios-operacionais-seguranca.md)
+records isolation 30/10 s and incomplete-isolation behavior, the pilot milestone
+**23 November 18:00 UTC**, mandatory environment/load/duration/results, full current/
+target channel coverage, browser checks, mock mTLS effort/rollback and implemented/
+tested administrative reconciliation by delivery or an explicit capability limitation.
+Do not ask again which options were selected. Next select pilot installation/load,
+complete concrete isolation/termination/tooling and verification in the later
+implementation/evaluation phase, and close remaining WS/session/upload requirements
+and baseline before construction. No execution or installation choice inferred.
+
+**B/A/A documentation verification, 2026-11-16T20:42:28Z:** 60 metric IDs and
+10 WS cases retained; catalog synchronized; 43 channel-matrix rows (including an
+explicit pending topology row), 19 broker principals and 6 database/backup pairs
+checked. Pilot Lisbon/UTC milestone verified; 156 local file links and table
+continuity passed. Only Markdown changed; no runtime tests or implementation.
+
+**Earlier operational result:** WS-C4 A/PKI-C2 B/PKI-C3 A are individually validated.
+The [operational contract](../../../docs/architecture/fase2-fila-ws-e-revogacao.md)
+specifies queue replacement/deadlines and a testable maintenance/CA-withdrawal
+procedure. Next close the PKI operational deadline, per-channel/version checks,
+concrete emergency reconciliation, WS state/abuse limits and final workload; do not
+ask again which A/B option was selected. Prior session preservation/retention and
+formal baseline gates remain. No runtime verification or application work inferred.
+
+**Later A/B/A review verification:** 60 metric IDs and 10 WS scenarios retained,
+catalog synchronized, 137 local file links resolved and Markdown table continuity
+checked. Only Markdown documentation changed; no runtime checks or commit created.
+
+**Earlier A/A/A verification record:** diff whitespace check passed;
 60 unique metric IDs retained (24 security/26 upload/10 guards), 10 WS scenarios,
 ideas 1/2 catalog synchronized and 171 local file links resolved. Static audit
 JSON verified. Changes are confined to documentation/planning evidence; these
@@ -198,8 +234,10 @@ bounded failure policy and termination at JWT expiry are selected, not measured.
 WS-C1 A/WS-C2 A now validate direct mTLS/explicit delegation and initial total
 timeout 1 s/50 evaluations, with limited concurrency/fair scheduling; D4 replaces
 asymmetric service JWT. Next review remaining payload/context/order/race design,
-pending-queue maximum/final workload, certificate revocation/trust withdrawal,
-persistent-connection rotation and infrastructure pair coverage; WS-C3 fixes initial
+final workload/state-abuse limits, PKI timing/emergency reconciliation and
+infrastructure pair coverage; WS-C4 A fixes 16 pending batches, PKI-C2 B chooses
+new CA/all certificates for withdrawal and PKI-C3 A fixes isolated maintenance
+and restart with post-maintenance controls; WS-C3 fixes initial
 4 global/1 per project/64 KiB, PKI-C1 fixes 365/30/7 days with administrator-run
 script in delivery, and ACL-C1 owner-only whole-project deletion. All are individually
 selected, not implemented or measured; close session transition/renewal before HS256 renewal

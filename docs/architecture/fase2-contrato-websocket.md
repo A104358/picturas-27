@@ -1,6 +1,6 @@
 # Fase 2 — Contrato de autorização WebSocket
 
-**Equipa:** PL2-G4. **Estado:** WS-C1 A/WS-C2 A/WS-C3 A validadas individualmente;
+**Equipa:** PL2-G4. **Estado:** WS-C1 A/WS-C2 A/WS-C3 A/WS-C4 A validadas individualmente;
 restante contrato como proposta para revisão, 16/11/2026.
 Complementa as [decisões](../fase2-ideias-1-e-2.md) e o
 [protocolo de métricas WS](../fase2-metricas-e-baseline.md#41-protocolo-de-permanência-ws--condições-validadas-e-prova-pendente).
@@ -32,16 +32,26 @@ alterar a aplicação. D3 mantém HS256 de utilizador e identidade RS256 do gate
 | ID | Escolha validada individualmente | Alternativa / trabalho pendente |
 |-------------------|--------------------------|----------------------|
 | WS-C1 A | Consulta direta ws_gateway → projects por mTLS; projects autentica especificamente WS e autoriza as operações; WS delega identidade/expiração verificadas no JWT e os contextos apresentados; projects decide permissões | Percurso via gateway adiado; cadeia, identidade e pares/ações precisam de implementação e prova. Qualquer certificado da CA não basta. |
-| WS-C2 A | Timeout total inicial 1 s, incluindo espera/ligação/envio/leitura, até 50 avaliações membro/contexto por pedido; configuráveis e sujeitos a medição | Vários lotes para projetos maiores. WS-C3 fixa 4 globais/1 por projeto/64 KiB; máximo da fila e restante dimensionamento pendentes, sem capacidade demonstrada. |
-| WS-C3 A | Limites iniciais configuráveis: 4 consultas HTTP globais, no máximo 1 por projeto, lotes alternados entre projetos e 64 KiB por corpo JSON de pedido/resposta | Sem capacidade/prazos demonstrados. Limite da fila e corpus final pendentes; timeout inclui espera e não reinicia no envio; fila cheia/espera excessiva não renovam autorização nem concedem novos joins. |
+| WS-C2 A | Timeout total inicial 1 s, incluindo espera/ligação/envio/leitura, até 50 avaliações membro/contexto por pedido; configuráveis e sujeitos a medição | Vários lotes para projetos maiores. WS-C3 fixa 4 globais/1 por projeto/64 KiB; WS-C4 fixa 16 pendentes; restante dimensionamento pendente, sem capacidade demonstrada. |
+| WS-C3 A | Limites iniciais configuráveis: 4 consultas HTTP globais, no máximo 1 por projeto, lotes alternados entre projetos e 64 KiB por corpo JSON de pedido/resposta | Sem capacidade/prazos demonstrados. WS-C4 fixa 16 pendentes; corpus final pendente; timeout inclui espera e não reinicia no envio; fila cheia/espera excessiva não renovam autorização nem concedem novos joins. |
+| WS-C4 A | 16 lotes pendentes por processo, além de 4 ativos, até 1 pendente por projeto; mais recente substitui pendente sem reiniciar o deadline; remover expirados | Concluir callbacks substituídos explicitamente e preservar outros contextos; sem fila oculta ou renovação em falha. Limites do estado/corpus e justiça por medir. |
 
 Os detalhes de payload, ordenação e mecanismo concreto de agendamento são a
 **especificação proposta** para concretizar as condições validadas, sujeitos a revisão.
-WS-C3 fixa os limites numéricos e a alternância; o algoritmo concreto, máximo da
-fila e outros limites de estado ainda precisam de detalhe. O restante contrato
+WS-C3/WS-C4 fixam os limites iniciais e a alternância/substituição; o algoritmo
+concreto e outros limites de estado ainda precisam de detalhe. O restante contrato
 não foi aprovado. PKI-C1/ACL-C1 são tratados nas decisões de certificados/permissões.
 
 ## Situação observada no código
+
+**Validação posterior A/B/A:** [WS-C4/PKI-C2/PKI-C3](fase2-fila-ws-e-revogacao.md)
+fixa individualmente 16 lotes pendentes por processo WS, além das 4 consultas
+ativas, até 1 pendente por projeto; substituição pelo mais recente sem reiniciar
+prazo e remoção de expirados. Retirada de confiança usa nova CA/reemissão completa,
+sem CRL, e manutenção/reinício com isolamento até prova de todos os participantes.
+Chamadas completas WS → projects e projects → armazenamento e recusa da CA antiga
+são testes obrigatórios na retirada; ligações/retomas antigas não podem sobreviver.
+Mecanismo escolhido, sem implementação, ensaios ou acordo coletivo destes detalhes.
 
 - O [frontend](../../frontend/app/dashboard/[pid]/page.tsx) emite `join-project`
   apenas com `pid`. O [ws_gateway](../../wsGateway/index.js) aceita essa string e
@@ -203,8 +213,9 @@ de execução, sem usar os resultados de revalidação como autorização de ent
 WS-C3 A fixa inicialmente **4 consultas HTTP globais** para joins/revalidações,
 **1 por projeto**, com alternância de lotes entre projetos, e **64 KiB por corpo JSON**
 de pedido/resposta. São parâmetros configuráveis, não capacidade demonstrada.
-O máximo da fila, estado guardado por contexto e corpus final ainda precisam de
-dimensionamento. Não se declara capacidade ilimitada:
+WS-C4 A acrescenta inicialmente **16 lotes pendentes** por processo WS, até
+**1 pendente por projeto**; estado guardado por contexto e corpus final ainda
+precisam de dimensionamento. Não se declara capacidade ilimitada:
 se os lotes não forem processados a tempo, o prazo existente expira e o resultado
 de disponibilidade/carga é reportado, sem abrir acesso para esconder a falha.
 Agrupar reduz pedidos HTTP; CPU/trabalho de autorização continuam a depender das
@@ -212,8 +223,12 @@ avaliações individuais. Medir também leituras e latência da BD por lote.
 
 **Relógio e fila:** o timeout total de 1 s inclui a espera desde a aceitação do
 pedido de autorização. Iniciar HTTP, estabelecer outra ligação ou tentar de novo
-não reinicia o prazo da mesma operação. A fila deve ser limitada; o número máximo
-ainda não está escolhido. Coalescer ciclos do mesmo contexto sem renovar o instante
+não reinicia o prazo da mesma operação. A fila tem limite inicial de 16 lotes pendentes,
+até 1 pendente por projeto, além dos 4 ativos. Um novo plano pendente do mesmo
+projeto substitui o anterior no mesmo slot, preservando instante original/deadline
+e concluindo explicitamente callbacks substituídos, sem negar outros contextos.
+Remover expirados e cancelar/inutilizar avaliações obsoletas; ver WS-C4 no contrato
+operacional para tratamento dos joins e cursores. Coalescer ciclos do mesmo contexto sem renovar o instante
 de entrada ou acumular trabalho equivalente. Ao encher ou expirar, registar a causa
 e recusar temporariamente novas entradas; membros existentes só conservam a última
 autorização até ao prazo já fixado. Só uma nova decisão positiva atual e elegível
@@ -263,7 +278,7 @@ para congelamento antes dos ensaios. Não foram executados para este novo desenh
 | WS-T07 | JWT expirado termina ligação; frontend reconecta explicitamente com JWT válido e autoriza novamente todas as salas pretendidas; identidade/projetos anónimos preservados. | S06/F06 |
 | WS-T08 | Lote com membros/contextos mistos não partilha decisões; resposta incompleta, duplicada ou trocada nunca concede acesso por omissão. | S10/S13 |
 | WS-T09 | Certificado de outro serviço da mesma CA, operação fora do par permitido, cabeçalho forjado e acesso direto são recusados; verificar no WS a associação entre JWT e identidade/expiração/contextos delegados. Projects decide com base nessa delegação confiada, sem prova independente do JWT original. | S02/S08/S10 |
-| WS-T10 | Variar projetos/membros/contextos, latências e lotes; incluir 500 membros num projeto + vários pequenos e mais de 20 projetos ativos; medir justiça/espera, recusas/timeout de fila, limites conjuntos 50/64 KiB, HTTP/s, avaliações/s, cadência, CPU/RSS, BD e impacto nos pedidos leves. | S12/S21/F07/F09 |
+| WS-T10 | Variar projetos/membros/contextos, latências e lotes; incluir 500 membros num projeto + vários pequenos e mais de 20 projetos ativos; medir justiça/espera, recusas/timeout de fila, 4 ativos +16 pendentes/17.º recusado, substituições sem reiniciar deadline/callbacks concluídos, limites conjuntos 50/64 KiB, HTTP/s, avaliações/s, cadência, CPU/RSS, BD e impacto nos pedidos leves. | S12/S21/F07/F09 |
 
 Distinguir corte/última emissão no servidor de chegada de pacotes já em trânsito.
 Registar razões e tempos com referências de ensaio sem guardar JWT, chaves ou

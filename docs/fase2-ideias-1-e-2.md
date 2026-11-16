@@ -63,8 +63,14 @@ autorização para alterar a aplicação.
 | D4 | mTLS para autenticação de serviços internos, em substituição de HTTPS + JWT assimétrico de serviço. | Autenticar a identidade específica e autorizar par/operação; cadeia/CA válida não basta. Proteger chaves e definir emissão/renovação; operacionalização detalhada em revisão. D3 e autorização do domínio mantêm-se. |
 | WS-C1 A | Consulta direta ws_gateway → projects por mTLS; WS delega identidade e expiração verificadas no JWT da ligação, associadas aos contextos apresentados. | Projects autentica especificamente WS, autoriza as operações permitidas e decide sempre as permissões. Não aceitar certificado de outro serviço da CA como equivalente. |
 | WS-C2 A | Timeout total inicial 1 s (espera/ligação/envio/leitura), até 50 avaliações membro/contexto por pedido, configuráveis e sujeitos a medição. | Vários lotes, concorrência limitada e agendamento justo; falhas/tentativas não prolongam autorizações. Corte ≤5 s/meta ≤2 s mantidos; capacidade não demonstrada. |
-| WS-C3 A | Inicialmente 4 consultas HTTP globais, 1 por projeto, alternância de lotes entre projetos e 64 KiB por corpo JSON de pedido/resposta. | Configuráveis, não capacidade medida; 50 avaliações/64 KiB em conjunto, timeout inclui fila, sem truncagem nem renovação em falha. Máximo da fila/corpus final pendentes. |
-| PKI-C1 A | CA própria por instalação (365 dias), chave por serviço, certificados de serviço de 30 dias e renovação quando faltarem 7 dias. | Script local de emissão/renovação entra na entrega, iniciado pelo administrador; validar arranque/retorno após >30 dias e recusar emissão além da CA. Revogação/rotação de ligações persistentes ainda por fechar. |
+| WS-C3 A | Inicialmente 4 consultas HTTP globais, 1 por projeto, alternância de lotes entre projetos e 64 KiB por corpo JSON de pedido/resposta. | Configuráveis, não capacidade medida; 50 avaliações/64 KiB em conjunto, timeout inclui fila, sem truncagem nem renovação em falha. WS-C4 fixa 16 pendentes; corpus final e limites de estado continuam pendentes. |
+| PKI-C1 A | CA própria por instalação (365 dias), chave por serviço, certificados de serviço de 30 dias e renovação quando faltarem 7 dias. | Script local de emissão/renovação entra na entrega, iniciado pelo administrador; validar arranque/retorno após >30 dias e recusar emissão além da CA. Retirada por nova CA/manutenção escolhida em PKI-C2 B/PKI-C3 A; prova por canal e calibração do tempo de substituição no piloto pendentes. |
+| WS-C4 A | Inicialmente 16 lotes pendentes por processo, além de 4 ativos, até 1 pendente por projeto; manter o plano mais recente sem reiniciar o deadline original e remover expirados. | Recusa explícita, callbacks concluídos, sem filas escondidas/renovação em falha; preservar membros/contextos distintos; justiça/limites de estado por medir. |
+| PKI-C2 B | Retirar confiança por substituição da CA e reemissão de todos os certificados da instalação; CRL não escolhida. | Interrupção/coordenação de todos os participantes, mesmo com um serviço comprometido. Renovação normal pode manter CA; não revoga automaticamente o certificado anterior. PKI-C4 B fixa isolamento 30/10 s; substituição por medir/calibrar no piloto. |
+| PKI-C3 A | Manutenção com isolamento e reinício controlado; aplicação parcial fica isolada; compromisso isola sem esperar trabalhos. | Provar WS → projects e projects → armazenamento e os restantes participantes; na retirada, recusar CA antiga em nova ligação e invalidar conexões/retomas antigas. Recuperação de trabalhos e prova por canal pendentes. |
+| PKI-C4 B | Isolamento ≤30 s/meta ≤10 s desde comando até corte de novas/persistentes/consumidores; medir substituição sem 15/5 min impostos. | Piloto planeado até 23/11 às 18:00 com instalação/carga/bruto. Falha de isolamento é incompleto sem reinício do relógio; falha de substituição mantém isolamento. |
+| PKI-C5 A | Matriz completa atual/alvo, probes automatizados e browser manual com confiança conhecida, sem ultrapassar avisos; API mock com mTLS. | Implementação real do cliente/servidor/mock contabilizada em esforço/recuo; suporte/terminação/testes por canal NM, não dispensados. |
+| OPS-C1 A | Exigir ferramenta/procedimento de reconciliação administrativa a implementar e ensaiar, evidência prévia, indeterminados não confirmados e quota não reaplicável; sem replay automático. | Até 27/11 sem ferramenta ou ensaio é limitação, não capacidade. Ack antecipado defeito conhecido; recuperação automática futura. |
 | ACL-C1 A | Eliminar o projeto inteiro fica reservado ao dono; editor mantém edição e remoção de media; leitor não elimina. | Mudança explícita de política: antes, DELETE aceitava partilha edit. Justificar como correção de segurança, verificar UI e preservar limpeza autorizada na eliminação de conta. |
 | D7 | `owner` pode estar ausente; quando presente, tem de ser um valor único coincidente com o dono no caminho. Contradições são recusadas. | A projects verifica sempre posse e partilha; a validação do parâmetro não substitui autorização do recurso. |
 | D6.1 | Recusar ligações Socket.IO sem JWT válido, incluindo o perfil anónimo; terminar a ligação quando o JWT expirar. | Frontend trata explicitamente a reconexão com JWT válido e nova autorização por sala; não presumir reconexão automática após corte pelo servidor. Transição/renovação preserva identidade e projetos anónimos e ainda precisa de desenho. |
@@ -260,8 +266,8 @@ anula o objetivo. Guarda: sobrecarga por pedido medida e ≤ 10 ms em mediana (p
   falha; negação efetiva retira de imediato; JWT expirado termina a ligação. Falta
   rever o restante contrato e ordenação/corridas; 50 avaliações/timeout total inicial
   1 s e WS-C3 (4 globais/1 por projeto/64 KiB) estão validados, sem capacidade medida.
-  O tamanho máximo da fila continua por decidir, com recusa e ausência de renovação
-  em saturação/espera excessiva.
+  WS-C4 A fixa inicialmente 16 lotes pendentes/1 por projeto, com substituição pelo
+  plano mais recente sem reiniciar prazo, recusa e ausência de renovação em falha.
   Não retirar acesso só porque um dos links terminou se outra via continuar válida.
 - **Transição das sessões antes da renovação HS256:** definir utilizadores registados,
   sessões anónimas, projetos associados, reautenticação e comportamento dos sockets.
@@ -568,7 +574,7 @@ refactoring da aplicação enquanto essas condições e a revisão de requisitos
 | D1 | Âmbito alargado: público, rede, portas, dados/S3 | Enumerar interfaces, identidades e ações abrangidas; medir todos os caminhos incluídos. Não significa proteger contra administrador do host comprometido. |
 | D2 | Gateway filtra, projects decide posse/partilha | Matriz por rota/verbo e uma regra de domínio consistente. |
 | D3/JWT | Validada pelo utilizador: HS256 utilizador; RS256 identidade interna | Definir transição de sessões registadas/anónimas antes de renovar o segredo; fechar aud, TTL, replay e rotação. |
-| D4 | Validada individualmente: cobertura A, mTLS nas APIs internas e TLS validado/credenciais/permissões nos restantes canais; JWT assimétrico de serviço substituído | PKI-C1 fixa CA por instalação 365 dias/serviço 30 dias/renovar a 7 dias e script local na entrega; revogação/persistência, guardas Git/build e matriz ainda por implementar/provar. Não exigir mTLS universal; D3 mantida. |
+| D4 | Validada individualmente: cobertura A, mTLS nas APIs internas e TLS validado/credenciais/permissões nos restantes canais; JWT assimétrico de serviço substituído | PKI-C1 fixa CA por instalação 365 dias/serviço 30 dias/renovar a 7 dias e script local na entrega; PKI-C2 B/PKI-C3 A fixam nova CA/manutenção; prova por canal, prazo PKI, guardas Git/build e matriz ainda pendentes. Não exigir mTLS universal; D3 mantida. |
 | D5 | Portas internas só em loopback; rede única mantida | Demonstrar alcance do host e da rede Docker separadamente; proteger também localhost. |
 | D6.1 | Validada individualmente: JWT válido obrigatório e término da ligação na expiração | Reconexão explícita com JWT válido/nova autorização por sala; fechar renovação/transição preservando identidade e projetos anónimos. |
 | D6.2 B | Escolhida pelo utilizador: consulta à projects em cada entrada; sem bilhetes WS | mTLS direto/timeout total inicial 1 s validados em WS-C1/WS-C2; payloads/ordenação/corrida ainda propostos, com recusa temporária em falha. |
@@ -667,8 +673,8 @@ Uma chamada da projects autenticada ainda precisa de indicar o contexto/projeto 
   Renovar não invalida automaticamente o certificado anterior ainda válido.
 - Definir tratamento de chave comprometida, revogação/rejeição e conexões já abertas;
   não presumir que renovar certificado corta sessões existentes. Duração/antecedência
-  são escolhidas em PKI-C1 abaixo; sobreposição, revogação, ligações persistentes e
-  procedimento operacional detalhado continuam por fechar.
+  são escolhidas em PKI-C1 abaixo; PKI-C2 B/PKI-C3 A escolhem retirada por nova CA
+  e manutenção/reinício, com prova por canal e procedimento concreto ainda pendentes.
   Não gerar certificados ou alterar Compose/aplicação nesta fase de documentação.
 
 **PKI-C1 A — modelo e durações escolhidos individualmente:** uma CA por instalação,
@@ -690,8 +696,10 @@ contentores aplicacionais; os certificados públicos de confiança podem ser dis
 aos verificadores. Cada instalação e serviço mantém a sua identidade; nenhuma CA
 da equipa é implicitamente confiável por outra instalação.
 
-Revogação, retirada da confiança antiga, recarregamento/reinício e tratamento de
-keep-alive/conexões persistentes **continuam por fechar**. Alterar ficheiros ou
+PKI-C2 B/PKI-C3 A, validadas posteriormente, escolhem retirada de confiança por
+substituição da CA de toda a instalação e manutenção/reinício. O runbook e os
+controlos estão abaixo; configuração/prova por canal, prazo PKI e recuperação de
+trabalhos interrompidos **continuam por fechar**. Alterar ficheiros ou
 renovar certificados não prova que ligações existentes passaram a usar os novos.
 Sem esses mecanismos e testes não declarar a PKI completa; o prazo WS de 5 s não
 é automaticamente um SLA de revogação de certificados.
@@ -715,7 +723,7 @@ ignores/build/aplicação nesta revisão anterior à baseline formal.
 Ensaios PKI a preparar: emissão/identidade/finalidade corretas e indevidas, outra
 CA/instalação, renovação no limiar de 7 dias, regresso após mais de 30 dias, CA
 perto de expirar, chave/CA fora de Git/imagem e retirada/rejeição da credencial
-antiga em ligações novas/persistentes quando o mecanismo for escolhido. Não foram
+antiga em ligações novas/persistentes/retomadas segundo PKI-C2 B/PKI-C3 A. Não foram
 executados nesta revisão. A duração não substitui os testes de revogação.
 
 **Matriz inicial de pares e operações — especificação a rever:** negar pares/ações
@@ -732,6 +740,7 @@ por rota/verbo e controlo positivo. São autorizações limitadas, não acesso g
 | projects | users | Consultar perfil/limites e reservar/devolver quota no fluxo previsto; sem administração geral de contas. |
 | projects | img_storage | Ler/escrever/copiar/remover/assinar objetos nos projetos/estágios autorizados, incluindo confirmação/hash/cleanup quando o contrato de upload for fechado. |
 | users | projects | Limpeza de projetos ao remover a conta, limitada ao titular. A chamada observada usa endereço/porta diferente da API atual; verificar compatibilidade e controlo legítimo antes de a dar por funcional. |
+| expand_ai_tool | generative-mock | Apenas outpainting no contexto previsto, com mTLS e identidade/operação específicas; classificação validada em PKI-C5 A, cliente/servidor/testes ainda por implementar. |
 
 **Cobertura dos restantes canais internos — desenho ainda pendente:** D4 é a escolha
 de autenticação nas APIs internas; a **opção A validada para 27/11** define a
@@ -745,7 +754,7 @@ mTLS universal e esta cobertura.
 | nginx/img_storage → SeaweedFS, incluindo o futuro envio se confirmado | TLS com validação do servidor; credenciais próprias/privilégios mínimos onde aplicável; leitura pública por URL assinada preservada | Configuração S3/TLS, permissões por principal/prefixo e casos GET/HEAD/Range. Não exigir credencial de serviço no browser. |
 | Serviços e backup → MongoDB | TLS com validação do servidor; credenciais próprias e privilégios mínimos por serviço/função | Verificar separadamente as três BD, a negação entre BD e o backup legítimo. |
 | Produtores/consumidores → RabbitMQ | TLS com validação do servidor; credenciais próprias e permissões mínimas | Filas/exchange por serviço, consumidores Python/Node e ferramenta de imagem externa; não assumir suporte/configuração já existentes. |
-| Ferramentas → generative-mock e restantes canais no âmbito | TLS com validação do servidor; autenticação/permissões onde aplicável | Fechar terminação/suporte nas versões usadas e preservar o fluxo legítimo. |
+| Ferramentas → generative-mock e restantes canais | PKI-C5 A valida expand_ai → generative-mock como API interna com mTLS; outros canais seguem a cobertura A aplicável | Cliente/servidor/terminação requerem implementação e testes reais; esforço/recuo no contrato operacional. Preservar outpainting legítimo e negar principal indevido, sem plaintext como recuo aprovado. |
 
 **mTLS universal (opção B) não é obrigatório nesta entrega.** Credenciais de
 Mongo/S3/broker e permissões por BD/bucket/fila continuam necessárias; TLS não
@@ -757,6 +766,72 @@ não podem ser apresentadas como implementação concluída. A escolha não apro
 coletivamente o restante contrato, os detalhes da PKI ou os requisitos completos.
 
 Prova: S08–S09/S19–S21, F06–F07 e o fluxo assíncrono real.
+
+### WS-C4 A, PKI-C2 B e PKI-C3 A — validação individual posterior
+
+O utilizador confirmou **A/B/A**, com condições, registadas em
+2026-11-16T20:14:36Z. O [contrato operacional e runbook testável](architecture/fase2-fila-ws-e-revogacao.md)
+concretiza a escolha. A recomendação inicial de CRL (PKI-C2 A) fica substituída;
+CRL e os seus prazos propostos não fazem parte da solução escolhida.
+
+- **WS-C4 A:** 16 lotes pendentes por processo WS, além de 4 consultas ativas, até
+  1 pendente por projeto. Segundo plano pendente do mesmo projeto mantém o mais
+  recente no mesmo slot, sem reiniciar o prazo original total de 1 s; remover
+  expirados e cancelar/inutilizar avaliações obsoletas. Não descartar silenciosamente
+  callbacks ou autorizações de outros membros/contextos. Fila cheia/timeout recusam
+  novas entradas e não renovam autorização. B, 64 lotes, não foi escolhida: só
+  acrescentaria valor com evidência de picos concluídos dentro do deadline.
+- **PKI-C2 B:** para retirar um certificado, substituir a CA e reemitir todos os
+  certificados da instalação, retirando a CA antiga de todos os trust stores.
+  Um serviço comprometido implica interrupção/coordenação de toda a instalação.
+  Isto dispensa CRL, mas não o inventário nem a prova de atualização de cada
+  participante. Renovação normal pode conservar a CA e não revoga por si o
+  certificado anterior ainda válido; 365 dias é validade máxima, não permanência
+  mínima da CA. Recusa imediata do anterior exige aplicar a retirada completa.
+- **PKI-C3 A:** isolamento, atualização coerente e reinício controlado; fechar
+  conexões/pools/retomas TLS antigas. Instalação parcial permanece isolada. Antes
+  de reabrir, verificar chamadas completas WS → projects e projects → armazenamento,
+  outros canais/participantes afetados e, na retirada, rejeição de certificados da
+  CA antiga em ligação nova e tentativa de retoma. Apenas a manutenção planeada
+  espera ausência de trabalhos; compromisso isola imediatamente e obriga a
+  reconciliar operações interrompidas. Rotação em funcionamento, B, não escolhida.
+
+Confiança média na complexidade/adequação, sem comparação experimental nem duração
+curta comprovada. O relatório deve explicitar o custo da interrupção. Continuam por
+fechar prazo operacional PKI, configuração/verificações por canal, recuperação de
+trabalhos interrompidos, estado/abuso WS e corpus final. ≤5 s/meta ≤2 s são limites
+WS, não um SLA PKI. Validação individual; nenhuma implementação ou teste executado.
+
+### PKI-C4 B, PKI-C5 A e OPS-C1 A — validação individual com condições
+
+O utilizador confirmou **B/A/A** em 2026-11-16T20:33:46Z. O
+[contrato de critérios operacionais](architecture/fase2-criterios-operacionais-seguranca.md)
+regista a matriz atual/alvo, critérios, manifesto do piloto, esforço e recuo.
+
+- **PKI-C4 B:** isolamento ≤30 s/meta ≤10 s desde o comando administrativo até
+  corte demonstrado de novas ligações, persistentes, acessos internos e consumidores
+  RabbitMQ. Falha é isolamento incompleto; continuar sem reiniciar relógio.
+  Substituição medida sem impor 15/5 min; falha mantém isolamento. Marco de
+  planeamento fixado: **23/11 às 18:00 Europe/Lisbon**, instalação/carga/bruto/n e
+  tentativas por registar. Piloto válido antes de 27/11 fornece critério empírico
+  contextual com tempo observado; ausência/falha não se converte em capacidade.
+- **PKI-C5 A:** matriz completa com estado atual e estado-alvo, probes automatizados
+  e browser manual reproduzível com confiança conhecida. Nunca ultrapassar aviso
+  para aprovar. **expand_ai → generative-mock é API interna com mTLS**: cliente HTTP
+  e Flask sem TLS exigem implementação/testes reais, incluídos na estimativa e
+  plano de recuo, não apenas uma linha de documentação. Canais sem prova continuam
+  lacunas; a opção não exige mTLS universal nos dados/broker.
+- **OPS-C1 A:** implementar e testar ferramenta/procedimento administrativo por
+  execução, preservar evidência antes de corrigir, separar indeterminados de
+  confirmados e impedir reaplicar quota, incluindo crash. Sem evidência suficiente,
+  manter caso pendente/isolado. Sem ferramenta ou ensaio até 27/11, registar limitação
+  e não capacidade existente. Recuperação automática fica futura; ack antecipado
+  continua defeito conhecido. Reiniciar consumers não prova trabalho concluído.
+
+Confiança média no desenho/baixa em prazos não ensaiados. Isolamento não é cutoff
+WS nem recuperação F08. A proposta anterior de 15/5 min foi substituída por B;
+nenhum valor observado foi inventado. Estimativas em horas são preliminares, sem
+orçamento/disponibilidade aprovados. Sem implementação/testes nesta revisão.
 
 ### ACL-C1 — eliminação do projeto reservada ao dono
 

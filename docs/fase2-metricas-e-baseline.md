@@ -69,6 +69,14 @@ política, não capacidade ou testes demonstrados. A auditoria Git/build identif
 lacunas atuais; proteções e ensaios continuam por implementar. Não atribuir aprovação
 aos outros membros nem alterar as restantes metas por associação.
 
+**Validação individual posterior A/B/A:** WS-C4 fixa 16 lotes pendentes, além de
+4 ativos, 1 pendente por projeto; substituir pelo mais recente sem reiniciar prazo
+original/remover expirados. PKI-C2 B substitui CRL pela troca da CA e reemissão
+completa para retirar confiança. PKI-C3 A mantém isolamento/reinício, incluindo
+recusa da CA antiga e testes completos WS → projects e projects → armazenamento.
+Renovação normal é distinta. O custo da interrupção está aceite; duração e prazo
+operacional não estão demonstrados nem definidos pelo cutoff WS.
+
 ## 1. Estados, prioridades e origem dos números
 
 - **P:** métrica principal, necessária para afirmar melhoria do respetivo RNF.
@@ -246,8 +254,8 @@ estado/payload verificado, não segurança universal.
 | S17 G | TLS de servidor inválido aceite e operações S3/broker com credenciais ausentes/antigas/privilégios excessivos, nº | D10 credencial conhecida funciona; S3 direto/TLS NM | TLS validado, credenciais próprias e permissões mínimas onde aplicável (opção A V); 0 admissões indevidas E | Menor privilégio demonstrado; testar consumidores/produtores e leituras S3 assinadas legítimas; não basta mudar .env nem exigir mTLS universal |
 | S18 D | Portas internas publicadas por interface e alcançáveis por superfície, nº/lista | Original publica serviços; contagem congelar por configuração | Só loopback nas internas, nginx 8080 conforme D5 | Mesmo limite C; remover portas/segmentar é alternativa, não escolha nova |
 | S19 G | Segredos/chaves privadas nos ficheiros entregues, contextos/imagens/montagens indevidas e leaks em logs, nº | Auditoria estática: 3 caminhos sintéticos sem ignore, 6 chaves antigas seguidas pelo Git, 7 contextos com COPY amplo sem exclusão demonstrada; imagens NM | Proteção D4/PKI-C1: CA fora Git/build/contentores aplicacionais; chaves por serviço, montagens restritas; 0 novos segredos expostos E | 0 ativos expostos no âmbito E; testar marcadores sintéticos ausentes do Git/contexto/camadas; ignorar não retira chaves já seguidas. WS sem chave RS256 do gateway, projects sem segredo HS256 e serviços sem chave CA |
-| S20 G | Rotação sem aceitar credencial antiga nem perder fluxos autorizados, nº/cenário | NM | 100% dos cenários de rotação acordados | Igual; E; não reescrever histórico automaticamente |
-| S21 G | Sobrecarga em pedidos leves, ms pareados; WS por projeto/membro/contexto: HTTP/s, avaliações/s, fila, bytes JSON, espera/ligação/envio/leitura, CPU/RSS, recusas e justiça | NM para novo mTLS/consultas agrupadas; 4 simultâneas não provam 4/s nem limite de 20 projetos | Mediana +≤10 ms E; revalidação inicial 1 s; timeout total 1 s incluindo fila; até 50 avaliações e 64 KiB por corpo; 4 globais/1 por projeto, alternância V; fila limitada com máximo pendente | ≤5 ms E em pedidos leves; parâmetros V configuráveis, não capacidade medida; medir 500 membros + pequenos, >20 projetos, fila cheia, bytes exatos/+1 e multibyte; sem truncagem/renovação em falha; corte ≤5 s/meta ≤2 s V |
+| S20 G | Retirada de confiança e renovação normal separadas, nº/cenário; fecho de ligações/retomas e uso de nova identidade | NM | PKI-C2 B/PKI-C3 A V: após retirada/reabertura, 0 aceitações da CA antiga e 100% controlos legítimos; aplicação parcial isolada, dois percursos completos e restantes participantes verificados | PKI-C4 B V: isolamento desde comando até corte de novos/persistentes/consumers ≤30 s/meta ≤10 s; falha reportada sem reiniciar relógio. Duração da substituição NM, a calibrar no piloto até 23/11 às 18:00; sem 15/5 min vigentes. Renovação sob mesma CA não revoga por si certificado anterior; não confundir com retirada. Demais cenários E; preservar histórico |
+| S21 G | Sobrecarga em pedidos leves, ms pareados; WS por projeto/membro/contexto: HTTP/s, avaliações/s, fila, bytes JSON, espera/ligação/envio/leitura, CPU/RSS, recusas e justiça | NM para novo mTLS/consultas agrupadas; 4 simultâneas não provam 4/s nem limite de 20 projetos | Mediana +≤10 ms E; revalidação inicial 1 s; timeout total 1 s incluindo fila; até 50 avaliações e 64 KiB por corpo; 4 globais/1 por projeto, alternância V; fila inicial de 16 lotes pendentes/1 por projeto V | ≤5 ms E em pedidos leves; parâmetros V configuráveis, não capacidade medida; medir 500 membros + pequenos, >20 projetos, fila cheia, bytes exatos/+1 e multibyte; sem truncagem/renovação em falha; corte ≤5 s/meta ≤2 s V |
 | S22 G | Tokens de upload reutilizados/roubados/expirados aceites, nº, 2 PUT concorrentes | NA | 0; exatamente uma reclamação atómica por token | 0; E; token opaco/URL assinado não asseguram uso único sozinhos |
 | S23 G | Metadados/corpo/key/Host manipulados ou TOCTOU aceites, nº, revalidar objeto real | Base valida o ficheiro, não o novo protocolo | 0 objetos inválidos visíveis/acionáveis | 0; E; testar revogação entre emissão e confirmação |
 | S24 G | Exposição de dados pending/URLs internas/SSRF de probe, nº | Pending e probe por URL NA | 0 acessos/leaks; destinos internos fixados pelo servidor | 0; E; não passar URLs arbitrários do cliente ao ffprobe |
@@ -293,8 +301,9 @@ estado/payload verificado, não segurança universal.
    globais/1 por projeto e alternância de lotes entre projetos. Dividir antes de
    exceder avaliações ou bytes; recusar/registar excesso indivisível, sem truncagem.
    Testar limite exato, +1 byte, UTF-8 multibyte e resposta demasiado grande. Timeout
-   total de 1 s inclui fila e não reinicia no envio HTTP. Limitar fila (máximo ainda
-   pendente), coalescer ciclos repetidos sem adiar prazos; fila cheia/espera excessiva
+   total de 1 s inclui fila e não reinicia no envio HTTP. Limitar fila a 16 lotes pendentes/1 por projeto V, além dos 4 ativos;
+   manter o plano pendente mais recente sem reiniciar prazo e remover expirados;
+   concluir callbacks substituídos, coalescer ciclos sem adiar prazos; fila cheia/espera excessiva
    não concedem novos joins nem renovam autorização. Medir espera por projeto/contexto,
    recusas, cadência e justiça com 1 projeto de 500 membros e vários pequenos, e
    mais de 20 projetos ativos (por exemplo 40, corpus final por fechar). Quatro
@@ -325,6 +334,48 @@ mesma CA, permissões de montagem/leitura e rotação em conexões persistentes.
 Observar erros/latência e fluxos legítimos, sem assumir que renovar invalida o antigo
 ou que HTTPS já fornece mTLS. Asserções e cobertura dos canais de infraestrutura
 ainda precisam de congelamento; nenhum ensaio novo é declarado.
+
+### 4.2. Fila, retirada de confiança e manutenção — validação individual A/B/A
+
+[WS-C4 A/PKI-C2 B/PKI-C3 A](architecture/fase2-fila-ws-e-revogacao.md) estão
+validadas individualmente com as condições do utilizador, não executadas. A
+recomendação CRL foi substituída: prazos/ensaios de CRL não são gates vigentes.
+Mantêm-se os 60 IDs existentes e as restantes propostas no seu estado anterior.
+
+| Decisão | Condições e evidência necessária | Métricas existentes |
+|---------|--------------------------------|---------------------|
+| WS-C4 A — 16 lotes pendentes, além de 4 ativos, 1 pendente por projeto | Ensaiar 4 ativos +16 pendentes e tentativa de 17.º; substituição pelo mais recente no mesmo slot sem reiniciar prazo, remoção de expirados, cancelamento de obsoletos e callbacks concluídos. Justiça também para membros/projetos não admitidos, 500 membros + pequenos e >20 projetos. Até 1 MiB de JSON pendente não limita memória total. | S10/S12/S21/F07/F09 |
+| PKI-C2 B — nova CA para retirar confiança | Reemitir todas as identidades, retirar CA antiga de todos os trust stores e registar aplicação por participante. Após reabertura: 0 aceitações de certificados da CA antiga em ligação nova, conexões persistentes úteis ou retomas antigas; controlo positivo novo. Renovação normal pode manter CA e não revoga por si o certificado anterior. | S08/S09/S19/S20/F06; S16/S17 nos canais afetados |
+| PKI-C3 A — manutenção/reinício | Medir deteção→isolamento, aplicação/fecho por participante e duração da interrupção. Testar chamadas completas WS → projects e projects → armazenamento, restantes canais e CA antiga recusada na retirada. Aplicação parcial mantém isolamento. Planeada espera ausência de trabalhos; compromisso isola logo e exige reconciliação. Testar falha/reinício e validade vencida com ligação aberta, preservação de dados/quota/identidade. | S08/S09/S20/F06/F07 |
+
+Não foi validado um prazo operacional PKI; ≤5 s/meta ≤2 s continuam a referir-se
+à autorização de salas WS. Nova CA/ficheiros no disco não provam aplicação em todos
+os verificadores nem eliminação de sessões antigas. O custo de parar toda a
+instalação para retirar um certificado é conhecido; a duração é NM, não «curta»
+demonstrada. Ensaios apenas com fixtures/PKI descartáveis; nenhum foi executado.
+
+### 4.3. Critérios operacionais — validação individual B/A/A
+
+[PKI-C4 B/PKI-C5 A/OPS-C1 A](architecture/fase2-criterios-operacionais-seguranca.md)
+foram validadas individualmente com condições. Os critérios são escolhas, não
+resultados; não aprovam as restantes metas por associação. Mantêm-se os 60 IDs.
+
+| Decisão | Critério, registo e evidência necessários | IDs existentes |
+|---------|----------------------------------------|----------------|
+| PKI-C4 B | Comando administrativo (incluindo preflight/esperas) → corte demonstrado de ligações novas/persistentes/internas e consumidores RabbitMQ: ≤30 s/meta ≤10 s V, por medir. Sem corte completo, falha/isolamento incompleto e ação continua sem reiniciar relógio. Substituição medida sem 15/5 min impostos; piloto planeado até 23/11/2026 às 18:00 Europe/Lisbon, com instalação/carga/bruto/n/tentativas. Se válido antes de 27/11, tempo observado é critério empírico contextual, não SLA universal. Falha mantém isolamento. | S20/F06/F08/F09/F10 |
+| PKI-C5 A | Matriz completa com estado atual/alvo por canal/principal/versão e controlos legítimos/indevidos; probes automatizados e browser manual reproduzível. Perfil de teste com confiança conhecida e sem ultrapassar aviso de certificado para aprovar. API expand_ai → generative-mock com mTLS exige implementação/testes reais; esforço/recuo registados, resultados NM. | S08/S09/S16/S17/S19/S20/S21/F06/F07/F10 |
+| OPS-C1 A | Ferramenta/procedimento administrativo implementado e ensaiado até à entrega; evidência antes de corrigir, indeterminados fora de confirmados e correção de quota protegida contra reaplicação/crash. Fixtures imagem/vídeo/débito ambíguo/editor/mudança de dia/mensagem tardia/limpeza. Sem prova suficiente: pendente/isolado. Sem ferramenta/ensaio até 27/11: limitação, não capacidade existente. Recuperação automática futura; ack antecipado defeito conhecido. | U21/U22/U24/F04/F06/F08/F09/F10 |
+
+O manifesto do piloto regista instalação, carga real, tempos por fase e falhas,
+com o marco de planeamento acima; não adiar silenciosamente. Se o piloto faltar,
+tempo NM/critério por calibrar é limitação explícita. Máximo observado e distribuição
+só são registados com bruto e cenário, sem inventar um limite de sucesso a partir
+de execuções falhadas. As três tentativas comparáveis são proposta instrumental,
+não três sucessos já obtidos nem carga/instalação já acordadas.
+
+Os 30/10 s de isolamento não validam F08 nem redefinem WS ≤5 s/meta ≤2 s.
+Documentação e reinício de consumidores não demonstram conclusão correta, quota
+ou cobertura TLS. Falta de suporte/ensaio não passa por zero ou por NA sem prova.
 
 ## 5. Catálogo de métricas de upload e recursos
 
@@ -369,7 +420,7 @@ Recolher gateway, projects, storage **e** nginx/SeaweedFS. Um valor Node pequeno
 | F03 G | Legendas com/sem fala e extração terminal/única/manifests, nº/total | Suites existentes, fala real NM | 100% regras; pelo menos um teste real de fala se percurso de storage afetado; não trocar reconhecimento por mock no relatório |
 | F04 G | Partilha, presença, versões, cancelamento, exportação e duas vias de autorização, nº/total; projeto vs media | Inspeção/alguns testes, cobertura ampliada NM; UI de DELETE encontrada na lista do próprio utilizador, sem ensaio renderizado | 100% controlos afetados; preservar outra via legítima e outras salas. ACL-C1 V: dono elimina projeto, editor remove media mas não projeto; verificar/ajustar UI não-dono e limpeza autorizada da conta; mudança de política justificada, sem alegar restrição DELETE inequívoca nos RF |
 | F05 G | Fluxo mock subscribe→premium→cancel→free, nº | Subscriptions fora de B16 | 100% antes/depois; criar fixture legítima e nunca usar promoção pública vulnerável como requisito positivo |
-| F06 G | Certificados/segredos/init, transição/renovação de sessões e reconexão WS registada/anónima, upgrade de volumes, nº/caso | Certificados expirados documentados; auditoria Git/build disponível, novo script PKI e transição/reconexão NM | Antes de renovar HS256, definir transição; preservar identidade/projetos anónimos e reconexão explícita V. PKI-C1 V: script local na entrega, validar arranque e renovação com ≤7 dias; recuperar >30 dias offline antes de servir, sem emissão além da CA. Revogação/ligações persistentes pendentes; não apagar volumes para corrigir migração |
+| F06 G | Certificados/segredos/init, transição/renovação de sessões e reconexão WS registada/anónima, upgrade de volumes, nº/caso | Certificados expirados documentados; auditoria Git/build disponível, novo script PKI e transição/reconexão NM | Antes de renovar HS256, definir transição; preservar identidade/projetos anónimos e reconexão explícita V. PKI-C1 V: script local na entrega, validar arranque e renovação com ≤7 dias; recuperar >30 dias offline antes de servir, sem emissão além da CA. PKI-C2 B/PKI-C3 A V: nova CA/reemissão completa para retirar confiança, manutenção/reinício e testes de conexões/retomas; PKI-C4 B fixa isolamento 30/10 s; substituição por medir no piloto, configuração por canal e reconciliação administrativa OPS-C1 a implementar/ensaiar; não apagar volumes para corrigir migração |
 | F07 D | Overhead de mTLS frio/quente, handshake e pedidos reutilizados, ms | NM | Reportar separadamente; guardas S21/U10 mantidas |
 | F08 G | Disponibilidade durante/fim de falha isolada, ms/restarts | B16 OOM sem retoma no intervalo observado | 0 quedas no corpus válido; se supervisor alterado, retoma ≤30 s, alvo ≤10 s E |
 | F09 D | Código/configuração afetados, contratos novos e passos operacionais, nº/lista | Inventário atual e listas nos documentos | Reportar extensão/complexidade; sem meta de «menos linhas» |

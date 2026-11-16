@@ -14,6 +14,15 @@ other channels require verified server TLS and service-specific least-privilege
 credentials where applicable. Exact configuration/proof and session transition
 remain open; prior JWT/WS decisions are preserved.
 Construction has not started.
+Current security review: [WS queue, revocation and persistent connections](../docs/architecture/fase2-fila-ws-e-revogacao.md)
+records individually validated WS-C4 A/PKI-C2 B/PKI-C3 A and a testable maintenance
+procedure. Channel proof, PKI timing/emergency reconciliation remain open; no
+implementation or measured compliance is inferred.
+[Operational criteria](../docs/architecture/fase2-criterios-operacionais-seguranca.md)
+record individually validated PKI-C4 B/PKI-C5 A/OPS-C1 A: isolation 30/10 s,
+measured replacement/pilot planned by 23 November 18:00 UTC, current/target channel
+proof and implemented/tested administrative recovery required. Runtime proof is
+pending; installation/load not selected.
 Session transition: the user confirms local-only Docker Compose installations
 administered by each member, no shared installation or external users. The
 [inventory worksheet](../docs/architecture/fase2-inventario-sessoes.md) includes

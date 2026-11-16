@@ -277,6 +277,10 @@ No individual agreement is inferred from those documents.
 | 2026-11-16T15:30:57Z | WS-C1 A | Direct WS → projects mTLS; authenticate specifically WS and permitted operations. WS delegates identity/expiry verified from the connection JWT with member-presented contexts; projects always decides permissions. | Explicit individual validation; any certificate of the CA is insufficient. D3 HS256 user JWT and gateway RS256 identity remain; rest of contract remains proposed. |
 | 2026-11-16T15:30:57Z | WS-C2 A | Initial configurable total timeout 1 s covering wait/connect/send/read; up to 50 member/context evaluations per request. Multiple batches with limited concurrency/fair scheduling; no extension on failures/retries. Cutoff ≤5 s/target ≤2 s retained. | Individual validation, subject to measurement, not demonstrated capacity. Global concurrency value/other limits remain to size; no agreement attributed to other members or tests claimed. |
 
+| 2026-11-16T19:49:16Z | WS-C3 A | Initial 4 simultaneous global authorization HTTP queries, 1 per project, alternating batches and 64 KiB UTF-8 JSON request/response bodies, jointly with 50 evaluations. Total 1 s includes queue; bound/coalesce pending work, overflow/late wait never renew or grant joins; no silent truncation. | Individual validation with conditions. Queue maximum/final corpus open. Four concurrent queries do not prove 4/s or twenty-project capacity. Test >20 projects and 500-member project plus small ones, fairness, byte boundaries and cutoff ≤5 s/target ≤2 s; no runtime proof. |
+| 2026-11-16T19:49:16Z | PKI-C1 A | CA per installation 365 days; service-specific keys/certificates 30 days, renew with 7 days remaining. Include administrator-invoked local issuance/renewal script and verification in delivery, no background daemon. Startup/offline recovery before service; never issue beyond CA validity. | Individual validation. Keep 30 days rather than switch to 90; implementation still unauthorized. Source Git/build audit finds gaps (3 nonignored probes/6 tracked keys/7 broad-copy contexts), not proven exclusions. Revocation/trust withdrawal/persistent connections remain open. |
+| 2026-11-16T19:49:16Z | ACL-C1 A | Only owner deletes entire project; editor retains editing/media removal, reader neither. Preserve authorized account cleanup, verify/hide non-owner UI actions and test disposable fixtures. | Explicit individual policy change: current DELETE accepts edit; RF53–RF55 do not unequivocally reserve DELETE to owner. Security-correction rationale recorded without claiming existing rule, runtime tests or other members’ approval. |
+
 The timestamp records when this validation was entered in the workspace; it does
 not fabricate a separate team meeting or each member's approval. The roster below
 identifies the team covered by the collectively communicated pair agreement;
@@ -293,6 +297,13 @@ The subsequent D4/WS-C1/WS-C2 entries supersede the open state of the service tr
 choice and initial timeout/batch parameters. The rest of the WS contract is still
 proposed; issuance/renewal/revocation parameters, pair coverage and concrete
 ordering/scheduling remain to review. No certificate/key was generated or app changed.
+
+The later WS-C3/PKI-C1/ACL-C1 rows fix the initial concurrency/body limits,
+certificate durations/renewal threshold and whole-project deletion policy. Earlier
+open-state statements above retain their historical scope. Remaining queue size,
+load corpus, certificate revocation/persistent connections and WS contract details
+are still open; engineering choices do not demonstrate capacity/compliance. The
+manual PKI script/checks are delivery scope, not implemented in this planning task.
 
 The [team review packet](team-review.md) provides the proposal to discuss against
 evidence commit `793df2e`. This record remains the single source for actual team

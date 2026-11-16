@@ -65,6 +65,20 @@ prolongam autorização. Critérios de corte mantidos; sem capacidade demonstrad
 O restante contrato e operacionalização da PKI continuam para revisão, sem atribuir
 aprovação aos restantes elementos, testes executados ou autorização para código.
 
+**Validação individual WS-C3/PKI-C1/ACL-C1:** limites iniciais WS de 4 consultas
+HTTP globais/1 por projeto, alternância e 64 KiB por corpo JSON, em conjunto com
+50 avaliações/timeout total 1 s incluindo fila. Fila limitada com máximo ainda por
+escolher; excesso nunca é truncado em silêncio e falhas não renovam autorizações.
+Quatro simultâneas não demonstram 4/s nem capacidade para 20 projetos; testar >20
+e um projeto de 500 membros com vários pequenos. PKI: CA por instalação 365 dias,
+serviço 30 dias, renovar com 7 dias restantes; script local manual e verificações
+na entrega, sem daemon automático. Auditoria Git/build encontrou lacunas, não
+proteção demonstrada; revogação/ligações persistentes pendentes. ACL: só dono
+elimina projeto inteiro, editor mantém remoção de media; mudança de política
+explícita, não restrição DELETE inequívoca herdada dos RF. Restantes decisões e
+ensaios mantêm-se pendentes, sem alterações à aplicação. Ver justificação completa
+no [documento de decisões](../../../docs/fase2-ideias-1-e-2.md#justificação-das-decisões).
+
 **Resumo ordenado por nota.**
 
 | # | Ideia | Tipo (ISO 25010) | Nota | Origem |
@@ -284,8 +298,10 @@ anula o objetivo. Guarda: sobrecarga por pedido medida e ≤ 10 ms em mediana (p
   agrupadas por projeto e individualizadas por membro/contexto; corte ≤5 s, meta ≤2 s;
   autorização local limitada desde o início da consulta positiva, sem extensão por
   falha; negação efetiva retira de imediato; JWT expirado termina a ligação. Falta
-  rever o restante contrato, ordenação/corridas e limites globais; 50 avaliações por
-  pedido/timeout total inicial 1 s estão validados, ainda sem carga/latência medidas.
+  rever o restante contrato e ordenação/corridas; 50 avaliações/timeout total inicial
+  1 s e WS-C3 (4 globais/1 por projeto/64 KiB) estão validados, sem capacidade medida.
+  O tamanho máximo da fila continua por decidir, com recusa e ausência de renovação
+  em saturação/espera excessiva.
   Não retirar acesso só porque um dos links terminou se outra via continuar válida.
 - **Transição das sessões antes da renovação HS256:** definir utilizadores registados,
   sessões anónimas, projetos associados, reautenticação e comportamento dos sockets.

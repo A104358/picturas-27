@@ -63,6 +63,9 @@ autorização para alterar a aplicação.
 | D4 | mTLS para autenticação de serviços internos, em substituição de HTTPS + JWT assimétrico de serviço. | Autenticar a identidade específica e autorizar par/operação; cadeia/CA válida não basta. Proteger chaves e definir emissão/renovação; operacionalização detalhada em revisão. D3 e autorização do domínio mantêm-se. |
 | WS-C1 A | Consulta direta ws_gateway → projects por mTLS; WS delega identidade e expiração verificadas no JWT da ligação, associadas aos contextos apresentados. | Projects autentica especificamente WS, autoriza as operações permitidas e decide sempre as permissões. Não aceitar certificado de outro serviço da CA como equivalente. |
 | WS-C2 A | Timeout total inicial 1 s (espera/ligação/envio/leitura), até 50 avaliações membro/contexto por pedido, configuráveis e sujeitos a medição. | Vários lotes, concorrência limitada e agendamento justo; falhas/tentativas não prolongam autorizações. Corte ≤5 s/meta ≤2 s mantidos; capacidade não demonstrada. |
+| WS-C3 A | Inicialmente 4 consultas HTTP globais, 1 por projeto, alternância de lotes entre projetos e 64 KiB por corpo JSON de pedido/resposta. | Configuráveis, não capacidade medida; 50 avaliações/64 KiB em conjunto, timeout inclui fila, sem truncagem nem renovação em falha. Máximo da fila/corpus final pendentes. |
+| PKI-C1 A | CA própria por instalação (365 dias), chave por serviço, certificados de serviço de 30 dias e renovação quando faltarem 7 dias. | Script local de emissão/renovação entra na entrega, iniciado pelo administrador; validar arranque/retorno após >30 dias e recusar emissão além da CA. Revogação/rotação de ligações persistentes ainda por fechar. |
+| ACL-C1 A | Eliminar o projeto inteiro fica reservado ao dono; editor mantém edição e remoção de media; leitor não elimina. | Mudança explícita de política: antes, DELETE aceitava partilha edit. Justificar como correção de segurança, verificar UI e preservar limpeza autorizada na eliminação de conta. |
 | D7 | `owner` pode estar ausente; quando presente, tem de ser um valor único coincidente com o dono no caminho. Contradições são recusadas. | A projects verifica sempre posse e partilha; a validação do parâmetro não substitui autorização do recurso. |
 | D6.1 | Recusar ligações Socket.IO sem JWT válido, incluindo o perfil anónimo; terminar a ligação quando o JWT expirar. | Frontend trata explicitamente a reconexão com JWT válido e nova autorização por sala; não presumir reconexão automática após corte pelo servidor. Transição/renovação preserva identidade e projetos anónimos e ainda precisa de desenho. |
 | D6.2 B | Consultar projects para autorizar cada entrada numa sala, considerando identidade, projeto e permissões atuais. | Indisponibilidade recusa nova entrada e permite tentativa posterior. WS-C1 A/WS-C2 A validam mTLS direto e timeout total inicial 1 s; payloads/ordenação/corridas continuam propostos. |
@@ -255,8 +258,10 @@ anula o objetivo. Guarda: sobrecarga por pedido medida e ≤ 10 ms em mediana (p
   agrupadas por projeto e individualizadas por membro/contexto; corte ≤5 s, meta ≤2 s;
   autorização local limitada desde o início da consulta positiva, sem extensão por
   falha; negação efetiva retira de imediato; JWT expirado termina a ligação. Falta
-  rever o restante contrato, ordenação/corridas e limites globais; 50 avaliações por
-  pedido/timeout total inicial 1 s estão validados, ainda sem carga/latência medidas.
+  rever o restante contrato e ordenação/corridas; 50 avaliações/timeout total inicial
+  1 s e WS-C3 (4 globais/1 por projeto/64 KiB) estão validados, sem capacidade medida.
+  O tamanho máximo da fila continua por decidir, com recusa e ausência de renovação
+  em saturação/espera excessiva.
   Não retirar acesso só porque um dos links terminou se outra via continuar válida.
 - **Transição das sessões antes da renovação HS256:** definir utilizadores registados,
   sessões anónimas, projetos associados, reautenticação e comportamento dos sockets.
@@ -563,7 +568,7 @@ refactoring da aplicação enquanto essas condições e a revisão de requisitos
 | D1 | Âmbito alargado: público, rede, portas, dados/S3 | Enumerar interfaces, identidades e ações abrangidas; medir todos os caminhos incluídos. Não significa proteger contra administrador do host comprometido. |
 | D2 | Gateway filtra, projects decide posse/partilha | Matriz por rota/verbo e uma regra de domínio consistente. |
 | D3/JWT | Validada pelo utilizador: HS256 utilizador; RS256 identidade interna | Definir transição de sessões registadas/anónimas antes de renovar o segredo; fechar aud, TTL, replay e rotação. |
-| D4 | Validada individualmente: opção A, mTLS nas APIs internas; restantes canais com TLS validado e credenciais/permissões onde aplicável. JWT assimétrico de serviço substituído | Matriz de pares/operações e ciclo de certificados abaixo; concluir configuração por canal e prova. Não exigir mTLS universal; D3 HS256/RS256 mantida. |
+| D4 | Validada individualmente: cobertura A, mTLS nas APIs internas e TLS validado/credenciais/permissões nos restantes canais; JWT assimétrico de serviço substituído | PKI-C1 fixa CA por instalação 365 dias/serviço 30 dias/renovar a 7 dias e script local na entrega; revogação/persistência, guardas Git/build e matriz ainda por implementar/provar. Não exigir mTLS universal; D3 mantida. |
 | D5 | Portas internas só em loopback; rede única mantida | Demonstrar alcance do host e da rede Docker separadamente; proteger também localhost. |
 | D6.1 | Validada individualmente: JWT válido obrigatório e término da ligação na expiração | Reconexão explícita com JWT válido/nova autorização por sala; fechar renovação/transição preservando identidade e projetos anónimos. |
 | D6.2 B | Escolhida pelo utilizador: consulta à projects em cada entrada; sem bilhetes WS | mTLS direto/timeout total inicial 1 s validados em WS-C1/WS-C2; payloads/ordenação/corrida ainda propostos, com recusa temporária em falha. |
@@ -661,9 +666,57 @@ Uma chamada da projects autenticada ainda precisa de indicar o contexto/projeto 
   confiança para rotação planeada, seguida de retirada explícita da credencial antiga.
   Renovar não invalida automaticamente o certificado anterior ainda válido.
 - Definir tratamento de chave comprometida, revogação/rejeição e conexões já abertas;
-  não presumir que renovar certificado corta sessões existentes. Duração, antecedência,
-  sobreposição, mecanismo de revogação e responsável operacional continuam por fechar.
+  não presumir que renovar certificado corta sessões existentes. Duração/antecedência
+  são escolhidas em PKI-C1 abaixo; sobreposição, revogação, ligações persistentes e
+  procedimento operacional detalhado continuam por fechar.
   Não gerar certificados ou alterar Compose/aplicação nesta fase de documentação.
+
+**PKI-C1 A — modelo e durações escolhidos individualmente:** uma CA por instalação,
+**365 dias** de validade da CA, certificados próprios por serviço de **30 dias**,
+renovação quando faltarem **7 dias** (aproximadamente aos 23 dias de um certificado
+de 30). Valores de engenharia, não requisitos docentes nem prova de operação segura.
+Concretizando a condição do utilizador, **o script local de emissão/renovação e os
+seus testes entram no âmbito da entrega**; mantém-se a validade de 30 dias. A opção
+de aumentar para 90 dias fica não escolhida. Não se prevê um daemon de renovação
+automática: o administrador inicia o procedimento local, que deve verificar a
+validade antes de colocar os serviços em funcionamento.
+
+Uma instalação desligada por mais de 30 dias precisa de renovar os certificados
+antes do regresso ao serviço; não aceitar certificados expirados como atalho. Uma
+CA expirada ou com prazo insuficiente para emitir um certificado de 30 dias exige
+tratamento explícito da CA/confiança antes dessa emissão. Não emitir validade além
+da CA. A chave privada da CA fica fora do Git, dos contextos de build e dos
+contentores aplicacionais; os certificados públicos de confiança podem ser distribuídos
+aos verificadores. Cada instalação e serviço mantém a sua identidade; nenhuma CA
+da equipa é implicitamente confiável por outra instalação.
+
+Revogação, retirada da confiança antiga, recarregamento/reinício e tratamento de
+keep-alive/conexões persistentes **continuam por fechar**. Alterar ficheiros ou
+renovar certificados não prova que ligações existentes passaram a usar os novos.
+Sem esses mecanismos e testes não declarar a PKI completa; o prazo WS de 5 s não
+é automaticamente um SLA de revogação de certificados.
+
+**Auditoria dos guardas Git/build — lacuna atual, não proteção já implementada.**
+O [registo de inspeção](../memory-bank/intents/001-phase-2-quality-improvements/evidence/security-planning-audit-2026-11-16.json)
+mostra três caminhos sintéticos de chaves não cobertos pelo `.gitignore`, seis
+chaves antigas já versionadas e sete contextos Node/frontend com cópia do contexto
+inteiro, sem exclusão de chaves demonstrada nas regras inspecionadas. Não foram
+criados os ficheiros sintéticos, lidas chaves privadas ou construídas imagens.
+Ignorar um caminho também não retira um ficheiro já versionado.
+
+Na implementação, incluir exclusões defensivas no Git e nos contextos Docker,
+manter a chave real da CA fora deles e testar com **marcadores sintéticos**, nunca
+com chaves reais: caminho ignorado, ausente do contexto e ausente das camadas da
+imagem produzida. Verificar também a montagem restrita das chaves certas por serviço.
+As exclusões devem acompanhar a migração para mounts externos, sem quebrar
+silenciosamente o arranque que hoje lê certificados do checkout. Não se alteraram
+ignores/build/aplicação nesta revisão anterior à baseline formal.
+
+Ensaios PKI a preparar: emissão/identidade/finalidade corretas e indevidas, outra
+CA/instalação, renovação no limiar de 7 dias, regresso após mais de 30 dias, CA
+perto de expirar, chave/CA fora de Git/imagem e retirada/rejeição da credencial
+antiga em ligações novas/persistentes quando o mecanismo for escolhido. Não foram
+executados nesta revisão. A duração não substitui os testes de revogação.
 
 **Matriz inicial de pares e operações — especificação a rever:** negar pares/ações
 não previstos. O par WS → projects e as suas restrições estão explicitamente
@@ -704,6 +757,38 @@ não podem ser apresentadas como implementação concluída. A escolha não apro
 coletivamente o restante contrato, os detalhes da PKI ou os requisitos completos.
 
 Prova: S08–S09/S19–S21, F06–F07 e o fluxo assíncrono real.
+
+### ACL-C1 — eliminação do projeto reservada ao dono
+
+**Opção A escolhida individualmente:** só o dono elimina o projeto inteiro;
+editores continuam a editar e remover media, leitores não podem eliminar projeto
+nem media. Gestão/revogação de partilhas continua do dono. A limpeza dos projetos
+quando a conta é eliminada mantém o seu fluxo de serviço autorizado, limitado ao
+titular e à operação prevista; não abrir DELETE global a editores ou ao WS.
+
+**Antes/depois explícito:** `DELETE /:user/:project` usa atualmente
+`checkSharePermission` + `requireEditPermission`, pelo que uma partilha edit pode
+passar esse controlo. Depois, o servidor terá de verificar dono efetivo para esta
+operação administrativa. Não é uma regra herdada já demonstrada: RF53–RF55 definem
+ver/editar e gestão de partilhas pelo proprietário, mas não fecham inequivocamente
+a eliminação do projeto inteiro. A escolha é uma política explícita de acesso,
+justificada como correção de segurança com mudança de comportamento intencional.
+Documentar a compatibilidade com preservação funcional nas guidelines, sem esconder
+a diferença ou prometer a sua aceitação académica como se fosse facto verificado.
+
+A inspeção do frontend encontrou a chamada `useDeleteProject` em
+`frontend/components/dashboard-sidebar/project-item.tsx`, alimentada pela lista
+do próprio utilizador em `project-list.tsx`. Não foi demonstrada em execução uma
+dependência da UI partilhada em eliminação por editor. Rever o caminho completo e
+ocultar/desativar qualquer ação de eliminar projeto quando o ator não for dono,
+com explicação coerente; a UI não substitui a recusa no servidor.
+
+Testar **apenas com projetos descartáveis**: dono elimina; editor não elimina
+mesmo por pedido HTTP direto e consegue editar/remover media; leitor não elimina
+nenhum dos dois; remoção de conta preserva a limpeza legítima. Manter versão,
+presença, quota e isolamento entre utilizadores nos controlos afetados. Não executar
+testes destrutivos sobre os dois conjuntos de volumes preservados de Luís.
+Prova: S01/S02/S05/S13/F04/F06. Testes de política/UI ainda não executados.
 
 **D5 — Loopback para portas internas, mantendo uma rede.**
 Reduz exposição à LAN e preserva depuração local; é a escolha comunicada. A alternativa de

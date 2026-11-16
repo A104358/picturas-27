@@ -1,7 +1,7 @@
 ---
 intent: 001-phase-2-quality-improvements
 created: 2026-11-14T17:10:27Z
-updated: 2026-11-16T16:31:00Z
+updated: 2026-11-16T19:49:16Z
 completed: null
 status: in-progress
 ---
@@ -39,7 +39,9 @@ that instruction; no separate nominal declarations or reviewed commit are invent
 | Team review | Six-direction synthesis, recommended discussion pair, scope/metric proposals and decision questions prepared; human review pending | [team-review.md](team-review.md) |
 | Updated decision rationale | Communicated November 16 choices preserved, undecided points explicit, final rationale and presentation answers completed | [Ideas 1/2](../../../docs/fase2-ideias-1-e-2.md) |
 | Measurement specification | 60 metrics, methods, baseline values/limits, proposed minimums/targets and explicit pre-code gates; formal baseline incomplete | [Metrics and baseline](../../../docs/fase2-metricas-e-baseline.md) |
-| WS authorization contract | WS-C1 A/WS-C2 A individually validated; rest proposed. D4 mTLS replaces asymmetric service JWT; certificate/pair lifecycle detailed for review; 10 verification cases not run | [Contract proposal](../../../docs/architecture/fase2-contrato-websocket.md) |
+| WS authorization contract | WS-C1 A/WS-C2 A/WS-C3 A individually validated; rest proposed. D4 mTLS replaces asymmetric service JWT; certificate/pair lifecycle detailed for review; 10 verification cases not run | [Contract proposal](../../../docs/architecture/fase2-contrato-websocket.md) |
+| WS/PKI/ACL source audit | Three synthetic key paths not ignored, six tracked legacy private-key paths and seven reviewed broad-copy build contexts; readonly planning evidence, not image/runtime testing | [Security planning audit](evidence/security-planning-audit-2026-11-16.json) |
+| Session transition inventory | Luís identified, both sets preserved. Isolated-copy counts: picturas 4 accounts/2 projects; experiment 13/10; originals hash-verified unchanged. Browser mappings/other computers and migration/source selection pending | [Inventory worksheet](../../../docs/architecture/fase2-inventario-sessoes.md) |
 | New evidence audit | 14 successful uploads summarized, 23 security/control case records reviewed, fresh static source/certificate inventory; raw ARM results unchanged | [Raw evidence index](evidence/nfr-2026-11-16/README.md) |
 | System Context | Not created | No artifact yet |
 | Units | Not created | No artifact yet |
@@ -93,6 +95,12 @@ No units have been decomposed. Boundaries depend on the selected requirements.
 | 2026-11-16T15:30:57Z | Record WS-C1 A/WS-C2 A: direct mTLS with specific WS authentication/operation permissions and explicit user delegation; total initial timeout 1 s and 50 member/context evaluations per request. | User validates identity/expiry from connection JWT, projects permission authority, bounded concurrency/fair scheduling for multiple batches and no authorization extension on failures/retries; cutoff ≤5 s/target ≤2 s retained. | Individual validation only, no agreement attributed to other members. Configurable parameters subject to measurement, not demonstrated capacity. Rest of contract remains proposed; no tests run/application edits. |
 | 2026-11-16T15:57:21Z | Record delivery scope option A: mTLS on internal APIs, verified server TLS elsewhere and service-specific least-privilege credentials where applicable. | User explicitly chose A for 27 November to focus on demonstrated authorization failures while preserving time for both quality requirements and their evaluation. | Individual validation only. Prior JWT/WS rules preserved; per-channel configuration, PKI parameters, session transition, remaining requirements and baseline remain incomplete. No application changes or runtime tests. |
 | 2026-11-16T16:31:00Z | Record anonymous deployment/browser inventory as unknown and required before choosing session migration. | User asks whether all anonymous browsers are team-controlled or external users exist, with an inventory prerequisite if unknown. The repository supplies no deployment/client-control inventory; neither population can be inferred. | No external users or all-controlled-client assumption asserted. Inventory remains to perform with deployment/operator information; identity/project preservation and prior JWT/WS conditions unchanged. No migration selected, secret rotated, runtime inventory or application/data changes performed. |
+| 2026-11-16T18:25:38Z | Record user-supplied local-only deployment context and prepare the session inventory worksheet. | User selected inventory preparation, then confirmed use only on team computers through Docker Compose, each member administering their own installation, no shared installation/external users and no formal environment list. Source reads confirm localStorage/session effects and lack of central session inventory. | Deployment-scope uncertainty resolved by user statement, not technical measurement. Fields, administrator roster, historical candidates and collection/exit criteria prepared; actual counts, browser associations and migration still pending. No Docker/DB/browser inventory, application changes, token renewal or key rotation performed. Prior pair/security/WS decisions preserved. |
+| 2026-11-16T19:03:51Z | Collect read-only local Docker metadata and record stopped/retained PictuRAS data sets. | User requested continuation. Queries found 13 exited experiment containers/6 volumes and 8 `picturas` volumes/no matching containers; historical temporary Compose file absent. | Partial one-host metadata inventory only. No DB/volume contents/browser inspected, services started/stopped, credentials rotated or application/data changed. Identity/project counts remain NM; other computers, administrator mapping and retention/migration decisions pending. |
+| 2026-11-16T19:18:54Z | Record Luís as this machine's administrator and preservation of both volume sets; collect account/project counts through isolated temporary database copies. | User explicitly requested preservation/counting without original-data changes and deferred development/evaluation installation selection. Counts: picturas 4 accounts (2 anonymous/2 free), 2 projects; experiment 13 free accounts, 10 projects. No anonymously owned projects in either set. | Original volumes mounted read-only, four file manifests unchanged before/after, temporary copies/databases removed and no temporary DB containers found afterwards. First copy attempt failed and was preserved as diagnostic, also with unchanged originals/cleanup. Counts are not migration tests, active sessions or storage-integrity verification; browser mapping/presets/other computers remain pending. No original app/database started, credentials rotated or source installation selected. |
+
+| 2026-11-16T19:49:16Z | Record individual WS-C3 A, PKI-C1 A and ACL-C1 A with implementation/evaluation conditions. | User agrees to initial 4 global/1 per project/alternating batches/64 KiB; local CA 365 days, service certs 30 days, renew with 7 days remaining; whole-project deletion owner-only, editor retains media removal. | Keep parameters distinct from measured capacity: 4 simultaneous does not prove 4/s or a 20-project limit. Queue maximum/final corpus, certificate revocation and persistent connections remain open. Include administrator-run issuance/renewal script and checks in delivery, retaining 30 days/no background daemon. ACL is an explicit policy change, not an unequivocal inherited RF restriction. Individual validation only; no app/ignore/build changes or runtime tests. |
+| 2026-11-16T19:49:16Z | Audit source protections and ACL/UI paths without runtime changes. | Three synthetic key paths not ignored, six tracked legacy key paths, seven reviewed contexts copying broadly without demonstrated private-key exclusion. DELETE currently accepts edit; only found frontend call is current-user project list. | No secret contents gathered, images built, certificates generated or rendered UI verified. Plan Git/context/image-layer marker checks, startup/offline renewal tests and disposable-project owner/editor/reader tests; preserve authorized account cleanup and both retained datasets. |
 
 ## Scope Changes
 
@@ -147,6 +155,7 @@ maintenance task is claimed. The dedicated stack is stopped with volumes retaine
 - [x] D6.2 B + D6.3 A recorded; room-ticket proposal deferred with rationale.
 - [x] A/A/A permanence conditions recorded, including individually validated 5 s/2 s criteria, initial 1 s grouped queries, bounded failure policy and explicit reconnection after JWT expiry.
 - [x] D4 supersession and WS-C1 A/WS-C2 A conditions recorded; D3 functions retained, PKI/pair operational detail made explicit as a proposal.
+- [x] WS-C3/PKI-C1/ACL-C1 individual choices and conditions recorded; source protection gaps audited, capacity correction explicit.
 - [ ] Open architecture/compatibility decisions closed and applicable metric gates approved.
 - [ ] Formal initial baseline completed for every mandatory metric or justified NA mechanism.
 - [ ] Exploratory evidence and feasibility assessed with the team.
@@ -162,6 +171,22 @@ maintenance task is claimed. The dedicated stack is stopped with volumes retaine
 
 ## Next Steps
 
+**Documentation verification for the A/A/A update:** diff whitespace check passed;
+60 unique metric IDs retained (24 security/26 upload/10 guards), 10 WS scenarios,
+ideas 1/2 catalog synchronized and 171 local file links resolved. Static audit
+JSON verified. Changes are confined to documentation/planning evidence; these
+checks do not execute the future WS/PKI/ACL scenarios or establish a formal baseline.
+
+For session transition, use the inventory worksheet: local-only/no-external-user
+scope is supplied; Luís is responsible for this machine and both volume sets must
+be preserved. One-host metadata and isolated-copy account/project counts are now
+recorded, with unchanged original hashes. Complete browser profiles/associations,
+any additional retained data and the other administrators' installation inventories.
+Development/evaluation-source selection remains explicitly deferred by the user.
+Keep historical experiment environments distinct. Review the resulting gaps before
+choosing transition/renewal, preserving identity/projects and not relying solely on
+the old JWT. Independent upload/certificate/measurement elicitation can continue.
+
 Continue the exploration procedure in [quality-exploration.md](quality-exploration.md):
 first review the November 16 [decision rationale](../../../docs/fase2-ideias-1-e-2.md#justificação-das-decisões)
 and [measurement gates](../../../docs/fase2-metricas-e-baseline.md). Preserve open
@@ -173,8 +198,11 @@ bounded failure policy and termination at JWT expiry are selected, not measured.
 WS-C1 A/WS-C2 A now validate direct mTLS/explicit delegation and initial total
 timeout 1 s/50 evaluations, with limited concurrency/fair scheduling; D4 replaces
 asymmetric service JWT. Next review remaining payload/context/order/race design,
-global concurrency/byte limits, certificate lifecycle parameters and infrastructure
-pair coverage; close session transition/renewal before HS256 renewal
+pending-queue maximum/final workload, certificate revocation/trust withdrawal,
+persistent-connection rotation and infrastructure pair coverage; WS-C3 fixes initial
+4 global/1 per project/64 KiB, PKI-C1 fixes 365/30/7 days with administrator-run
+script in delivery, and ACL-C1 owner-only whole-project deletion. All are individually
+selected, not implemented or measured; close session transition/renewal before HS256 renewal
 and the remaining upload/measurement details. Agree the scenarios and demonstrate
 the criteria experimentally. The QC-06 + QC-05 pair agreement is now recorded as
 communicated by the user. Do not reopen selection by default or extend that

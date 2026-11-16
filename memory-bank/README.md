@@ -14,6 +14,13 @@ other channels require verified server TLS and service-specific least-privilege
 credentials where applicable. Exact configuration/proof and session transition
 remain open; prior JWT/WS decisions are preserved.
 Construction has not started.
+Session transition: the user confirms local-only Docker Compose installations
+administered by each member, no shared installation or external users. The
+[inventory worksheet](../docs/architecture/fase2-inventario-sessoes.md) includes
+one-host Docker metadata and isolated-copy account/project counts (picturas 4/2;
+experiment 13/10). Luís is the administrator, both sets are preserved, and original
+hashes remained unchanged. Other computers/browser mappings, migration and the
+development/evaluation installation choice remain pending.
 
 - `intents/`: draft requirements and future units/stories.
 - `bolts/`: future execution plans and artifacts.

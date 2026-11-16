@@ -1,0 +1,103 @@
+{
+  "recorded_at": "2026-11-16T19:03:51Z",
+  "checkout_commit": "51a8fe7",
+  "scope": "Read-only Docker metadata on the queried local daemon; not a census of the team's computers or browser sessions",
+  "host_ref": "LOCAL-HOST-01",
+  "administrator_ref": null,
+  "collection": {
+    "compose_projects_listed": true,
+    "picturas_container_labels_queried": true,
+    "picturas_volume_names_and_labels_queried": true,
+    "unrelated_projects_excluded_from_report": true,
+    "database_contents_read": false,
+    "volume_contents_read": false,
+    "browser_storage_read": false,
+    "services_started_or_stopped": false,
+    "credentials_or_data_changed": false,
+    "atomic_snapshot": false
+  },
+  "commands": [
+    "docker compose ls -a --format json",
+    "docker ps -a --filter label=com.docker.compose.project=picturas-quality-20261114 --format <name/service/state/image JSON>",
+    "docker volume ls --filter name=picturas --format <name and labels>",
+    "docker ps -a --filter label=com.docker.compose.project=picturas --format <name/service/state/image JSON>",
+    "Read-only filesystem existence check of the historical Compose configuration"
+  ],
+  "command_formats_abbreviated": true,
+  "report_note": "Normalized observation from tool results, not a verbatim terminal transcript; image references are exactly the short references shown by docker ps, not verified image digests",
+  "environments": [
+    {
+      "ref": "ENV-LOCAL-01",
+      "compose_project": "picturas-quality-20261114",
+      "classification": "Historical experiment still present as stopped containers and labeled volumes",
+      "container_count": 13,
+      "running_container_count": 0,
+      "containers": [
+        {"service": "nginx", "state": "exited", "image_reference_from_ps": "1ebe58b0003b"},
+        {"service": "api_gateway", "state": "exited", "image_reference_from_ps": "4ce850c92caf"},
+        {"service": "users", "state": "exited", "image_reference_from_ps": "ec6ea12e0b54"},
+        {"service": "img_storage", "state": "exited", "image_reference_from_ps": "cac08eb9b0f5"},
+        {"service": "ws_gateway", "state": "exited", "image_reference_from_ps": "c7ab730c71eb"},
+        {"service": "projects", "state": "exited", "image_reference_from_ps": "5c21e207f6ad"},
+        {"service": "video_tool", "state": "exited", "image_reference_from_ps": "4beaa475d81e"},
+        {"service": "brightness_tool", "state": "exited", "image_reference_from_ps": "23c8f2828e9b"},
+        {"service": "seaweedfs", "state": "exited", "image_reference_from_ps": "31d61f5e8771"},
+        {"service": "frontend", "state": "exited", "image_reference_from_ps": "0993ae7771eb"},
+        {"service": "rabbitmq", "state": "exited", "image_reference_from_ps": "f5d40cd20460"},
+        {"service": "users_mongoDB", "state": "exited", "image_reference_from_ps": "0010f63d2695"},
+        {"service": "projects_mongoDB", "state": "exited", "image_reference_from_ps": "0010f63d2695"}
+      ],
+      "volume_count": 6,
+      "volumes": [
+        "picturas-quality-20261114_image_data",
+        "picturas-quality-20261114_project_data",
+        "picturas-quality-20261114_rabbitmq_data",
+        "picturas-quality-20261114_seaweedfs_data",
+        "picturas-quality-20261114_user_data",
+        "picturas-quality-20261114_whisper_models"
+      ],
+      "historical_config_path": "/tmp/picturas-quality-20261114/compose.json",
+      "historical_config_file_present": false,
+      "retention_decision": "Pending administrator confirmation; not assumed disposable"
+    },
+    {
+      "ref": "ENV-LOCAL-02",
+      "compose_project": "picturas",
+      "classification": "Retained labeled volumes; no matching containers found in the query",
+      "container_count": 0,
+      "running_container_count": 0,
+      "volume_count": 8,
+      "volumes": [
+        "picturas_image_data",
+        "picturas_minio_data",
+        "picturas_project_data",
+        "picturas_rabbitmq_data",
+        "picturas_seaweedfs_data",
+        "picturas_subscription_data",
+        "picturas_user_data",
+        "picturas_whisper_models"
+      ],
+      "legacy_storage_volume_present": "picturas_minio_data",
+      "storage_layout_or_compatibility_verified": false,
+      "retention_decision": "Pending administrator confirmation; contents and links to browser identities not inspected"
+    }
+  ],
+  "totals_in_observed_picturas_metadata": {
+    "containers": 13,
+    "running_containers": 0,
+    "labeled_volumes": 14,
+    "anonymous_identities": null,
+    "projects": null,
+    "media": null,
+    "browser_profiles": null,
+    "browser_identity_associations": null
+  },
+  "remaining": [
+    "Map this host and both retained data sets to the responsible administrator",
+    "Decide which fixtures and data must be preserved without inspecting or deleting them by assumption",
+    "Plan controlled database reads without silently starting or reconstructing stopped environments",
+    "Inventory browser profiles/origins and reconcile identity/project associations",
+    "Obtain the other administrators' installation inventories",
+    "Choose migration and recovery only after preserving the required identity/project associations"
+  ]
+}

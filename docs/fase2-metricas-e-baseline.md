@@ -31,7 +31,7 @@ positiva, limitada pelo JWT/permissão; falhas não renovam, respostas obsoletas
 restauram acesso e negação efetiva retira de imediato. Ao expirar o JWT, terminar a
 ligação e exigir reconexão explícita com JWT válido/nova autorização das salas.
 Estes critérios estão **validados individualmente e por demonstrar experimentalmente**.
-As restantes metas não foram aprovadas por associação. Contrato/timeout, renovação,
+As restantes metas não foram aprovadas por associação. Restante contrato, renovação,
 transição de sessões e outros TTL continuam abertos. A transição preserva identidade
 e projetos anónimos e deve ficar definida antes de renovar HS256. O acordo do par
 está registado separadamente; não aprova coletivamente todos estes detalhes.
@@ -58,6 +58,16 @@ credenciais e permissões nos dados/broker. Testar certificado inválido/expirad
 identidade de servidor incorreta e controlos positivos por canal; nos canais
 sem mTLS não inventar um requisito de certificado de cliente. S19/S20 continuam
 a cobrir segredos/rotação. Nenhum teste novo foi executado nesta atualização.
+
+**Validação individual WS-C3/PKI-C1/ACL-C1:** 4 consultas HTTP globais, 1 por
+projeto, lotes alternados e 64 KiB (65 536 bytes UTF-8) por corpo JSON; CA por
+instalação 365 dias, certificados de serviço 30 dias, renovar com 7 dias restantes;
+script local de emissão/renovação executado pelo administrador incluído na entrega,
+sem renovação automática em fundo. Eliminar o projeto inteiro passa a ser exclusivo
+do dono; editor mantém edição/remoção de media. São escolhas de engenharia e
+política, não capacidade ou testes demonstrados. A auditoria Git/build identificou
+lacunas atuais; proteções e ensaios continuam por implementar. Não atribuir aprovação
+aos outros membros nem alterar as restantes metas por associação.
 
 ## 1. Estados, prioridades e origem dos números
 
@@ -224,20 +234,20 @@ estado/payload verificado, não segurança universal.
 | S05 G | Operações legítimas concluídas, nº/total, dono/partilha/workers/previews/export | C00 dono passou; resto NM neste pacote | 100% | 100%; E, evita «segurança» por desligar o produto |
 | S06 G | Bloqueio de token ausente/expirado/assinatura errada/aud errada e término de ligação ativa na expiração, nº/caso | G01 401; restantes a ampliar, corte ativo NM | JWT expirado termina ligação; reconexão exige JWT válido e nova autorização por sala (V); 100% dos casos previstos (E) | Medir eventos após exp, reconexão explícita e preservação anónima; 100% E; regra de expiração V |
 | S07 G | Identidades internas adulteradas/aud/sub/exp/replay inválidos aceites, nº | NA; cabeçalho atual não é identidade assinada | 0 aceitações indevidas | 0; E; RS256 validado individualmente em D3; TTL, distribuição/rotação e replay continuam abertos |
-| S08 G | Pares/operações mTLS indevidos aceites, nº; CA errada, expirado, SAN/EKU/serviço errado e certificado de outro serviço da mesma CA | mTLS NA; certificados antigos não verificados; escolha D4 V, implementação/testes NM | Só identidades específicas e operações previstas; WS → projects limitado às consultas (V); 0 aceitações indevidas na matriz E | 0 E; aplicar matriz D4 e casos de emissão/renovação/rejeição, sem inferir segurança da mera presença de certificado |
+| S08 G | Pares/operações mTLS indevidos aceites, nº; CA errada, expirado, SAN/EKU/serviço errado e certificado de outro serviço da mesma CA | mTLS NA; certificados antigos não verificados; escolha D4 V, implementação/testes NM | Só identidades específicas e operações previstas; WS → projects limitado às consultas (V); 0 aceitações indevidas na matriz E | 0 E; PKI-C1 V: CA local 365 dias, serviço 30 dias, renovar a 7 dias; verificar arranque, retorno após >30 dias, emissão limitada pela CA e rejeições; parâmetros não são prova de cumprimento |
 | S09 G | Falhas em chamadas de serviço legítimas, nº/total, incluindo quota e billing | NM com PKI nova | 0 | 0; E |
 | S10 G | Joins sem permissão atual ou com contexto sub/projeto/perm adulterado admitidos, nº; consulta autenticada à projects por entrada | Consulta autorizadora NA; W01 mostra join sem autorização | 0; em falha/timeout da projects, 0 novas entradas concedidas | 0; E; controlos positivos incluem nova tentativa após recuperação; sem bilhetes WS |
 | S11 G | Joins admitidos após revogação confirmada, nº, consultas iniciadas depois do ACK da revogação; capturar pedidos em corrida separadamente | NM com asserções temporais completas | 0 permissões concedidas nas consultas posteriores ao corte confirmado | 0; E; sem janela de validade de bilhete. Corridas entre consulta e join entram em S12/S13 |
 | S12 G | Atraso de corte após revogação confirmada, ms; eventos indevidos após limite; prazo local e respostas obsoletas, §4.1 | NM para o novo mecanismo periódico | ≤5 s, local até 5 s desde início da consulta positiva e nunca além do JWT/permissão; falhas não prolongam; negação efetiva retira imediatamente, preservando outras autorizações | ≤2 s; V, critério/meta escolhidos individualmente e ainda por validar experimentalmente; intervalo inicial 1 s sujeito a carga/latência |
-| S13 G | Permissões read/edit/revoked/expired/legadas corretas, nº/total | Revogação existe; expiração de links é nova | 100% para política escolhida | 100%; C/E; links legados e política D8 ainda precisam de fecho |
+| S13 G | Permissões read/edit/revoked/expired/legadas corretas, nº/total; eliminação do projeto e remoção de media separadas | DELETE atual aceita edit; ACL-C1 altera essa política, novo comportamento NM; expiração de links nova | ACL-C1 V: dono elimina projeto; editor edita/remove media mas não elimina projeto; leitor não elimina nenhum; limpeza autorizada da conta preservada | 100% para política escolhida C/E; testar positivos e negativos em projetos descartáveis; links legados/D8 ainda por fechar, RF53–RF55 não provam a nova exclusividade de DELETE |
 | S14 G | Mudanças indevidas de perfil/consulta de dados pessoais, nº, G05–G07/D09 | 4 casos reportam efeito/exposição | 0 nos casos abrangidos | 0; E, distinguir hardening de regra nova |
 | S15 G | Operações de subscrição legítimas e indevidas, nº/caso | Serviço ausente; G08/G09=500, inconclusivo | 0 indevidas e 100% legítimas | Igual; E; baseline com subscriptions presente |
 | S16 G | TLS de servidor inválido aceite, ligações de BD sem credenciais ou a outra BD de serviço admitidas, nº | D11 leitura local sem credenciais; outros Mongo/TLS NM | TLS validado, credenciais próprias e permissões mínimas onde aplicável (opção A V); 0 admissões indevidas E | 0; testar três Mongo e backup legítimo separadamente, sem exigir mTLS nos clientes de BD |
 | S17 G | TLS de servidor inválido aceite e operações S3/broker com credenciais ausentes/antigas/privilégios excessivos, nº | D10 credencial conhecida funciona; S3 direto/TLS NM | TLS validado, credenciais próprias e permissões mínimas onde aplicável (opção A V); 0 admissões indevidas E | Menor privilégio demonstrado; testar consumidores/produtores e leituras S3 assinadas legítimas; não basta mudar .env nem exigir mTLS universal |
 | S18 D | Portas internas publicadas por interface e alcançáveis por superfície, nº/lista | Original publica serviços; contagem congelar por configuração | Só loopback nas internas, nginx 8080 conforme D5 | Mesmo limite C; remover portas/segmentar é alternativa, não escolha nova |
-| S19 G | Segredos/chaves privadas nos ficheiros entregues, imagens/montagens indevidas e leaks em logs, nº | Há segredos/chaves e logs sensíveis; inventário estático, distribuição nova NM | Proteção de chaves e ciclo de certificados conforme D4; 0 novos segredos expostos, retirar/rodar os usados no âmbito E | 0 ativos versionados/expostos no âmbito E; testar que WS não recebe chave RS256 do gateway, projects não recebe segredo HS256 e serviços não recebem chave da CA; distinguir histórico Git/templates |
+| S19 G | Segredos/chaves privadas nos ficheiros entregues, contextos/imagens/montagens indevidas e leaks em logs, nº | Auditoria estática: 3 caminhos sintéticos sem ignore, 6 chaves antigas seguidas pelo Git, 7 contextos com COPY amplo sem exclusão demonstrada; imagens NM | Proteção D4/PKI-C1: CA fora Git/build/contentores aplicacionais; chaves por serviço, montagens restritas; 0 novos segredos expostos E | 0 ativos expostos no âmbito E; testar marcadores sintéticos ausentes do Git/contexto/camadas; ignorar não retira chaves já seguidas. WS sem chave RS256 do gateway, projects sem segredo HS256 e serviços sem chave CA |
 | S20 G | Rotação sem aceitar credencial antiga nem perder fluxos autorizados, nº/cenário | NM | 100% dos cenários de rotação acordados | Igual; E; não reescrever histórico automaticamente |
-| S21 G | Sobrecarga em pedidos leves, ms pareados; WS por projeto/membro/contexto: HTTP/s, avaliações/s, espera/ligação/envio/leitura, latência, CPU/RSS, erros e justiça | NM para novo mTLS/consultas agrupadas | Mediana +≤10 ms E; revalidação inicial 1 s; timeout total inicial 1 s; até 50 avaliações/pedido; concorrência limitada/agendamento justo V | ≤5 ms E em pedidos leves; 1 s/50 configuráveis, sem capacidade demonstrada; medir lotes/cadência/filas e custo por membro, guardando corte ≤5 s/meta ≤2 s V |
+| S21 G | Sobrecarga em pedidos leves, ms pareados; WS por projeto/membro/contexto: HTTP/s, avaliações/s, fila, bytes JSON, espera/ligação/envio/leitura, CPU/RSS, recusas e justiça | NM para novo mTLS/consultas agrupadas; 4 simultâneas não provam 4/s nem limite de 20 projetos | Mediana +≤10 ms E; revalidação inicial 1 s; timeout total 1 s incluindo fila; até 50 avaliações e 64 KiB por corpo; 4 globais/1 por projeto, alternância V; fila limitada com máximo pendente | ≤5 ms E em pedidos leves; parâmetros V configuráveis, não capacidade medida; medir 500 membros + pequenos, >20 projetos, fila cheia, bytes exatos/+1 e multibyte; sem truncagem/renovação em falha; corte ≤5 s/meta ≤2 s V |
 | S22 G | Tokens de upload reutilizados/roubados/expirados aceites, nº, 2 PUT concorrentes | NA | 0; exatamente uma reclamação atómica por token | 0; E; token opaco/URL assinado não asseguram uso único sozinhos |
 | S23 G | Metadados/corpo/key/Host manipulados ou TOCTOU aceites, nº, revalidar objeto real | Base valida o ficheiro, não o novo protocolo | 0 objetos inválidos visíveis/acionáveis | 0; E; testar revogação entre emissão e confirmação |
 | S24 G | Exposição de dados pending/URLs internas/SSRF de probe, nº | Pending e probe por URL NA | 0 acessos/leaks; destinos internos fixados pelo servidor | 0; E; não passar URLs arbitrários do cliente ao ffprobe |
@@ -278,12 +288,20 @@ estado/payload verificado, não segurança universal.
    intervalo efetivo e atraso da revalidação, latência/erros/timeout, CPU/RSS da
    projects e ws_gateway, trabalho/latência na BD e impacto nos pedidos leves.
    Comparar com o mesmo workload sem o novo mecanismo. Agrupar reduz pedidos HTTP;
-   não elimina crescimento do processamento por membros/contextos. Valores de carga,
-   concorrência global, limites de bytes e budgets adicionais continuam por
-   dimensionar/medir. WS-C2 A fixa inicialmente até 50 avaliações membro/contexto
-   por pedido; projetos maiores usam vários lotes com concorrência limitada e
-   agendamento justo. Medir espera máxima por projeto/contexto e fome de projetos
-   pequenos sob carga de projetos grandes. Falhas ou tentativas não renovam prazo.
+   não elimina crescimento do processamento por membros/contextos. WS-C2/WS-C3 A
+   fixam inicialmente até 50 avaliações e 64 KiB por corpo JSON, 4 consultas HTTP
+   globais/1 por projeto e alternância de lotes entre projetos. Dividir antes de
+   exceder avaliações ou bytes; recusar/registar excesso indivisível, sem truncagem.
+   Testar limite exato, +1 byte, UTF-8 multibyte e resposta demasiado grande. Timeout
+   total de 1 s inclui fila e não reinicia no envio HTTP. Limitar fila (máximo ainda
+   pendente), coalescer ciclos repetidos sem adiar prazos; fila cheia/espera excessiva
+   não concedem novos joins nem renovam autorização. Medir espera por projeto/contexto,
+   recusas, cadência e justiça com 1 projeto de 500 membros e vários pequenos, e
+   mais de 20 projetos ativos (por exemplo 40, corpus final por fechar). Quatro
+   simultâneas não significam máximo 4/s: com ocupação L segundos, 4/L é apenas uma
+   aproximação ideal; timeouts podem dar zero renovações. Vinte projetos não são um
+   limite demonstrado. Medir distribuição/caudas e corte ≤5 s/meta ≤2 s; falhas e
+   tentativas não renovam prazo. Budgets adicionais e capacidade continuam por medir.
 7. **JWT/frontend:** testar expiração durante ligação ativa em perfis registados e
    anónimos; terminar a ligação e verificar que o frontend trata explicitamente a
    reconexão, apresenta JWT válido e pede nova autorização de cada sala. Não assumir
@@ -296,11 +314,12 @@ estado/payload verificado, não segurança universal.
    não marcar S06/S12/S21/F04/F06 como concluídos.
 
 O [contrato WS proposto](architecture/fase2-contrato-websocket.md) concretiza o
-protocolo §4.1 e propõe os casos WS-T01–WS-T10. WS-C1 A e WS-C2 A estão validadas
+protocolo §4.1 e propõe os casos WS-T01–WS-T10. WS-C1 A, WS-C2 A e WS-C3 A estão validadas
 individualmente com as condições acima; o restante contrato continua proposto.
 Os parâmetros não contam como capacidade ou conformidade medidas. O
 [ciclo/matriz D4](fase2-ideias-1-e-2.md#d4--mtls-entre-serviços-ciclo-de-certificados-e-pares)
-orienta S08/S09/S19/S20/F06/F07: testar emissão, chave/certificado correspondente,
+orienta S08/S09/S19/S20/F06/F07: testar script manual de emissão/renovação, validade
+no arranque/retorno após >30 dias, limite da CA, chave/certificado correspondente,
 renovação e retirada da confiança anterior, certificado expirado/outro serviço da
 mesma CA, permissões de montagem/leitura e rotação em conexões persistentes.
 Observar erros/latência e fluxos legítimos, sem assumir que renovar invalida o antigo
@@ -348,15 +367,30 @@ Recolher gateway, projects, storage **e** nginx/SeaweedFS. Um valor Node pequeno
 | F01 G | Testes existentes de orquestração e vídeo, nº e ambiente | B14: 8 Node e 74 vídeo; Whisper simulado | 100% antes/depois no mesmo ambiente; falhas explicadas, não esconder skips |
 | F02 G | Efeitos, ordem, MP4/H.264/AAC, duração e áudio, casos imagem/vídeo/misto | B14 controlos; B16 R0 imagem | 100% corpus, comparar pixels/áudio conforme contrato; não exigir MP4 binariamente igual sem necessidade |
 | F03 G | Legendas com/sem fala e extração terminal/única/manifests, nº/total | Suites existentes, fala real NM | 100% regras; pelo menos um teste real de fala se percurso de storage afetado; não trocar reconhecimento por mock no relatório |
-| F04 G | Partilha, presença, versões, cancelamento, exportação e duas vias de autorização, nº/total | Inspeção/alguns testes, cobertura ampliada NM | 100% controlos afetados; revogar um link não retira outra via ainda legítima nem outras salas; preservar links/URL segundo migração escolhida |
+| F04 G | Partilha, presença, versões, cancelamento, exportação e duas vias de autorização, nº/total; projeto vs media | Inspeção/alguns testes, cobertura ampliada NM; UI de DELETE encontrada na lista do próprio utilizador, sem ensaio renderizado | 100% controlos afetados; preservar outra via legítima e outras salas. ACL-C1 V: dono elimina projeto, editor remove media mas não projeto; verificar/ajustar UI não-dono e limpeza autorizada da conta; mudança de política justificada, sem alegar restrição DELETE inequívoca nos RF |
 | F05 G | Fluxo mock subscribe→premium→cancel→free, nº | Subscriptions fora de B16 | 100% antes/depois; criar fixture legítima e nunca usar promoção pública vulnerável como requisito positivo |
-| F06 G | Certificados/segredos/init, transição/renovação de sessões e reconexão WS registada/anónima, upgrade de volumes, nº/caso | Certificados expirados documentados; inventário estático disponível, transição/reconexão NM | Antes de renovar HS256, definir transição; preservar identidade e projetos anónimos (V), reconexão explícita com JWT válido/nova autorização por sala (V); arranque claro/sem perda de dados, credenciais válidas; não apagar volumes para «corrigir» migração |
+| F06 G | Certificados/segredos/init, transição/renovação de sessões e reconexão WS registada/anónima, upgrade de volumes, nº/caso | Certificados expirados documentados; auditoria Git/build disponível, novo script PKI e transição/reconexão NM | Antes de renovar HS256, definir transição; preservar identidade/projetos anónimos e reconexão explícita V. PKI-C1 V: script local na entrega, validar arranque e renovação com ≤7 dias; recuperar >30 dias offline antes de servir, sem emissão além da CA. Revogação/ligações persistentes pendentes; não apagar volumes para corrigir migração |
 | F07 D | Overhead de mTLS frio/quente, handshake e pedidos reutilizados, ms | NM | Reportar separadamente; guardas S21/U10 mantidas |
 | F08 G | Disponibilidade durante/fim de falha isolada, ms/restarts | B16 OOM sem retoma no intervalo observado | 0 quedas no corpus válido; se supervisor alterado, retoma ≤30 s, alvo ≤10 s E |
 | F09 D | Código/configuração afetados, contratos novos e passos operacionais, nº/lista | Inventário atual e listas nos documentos | Reportar extensão/complexidade; sem meta de «menos linhas» |
 | F10 G | Reprodutibilidade dos artefactos, nº de execuções repetíveis/previstas | Scripts/JSON B16 presentes, manifesto incompleto | 100% dos gates com comando, dados/hashes, ambiente, bruto e análise; 0 segredos nos entregáveis |
 
 ## 7. Matriz de cenários e critérios de saída
+
+Para F06, o [inventário de sessões](architecture/fase2-inventario-sessoes.md) prepara
+as fixtures de preservação por instalação/browser/identidade/projeto. O utilizador
+confirmou uso apenas local pela equipa, sem instalação partilhada nem utilizadores
+externos. Essa declaração define o âmbito. Luís confirmou responsabilidade nesta
+máquina e preservação de ambos os conjuntos. Após os metadados Docker (13
+contentores parados/14 volumes), foram recolhidas contagens em cópias isoladas:
+`picturas` tem 4 contas/2 projetos (2 contas anónimas, 0 projetos de anónimos) e a
+experiência de 14/11 tem 13 contas gratuitas/10 projetos. Os hashes dos quatro
+volumes originais mantiveram-se iguais; cópias/contentores temporários removidos.
+Isto fornece fixtures agregadas de inventário, não resultados da migração ou
+cumprimento de F06. Browsers/associações, outros computadores e ensaios de transição
+continuam pendentes; instalação de desenvolvimento/avaliação não selecionada.
+Não confundir contagem de contas anónimas com sessões ativas nem recarregar o frontend como
+observação neutra, dado o comportamento atual de substituição da identidade em erro.
 
 | Grupo | Cenários a congelar | Métricas |
 |-------|---------------------|----------|

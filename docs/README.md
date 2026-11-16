@@ -36,7 +36,8 @@ pending; prior JWT/WS decisions are preserved.
 |----------|---------|
 | [Ideas 1 and 2, choices and rationale](fase2-ideias-1-e-2.md) | Communicated choices, unresolved questions, alternatives, risks and presentation answers. The final section is the canonical decision rationale. |
 | [Metrics, acceptance criteria and baseline](fase2-metricas-e-baseline.md) | 60 metrics, existing values, proposed minimums/targets and individually validated WS criteria (≤5 s/≤2 s, initial 1 s revalidation), with pending experimental proof and pre-implementation gates. |
-| [WebSocket authorization contract](architecture/fase2-contrato-websocket.md) | WS-C1 A/WS-C2 A individually validated: direct mTLS/delegation and initial 1 s total timeout/50 evaluations with limited concurrency/fair scheduling. Remaining contract proposed; no tests run. |
+| [WebSocket authorization contract](architecture/fase2-contrato-websocket.md) | WS-C1/C2/C3 A individually validated: direct mTLS/delegation, total 1 s, 50 evaluations, 4 global/1 per project/64 KiB and alternating batches; queue size/load proof pending. Remaining contract proposed; no tests run. |
+| [Session transition inventory](architecture/fase2-inventario-sessoes.md) | Luís identified; both volume sets preserved. Isolated-copy counts: picturas 4 accounts/2 projects, experiment 13/10; original hashes unchanged. Browser mappings, other computers, migration and source selection pending. |
 | [Upgrade catalog](../memory-bank/intents/001-phase-2-quality-improvements/upgrade-ideas.md) | Broader 19-idea catalog and the original ARM pilot context; qualitative scores are not team approval. |
 | [November 16 evidence audit](../memory-bank/intents/001-phase-2-quality-improvements/evidence/nfr-2026-11-16/README.md) | Original raw results, reproducibility limits and links to the derived audit. |
 

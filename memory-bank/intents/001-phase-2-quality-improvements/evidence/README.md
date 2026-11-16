@@ -14,6 +14,11 @@ application-level experiments and their explicit limits.
 
 | File | What it records |
 |------|-----------------|
+| [Security planning source audit](security-planning-audit-2026-11-16.json) | Three synthetic private-key paths not ignored, six tracked legacy key paths, seven reviewed build contexts with broad COPY and no demonstrated private-key exclusion; current DELETE/edit guard and frontend callsite. No key contents, images built, certificate generation or runtime tests. Protection guards and PKI/ACL tests remain planned. |
+| [Account/project snapshot counts](session-counts-local-2026-11-16.json) | Counts on isolated copies: picturas 4 accounts/2 projects (2 anonymous accounts, 0 anonymous projects); experiment 13 free accounts/10 projects. Original manifests unchanged and temporary copies removed. Luís administers both preserved sets; no development/evaluation source selected. |
+| [Snapshot count collector](collect-session-counts.py) | Configured for this host's four stopped MongoDB volumes/local image. Read-only original mounts, private copies, isolated queries and original-content verification; review configuration/permissions before reuse on another computer. Does not read browsers or publish account IDs/credentials. |
+| [First snapshot-copy attempt](session-counts-local-attempt-1-2026-11-16.json) | Copy failed before account queries; original manifests unchanged and temporary copies cleaned. Diagnostic of collection tooling, not an application reliability test. |
+| [Local session-inventory metadata](session-inventory-local-2026-11-16.json) | Read-only one-host Docker observation: 13 stopped experiment containers/6 volumes and 8 retained `picturas` volumes/no matching containers. No DB contents/browser data or identity counts collected; see the [inventory worksheet](../../../../docs/architecture/fase2-inventario-sessoes.md). |
 | [Source/environment inventory](source-inventory-2026-11-14.json) | Commit, application diff from the prior diagnosis, source hashes and point-in-time host resources. |
 | [Acknowledgement-order probe](ack-order.cjs) | Loads the real helper in a VM with a fake AMQP transport and a controlled asynchronous callback. |
 | [Acknowledgement-order result](ack-order-2026-11-14.json) | Callback starts, message is acknowledged, then callback completes. No live broker or crash is involved. |

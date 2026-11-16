@@ -1,6 +1,6 @@
 # Fase 2 — Contrato de autorização WebSocket
 
-**Equipa:** PL2-G4. **Estado:** WS-C1 A/WS-C2 A validadas individualmente;
+**Equipa:** PL2-G4. **Estado:** WS-C1 A/WS-C2 A/WS-C3 A validadas individualmente;
 restante contrato como proposta para revisão, 16/11/2026.
 Complementa as [decisões](../fase2-ideias-1-e-2.md) e o
 [protocolo de métricas WS](../fase2-metricas-e-baseline.md#41-protocolo-de-permanência-ws--condições-validadas-e-prova-pendente).
@@ -32,12 +32,14 @@ alterar a aplicação. D3 mantém HS256 de utilizador e identidade RS256 do gate
 | ID | Escolha validada individualmente | Alternativa / trabalho pendente |
 |-------------------|--------------------------|----------------------|
 | WS-C1 A | Consulta direta ws_gateway → projects por mTLS; projects autentica especificamente WS e autoriza as operações; WS delega identidade/expiração verificadas no JWT e os contextos apresentados; projects decide permissões | Percurso via gateway adiado; cadeia, identidade e pares/ações precisam de implementação e prova. Qualquer certificado da CA não basta. |
-| WS-C2 A | Timeout total inicial 1 s, incluindo espera/ligação/envio/leitura, até 50 avaliações membro/contexto por pedido; configuráveis e sujeitos a medição | Vários lotes para projetos maiores, concorrência limitada e agendamento justo. Valor da concorrência global e restantes limites por dimensionar; capacidade não demonstrada. |
+| WS-C2 A | Timeout total inicial 1 s, incluindo espera/ligação/envio/leitura, até 50 avaliações membro/contexto por pedido; configuráveis e sujeitos a medição | Vários lotes para projetos maiores. WS-C3 fixa 4 globais/1 por projeto/64 KiB; máximo da fila e restante dimensionamento pendentes, sem capacidade demonstrada. |
+| WS-C3 A | Limites iniciais configuráveis: 4 consultas HTTP globais, no máximo 1 por projeto, lotes alternados entre projetos e 64 KiB por corpo JSON de pedido/resposta | Sem capacidade/prazos demonstrados. Limite da fila e corpus final pendentes; timeout inclui espera e não reinicia no envio; fila cheia/espera excessiva não renovam autorização nem concedem novos joins. |
 
 Os detalhes de payload, ordenação e mecanismo concreto de agendamento são a
 **especificação proposta** para concretizar as condições validadas, sujeitos a revisão.
-Concorrência limitada e justiça são condições validadas, sem escolha implícita de
-um algoritmo ou valor numérico de concorrência. O restante contrato não foi aprovado.
+WS-C3 fixa os limites numéricos e a alternância; o algoritmo concreto, máximo da
+fila e outros limites de estado ainda precisam de detalhe. O restante contrato
+não foi aprovado. PKI-C1/ACL-C1 são tratados nas decisões de certificados/permissões.
 
 ## Situação observada no código
 
@@ -113,6 +115,9 @@ Não acrescentar uma exigência de edição para receber eventos que o modelo pe
 ao leitor. Entrada na sala não concede autorização para mutações HTTP nem ocupa,
 por si só, um lugar de editor/presença. Rever os payloads recebidos por read/edit
 para preservar o comportamento legítimo sem expor conteúdo fora dessa permissão.
+ACL-C1 A reserva a eliminação do projeto inteiro ao dono; editores continuam a
+editar/remover media. A autorização de leitura da sala não é autorização para
+administrar o projeto ou mutar recursos HTTP.
 
 ### Canal interno → projects
 
@@ -195,13 +200,52 @@ grande ocupe todo o agendamento. Não sobrepor avaliações do mesmo contexto se
 invalidar e correlacionar as anteriores. Novos joins também precisam de orçamento
 de execução, sem usar os resultados de revalidação como autorização de entrada.
 
-O valor do limite de concorrência global, limites de bytes/contextos guardados e
-corpus máximo suportado ainda precisam de dimensionamento. O limite de concorrência
-tem de existir; não se aprova execução ilimitada. Não se declara capacidade ilimitada:
+WS-C3 A fixa inicialmente **4 consultas HTTP globais** para joins/revalidações,
+**1 por projeto**, com alternância de lotes entre projetos, e **64 KiB por corpo JSON**
+de pedido/resposta. São parâmetros configuráveis, não capacidade demonstrada.
+O máximo da fila, estado guardado por contexto e corpus final ainda precisam de
+dimensionamento. Não se declara capacidade ilimitada:
 se os lotes não forem processados a tempo, o prazo existente expira e o resultado
 de disponibilidade/carga é reportado, sem abrir acesso para esconder a falha.
 Agrupar reduz pedidos HTTP; CPU/trabalho de autorização continuam a depender das
 avaliações individuais. Medir também leituras e latência da BD por lote.
+
+**Relógio e fila:** o timeout total de 1 s inclui a espera desde a aceitação do
+pedido de autorização. Iniciar HTTP, estabelecer outra ligação ou tentar de novo
+não reinicia o prazo da mesma operação. A fila deve ser limitada; o número máximo
+ainda não está escolhido. Coalescer ciclos do mesmo contexto sem renovar o instante
+de entrada ou acumular trabalho equivalente. Ao encher ou expirar, registar a causa
+e recusar temporariamente novas entradas; membros existentes só conservam a última
+autorização até ao prazo já fixado. Só uma nova decisão positiva atual e elegível
+pode renovar uma autorização; falhas/tentativas não o fazem.
+
+**Bytes e lotes:** 64 KiB = **65 536 bytes** do corpo JSON serializado em UTF-8,
+incluindo o envelope; não é contagem de caracteres, cabeçalhos ou tráfego TLS.
+Aplicar conjuntamente até 50 avaliações e até 64 KiB: dividir o lote antes de
+ultrapassar qualquer limite. Uma avaliação que não caiba sozinha deve ser recusada
+explicitamente. Excesso recebido deve ter erro/métrica próprios, nunca truncagem
+silenciosa. Resposta oversized/truncada não pode conceder autorização a partir de
+um prefixo; mantém-se a regra de falha sem renovação. Testar exatamente o limite,
+um byte acima e texto multibyte. A resposta tem de caber no seu próprio limite.
+
+**Capacidade: correção da conta proposta.** Concorrência 4 não significa um máximo
+fixo de 4 consultas/s. Num modelo ideal, o débito é aproximadamente `4 / L`, com
+`L` a duração média ocupada por consulta em segundos, condicionado por projetos,
+cadência, fila e outros recursos. `L=0,1 s` permitiria teoricamente cerca de 40/s;
+não é uma medição. Cerca de 4/s corresponde à hipótese de ocupação próxima de 1 s;
+se todas as consultas esgotarem o timeout, pode haver **zero revalidações positivas**.
+20 consultas/5 s é apenas uma estimativa nessa hipótese, não capacidade garantida
+de 20 projetos. O timeout já inclui fila, e cada projeto pode precisar de vários
+lotes. Não registar 20 como limite conhecido nem afirmar que abaixo dele os prazos
+estão garantidos. Recolher espera, ocupação, recusas, cadência e corte por cenário.
+
+**Justiça/corpus:** incluir um projeto de **500 membros**, com vários pequenos,
+medindo o atraso dos pequenos e quantas revalidações/joins terminam, falham ou
+expiram. Incluir carga com mais de 20 projetos ativos — por exemplo 40 como caso
+proposto, não como nova capacidade aprovada — e diferentes latências/falhas da
+projects. Não confundir alternância entre projetos com justiça entre membros de
+um projeto grande; observar ambos. Critério ≤5 s/meta ≤2 s permanecem, sem prova
+experimental nem declaração de resultados nesta revisão.
 
 ## Verificação antes de declarar o contrato cumprido
 
@@ -219,7 +263,7 @@ para congelamento antes dos ensaios. Não foram executados para este novo desenh
 | WS-T07 | JWT expirado termina ligação; frontend reconecta explicitamente com JWT válido e autoriza novamente todas as salas pretendidas; identidade/projetos anónimos preservados. | S06/F06 |
 | WS-T08 | Lote com membros/contextos mistos não partilha decisões; resposta incompleta, duplicada ou trocada nunca concede acesso por omissão. | S10/S13 |
 | WS-T09 | Certificado de outro serviço da mesma CA, operação fora do par permitido, cabeçalho forjado e acesso direto são recusados; verificar no WS a associação entre JWT e identidade/expiração/contextos delegados. Projects decide com base nessa delegação confiada, sem prova independente do JWT original. | S02/S08/S10 |
-| WS-T10 | Variar projetos/membros/contextos e lotes; medir HTTP/s, avaliações/s, cadência, filas, CPU/RSS, BD, erros e impacto nos pedidos leves. | S21/F07/F09 |
+| WS-T10 | Variar projetos/membros/contextos, latências e lotes; incluir 500 membros num projeto + vários pequenos e mais de 20 projetos ativos; medir justiça/espera, recusas/timeout de fila, limites conjuntos 50/64 KiB, HTTP/s, avaliações/s, cadência, CPU/RSS, BD e impacto nos pedidos leves. | S12/S21/F07/F09 |
 
 Distinguir corte/última emissão no servidor de chegada de pacotes já em trânsito.
 Registar razões e tempos com referências de ensaio sem guardar JWT, chaves ou

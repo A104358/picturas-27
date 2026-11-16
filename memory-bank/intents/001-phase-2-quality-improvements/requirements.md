@@ -3,7 +3,7 @@ intent: 001-phase-2-quality-improvements
 phase: inception
 status: draft
 created: 2026-11-14T17:10:27Z
-updated: 2026-11-16T16:31:00Z
+updated: 2026-11-16T19:49:16Z
 ---
 
 # Requirements: Phase 2 Quality Improvements
@@ -219,8 +219,9 @@ The later delivery-scope decision below fixes the required transport categories.
 Exact per-channel configuration/termination and support in the deployed versions
 remain to specify and verify, without claiming existing complete TLS/mTLS coverage.
 
-Certificate lifetime/renewal window/revocation mechanism, exact global concurrency/
-byte budgets and workload capacity remain open. **The rest of the contract remains
+Later WS-C3/PKI-C1 decisions below fix initial concurrency/JSON body limits and
+certificate lifetimes/renewal window. Queue capacity, revocation/persistent
+connections and demonstrated workload capacity remain open. **The rest of the contract remains
 a proposal for review.** Validation is individual, attributes no agreement to other
 members, declares no tests run and does not authorize application changes. The ten
 proposed verification cases map to existing metrics; full requirements review is
@@ -256,11 +257,71 @@ the agreed QC-06 + QC-05 pair.
   the remaining transport coverage in the D4 matrix, including nginx and tools.
 
 This is individual scope validation, not measured compliance, full requirements
-approval or construction authorization. Certificate lifecycle parameters, exact
+approval or construction authorization. Remaining certificate lifecycle details, exact
 pair/route policy, infrastructure configuration, session transition/renewal and
 remaining workload/metric decisions are still open. Option B, mandatory mTLS for
 every internal protocol, is not required for this delivery; it may be reconsidered
 if the threat model or evidence changes.
+
+## WS, Certificate and Access-Policy Review — Individual A/A/A Validation
+
+The user explicitly agreed with **WS-C3 A, PKI-C1 A and ACL-C1 A**, subject to the
+conditions below. This is individual validation, not approval of the full
+requirements set, measured compliance or authorization to change the application.
+
+- **WS-C3 A:** Initially 4 global simultaneous authorization HTTP queries, at most
+  1 per project, alternating batches between projects, and 64 KiB (65,536 UTF-8
+  bytes) per JSON request/response body. The 50-evaluation and byte limits apply
+  jointly; split before exceeding either, reject/log indivisible oversized bodies
+  and never silently truncate. These parameters are configurable engineering
+  choices. The 1 s total timeout includes queue waiting and never restarts when
+  HTTP begins. Bound the pending queue (numeric maximum still open), coalesce
+  repeated context revalidations without postponing their deadline, and apply
+  failure/no-renewal/no-new-entry rules to overflow and excessive waiting.
+- **Capacity qualification:** Four concurrent queries do not imply a maximum of
+  four queries/s or a demonstrated limit of twenty projects. Throughput depends on
+  occupied time, scheduling and batches per project; four/s assumes roughly 1 s
+  occupancy, and all timeouts can mean zero successful renewals. Test more than
+  twenty active projects as a stress case, not a known capacity boundary. Include
+  one 500-member project plus several small projects and measure small-project
+  waits, refusals, actual cadence and cutoff ≤5 s/target ≤2 s. Final corpus remains
+  to freeze; limits do not guarantee either deadline.
+- **PKI-C1 A:** One CA per installation, CA lifetime 365 days, separate service
+  keys, service certificates 30 days, renew with 7 days remaining (about day 23).
+  Resolve the delivery tradeoff by including an administrator-invoked local
+  issuance/renewal script and its verification in scope, retaining 30 days rather
+  than silently switching to 90. No background automatic renewal is required.
+  Check validity before startup; after >30 days offline, renew before resuming
+  service. Never issue beyond CA validity. CA expiry/insufficient remaining life
+  requires explicit CA handling before issuing a full new service lifetime.
+- **Key-protection gap:** The [read-only source audit](evidence/security-planning-audit-2026-11-16.json)
+  found no ignore match for three synthetic private-key paths, six tracked legacy
+  private-key paths and seven reviewed build contexts copying the whole context
+  without demonstrated key exclusions. No key contents were collected or images
+  built. Implement Git/build exclusions with external secret mounts and verify
+  synthetic private-key markers are absent from Git, contexts and image layers.
+  Ignore rules alone do not remove tracked keys. CA keys must stay outside Git,
+  build contexts and application containers. Revocation, withdrawal of trust and
+  existing persistent connections remain undecided; membership cutoff is not a
+  certificate-revocation SLA.
+- **ACL-C1 A:** Only the owner may delete an entire project. Editors retain
+  legitimate editing and media removal; readers may delete neither. The current
+  DELETE guard accepts edit permission, so this is an explicit access-policy
+  change justified as a security correction, not a rule unequivocally inherited
+  from RF53–RF55. Preserve authorized owner-scoped cleanup on account deletion.
+  Static inspection found the delete control in the current user's project list;
+  no rendered UI behavior was tested. Verify any shared-editor path and hide or
+  disable whole-project deletion for non-owners while enforcing it in the backend.
+  Plan disposable-project owner/editor/reader tests, including the editor's
+  successful media removal; do not use either preserved dataset as destructive
+  fixtures.
+
+Confidence is medium for WS sizing/certificate durations, and high for the
+recommendation to separate editing from administration; these are engineering
+judgments, not benchmarks or evidence of academic acceptance. Queue capacity,
+final load corpus, revocation/persistent-connection handling and remaining contract/
+pair-operation details still require review. No application, ignore/build files,
+certificates or preserved data were changed, and no new runtime tests were run.
 
 ## Session Transition — Source Findings, Decision Pending
 
@@ -281,17 +342,20 @@ Source inspection during continued elicitation found:
   Storing an old user ID in the browser is not additional proof. Do not claim
   transparent safe migration solely by verifying/re-signing such a JWT.
 
-**Deployment/browser inventory status: unknown.** No inventory or explicit
-confirmation establishes that all existing anonymous sessions are in team-controlled
-browsers, or that external users exist. Repository inspection establishes neither
-population nor browser control. Do not turn missing evidence into zero external
-users or assume that all identities/data are disposable test fixtures.
+**Deployment scope clarified by the user:** PictuRAS is used only locally on the
+team members' computers through Docker Compose; each member administers their own
+installation. The user states there is no shared installation and no external
+users, and no formal environment list yet. Record this as supplied operational
+context, not a runtime census or an inference from source inspection. It supersedes
+the earlier unknown deployment-scope state; specific installations, volumes,
+browser profiles and identity/project associations still need enumeration.
 
 Before choosing the migration, inventory:
 
 - Deployments and retained datasets whose anonymous sessions/projects must survive.
-- Anonymous identities and their associated projects; distinguish test fixtures,
-  external users and unclassified cases without inventing counts.
+- Anonymous identities and associated projects in the local installations;
+  distinguish fixtures, data to preserve and unclassified cases without inventing
+  counts or treating all local data as disposable.
 - Which browsers are controlled/accessibly recoverable by the team, based on
   deployment/operator information rather than inferred from database records alone.
 - Available independent identity/ownership evidence or assisted recovery procedure,
@@ -303,9 +367,48 @@ not an executed inventory or an approved migration mechanism. Until clarified,
 preserve the existing identity/project requirement; do not rotate the secret or
 substitute new anonymous identities as if preservation were achieved.
 
+The [session inventory worksheet](../../../docs/architecture/fase2-inventario-sessoes.md)
+now provides the four administrators' roster, collection fields/sources, known
+historical candidate environments, a read-only collection procedure and completion
+criteria. It does not assume one installation per person or mark counts complete.
+The source review also confirms `localStorage.session` and session-validation
+effects that can replace an anonymous identity; collection must not trigger that
+replacement by treating page reload/login as a neutral observation.
+
 Registered-account reauthentication, anonymous recovery proof/procedure, future
-renewal and token lifetimes remain undecided. No accounts, tokens or projects were
-modified; no statement about actual external users is attributed to the team.
+renewal and token lifetimes remain undecided. The local context supports evaluating
+administrator-assisted transition as a proposal, not an approved mechanism. No
+accounts, tokens or projects were modified.
+
+After the user requested continuation, read-only Docker metadata was collected on
+one local daemon: 13 stopped containers/6 labeled volumes for the historical
+experiment and 8 retained volumes/no matching containers for `picturas`. The
+[normalized observation](evidence/session-inventory-local-2026-11-16.json) records
+scope, sources and limits. The old temporary Compose file is absent. At that first
+observation no database/browser contents were read or services started.
+
+The user subsequently confirmed **Luís as administrator of this machine (ADM-01)**
+and instructed preservation of **both complete volume sets**, with the development/
+evaluation installation to be selected later. They requested account/project
+counts without modifying original data. The [aggregate collection](evidence/session-counts-local-2026-11-16.json)
+used private temporary copies of four source volumes mounted read-only; MongoDB
+ran only on the copies without external networking/published ports. Original file
+manifest hashes matched before/after and temporary databases/copies were removed.
+
+| Preserved data set | Accounts | Anonymous / free / premium | Projects | Projects owned by anonymous accounts |
+|--------------------|----------|----------------------------|----------|--------------------------------------|
+| picturas | 4 | 2 / 2 / 0 | 2 | 0 |
+| picturas-quality-20261114 | 13 | 0 / 13 / 0 | 10 | 0 |
+
+The project owners were found in the respective accounts collection and all are
+free accounts. Media references were counted (3/28), not verified against storage.
+No private IDs or credentials are archived; browser associations/presets remain
+unexamined and other administrators' computers uninventoried. These are account
+counts per data set, not distinct people or active sessions. Zero anonymously owned
+projects does not authorize discarding anonymous identities. A failed first copy
+attempt is retained separately; it also verified unchanged originals and cleanup.
+No original application/database was started or changed. No migration, secret
+rotation, disposal or development/evaluation-source selection has been made.
 
 ## Business Goals
 
@@ -401,9 +504,9 @@ will be maintained separately from these intent-specific requirements.
 | Which two quality weaknesses should this intent prioritize? | PL2-G4 | Resolved: QC-06 security/end-to-end authorization + QC-05 performance efficiency/upload resource utilization. Pair agreement recorded on the user's explicit instruction at 2026-11-16T15:12:33Z; details and measurements remain open. |
 | What hardware/resource budget, time, representative workloads and participants are available? | PL2-G4 | Pilot resources are recorded. Team hours, final workload scope and participant access remain open for the team review. |
 | What delivery deadline applies? | PL2-G4 | User explicitly corrected delivery to 27 November 2026; the previous 20 November planning date is superseded. Submission time remains unknown. |
-| Are all existing anonymous sessions in team-controlled browsers? | PL2-G4 / deployment operators | Unknown: no deployment/browser inventory supplied. Inventory identities/projects, browser control and independent recovery evidence before selecting migration; do not assume absence of external users. |
+| What deployment/browser context must session migration preserve? | PL2-G4 / each local administrator | Local-only/no external users confirmed. Luís administers LOCAL-HOST-01 and requires both volume sets preserved. On isolated copies: picturas 4 accounts/2 projects (2 anonymous accounts, 0 anonymous projects); experiment 13 accounts/10 projects (0 anonymous accounts). Browser associations, presets/media integrity and other computers pending; no development/evaluation installation selected. |
 | What target and minimum acceptable values are justified by the baseline and stakeholder needs? | PL2-G4 | WS cutoff ≤5 s/target ≤2 s and initial 1 s revalidation are individually validated, awaiting experimental proof. Other metric proposals remain unapproved; complete applicable gate review, whole-team agreement and reproducible formal baseline before refactoring. |
-| Which architecture details remain undecided? | PL2-G4 | D10; remaining WS payload/order/race design, global concurrency/byte limits; certificate lifecycle and exact per-channel TLS configuration/termination; session transition/renewal, other lifetimes/rotation, legacy links, API compatibility, atomic upload token, pending visibility and hash recovery. Option A transport coverage is individually validated: mTLS on internal APIs; verified server TLS elsewhere, service credentials/least privilege for data/broker where applicable. D4, WS-C1 A/WS-C2 A and prior WS/JWT conditions retain their validations; rest remains proposed. |
+| Which architecture details remain undecided? | PL2-G4 | D10; remaining WS payload/order/race design, pending-queue maximum and final load corpus; certificate revocation/trust withdrawal/persistent connections and exact channel/pair-operation configuration; session transition/renewal, other lifetimes/rotation, legacy links, API compatibility, atomic upload token, pending visibility and hash recovery. WS-C3 A (4 global/1 project/64 KiB), PKI-C1 A (CA 365/service 30/renew at 7 days, manual local script in delivery), ACL-C1 A (owner-only whole-project deletion) are individually validated, not implemented/measured. Prior coverage/JWT/WS conditions remain. |
 
 ## Sources
 

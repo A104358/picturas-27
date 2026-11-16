@@ -1,0 +1,114 @@
+{
+  "started_at": "2026-11-16T19:17:40Z",
+  "checkout_commit": "51a8fe7723dd476500613ca1dc35d552a1e6edd3",
+  "host_ref": "LOCAL-HOST-01",
+  "administrator_ref": "ADM-01",
+  "administrator_name": "Lu\u00eds Miguel Coelho",
+  "preserve_original_sets": [
+    "picturas",
+    "picturas-quality-20261114"
+  ],
+  "status": "complete",
+  "method": "Networkless read-only source helper; temporary physical copies; isolated MongoDB 4.4; aggregate-only report",
+  "original_volumes_mounted_readonly": true,
+  "original_databases_started": false,
+  "ports_published": false,
+  "browser_data_read": false,
+  "development_or_evaluation_installation_selected": false,
+  "datasets": {
+    "picturas": {
+      "users_database": "user",
+      "projects_database": "project",
+      "accounts_total": 4,
+      "accounts_by_type": {
+        "anonymous": 2,
+        "free": 2,
+        "premium": 0,
+        "other": 0
+      },
+      "projects_total": 2,
+      "projects_by_owner_type": {
+        "anonymous": 0,
+        "free": 2,
+        "premium": 0,
+        "other": 0,
+        "owner-not-found": 0
+      },
+      "media_references_total": 3,
+      "malformed_media_arrays": 0,
+      "media_objects_verified": false,
+      "browser_associations": null
+    },
+    "picturas-quality-20261114": {
+      "users_database": "user",
+      "projects_database": "project",
+      "accounts_total": 13,
+      "accounts_by_type": {
+        "anonymous": 0,
+        "free": 13,
+        "premium": 0,
+        "other": 0
+      },
+      "projects_total": 10,
+      "projects_by_owner_type": {
+        "anonymous": 0,
+        "free": 10,
+        "premium": 0,
+        "other": 0,
+        "owner-not-found": 0
+      },
+      "media_references_total": 28,
+      "malformed_media_arrays": 0,
+      "media_objects_verified": false,
+      "browser_associations": null
+    }
+  },
+  "mongo_image_id": "sha256:0010f63d26952bd3960fac5513c64a1cf7d6299f31fa7b54ac1b36633ee04333",
+  "sources_before": {
+    "picturas-user": {
+      "sha256_file_manifest": "62cd1abf0427cbefd2d3a32565713ec777894aaec8e15120f4fde177c5eef312",
+      "disk_kib": 308168,
+      "source_volume": "picturas_user_data"
+    },
+    "picturas-project": {
+      "sha256_file_manifest": "79508342345b764beabb368416001dc872fb87012d50804056674ca18caa3b48",
+      "disk_kib": 308560,
+      "source_volume": "picturas_project_data"
+    },
+    "picturas-quality-20261114-user": {
+      "sha256_file_manifest": "03c757e0433adec030c11cde99794fe0ca66550255590079a2c4da7d3f9185ab",
+      "disk_kib": 307832,
+      "source_volume": "picturas-quality-20261114_user_data"
+    },
+    "picturas-quality-20261114-project": {
+      "sha256_file_manifest": "636c55fa245fdc1041b2322bac50e4820195da72586120cd2124190bc3f3e87f",
+      "disk_kib": 308280,
+      "source_volume": "picturas-quality-20261114_project_data"
+    }
+  },
+  "sources_after": {
+    "picturas-user": {
+      "sha256_file_manifest": "62cd1abf0427cbefd2d3a32565713ec777894aaec8e15120f4fde177c5eef312",
+      "disk_kib": 308168,
+      "source_volume": "picturas_user_data"
+    },
+    "picturas-project": {
+      "sha256_file_manifest": "79508342345b764beabb368416001dc872fb87012d50804056674ca18caa3b48",
+      "disk_kib": 308560,
+      "source_volume": "picturas_project_data"
+    },
+    "picturas-quality-20261114-user": {
+      "sha256_file_manifest": "03c757e0433adec030c11cde99794fe0ca66550255590079a2c4da7d3f9185ab",
+      "disk_kib": 307832,
+      "source_volume": "picturas-quality-20261114_user_data"
+    },
+    "picturas-quality-20261114-project": {
+      "sha256_file_manifest": "636c55fa245fdc1041b2322bac50e4820195da72586120cd2124190bc3f3e87f",
+      "disk_kib": 308280,
+      "source_volume": "picturas-quality-20261114_project_data"
+    }
+  },
+  "original_file_manifests_unchanged": true,
+  "temporary_snapshots_removed": true,
+  "completed_at": "2026-11-16T19:17:57Z"
+}

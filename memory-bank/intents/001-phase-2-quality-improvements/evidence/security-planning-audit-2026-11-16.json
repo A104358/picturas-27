@@ -1,0 +1,98 @@
+{
+  "recorded_at": "2026-11-16T19:40:58Z",
+  "source_commit": "51a8fe7723dd476500613ca1dc35d552a1e6edd3",
+  "scope": "Read-only planning audit; no private key content read or generated; no Docker builds or application tests",
+  "git_ignore_synthetic_path_probes": [
+    {
+      "hypothetical_path": "secrets/ca/private.key",
+      "ignored": false,
+      "rule": null,
+      "file_created": false
+    },
+    {
+      "hypothetical_path": "users/certs/ca.key",
+      "ignored": false,
+      "rule": null,
+      "file_created": false
+    },
+    {
+      "hypothetical_path": "projects/certs/ca-private.pem",
+      "ignored": false,
+      "rule": null,
+      "file_created": false
+    }
+  ],
+  "reviewed_build_contexts": [
+    {
+      "context": "apiGateway",
+      "copies_entire_context": true,
+      "dockerignore_present": false,
+      "dockerignore_rules": [],
+      "private_key_exclusion_demonstrated": false
+    },
+    {
+      "context": "users",
+      "copies_entire_context": true,
+      "dockerignore_present": false,
+      "dockerignore_rules": [],
+      "private_key_exclusion_demonstrated": false
+    },
+    {
+      "context": "projects",
+      "copies_entire_context": true,
+      "dockerignore_present": false,
+      "dockerignore_rules": [],
+      "private_key_exclusion_demonstrated": false
+    },
+    {
+      "context": "subscriptions",
+      "copies_entire_context": true,
+      "dockerignore_present": false,
+      "dockerignore_rules": [],
+      "private_key_exclusion_demonstrated": false
+    },
+    {
+      "context": "imageStorageService",
+      "copies_entire_context": true,
+      "dockerignore_present": false,
+      "dockerignore_rules": [],
+      "private_key_exclusion_demonstrated": false
+    },
+    {
+      "context": "wsGateway",
+      "copies_entire_context": true,
+      "dockerignore_present": true,
+      "dockerignore_rules": [
+        "node_modules"
+      ],
+      "private_key_exclusion_demonstrated": false
+    },
+    {
+      "context": "frontend",
+      "copies_entire_context": true,
+      "dockerignore_present": true,
+      "dockerignore_rules": [
+        "node_modules"
+      ],
+      "private_key_exclusion_demonstrated": false
+    }
+  ],
+  "tracked_private_key_paths": [
+    "apiGateway/certs/selfsigned.key",
+    "certs/selfsigned.key",
+    "frontend/certs/selfsigned.key",
+    "projects/certs/selfsigned.key",
+    "subscriptions/certs/selfsigned.key",
+    "users/certs/selfsigned.key"
+  ],
+  "tracked_private_key_count": 6,
+  "backend_project_delete_edit_guard_observed": true,
+  "backend_source": "projects/routes/projects.js:1918",
+  "frontend_project_delete_call_site": "frontend/components/dashboard-sidebar/project-item.tsx",
+  "frontend_project_list_source": "frontend/components/dashboard-sidebar/project-list.tsx:24",
+  "shared_editor_delete_button_runtime_verified": false,
+  "application_or_ignore_files_changed": false,
+  "certificates_generated": false,
+  "images_built": false,
+  "conclusion": "Current source/ignore rules do not establish exclusion of CA/private keys. Implement and test guards with the planned PKI setup; owner-only DELETE is an explicit policy change, not a proven inherited rule."
+}

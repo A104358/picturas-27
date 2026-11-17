@@ -32,6 +32,16 @@ continuam as registadas nos [requisitos](../../memory-bank/intents/001-phase-2-q
 
 ## Responsáveis e instalações a identificar
 
+**Clarificação de 17/11, registada em 2026-11-17T22:48:42Z:** o utilizador ainda
+não sabe se existe registo independente que associe as duas identidades anónimas
+de `picturas` aos browsers certos. Estado da evidência: **desconhecido**, sem
+concluir existência ou ausência. As associações/recuperações reais ficam pendentes;
+não emitir JWT com base apenas no ID/token antigo ou na contagem de zero projetos.
+O [procedimento de recuperação](fase2-recuperacao-anonima.md) e o
+[modelo de caso](../templates/anonymous-session-recovery-case.template.json)
+concretizam a prova, emissão/importação e falhas. Nenhum caso real foi preenchido,
+aprovado ou recuperado nesta revisão; ambos os conjuntos continuam preservados.
+
 Cada responsável lista as suas instalações atuais e dados retidos, inclusive
 instalações paradas que se pretenda voltar a usar. As referências abaixo identificam
 responsáveis; não representam instalações já descobertas ou contagens concluídas.
@@ -59,6 +69,7 @@ assinados. **NM** significa não medido/não recolhido, nunca zero.
 | Browser/perfil | Referência, responsável, origem, acessível/indisponível/desconhecido, sessão presente/ausente/desconhecida, data da observação | Observação do perfil existente; não inferir de contas na BD ou de um browser instalado. |
 | Identidade anónima | Referência por instalação, correspondência privada com `_id`, tipo observado no servidor, contexto/fixture conhecido e evidência disponível | Users/administrador; valor guardado no cliente não é prova de titularidade. |
 | Associação browser↔identidade | Referências, correspondência confirmada/por confirmar, data e quem a confirmou | Comparar estado do browser com instalação e registos de domínio, sem publicar JWT. Não presumir associação única: várias sessões podem referir a mesma identidade. |
+| Evidência independente | Estado desconhecida/encontrada/verificada, referência privada, proveniência e fundamento da associação, administrador/data | Nesta máquina é desconhecida por resposta do utilizador em 17/11; ID/JWT antigo isoladamente não bastam. Modelo preenchido fora do Git, sem credencial. |
 | Projetos/media | Referências dos projetos por `user_id`, quantidade de projetos e media, integridade/objetos ainda por verificar, dados a preservar | Projects e storage da mesma instalação; não somar IDs de instalações distintas como se fossem uma única conta. |
 | Validade atual | Expiração conhecida ou NM, cliente disponível para transição e eventuais casos já expirados | Metadados locais lidos sem divulgar token; claims antigas não são prova independente de identidade. Sete dias no código não determina a expiração de cada sessão retida. |
 | Recuperação/estado | Evidência independente/associação administrativamente conhecida, dúvidas, perfil inacessível, identidade sem browser e decisão ainda necessária | Administrador; não escolher recuperação ou emitir credenciais durante a recolha. |
@@ -181,7 +192,7 @@ instalação de desenvolvimento/avaliação.
 | Browsers/sessões ativas e existência dos objetos de media | NM; referências de media contadas na BD não provam objetos existentes |
 | Instalação para desenvolvimento e avaliação | Por decidir; nenhuma selecionada nesta recolha |
 | Associações browser↔identidade↔projetos e casos inacessíveis | Pendentes |
-| Procedimento de migração, recuperação e renovação | SESS-C1 A selecionada individualmente com confirmação técnica; prova concreta/ferramenta de emissão/importação e ensaio ainda pendentes |
+| Procedimento de migração, recuperação e renovação | SESS-C1 A selecionada; especificação e modelo de caso preparados. Prova real desconhecida, ferramenta de emissão/importação e ensaio ainda pendentes |
 
 - [ ] Cada responsável listou as instalações e dados retidos relevantes, com data.
 - [x] Metadados e contagens de contas/projetos numa máquina recolhidos, com fonte,

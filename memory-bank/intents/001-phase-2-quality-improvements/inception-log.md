@@ -1,7 +1,7 @@
 ---
 intent: 001-phase-2-quality-improvements
 created: 2026-11-14T17:10:27Z
-updated: 2026-11-17T12:06:37Z
+updated: 2026-11-17T22:53:41Z
 completed: null
 status: in-progress
 ---
@@ -44,6 +44,7 @@ that instruction; no separate nominal declarations or reviewed commit are invent
 | Operational security review | WS-C4 A/PKI-C2 B/PKI-C3 A individually validated; 16 pending batches, new CA/all certificates for withdrawal, isolated maintenance/restart. CRL recommendation superseded; testable runbook/controls prepared, not executed | [Queue/revocation contract](../../../docs/architecture/fase2-fila-ws-e-revogacao.md) |
 | Operational criteria | PKI-C4 B/PKI-C5 A/OPS-C1 A individually validated; isolation 30/10 s, measured replacement/pilot milestone, full current/target channel matrix, actual mock mTLS and implemented/tested administrative reconciliation required. No runtime proof | [Operational criteria](../../../docs/architecture/fase2-criterios-operacionais-seguranca.md) |
 | Remaining security selection — November 17 | SESS-C1 A/JWT-C1 A/LINK-C1 A/WS-C5 B individually communicated and technically confirmed; D8 revised, replay/capacity metrics separated and logical scenarios v1 fixed. Proof/physical corpus/implementation pending | [Sessions/identity/sharing/WS](../../../docs/architecture/fase2-sessoes-identidade-partilhas-ws.md) |
+| Anonymous recovery procedure and case template | SESS-C1 A working proof/issuance/import specification and AR-01–AR-12 detailed; empty public case template. User says independent association evidence is unknown, so no case eligible/approved/issued by this review | [Procedure](../../../docs/architecture/fase2-recuperacao-anonima.md), [empty template](../../../docs/templates/anonymous-session-recovery-case.template.json) |
 | Session transition inventory | Luís identified, both sets preserved. Isolated-copy counts: picturas 4 accounts/2 projects; experiment 13/10; originals hash-verified unchanged. Browser mappings/other computers and migration/source selection pending | [Inventory worksheet](../../../docs/architecture/fase2-inventario-sessoes.md) |
 | New evidence audit | 14 successful uploads summarized, 23 security/control case records reviewed, fresh static source/certificate inventory; raw ARM results unchanged | [Raw evidence index](evidence/nfr-2026-11-16/README.md) |
 | System Context | Not created | No artifact yet |
@@ -109,6 +110,7 @@ No units have been decomposed. Boundaries depend on the selected requirements.
 | 2026-11-16T20:33:46Z | Record PKI-C4 B, PKI-C5 A and OPS-C1 A with user conditions. | Explicit user choices: isolation ≤30 s/target ≤10 s including persistent connections/consumers; replacement measured, not imposed 15/5 min. Full current/target channel matrix and browser with known trust/no bypass. Mock API mTLS effort/rollback; administrative tool/procedure implemented/tested by delivery or explicit limitation. | Individual validation only. Pilot planning milestone set to 23 November 18:00 Europe/Lisbon/UTC; environment/load/results still pending. Isolate incomplete failures without clock reset; failed replacement remains isolated. Preserve evidence, exclude indeterminate outputs and prevent repeat quota corrections. No auto-recovery claim; early ack remains defect. No application, Docker, credentials, volumes or new runtime tests changed; preliminary effort estimates not measured/team-approved. |
 | 2026-11-17T11:33:22Z | Prepare remaining security alternatives after user selects option 1. | SESS-C1 A recommends assisted transition/7-day user JWT, JWT-C1 A scoped 30-second gateway identity without generic single-use guarantee, LINK-C1 A preserves old/new links until explicit revocation per RNF52, WS-C5 initial state/rate/bytes and D10 host/container proofs. | Choices requested, still pending; no new individual validation inferred. Replay/logout/session-revocation residuals explicit. Code also emits preview/progress into personal rooms and producer messages lack project context: include protected emission checks/payload migration in tests, not a claimed live leak. No app, secrets, browsers, Docker or original data changed; only source/PDF/primary-doc review and Markdown. |
 | 2026-11-17T11:53:34Z | Record individual SESS-C1 A/JWT-C1 A/LINK-C1 A/WS-C5 B recommendations and assistant technical confirmation. | User asks to close these choices with conditions: assisted same-ID preservation/future anonymous reissue and actual proof/tool tests, 30 s admission-only contextual identity with accepted reuse residual, links until revocation and lower WS caps 512/4096. | Technical confirmation, not a literal validation statement invented for four members. RNF52 verified PDF p.27; D8 expiry preference deferred. S07 no longer claims zero contextual replay; excess caps are refusal tests, not fully admitted load. Logical scenarios v1 fixed (normal 50, fairness 510, many-project 200, limits/rates/bytes/personal events); physical corpus/proof/controls still pending. No app/secrets/browsers/Docker/data changes or new runtime tests. |
+| 2026-11-17T22:48:42Z | Concretize anonymous recovery, administrative issuance and browser import under SESS-C1 A. | User selected option 2 and answered they do not yet know whether an independent reliable identity/browser association record exists. Prepare proof criteria, private case states, restricted issuer, private normal JWT delivery and server-validation-before-import with suspended frontend bootstrap. | Evidence existence unknown, not absent/present. No case proof/approval or token created. Direct bearer file is not single-use/refresh; expiry starts at issuance, deletion does not revoke. Existing root provider can register/validate before import; tabs/callbacks require explicit handling. Empty JSON template outside real data, 12 planned scenarios and preliminary effort/rollback specified; no app/browser/DB/Docker/secret/volume change or runtime tests. |
 
 ## Scope Changes
 
@@ -167,6 +169,7 @@ maintenance task is claimed. The dedicated stack is stopped with volumes retaine
 - [x] WS-C4 A/PKI-C2 B/PKI-C3 A individually validated; maintenance runbook/controls prepared and CRL recommendation superseded.
 - [x] PKI-C4 B/PKI-C5 A/OPS-C1 A individually validated with pilot milestone, current/target channel matrix and actual implementation/test obligations.
 - [x] SESS-C1 A/JWT-C1 A/LINK-C1 A/WS-C5 B individually communicated/technically confirmed; D8/replay/capacity distinctions and logical scenarios v1 recorded.
+- [x] Anonymous proof/issuance/import working procedure and empty case template prepared; user evidence status recorded as unknown, not fabricated proof.
 - [ ] Open architecture/compatibility decisions closed and applicable metric gates approved.
 - [ ] Formal initial baseline completed for every mandatory metric or justified NA mechanism.
 - [ ] Exploratory evidence and feasibility assessed with the team.
@@ -181,6 +184,25 @@ maintenance task is claimed. The dedicated stack is stopped with volumes retaine
 - [ ] Artifacts reviewed and construction readiness confirmed.
 
 ## Next Steps
+
+**Anonymous-recovery documentation verification, 2026-11-17T22:53:41Z:**
+12 documentation/template artifacts; empty JSON parses, remains template-only,
+pending evidence/approval and not issued, with no credential fields or real IDs.
+60 unique metric IDs, 10 existing WS cases and 12 distinct planned recovery cases
+retained; canonical/catalog synchronization, 188 local file links, Markdown table
+continuity and diff whitespace passed. These are static documentation checks,
+not recovery, JWT, browser or runtime tests. No application/data changes, token
+issuance, case approval or commit performed.
+
+**Current anonymous-recovery detail:** the user states independent association
+evidence is **unknown**. The [procedure](../../../docs/architecture/fase2-recuperacao-anonima.md)
+and [empty case template](../../../docs/templates/anonymous-session-recovery-case.template.json)
+now specify proof/eligibility, issuance/import, frontend bootstrap suspension,
+error/ambiguity handling and AR-01–AR-12. Real cases remain pending evidence; no
+issuance, browser inspection or migration is authorized/performed by this review.
+Next obtain independent association evidence locally, then implement/test the
+procedure after the required full requirements/baseline review; do not ask again
+whether evidence is already known or infer it from the template/old JWT.
 
 **Current November 17 selection:** SESS-C1 A/JWT-C1 A/LINK-C1 A/WS-C5 B are
 individual recommendations technically confirmed by the assistant; do not ask again

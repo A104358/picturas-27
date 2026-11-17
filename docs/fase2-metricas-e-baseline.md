@@ -408,6 +408,28 @@ contexto/payload e medir; a inspeção estática não prova divulgação em exec
 D10 cobre host/contentor não confiável, separando rede/TLS/identidade/domínio, com
 controlos positivos. Todos os novos resultados são NM; sem migração ou ensaio feito.
 
+### 4.5. Recuperação anónima detalhada — prova real desconhecida
+
+O [procedimento de emissão/importação](architecture/fase2-recuperacao-anonima.md)
+concretiza SESS-C1 A, sem introduzir refresh/credencial de uso único. O utilizador
+declarou desconhecer se existe fonte independente de associação aos browsers.
+Registar estado **desconhecido/pending_evidence**, sem marcar «prova ausente»,
+«caso elegível» ou «recuperado» por omissão. Não foram consultados browsers/dados.
+
+| Grupo de casos | Evidência e critério antes de afirmar recuperação | IDs existentes |
+|----------------|-------------------------------------------------|----------------|
+| AR-01–AR-04 | Prova insuficiente impede emissão; aprovação fundamentada preserva mesmo sub/conta/perfil/dados. Conta apagada/registada, conflito, concorrência e crash não geram substituição ou duplicação cega. Template público vazio não aprova caso; artefacto privado/journal separados. | S06/S19/S20/F06/F09/F10 |
+| AR-05–AR-08 | Credencial candidata só é gravada após validação no servidor e comparação com caso aprovado; issuer/dataset/sub/tipo errados, old-secret JWT, ficheiro inválido/excessivo e falhas de rede/storage mantêm estado seguro. JWT 7 dias desde emissão, não desde importação. Ficheiro até 16 KiB é proposta instrumental; token/handshake mantém 8 KiB selecionados. | S06/S19/S20/F06/F10 |
+| AR-09–AR-12 | Bootstrap suspenso antes de criar/validar/logar sessão antiga; zero registos automáticos no modo recuperação. Tabs/callbacks não sobrescrevem a nova identidade; reconexão explícita e dados/quota preservados. Nenhum bearer/chave nos entregáveis/logs; apagar ficheiro não revoga JWT nem o torna de uso único. | S06/S19/F04/F06/F09/F10/U24 |
+
+Recolher tentativas, estados/causas, igualdade de identidade/dados/quota e tempos
+de aprovação/emissão/validação/importação sem segredos. N/durações de execução
+continuam NM; não medir segurança real por validar este documento/template. Os 12
+casos detalham SEC-01/SEC-02 e os 60 IDs, não acrescentam RNF ou ensaios executados.
+Ferramenta/procedimento e testes continuam obrigação da entrega; sem eles, limitação
+explícita. Estimativa preliminar de implementação 8–16 h/pessoa, não medida nem
+aprovação de recursos/horas da equipa.
+
 ## 5. Catálogo de métricas de upload e recursos
 
 Recolher gateway, projects, storage **e** nginx/SeaweedFS. Um valor Node pequeno não

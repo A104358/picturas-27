@@ -1052,6 +1052,23 @@ observação estática não é divulgação demonstrada. Cenários lógicos v1 f
 manifesto/corpus físico ainda por congelar. Confiança alta nos links/média nas
 restantes escolhas; tetos não têm capacidade demonstrada. Nenhum código/dado foi alterado.
 
+### Recuperação anónima — procedimento concretizado, prova real desconhecida
+
+O utilizador selecionou o detalhe de SESS-C1 A e declarou desconhecer se existe
+registo independente das associações aos browsers. O [procedimento](architecture/fase2-recuperacao-anonima.md)
+e [modelo vazio de caso](templates/anonymous-session-recovery-case.template.json)
+fixam condições de prova, estados privados, emissor local, ficheiro bearer e
+validação no servidor **antes** de importar a sessão. Não inventar prova nem
+emitir com base só no ID/JWT antigo. A falta de prova mantém dados/caso pendentes.
+
+O frontend atual pode registar/validar ao montar o provider; o importador precisa
+de suspender o bootstrap antes dos efeitos e tratar tabs/callbacks antigos.
+Emissão usa o mesmo perfil normal HS256 de 7 dias; o ficheiro não é refresh nem
+uso único, e importar/apagar não reinicia expiração/não revoga cópias. AR-01–AR-12
+são testes planeados, não execução. Ferramenta, UI, validação do perfil e testes
+continuam por implementar; estimativa preliminar 8–16 h/pessoa, sem orçamento
+aprovado. Nenhum dado/perfil real foi consultado ou alterado nesta revisão.
+
 ### Ideia 2 — porquê nginx/S3 e o que ainda precisa de prova
 
 **U1 — Envio pelo nginx para S3, em vez de atravessar os três Node.**

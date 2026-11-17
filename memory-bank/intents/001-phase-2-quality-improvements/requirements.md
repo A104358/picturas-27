@@ -3,7 +3,7 @@ intent: 001-phase-2-quality-improvements
 phase: inception
 status: draft
 created: 2026-11-14T17:10:27Z
-updated: 2026-11-17T12:06:37Z
+updated: 2026-11-17T22:48:42Z
 ---
 
 # Requirements: Phase 2 Quality Improvements
@@ -467,6 +467,34 @@ baseline review remain incomplete. Only documentation changed; no application,
 secrets, browsers, volumes or deployment changed, and no new runtime test ran.
 
 ## Session Transition — Source Findings, Proof Pending
+
+### Anonymous Recovery Concretization — Evidence Unknown
+
+The user selected detailing anonymous recovery and issuance/import. When asked
+whether an independent reliable association record exists, the user answered that
+they do not yet know. Record **unknown**, not evidence present/absent or account
+eligibility. The historical two anonymous accounts are not newly inspected cases.
+
+The [working procedure](../../../docs/architecture/fase2-recuperacao-anonima.md)
+and [empty case template](../../../docs/templates/anonymous-session-recovery-case.template.json)
+now specify proof conditions, private administrative states, restricted issuer,
+bearer delivery file and server-validated import before replacing local session.
+The template is not approval and contains no credential/real subject ID. Filled
+records stay outside Git; pending evidence prevents issuance.
+
+Implementation must suspend normal SessionProvider/register/validate/logout/socket
+effects before recovery starts; a page inside today's provider is insufficient.
+Validate issuer/sub/type/expiry against server and independent approved case, handle
+wrong installation/profile, storage/network failure, concurrent tabs/callbacks and
+ambiguous issuance without blind retries. The delivery JWT remains the normal
+7-day user bearer from issuance, not single-use/refresh; deleting a file does not
+revoke copies. Future anonymous expiry still requires assisted proof/reissue.
+
+AR-01–AR-12 detail existing SEC-01/SEC-02 and S06/S19/S20/F06 guards. Concrete
+recovery evidence remains unknown; tooling/import UI/server profile and tests are
+not implemented by this specification. No account, browser, secret or retained
+data was read/changed, no token issued and no case approved. Full requirements,
+baseline and construction review remain pending; SESS-C1 A is unchanged.
 
 Source inspection during continued elicitation found:
 

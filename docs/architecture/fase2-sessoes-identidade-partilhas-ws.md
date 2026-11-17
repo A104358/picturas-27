@@ -37,6 +37,14 @@ Zero projetos observados não autoriza descartar identidades/presets não levant
 
 ### Procedimento selecionado para implementar/ensaiar, não executado
 
+O [detalhe de recuperação anónima](fase2-recuperacao-anonima.md) concretiza a prova
+administrativa, estados/caso privado, emissor/ficheiro/importador e AR-01–AR-12.
+Em 17/11 o utilizador declarou desconhecer se há prova independente das associações
+reais; isso mantém os casos pendentes, sem presumir ausência ou autorizar emissão.
+O template não tem IDs/credenciais, e o percurso de recuperação deve suspender o
+bootstrap automático antes dos efeitos do SessionProvider. Tudo ainda por implementar/
+ensaiar; o procedimento não executa migração nem altera SESS-C1 A.
+
 1. Completar o [inventário](fase2-inventario-sessoes.md) por instalação/browser e
    responsável, incluindo dados/presets a preservar e casos inacessíveis. Guardar
    correspondências reais e evidência de titularidade protegidas fora do Git;

@@ -28,6 +28,10 @@ records SESS-C1 A/JWT-C1 A/LINK-C1 A/WS-C5 B individual selections with assistan
 technical confirmation. D8/replay/capacity distinctions and logical scenarios v1
 are fixed; concrete anonymous proof, physical corpus and emission controls still
 need implementation/tests. No migration or deployed capability inferred.
+[Anonymous recovery specification](../docs/architecture/fase2-recuperacao-anonima.md)
+and an empty case template now detail eligibility, issuance/import and suspended
+frontend bootstrap. Independent association evidence is unknown by user statement;
+real cases remain pending, no tokens issued or recovery tool implemented.
 Session transition: the user confirms local-only Docker Compose installations
 administered by each member, no shared installation or external users. The
 [inventory worksheet](../docs/architecture/fase2-inventario-sessoes.md) includes

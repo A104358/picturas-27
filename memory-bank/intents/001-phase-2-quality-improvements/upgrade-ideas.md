@@ -106,6 +106,14 @@ reservas. Normal/fairness/saturação separados: acima dos tetos é recusa, não
 integral. Cenários lógicos v1 fixados; prova anónima, corpus físico e emissões pessoais
 protegidas ainda precisam de concretização/testes. Sem acordo dos quatro presumido.
 
+**Detalhe de recuperação anónima, sem nova escolha presumida:**
+[procedimento e template vazio](../../../docs/architecture/fase2-recuperacao-anonima.md)
+concretizam SESS-C1 A, prova privada, emissão e importação após validação no servidor,
+com bootstrap suspenso. O utilizador não sabe se existe prova independente das
+associações reais: estado desconhecido/casos pendentes, sem emissão ou recuperação
+executada. O ficheiro é bearer de sessão, não uso único/refresh; testes AR ainda
+por implementar/ensaiar. Dados/volumes preservados.
+
 **Resumo ordenado por nota.**
 
 | # | Ideia | Tipo (ISO 25010) | Nota | Origem |

@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "template_only": true,
+  "case_ref": null,
+  "installation_ref": null,
+  "dataset_ref": null,
+  "administrator_ref": null,
+  "browser_profile_ref": null,
+  "subject_id": null,
+  "state": "pending_evidence",
+  "evidence": {
+    "existence_status": "unknown",
+    "source_ref": null,
+    "trusted_provenance_basis": null,
+    "independent_association_basis": null,
+    "verified_by": null,
+    "verified_at": null
+  },
+  "approval": {
+    "status": "pending",
+    "approved_by": null,
+    "approved_at": null
+  },
+  "target": {
+    "origin": "https://localhost:8080",
+    "issuer": null,
+    "expected_subject_id": null,
+    "required_account_type": "anonymous",
+    "controlled_destination_verified_at": null
+  },
+  "issuance": {
+    "status": "not_issued",
+    "issuance_ref": null,
+    "issued_at": null,
+    "expires_at": null,
+    "private_output_ref": null,
+    "ambiguity": null
+  },
+  "import": {
+    "status": "not_started",
+    "server_validation_at": null,
+    "expected_subject_confirmed_at": null,
+    "imported_at": null,
+    "verified_at": null
+  },
+  "checks": {
+    "same_identity": null,
+    "account_count_unchanged": null,
+    "projects_preserved": null,
+    "presets_preserved": null,
+    "media_references_and_bytes_preserved": null,
+    "quota_unchanged": null,
+    "no_automatic_registration": null,
+    "old_secret_rejected": null,
+    "explicit_ws_reconnection": null,
+    "no_secret_leak_in_report": null
+  },
+  "outcome": {
+    "status": "pending",
+    "reason": null,
+    "recorded_at": null
+  }
+}

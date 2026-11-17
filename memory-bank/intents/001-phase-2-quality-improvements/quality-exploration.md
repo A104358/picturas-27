@@ -3,7 +3,7 @@ intent: 001-phase-2-quality-improvements
 phase: inception
 status: draft
 created: 2026-11-14T17:16:06Z
-updated: 2026-11-17T12:06:37Z
+updated: 2026-11-17T22:48:42Z
 ---
 
 # Quality Options and Team Decision
@@ -383,6 +383,18 @@ as expiry implementation work. Personal-room event emission also needs context/
 authorization/cutoff implementation and tests. No runtime leak result is claimed.
 This does not approve full requirements, confer whole-team detail agreement or
 claim deployed security/capacity. No application/data changes or migration occurred.
+
+## Anonymous Recovery Detail — Evidence Unknown, No New Selection Inferred
+
+The user selected procedure concretization and explicitly said they do not yet
+know whether a reliable independent identity/browser association record exists.
+Record unknown, not evidence present/absent. The [working procedure](../../../docs/architecture/fase2-recuperacao-anonima.md)
+and [empty case template](../../../docs/templates/anonymous-session-recovery-case.template.json)
+detail eligibility, local administrative authority, issuance/import and bootstrap/
+callback conflicts, 12 planned tests and implementation effort. No record was
+approved, JWT issued or real browser/data inspected. This elaborates SESS-C1 A;
+it does not add a new claimed individual validation, completed proof or construction
+approval. Both retained datasets remain preserved and unselected for evaluation.
 
 ## Traceability and AI Assistance
 

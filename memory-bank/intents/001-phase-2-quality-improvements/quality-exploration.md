@@ -3,7 +3,7 @@ intent: 001-phase-2-quality-improvements
 phase: inception
 status: draft
 created: 2026-11-14T17:16:06Z
-updated: 2026-11-16T20:42:28Z
+updated: 2026-11-17T12:06:37Z
 ---
 
 # Quality Options and Team Decision
@@ -260,7 +260,7 @@ distinction; its final rationale and
 [measurement plan](../../../docs/fase2-metricas-e-baseline.md) are ready for review.
 No individual agreement is inferred from those documents.
 
-### Explicit Individual Decision Validation
+### Individual Decision Records — Validations and Technically Confirmed Selections
 
 | Timestamp | Decision | User-validated rule | Scope of validation |
 |-----------|----------|---------------------|---------------------|
@@ -285,6 +285,10 @@ No individual agreement is inferred from those documents.
 | 2026-11-16T20:33:46Z | PKI-C4 B | Isolation ≤30 s/target ≤10 s from administrative command until new/persistent/internal connections, consumers and worker effects are cut; incomplete isolation reported without resetting clock. Measure replacement without imposed 15/5 min; failed replacement remains isolated. | Individual choice. User requires installation/load/real duration and a pilot deadline; set planning milestone 23 November 18:00 UTC. Valid pilot before delivery yields contextual empirical comparison criterion, not universal SLA. No measured duration or installation selected. |
 | 2026-11-16T20:33:46Z | PKI-C5 A | Complete current/target channel matrix, automated probes and reproducible known-trust browser profile; no certificate-warning bypass counts as pass. Explicitly classify expand_ai_tool → generative-mock as internal mTLS API with actual implementation/test effort and rollback. | Individual validation. Runtime/termination and full channel proof pending; source HTTP client/Flask server are not protected by adding a row. Preliminary effort ranges remain engineering estimates, not approved availability. |
 | 2026-11-16T20:33:46Z | OPS-C1 A | Implement/test administrative reconciliation by delivery; preserve evidence first, exclude indeterminate results from committed state and prevent duplicate quota correction across reapply/crash. Without evidence, pending; without tool/tests by 27 November, explicit limitation rather than capability. | Individual validation. Automatic recovery future, early ack known defect; consumer restart not proof of completion. No application changes or runtime recovery tests claimed. |
+| 2026-11-17T11:53:34Z | SESS-C1 A | Assisted same-ID transition/reissue, registered login and 7-day absolute user JWT without refresh; anonymous future expiry still needs administrator and independent proof. No proof means pending/preserved data; issuance/import must be implemented/tested. | User recommends A for assistant confirmation; assistant technically confirms with conditions. Individual selection, not a fabricated literal whole-team validation. Concrete proof/browser inventory still pending; no credentials issued. |
+| 2026-11-17T11:53:34Z | JWT-C1 A | Per-request contextual RS256 up to 30 s/session exp, admission only; exact recipient/issuer/type/method/path/peer, scoped downstream delegation. Same authorized peer/context reuse during validity is accepted residual; no generic anti-replay store or exactly-once claim. | Same individual recommendation plus technical confirmation. jti alone is not single-use; S07 separates invalid-context rejection from residual reuse. No implementation/capacity proof. |
+| 2026-11-17T11:53:34Z | LINK-C1 A / D8 | Old and new links persist until explicit revocation, preserving RNF52 verified on PDF page 27. expiresAt/schema/UI/temporal migration deferred, superseding earlier communicated D8 preference. Revocation and WS revalidation remain. | Individual selection plus technical confirmation; high confidence in preservation, not a new test result or other members’ approval. Signed-media/upload TTL remains separate. |
+| 2026-11-17T11:53:34Z | WS-C5 B | Initial 512 connections/4096 contexts including pending reservations; selected contract, room/context/rate/bucket/input limits. Above caps test controlled refusal/preservation, not supported load. Logical scenarios v1 normal/fairness/saturation fixed. | User recommends lower caps and assistant confirms medium-confidence proportionality. No demonstrated capacity. If physical corpus needs higher admitted concurrency, explicitly revise before freeze; personal-room emission controls/proof still required. |
 
 The timestamp records when this validation was entered in the workspace; it does
 not fabricate a separate team meeting or each member's approval. The roster below
@@ -364,6 +368,21 @@ A measured pilot before delivery provides a contextual comparison criterion; no
 result has been invented. Installations/load, concrete isolation/termination,
 reconciliation tooling and runtime verification remain incomplete. The choice does
 not approve the full requirements or attribute agreement to the other members.
+
+## November 17 Security Selection — A/A/A/B Technically Confirmed
+
+The user recommended **SESS-C1 A/JWT-C1 A/LINK-C1 A/WS-C5 B** for confirmation;
+the assistant technically confirmed the combination with the stated conditions.
+The [contract/scenarios v1](../../../docs/architecture/fase2-sessoes-identidade-partilhas-ws.md)
+records this provenance, future anonymous-expiry assistance, independent proof,
+implemented/tested issuance/import, accepted contextual identity reuse, indefinite
+links per RNF52 and controlled refusal above 512/4096. Logical scenarios distinguish
+normal 50, fairness 510, many-project 200 and excess-cap attempts; physical manifest/
+corpus and anonymous proof are still pending. D8 is now updated, not silently left
+as expiry implementation work. Personal-room event emission also needs context/
+authorization/cutoff implementation and tests. No runtime leak result is claimed.
+This does not approve full requirements, confer whole-team detail agreement or
+claim deployed security/capacity. No application/data changes or migration occurred.
 
 ## Traceability and AI Assistance
 

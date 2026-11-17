@@ -97,6 +97,15 @@ de ser implementada/ensaiada até à entrega, ou é limitação explícita; sem 
 automático, evidência prévia e quota não reaplicável. Nada foi medido/implementado
 nesta revisão e nenhuma aprovação coletiva de detalhe é inferida.
 
+**Seleção individual de segurança de 17/11 A/A/A/B, com confirmação técnica:**
+[SESS-C1 A/JWT-C1 A/LINK-C1 A/WS-C5 B](../../../docs/architecture/fase2-sessoes-identidade-partilhas-ws.md)
+fixam assistência também na futura expiração anónima, JWT 7 dias/identidade interna
+30 s de admissão, reutilização contextual residual explícita e links antigos/novos
+até revogação (D8/expiry adiado). WS começa com 512 ligações/4096 contextos, contando
+reservas. Normal/fairness/saturação separados: acima dos tetos é recusa, não suporte
+integral. Cenários lógicos v1 fixados; prova anónima, corpus físico e emissões pessoais
+protegidas ainda precisam de concretização/testes. Sem acordo dos quatro presumido.
+
 **Resumo ordenado por nota.**
 
 | # | Ideia | Tipo (ISO 25010) | Nota | Origem |
@@ -246,7 +255,7 @@ anula o objetivo. Guarda: sobrecarga por pedido medida e ≤ 10 ms em mediana (p
 | D6.2 | Quem entra na sala de um projeto | Consulta à projects por entrada, opção B escolhida pelo utilizador; bilhetes WS adiados |
 | D6.3 | Permanência na sala | Revalidação periódica inicial de 1 s, agrupada por projeto e individual por contexto; corte ≤5 s, meta ≤2 s, escolhidos individualmente e ainda por medir |
 | D7 | Tratamento de owner | Ausente permitido; se presente, único e igual ao dono no caminho; contraditório recusado; validado pelo utilizador |
-| D8 | Modelo de partilha | Links com expiração |
+| D8 | Modelo de partilha | LINK-C1 A: links antigos e novos até revogação; expiresAt adiado nesta entrega, substituindo a preferência anterior |
 | D9 | Serviços no âmbito | Incluir `users` e `subscriptions` |
 | D11 | Token de upload da ideia 2 | Verificação própria e simplificada |
 
@@ -263,7 +272,7 @@ anula o objetivo. Guarda: sobrecarga por pedido medida e ≤ 10 ms em mediana (p
    deriva dela o chamador (`getCallerId`). Não precisa do segredo dos JWT de utilizador. É ela
    que decide: sem `share`, exige chamador = dono em todas as rotas, incluindo `GET`, `POST` e
    `DELETE /:user` e `/presence`; com `share`, aplica a regra atual (`checkSharePermission`) e a
-   expiração (ponto 8). A rota interna WS autentica o serviço por mTLS e recebe a
+   persistência/revogação (ponto 8; LINK-C1 A adia expiry). A rota interna WS autentica o serviço por mTLS e recebe a
    delegação validada em WS-C1; não exige que WS emita identidade RS256 de gateway.
 3. **Chamadas entre serviços internos** (incluindo `projects` → `img_storage`,
    `projects` → `users` para a quota e `ws_gateway` → `projects`). mTLS: o serviço chamado só aceita ligações com um
@@ -293,21 +302,22 @@ anula o objetivo. Guarda: sobrecarga por pedido medida e ≤ 10 ms em mediana (p
 7. **Portas.** Todas as portas publicadas, exceto a do nginx (8080), passam a
    `127.0.0.1:<porta>`. A rede `elk` mantém-se única. A proteção contra os casos D vem dos
    pontos 2 a 6, não das portas.
-8. **Partilha com expiração.** Novo campo `sharedLinks[].expiresAt`; `checkSharePermission`
-   responde 410 depois dessa data; o diálogo de partilha permite escolher a validade.
+8. **Partilha persistente até revogação — LINK-C1 A/D8.** Manter links antigos e
+   novos ativos entre sessões até revogação explícita, conforme RNF52. A preferência
+   anterior por expiresAt/schema/UI de validade foi revista e adiada nesta entrega;
+   revogação HTTP/WS e revalidação mantêm-se.
 
-*Em aberto (por decidir):*
+*Decisões selecionadas e concretização pendente:*
 
 - **D7 já validada individualmente:** parâmetro ausente permitido; presente exige valor
   único igual ao dono no caminho. Não voltar a tratá-la como escolha entre validar/ignorar.
   Testar ausência, coincidência, contradição e entradas multivalor, preservando partilha.
   Em `buildQuery`, o cliente principal omite a query sem partilha; não é necessário
   obrigá-lo a acrescentar `owner`.
-- **D10, como medir.** Com as portas em `127.0.0.1`, os casos D continuam alcançáveis a partir
-  do host, é possível ensaiar o host se a rede/configuração o permitir; rejeições HTTP, TLS e de rede devem ser registadas separadamente. Fica por decidir se se repete a
-  matriz a partir de dentro de um contentor da rede `elk`, e que casos novos entram (partilha
-  expirada e revogada, leitura vs. edição, consulta de join e autorização indisponível, token de upload da
-  ideia 2).
+- **D10, cenários lógicos v1:** host e contentor não confiável na rede de ensaio,
+  com positivos e rejeições de rede/TLS/identidade/domínio separadas. Casos lógicos
+  fixados no contrato de 17/11; instalação/manifesto/corpus físico por congelar.
+  Uso único/TTL de upload da ideia 2 continua decisão separada.
 - **D6.1 já validada individualmente:** recusar a ligação Socket.IO sem JWT válido.
 - **D6.2 B já escolhida individualmente:** consulta à projects por entrada; WS-C1 A
   e WS-C2 A validam mTLS direto e timeout total inicial 1 s. Rever os payloads e o
@@ -316,18 +326,23 @@ anula o objetivo. Guarda: sobrecarga por pedido medida e ≤ 10 ms em mediana (p
   agrupadas por projeto e individualizadas por membro/contexto; corte ≤5 s, meta ≤2 s;
   autorização local limitada desde o início da consulta positiva, sem extensão por
   falha; negação efetiva retira de imediato; JWT expirado termina a ligação. Falta
-  rever o restante contrato e ordenação/corridas; 50 avaliações/timeout total inicial
+  implementar/provar o contrato e ordenação/corridas selecionados em WS-C5 B; 50 avaliações/timeout total inicial
   1 s e WS-C3 (4 globais/1 por projeto/64 KiB) estão validados, sem capacidade medida.
   WS-C4 A fixa inicialmente 16 lotes pendentes/1 por projeto, com substituição pelo
   plano mais recente sem reiniciar prazo, recusa e ausência de renovação em falha.
   Não retirar acesso só porque um dos links terminou se outra via continuar válida.
-- **Transição das sessões antes da renovação HS256:** definir utilizadores registados,
-  sessões anónimas, projetos associados, reautenticação e comportamento dos sockets.
-  O algoritmo foi fechado nesta fase (HS256 utilizador, RS256 identidade interna),
-  mas a estratégia de transição e a validade/rotação das chaves não foram escolhidas.
-- **Links existentes** (sem `expiresAt`): sem validade, ou com uma validade por omissão.
-- **Validades** da identidade interna, sessões e tokens de upload; o desenho atual
-  não usa bilhetes WS, pelo que não há TTL de bilhete de sala a escolher nesta fase.
+- **SESS-C1 A/JWT-C1 A selecionadas individualmente e confirmadas tecnicamente:**
+  transição/reemissão assistidas, prova independente para anónimos, HS256 de 7 dias
+  absolutos sem refresh e RS256 interno até 30 s/exp da sessão. Contexto/peer e aud
+  restringem identidade; reutilização contextual residual aceite, sem uso único.
+  Prova de recuperação/browser e emissão/importação ensaiada ainda por realizar.
+- **LINK-C1 A/D8:** links antigos e novos sem expiry até revogação, sem migração
+  temporal; decisão fechada no âmbito individual, não funcionalidade de expiry.
+- **WS-C5 B:** tetos de 512 ligações/4096 contextos incluindo reservas, restantes
+  taxas/bytes/contrato conforme seleção. Excesso é recusa controlada, não capacidade.
+- **Validades de URLs S3 e tokens de upload:** pertencem ao contrato da ideia 2 e
+  continuam separadas. Não há bilhetes WS; TTL de identidade interna não é TTL
+  de processamento nem garante uso único de upload.
 
 *Onde mexer:*
 
@@ -339,9 +354,10 @@ anula o objetivo. Guarda: sobrecarga por pedido medida e ≤ 10 ms em mediana (p
   validada na `projects`. Novo módulo que emite a identidade assinada.
 - `projects/utils/caller.js`: `getCallerId` deriva o chamador da identidade assinada verificada
   e ignora `X-Caller-Id` e `jwt.decode`.
-- `projects/middleware/shareAuth.js`: `checkSharePermission` (expiração),
-  `requireEditPermission` (sem `share`, exigir chamador = dono).
-- `projects/models/project.js`: `sharedLinks[].expiresAt`.
+- `projects/middleware/shareAuth.js`: identidade comprovada, posse/partilha/revogação
+  em `checkSharePermission`/`requireEditPermission`; sem share exigir chamador=dono.
+- `projects/models/project.js`: preservar sharedLinks/createdAt/revoked; não
+  acrescentar expiresAt nesta entrega (LINK-C1 A).
 - `projects/routes/projects.js`: `requireOwner`, `requireAuth`; aplicar a `GET /:user`,
   `POST /:user`, `DELETE /:user` e às rotas `/:user/:project/presence` (hoje usam `getCallerId`,
   que confia no `X-Caller-Id`); disponibilizar autorização de sala ao ws_gateway,
@@ -355,7 +371,7 @@ anula o objetivo. Guarda: sobrecarga por pedido medida e ≤ 10 ms em mediana (p
   cada join, recusa temporária em falha e remoção de membros conforme D6.3.
 - `frontend/lib/projects.ts` e `frontend/app/dashboard/[pid]/page.tsx`: transmitir o
   contexto necessário ao join e tratar recusa/nova tentativa; não gerir bilhetes WS.
-  O diálogo de partilha com validade mantém a revisão funcional/migração pendente.
+  Não acrescentar diálogo de validade de partilha nesta entrega; preservar revogação.
 - `docker-compose.yaml`: portas em `127.0.0.1`; credenciais do MongoDB e do SeaweedFS; chaves
   da identidade assinada e certificados mTLS montados a partir de fora do
   repositório.

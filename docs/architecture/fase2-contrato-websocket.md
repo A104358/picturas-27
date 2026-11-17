@@ -1,7 +1,8 @@
 # Fase 2 — Contrato de autorização WebSocket
 
 **Equipa:** PL2-G4. **Estado:** WS-C1 A/WS-C2 A/WS-C3 A/WS-C4 A validadas individualmente;
-restante contrato como proposta para revisão, 16/11/2026.
+WS-C5 B selecionada individualmente e confirmada tecnicamente em 17/11/2026.
+Especificação de trabalho para implementação/testes, sem aprovação integral dos requisitos.
 Complementa as [decisões](../fase2-ideias-1-e-2.md) e o
 [protocolo de métricas WS](../fase2-metricas-e-baseline.md#41-protocolo-de-permanência-ws--condições-validadas-e-prova-pendente).
 Não é uma implementação, uma medição ou a aprovação do conjunto dos requisitos.
@@ -13,7 +14,7 @@ MongoDB/RabbitMQ/S3 usam credenciais próprias e permissões mínimas onde aplic
 mTLS universal não é requisito desta entrega. As decisões JWT e WS mantêm-se.
 O detalhe por canal está na [matriz D4](../fase2-ideias-1-e-2.md#d4--mtls-entre-serviços-ciclo-de-certificados-e-pares).
 
-## Condições já validadas e escolhas pendentes
+## Condições selecionadas e concretização por demonstrar
 
 D6.2 B exige consulta à projects em cada entrada. D6.3 usa revalidação inicialmente
 a cada 1 s, agrupada por projeto com autorização individual por membro/contexto.
@@ -35,14 +36,23 @@ alterar a aplicação. D3 mantém HS256 de utilizador e identidade RS256 do gate
 | WS-C2 A | Timeout total inicial 1 s, incluindo espera/ligação/envio/leitura, até 50 avaliações membro/contexto por pedido; configuráveis e sujeitos a medição | Vários lotes para projetos maiores. WS-C3 fixa 4 globais/1 por projeto/64 KiB; WS-C4 fixa 16 pendentes; restante dimensionamento pendente, sem capacidade demonstrada. |
 | WS-C3 A | Limites iniciais configuráveis: 4 consultas HTTP globais, no máximo 1 por projeto, lotes alternados entre projetos e 64 KiB por corpo JSON de pedido/resposta | Sem capacidade/prazos demonstrados. WS-C4 fixa 16 pendentes; corpus final pendente; timeout inclui espera e não reinicia no envio; fila cheia/espera excessiva não renovam autorização nem concedem novos joins. |
 | WS-C4 A | 16 lotes pendentes por processo, além de 4 ativos, até 1 pendente por projeto; mais recente substitui pendente sem reiniciar o deadline; remover expirados | Concluir callbacks substituídos explicitamente e preservar outros contextos; sem fila oculta ou renovação em falha. Limites do estado/corpus e justiça por medir. |
+| WS-C5 B | 512 ligações/4096 contextos por processo com reservas, 32 salas/ligação e 4 vias/sala; taxas/buckets/entradas 4–8–64 KiB conforme contrato de 17/11 | Tetos configuráveis, não capacidade demonstrada. Excesso 513/4097 mede recusa controlada; corpus com mais admissões exige revisão explícita antes de congelar. |
 
-Os detalhes de payload, ordenação e mecanismo concreto de agendamento são a
-**especificação proposta** para concretizar as condições validadas, sujeitos a revisão.
+WS-C5 B toma payload/ordenação/limites abaixo como especificação de trabalho
+confirmada tecnicamente para concretizar a seleção individual, sem declarar
+algoritmo implementado ou ensaios passados.
 WS-C3/WS-C4 fixam os limites iniciais e a alternância/substituição; o algoritmo
-concreto e outros limites de estado ainda precisam de detalhe. O restante contrato
-não foi aprovado. PKI-C1/ACL-C1 são tratados nas decisões de certificados/permissões.
+concreto e a prova dos limites de estado ainda precisam de implementação/teste. A revisão integral de requisitos
+e prova de implementação continuam pendentes. PKI-C1/ACL-C1 são tratados nas decisões de certificados/permissões.
 
 ## Situação observada no código
+
+**Seleção de 17/11 A/A/A/B:** [SESS-C1/JWT-C1/LINK-C1/WS-C5](fase2-sessoes-identidade-partilhas-ws.md)
+regista recomendação individual do utilizador e confirmação técnica: sessões
+assistidas, 7 dias HS256/30 s identidade interna, risco residual de reutilização
+contextual, links até revogação e WS-C5 B (512 ligações/4096 contextos). Contrato/
+ordenação e cenários lógicos v1 fixados para ensaio; não são implementação/capacidade
+comprovadas. Eventos pessoais de projeto também precisam de autorização/corte.
 
 **Validação posterior A/B/A:** [WS-C4/PKI-C2/PKI-C3](fase2-fila-ws-e-revogacao.md)
 fixa individualmente 16 lotes pendentes por processo WS, além das 4 consultas
@@ -59,14 +69,20 @@ Mecanismo escolhido, sem implementação, ensaios ou acordo coletivo destes deta
 - O JWT é verificado uma vez no handler de ligação quando existe token; não existe
   término agendado na sua expiração nem contexto de autorização por membro de sala.
 - [Partilhas](../../projects/models/project.js) têm `id`, `permission`, `createdAt`
-  e `revoked`. `expiresAt` não existe no schema atual; a sua política/migração D8
-  continua aberta. Não fabricar datas de expiração para links legados.
+  e `revoked`. `expiresAt` não existe no schema atual; LINK-C1 A/D8 mantém
+  legados e novos até revogação e adia expiry nesta entrega. Não criar prazo oculto.
 - [Criar/revogar links](../../projects/controllers/project.js) incrementa `version`;
   a versão também é usada noutras alterações. Não representa, sozinha, uma prova
   completa de autorização atual ou de ordem das respostas de rede.
 - O [servidor projects](../../projects/bin/www) usa HTTPS com certificados atuais,
   sem configurar autenticação mTLS de clientes. O canal da proposta WS-C1 precisa
   de implementação e ensaio; não existe por já haver TLS.
+- Preview/progresso também seguem `io.to(user)`; [mensagens da projects](../../projects/utils/project_msg.js)
+  nem sempre transportam projeto. A condição de verificar autorização antes da
+  emissão protegida tem de cobrir esses percursos, não apenas `project:<id>`.
+  Sala pessoal/JWT não demonstram permissão atual de projeto. A migração de
+  payloads e a asserção de corte nesse percurso são propostas de revisão, sem
+  divulgação após revogação demonstrada em execução nesta análise.
 
 ## Identidade e fronteira de confiança — WS-C1 A validada
 
@@ -102,7 +118,7 @@ explicita a proteção das chaves, emissão/renovação e matriz de pares autori
 ### Browser → ws_gateway
 
 O evento `join-project` apresenta o projeto e uma via de acesso: propriedade ou
-um `shareId`. Uma forma proposta é `{ projectId, access: { kind: "owner" } }` ou
+um `shareId`. O formato de trabalho é `{ projectId, access: { kind: "owner" } }` ou
 `{ projectId, access: { kind: "share", shareId } }`, com callback de confirmação.
 O sujeito vem sempre da ligação autenticada. Não pedir ao cliente para declarar
 `allowed`, a permissão efetiva ou o dono como prova de acesso.
@@ -111,7 +127,7 @@ Cada pedido de entrada exige consulta fresca. Não usar a autorização local de
 outro membro/contexto ou uma entrada anterior para conceder uma entrada nova em
 indisponibilidade. O join só se confirma depois da decisão positiva ainda válida
 e da entrada efetiva. O callback distingue `joined`, `denied`, `unavailable`,
-`invalid_request` e `session_expired`; os nomes são propostos. Timeout do callback
+`invalid_request` e `session_expired`; nomes da especificação de trabalho, ainda sem implementação. Timeout do callback
 não é autorização. Repetir uma entrada já confirmada não deve duplicar estado,
 mas mantém a exigência de consulta por pedido de entrada.
 
@@ -131,7 +147,7 @@ administrar o projeto ou mutar recursos HTTP.
 
 ### Canal interno → projects
 
-Proposta de rota interna: `POST /internal/ws/projects/:projectId/authorize`.
+Rota interna especificada: `POST /internal/ws/projects/:projectId/authorize`.
 Disponível apenas ao serviço autorizado segundo WS-C1, sem encaminhamento público
 que transforme dados do browser em identidade interna confiável.
 
@@ -142,8 +158,8 @@ contexto de acesso apresentado. Referências não são credenciais nem bilhetes.
 
 Projects carrega o estado do projeto para o lote e avalia cada membro/contexto:
 propriedade compara sujeito com o dono real; partilha verifica associação ao
-projeto, estado revogado, permissão e expiração segundo a política D8 que vier a ser
-fechada. Um link inválido de um membro não deve conceder ou negar automaticamente
+projeto, estado revogado e permissão; LINK-C1 A não introduz expiry dos links
+nesta entrega. A validade do JWT e o prazo local continuam obrigatórios. Um link inválido de um membro não deve conceder ou negar automaticamente
 as avaliações dos restantes. Uma decisão deve refletir a leitura atual do estado;
 não consultar cache/replica desatualizada como se fornecesse a autorização atual.
 
@@ -271,7 +287,7 @@ para congelamento antes dos ensaios. Não foram executados para este novo desenh
 |------|----------|----------|
 | WS-T01 | Dono e partilhas read/edit válidas entram; sujeitos/contextos adulterados não entram. | S04/S05/S10/S13 |
 | WS-T02 | Projects indisponível/timeout recusa novos joins; recuperação permite nova tentativa autorizada. | S10/S21 |
-| WS-T03 | Revogação com ligação ativa cumpre corte ≤5 s; reportar separadamente cumprimento da meta ≤2 s. | S12 |
+| WS-T03 | Revogação com ligação ativa cumpre corte ≤5 s; reportar meta ≤2 s. Cobrir conteúdo protegido de projeto emitido em salas de projeto e pessoais, incluindo preview/progresso, sem assumir contexto ausente como autorização. | S12 |
 | WS-T04 | Falhas não estendem prazo; resposta positiva após timeout/prazo ou fora de ordem não restaura acesso indevido. | S12/S13 |
 | WS-T05 | Revogar entre leitura e join, sair/voltar a entrar, desligar/reconectar e trocar contextos não reutiliza avaliação antiga. | S10–S13 |
 | WS-T06 | Negação de uma via preserva outra válida apresentada e outras salas; negar todas retira o acesso efetivo. | S12/S13/F04 |

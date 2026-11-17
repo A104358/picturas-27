@@ -1,7 +1,7 @@
 ---
 intent: 001-phase-2-quality-improvements
 created: 2026-11-14T17:10:27Z
-updated: 2026-11-16T20:42:28Z
+updated: 2026-11-17T12:06:37Z
 completed: null
 status: in-progress
 ---
@@ -43,6 +43,7 @@ that instruction; no separate nominal declarations or reviewed commit are invent
 | WS/PKI/ACL source audit | Three synthetic key paths not ignored, six tracked legacy private-key paths and seven reviewed broad-copy build contexts; readonly planning evidence, not image/runtime testing | [Security planning audit](evidence/security-planning-audit-2026-11-16.json) |
 | Operational security review | WS-C4 A/PKI-C2 B/PKI-C3 A individually validated; 16 pending batches, new CA/all certificates for withdrawal, isolated maintenance/restart. CRL recommendation superseded; testable runbook/controls prepared, not executed | [Queue/revocation contract](../../../docs/architecture/fase2-fila-ws-e-revogacao.md) |
 | Operational criteria | PKI-C4 B/PKI-C5 A/OPS-C1 A individually validated; isolation 30/10 s, measured replacement/pilot milestone, full current/target channel matrix, actual mock mTLS and implemented/tested administrative reconciliation required. No runtime proof | [Operational criteria](../../../docs/architecture/fase2-criterios-operacionais-seguranca.md) |
+| Remaining security selection — November 17 | SESS-C1 A/JWT-C1 A/LINK-C1 A/WS-C5 B individually communicated and technically confirmed; D8 revised, replay/capacity metrics separated and logical scenarios v1 fixed. Proof/physical corpus/implementation pending | [Sessions/identity/sharing/WS](../../../docs/architecture/fase2-sessoes-identidade-partilhas-ws.md) |
 | Session transition inventory | Luís identified, both sets preserved. Isolated-copy counts: picturas 4 accounts/2 projects; experiment 13/10; originals hash-verified unchanged. Browser mappings/other computers and migration/source selection pending | [Inventory worksheet](../../../docs/architecture/fase2-inventario-sessoes.md) |
 | New evidence audit | 14 successful uploads summarized, 23 security/control case records reviewed, fresh static source/certificate inventory; raw ARM results unchanged | [Raw evidence index](evidence/nfr-2026-11-16/README.md) |
 | System Context | Not created | No artifact yet |
@@ -106,6 +107,8 @@ No units have been decomposed. Boundaries depend on the selected requirements.
 | 2026-11-16T20:14:36Z | Record individual WS-C4 A, PKI-C2 B and PKI-C3 A; supersede CRL recommendation and specify maintenance controls. | User explicitly selects 16 pending batches/latest pending plan without deadline reset; replace CA/all certificates for trust withdrawal; isolation/restart and complete WS → projects/projects → storage controls before reopen. | Whole-installation downtime/coordination acknowledged, not measured short. Normal expiry renewal may retain CA and does not itself revoke old leaf; immediate withdrawal uses B. Compromise isolates without waiting for jobs; partial update stays isolated. Require old-CA rejection/new handshake and old-connection/session invalidation. PKI deadline, channel proof and emergency reconciliation pending; no app/PKI implementation, runtime tests or collective detail approval. |
 | 2026-11-16T20:30:06Z | Prepare PKI-C4/PKI-C5/OPS-C1 alternatives for operational criteria. | User selected option 1 after A/B/A. Recommend proposed isolation 30 s/target 10 s and prepared idle replacement 15 min/target 5 min; full channel coverage with manual browser evidence; administrative reconciliation without automatic replay. | Await individual choice; no metrics approved by association. Source review finds early image ack, non-awaited result callbacks, refund-before-version update and counters/day ambiguities. HTTP generative API classification flagged for explicit decision. Primary supplier docs do not prove deployed coverage; Mongo/Rabbit version links redirect. No application, Docker, credentials, volumes or runtime tests changed; no new whole-team approvals. |
 | 2026-11-16T20:33:46Z | Record PKI-C4 B, PKI-C5 A and OPS-C1 A with user conditions. | Explicit user choices: isolation ≤30 s/target ≤10 s including persistent connections/consumers; replacement measured, not imposed 15/5 min. Full current/target channel matrix and browser with known trust/no bypass. Mock API mTLS effort/rollback; administrative tool/procedure implemented/tested by delivery or explicit limitation. | Individual validation only. Pilot planning milestone set to 23 November 18:00 Europe/Lisbon/UTC; environment/load/results still pending. Isolate incomplete failures without clock reset; failed replacement remains isolated. Preserve evidence, exclude indeterminate outputs and prevent repeat quota corrections. No auto-recovery claim; early ack remains defect. No application, Docker, credentials, volumes or new runtime tests changed; preliminary effort estimates not measured/team-approved. |
+| 2026-11-17T11:33:22Z | Prepare remaining security alternatives after user selects option 1. | SESS-C1 A recommends assisted transition/7-day user JWT, JWT-C1 A scoped 30-second gateway identity without generic single-use guarantee, LINK-C1 A preserves old/new links until explicit revocation per RNF52, WS-C5 initial state/rate/bytes and D10 host/container proofs. | Choices requested, still pending; no new individual validation inferred. Replay/logout/session-revocation residuals explicit. Code also emits preview/progress into personal rooms and producer messages lack project context: include protected emission checks/payload migration in tests, not a claimed live leak. No app, secrets, browsers, Docker or original data changed; only source/PDF/primary-doc review and Markdown. |
+| 2026-11-17T11:53:34Z | Record individual SESS-C1 A/JWT-C1 A/LINK-C1 A/WS-C5 B recommendations and assistant technical confirmation. | User asks to close these choices with conditions: assisted same-ID preservation/future anonymous reissue and actual proof/tool tests, 30 s admission-only contextual identity with accepted reuse residual, links until revocation and lower WS caps 512/4096. | Technical confirmation, not a literal validation statement invented for four members. RNF52 verified PDF p.27; D8 expiry preference deferred. S07 no longer claims zero contextual replay; excess caps are refusal tests, not fully admitted load. Logical scenarios v1 fixed (normal 50, fairness 510, many-project 200, limits/rates/bytes/personal events); physical corpus/proof/controls still pending. No app/secrets/browsers/Docker/data changes or new runtime tests. |
 
 ## Scope Changes
 
@@ -163,6 +166,7 @@ maintenance task is claimed. The dedicated stack is stopped with volumes retaine
 - [x] WS-C3/PKI-C1/ACL-C1 individual choices and conditions recorded; source protection gaps audited, capacity correction explicit.
 - [x] WS-C4 A/PKI-C2 B/PKI-C3 A individually validated; maintenance runbook/controls prepared and CRL recommendation superseded.
 - [x] PKI-C4 B/PKI-C5 A/OPS-C1 A individually validated with pilot milestone, current/target channel matrix and actual implementation/test obligations.
+- [x] SESS-C1 A/JWT-C1 A/LINK-C1 A/WS-C5 B individually communicated/technically confirmed; D8/replay/capacity distinctions and logical scenarios v1 recorded.
 - [ ] Open architecture/compatibility decisions closed and applicable metric gates approved.
 - [ ] Formal initial baseline completed for every mandatory metric or justified NA mechanism.
 - [ ] Exploratory evidence and feasibility assessed with the team.
@@ -177,6 +181,29 @@ maintenance task is claimed. The dedicated stack is stopped with volumes retaine
 - [ ] Artifacts reviewed and construction readiness confirmed.
 
 ## Next Steps
+
+**Current November 17 selection:** SESS-C1 A/JWT-C1 A/LINK-C1 A/WS-C5 B are
+individual recommendations technically confirmed by the assistant; do not ask again
+which options were selected. The [contract/logical scenarios v1](../../../docs/architecture/fase2-sessoes-identidade-partilhas-ws.md)
+updates D8, explicit replay residuals and normal-vs-refusal capacity assertions.
+Next concretize independent anonymous proof/browser mappings and tested issuance/
+import, complete physical scenario/manifest freeze and project-event emission
+controls. Retain admitted-cap review if corpus needs >512/4096, all earlier gates
+and the separate unfinished upload requirements. No migration or code authorization
+is inferred; full requirements/baseline review remains incomplete.
+
+**A/A/A/B selection verification, 2026-11-17T12:06:37Z:** 60 metric IDs,
+10 WS cases and 13 logical scenario groups v1 retained; canonical/catalog slices,
+D8 persistence and selected 512/4096 caps consistent. Replay residual separate
+from rejected-profile assertions; fairness arithmetic and excess-cap refusal
+checked. All 174 local file links, table continuity and diff whitespace passed.
+Only Markdown changed; no runtime tests, migration or application/data changes.
+
+**November 17 proposal verification, 2026-11-17T11:37:33Z:** 60 metric IDs,
+10 WS cases and catalog synchronization retained; 174 local file links, Markdown
+table continuity and diff whitespace passed. New choices remain proposals; only
+Markdown changed. No application/data changes, runtime tests, browser inspection
+or commit were performed.
 
 **Latest criteria result:** PKI-C4 B/PKI-C5 A/OPS-C1 A are individually validated.
 The [criteria contract](../../../docs/architecture/fase2-criterios-operacionais-seguranca.md)

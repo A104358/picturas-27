@@ -3,7 +3,7 @@ intent: 001-phase-2-quality-improvements
 phase: inception
 status: draft
 created: 2026-11-14T17:10:27Z
-updated: 2026-11-16T20:42:28Z
+updated: 2026-11-17T12:06:37Z
 ---
 
 # Requirements: Phase 2 Quality Improvements
@@ -104,7 +104,8 @@ individual validation, not confirmation of agreement by all four team members:
 - **D3/JWT:** Retain HS256 user JWTs in this phase, with a renewed secret outside
   the repository. Use RS256 for gateway-issued internal identity. Define the session
   transition, including anonymous sessions, before secret renewal. Transition
-  mechanics, token lifetimes and rotation details remain open.
+  mechanics, token lifetimes and rotation details were open at this first group;
+  the November 17 selection below subsequently fixes the working profile.
 - **D7:** Permit absence of `owner`; when present, require one value matching the
   owner in the path and reject contradictions. `projects` always verifies ownership
   and sharing independently of that parameter check.
@@ -222,8 +223,8 @@ remain to specify and verify, without claiming existing complete TLS/mTLS covera
 Later WS-C3/PKI-C1 decisions below fix initial concurrency/JSON body limits and
 certificate lifetimes/renewal window. WS-C4/PKI-C2/PKI-C3 below subsequently fix queue size and the trust-withdrawal/
 maintenance strategy; channel proof, PKI timing and demonstrated workload capacity
-remain open. **The rest of the contract remains
-a proposal for review.** Validation is individual, attributes no agreement to other
+remain open at this stage. **The November 17 WS-C5 selection below later takes
+the contract as the working specification; full requirements review remains open.** Validation is individual, attributes no agreement to other
 members, declares no tests run and does not authorize application changes. The ten
 proposed verification cases map to existing metrics; full requirements review is
 still outstanding.
@@ -303,7 +304,8 @@ requirements set, measured compliance or authorization to change the application
   synthetic private-key markers are absent from Git, contexts and image layers.
   Ignore rules alone do not remove tracked keys. CA keys must stay outside Git,
   build contexts and application containers. PKI-C2 B/PKI-C3 A below subsequently choose CA replacement and maintenance;
-  operational timing/channel proof remain open; membership cutoff is not a
+  later PKI-C4 fixes isolation timing, while replacement calibration/channel proof
+  remain pending; membership cutoff is not a
   certificate-revocation SLA.
 - **ACL-C1 A:** Only the owner may delete an entire project. Editors retain
   legitimate editing and media removal; readers may delete neither. The current
@@ -338,7 +340,8 @@ runbook](../../../docs/architecture/fase2-fila-ws-e-revogacao.md) records:
   expired work; never restart the total 1 s timeout. Complete replaced join
   callbacks explicitly; discard obsolete evaluations without mixing different
   members/contexts or creating hidden queues. Overflow/timeout never grant joins
-  or renew authorization. Membership-state limits/final workload remain open.
+  or renew authorization. Later WS-C5 B fixes membership-state caps; physical
+  workload/manifest still need completion.
 - **PKI-C2 B:** Withdraw trust by replacing the installation CA, reissuing all its
   certificates/keys and removing old CA trust from every participant. This replaces
   the assistant's earlier CRL recommendation; CRL and its proposed durations are
@@ -411,7 +414,59 @@ uploads and full baseline/review remain to complete. Only documents were changed
 no application, Compose, credentials or preserved data were modified, and no new
 runtime tests or PKI/admin tool implementation were performed.
 
-## Session Transition — Source Findings, Decision Pending
+## November 17 Security Selection — SESS-C1 A/JWT-C1 A/LINK-C1 A/WS-C5 B
+
+The user recommended **A/A/A/B** for confirmation; the assistant technically
+confirmed proportionality with the stated conditions at 2026-11-17T11:53:34Z.
+Record this as an **individual selection communicated by the user and technical
+confirmation**, not a separately worded whole-team approval or completed test.
+The [contract and logical scenarios v1](../../../docs/architecture/fase2-sessoes-identidade-partilhas-ws.md)
+specifies the selected working design:
+
+- **SESS-C1 A:** Assisted transition/reissue for the same identity, registered login,
+  anonymous independent administrative proof, 7-day absolute HS256 user JWT without
+  automatic refresh. Future anonymous expiry also needs assistance. Without proof,
+  preserve data/case pending; knowing ID/old exposed-secret JWT is insufficient.
+  Issuance/import procedure must be implemented/tested. Network error/expiry must
+  not silently create a new anonymous account. No generic individual-session
+  revocation is claimed; copied bearer/logout risk remains explicit.
+- **JWT-C1 A:** Per-request RS256 identity up to 30 s/no later than session expiry,
+  bound to issuer/audience/type/method/internal path and specific mTLS peer.
+  Scoped projects delegation on downstream quota/storage pairs is explicit trust,
+  not accepting the wrong audience or sharing gateway signing keys. No generic
+  anti-replay store: same authorized peer/context may reuse during validity. jti
+  alone is not single-use; even persisted jti does not give exactly-once effects.
+  Thirty seconds bounds admission, not legitimate upload/job duration. S07 separates
+  invalid-profile rejection from this accepted residual reuse.
+- **LINK-C1 A / D8:** Preserve old/new links until explicit revocation, retaining
+  RNF52 (verified physical PDF page 27); expiresAt/schema/UI/migration postponed
+  for this delivery, superseding the earlier communicated expiry preference.
+  Revocation/revalidation and other valid access paths remain; signed S3/upload
+  credential lifetimes are separate outstanding upload decisions.
+- **WS-C5 B:** Initial 512 connections/4096 contexts per process including pending
+  reservations, 32 rooms/connection, 4 contexts/room and the contract's bounded
+  rates/buckets/input sizes. Free state on every error/timeout/leave path, including
+  failed authentication before connect. Apply 4/8/64 KiB to the corresponding
+  inputs without truncating legitimate outbound events. Control protected project
+  events in personal rooms as well as project rooms; source producer context and
+  emission guards require actual implementation/tests.
+
+Logical scenarios v1 are fixed for evaluation: normal 50 connections/10 projects,
+fairness 500+5+5=510 connections, many projects 40×5=200, and independent state/
+rate/byte/error boundaries. Attempts above 512/4096 test controlled refusal and
+existing-authorization preservation, not fully supported load. If the corpus needs
+more admitted concurrency, explicitly revise A/values before physical freeze.
+Within-cap load also needs measurement; a backend timeout is not cap overflow.
+Host/untrusted-container D10 paths, positive controls and raw results are specified.
+
+Confidence is high for link preservation, medium for other proportionality choices;
+limits/TTL are not capacity evidence. Concrete anonymous proof/browser mapping,
+physical installation/load/manifest, issuance/import and emission-control tooling,
+channel support, administrative reconciliation, uploads and full requirements/
+baseline review remain incomplete. Only documentation changed; no application,
+secrets, browsers, volumes or deployment changed, and no new runtime test ran.
+
+## Session Transition — Source Findings, Proof Pending
 
 Source inspection during continued elicitation found:
 
@@ -438,7 +493,7 @@ context, not a runtime census or an inference from source inspection. It superse
 the earlier unknown deployment-scope state; specific installations, volumes,
 browser profiles and identity/project associations still need enumeration.
 
-Before choosing the migration, inventory:
+Before executing the selected assisted migration, complete the inventory:
 
 - Deployments and retained datasets whose anonymous sessions/projects must survive.
 - Anonymous identities and associated projects in the local installations;
@@ -451,7 +506,7 @@ Before choosing the migration, inventory:
 
 Record source, time and responsible operator for the inventory; do not collect raw
 JWTs or private credentials in documentation/logs. This is a planning prerequisite,
-not an executed inventory or an approved migration mechanism. Until clarified,
+not an executed migration or completed ownership proof. Until eligible mappings are verified,
 preserve the existing identity/project requirement; do not rotate the secret or
 substitute new anonymous identities as if preservation were achieved.
 
@@ -463,10 +518,10 @@ The source review also confirms `localStorage.session` and session-validation
 effects that can replace an anonymous identity; collection must not trigger that
 replacement by treating page reload/login as a neutral observation.
 
-Registered-account reauthentication, anonymous recovery proof/procedure, future
-renewal and token lifetimes remain undecided. The local context supports evaluating
-administrator-assisted transition as a proposal, not an approved mechanism. No
-accounts, tokens or projects were modified.
+SESS-C1 A now selects registered reauthentication and assisted anonymous reissue,
+including future expiry, with 7-day absolute user tokens. Concrete independent
+proof, browser mapping and executable issuance/import remain to complete before
+using that mechanism. No accounts, tokens or projects were modified.
 
 After the user requested continuation, read-only Docker metadata was collected on
 one local daemon: 13 stopped containers/6 labeled volumes for the historical
@@ -594,7 +649,7 @@ will be maintained separately from these intent-specific requirements.
 | What delivery deadline applies? | PL2-G4 | User explicitly corrected delivery to 27 November 2026; the previous 20 November planning date is superseded. Submission time remains unknown. |
 | What deployment/browser context must session migration preserve? | PL2-G4 / each local administrator | Local-only/no external users confirmed. Luís administers LOCAL-HOST-01 and requires both volume sets preserved. On isolated copies: picturas 4 accounts/2 projects (2 anonymous accounts, 0 anonymous projects); experiment 13 accounts/10 projects (0 anonymous accounts). Browser associations, presets/media integrity and other computers pending; no development/evaluation installation selected. |
 | What target and minimum acceptable values are justified by the baseline and stakeholder needs? | PL2-G4 | WS cutoff ≤5 s/target ≤2 s and initial 1 s revalidation are individually validated, awaiting experimental proof. Other metric proposals remain unapproved; complete applicable gate review, whole-team agreement and reproducible formal baseline before refactoring. |
-| Which architecture details remain undecided? | PL2-G4 | Remaining WS payload/order/race/state-abuse details and final corpus; pilot installation/load, concrete isolation/termination and version/channel proof; executable administrative reconciliation, session transition/renewal, other JWT/link lifetimes/rotation and upload/API/token/hash decisions. WS-C4 A/PKI-C2 B/PKI-C3 A remain individually validated. PKI-C4 B adds isolation 30/10 s and measured replacement/pilot by 23 November 18:00 UTC; PKI-C5 A validates full current/target channel matrix and internal mock mTLS; OPS-C1 A requires implemented/tested administrative recovery or an explicit delivery limitation. No implementation/compliance inferred. |
+| Which architecture details remain undecided? | PL2-G4 | SESS-C1 A/JWT-C1 A/LINK-C1 A/WS-C5 B are individually selected with assistant technical confirmation, not pending A/B choices. Concrete anonymous proof/browser mapping, physical corpus/installation/manifest, executable migration/emission/reconciliation controls and per-channel support still need completion; upload/API/token/hash decisions remain separate. Logical scenarios v1 fixed; excess 513/4097 is refusal testing, not capacity. Full requirements and formal baseline remain incomplete. |
 
 ## Sources
 

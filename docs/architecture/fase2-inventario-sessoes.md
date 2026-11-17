@@ -25,8 +25,9 @@ para desenvolvimento e avaliação fica para uma decisão posterior. A contagem 
 pedida sem alterar os dados; não implica autorização de limpeza, migração ou rotação.
 
 O inventário prepara a escolha da migração antes de renovar o segredo HS256,
-preservando identidade e projetos anónimos. Não escolhe ainda a migração, validade
-futura dos tokens ou recuperação. As decisões de JWT, WS e cobertura TLS/mTLS
+preservando identidade e projetos anónimos. SESS-C1 A foi posteriormente
+selecionada individualmente com confirmação técnica: transição/reemissão assistidas
+e 7 dias absolutos sem refresh. O inventário/prova ainda condicionam a execução. As decisões de JWT, WS e cobertura TLS/mTLS
 continuam as registadas nos [requisitos](../../memory-bank/intents/001-phase-2-quality-improvements/requirements.md).
 
 ## Responsáveis e instalações a identificar
@@ -70,7 +71,7 @@ O [código consultado](../../frontend/lib/mutations/session.ts) pode criar outra
 identidade ao fazer logout após erro de validação; abrir/recarregar a aplicação
 não é um método neutro de recolher o estado antigo.
 
-## Roteiro de recolha local, sem escolher a migração
+## Roteiro de recolha local antes de executar a transição
 
 1. **Listar ambientes com cada responsável.** Conferir os checkouts/projetos Compose
    e volumes atuais, incluindo os parados. `docker compose ls -a` e, no projeto
@@ -180,7 +181,7 @@ instalação de desenvolvimento/avaliação.
 | Browsers/sessões ativas e existência dos objetos de media | NM; referências de media contadas na BD não provam objetos existentes |
 | Instalação para desenvolvimento e avaliação | Por decidir; nenhuma selecionada nesta recolha |
 | Associações browser↔identidade↔projetos e casos inacessíveis | Pendentes |
-| Procedimento de migração, recuperação e renovação | Por escolher após o levantamento |
+| Procedimento de migração, recuperação e renovação | SESS-C1 A selecionada individualmente com confirmação técnica; prova concreta/ferramenta de emissão/importação e ensaio ainda pendentes |
 
 - [ ] Cada responsável listou as instalações e dados retidos relevantes, com data.
 - [x] Metadados e contagens de contas/projetos numa máquina recolhidos, com fonte,
@@ -194,9 +195,14 @@ instalação de desenvolvimento/avaliação.
 - [ ] Antes/depois permitem avaliar F06: preservação de identidade/projetos,
   autenticação válida e reconexão WS, incluindo falhas e recuperação.
 
-O contexto local permite estudar uma transição assistida por cada administrador,
-sem assumir necessidade de um serviço público de recuperação para utilizadores
-externos. Isso é uma hipótese para o desenho seguinte, não uma migração aprovada.
-As dúvidas de inventário não impedem continuar os requisitos independentes de
-uploads, certificados e medição. Preparação apoiada por Codex/Inception; fontes
-de código, declaração humana e evidência histórica permanecem distintas.
+O contexto local fundamenta SESS-C1 A, selecionada individualmente pelo utilizador
+e confirmada tecnicamente pelo assistente em 17/11. O [contrato de sessões](fase2-sessoes-identidade-partilhas-ws.md)
+exige prova independente e reemissão para a mesma identidade, incluindo expiração
+anónima futura; JWT de 7 dias absolutos, sem refresh automático. Sem prova, dados
+preservados/caso pendente. A escolha não prova associação nem executa a ferramenta.
+Não emitir credenciais com base só no ID/JWT antigo, não presumir que os dois
+conjuntos locais estão descartáveis e não os selecionar para avaliação por omissão.
+Prova e ferramenta/procedimento de emissão/importação devem ficar implementados e
+ensaiados. Nenhuma credencial foi emitida ou browser inspecionado nesta revisão.
+As dúvidas de inventário não impedem continuar requisitos independentes de uploads,
+certificados e medição; fontes/declarações/observações mantêm proveniência distinta.

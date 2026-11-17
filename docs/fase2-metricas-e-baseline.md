@@ -31,8 +31,9 @@ positiva, limitada pelo JWT/permissão; falhas não renovam, respostas obsoletas
 restauram acesso e negação efetiva retira de imediato. Ao expirar o JWT, terminar a
 ligação e exigir reconexão explícita com JWT válido/nova autorização das salas.
 Estes critérios estão **validados individualmente e por demonstrar experimentalmente**.
-As restantes metas não foram aprovadas por associação. Restante contrato, renovação,
-transição de sessões e outros TTL continuam abertos. A transição preserva identidade
+As restantes metas não foram aprovadas por associação. SESS-C1 A/JWT-C1 A/WS-C5 B fecham posteriormente o modelo de sessões/identidade
+e a especificação de trabalho WS; prova concreta, ferramentas e outros TTL de
+upload/S3 continuam pendentes. A transição preserva identidade
 e projetos anónimos e deve ficar definida antes de renovar HS256. O acordo do par
 está registado separadamente; não aprova coletivamente todos estes detalhes.
 Nenhum bilhete WS faz parte da solução atual.
@@ -240,14 +241,14 @@ estado/payload verificado, não segurança universal.
 | S03 P | Signer/storage read/write/delete sem identidade autorizada, nº, HEAD/hash antes/depois | D06 URL emitida, leitura inválida; D07/D08 201; hash B14 separado | 0 emissões/operações indevidas | 0; E |
 | S04 P | Eventos recebidos por socket não autorizado, nº, JWT ausente/inválido ou join sem autorização positiva da projects | W01 recebeu TOOL_ADDED | 0 eventos protegidos | 0; E |
 | S05 G | Operações legítimas concluídas, nº/total, dono/partilha/workers/previews/export | C00 dono passou; resto NM neste pacote | 100% | 100%; E, evita «segurança» por desligar o produto |
-| S06 G | Bloqueio de token ausente/expirado/assinatura errada/aud errada e término de ligação ativa na expiração, nº/caso | G01 401; restantes a ampliar, corte ativo NM | JWT expirado termina ligação; reconexão exige JWT válido e nova autorização por sala (V); 100% dos casos previstos (E) | Medir eventos após exp, reconexão explícita e preservação anónima; 100% E; regra de expiração V |
-| S07 G | Identidades internas adulteradas/aud/sub/exp/replay inválidos aceites, nº | NA; cabeçalho atual não é identidade assinada | 0 aceitações indevidas | 0; E; RS256 validado individualmente em D3; TTL, distribuição/rotação e replay continuam abertos |
+| S06 G | Tokens ausentes/expirados/adulterados/contexto errado, término WS em exp e preservação da identidade, nº/caso | G01 401; restante cobertura a ampliar, nova transição NM | Expiração termina ligação/reconexão válida V; SESS-C1 A C: 7 dias absolutos sem refresh, relogin registado/reemissão anónima assistida; não trocar identidade por erro | 100% dos casos previstos E; futura expiração anónima exige administrador e prova independente. Logout não invalida genericamente cópia do JWT; reportar essa limitação, não falso bloqueio |
+| S07 G | Identidade interna com assinatura/alg/iss/aud/sub/tipo/método/percurso/peer/exp incorretos aceite, nº; reutilização contextual medida à parte | NA; base usa cabeçalho sem este perfil; implementação NM | 0 admissões fora do perfil C/E; JWT-C1 A: RS256 por pedido até 30 s/exp da sessão, só admissão; não interromper job autorizado por vencer 30 s | Reutilização pelo peer autorizado no mesmo contexto durante validade é residual aceite em A, não incluída num falso «zero replay». jti sem persistência não é uso único nem exactly-once. Distribuição/rotina de chaves e delegação por par precisam de prova |
 | S08 G | Pares/operações mTLS indevidos aceites, nº; CA errada, expirado, SAN/EKU/serviço errado e certificado de outro serviço da mesma CA | mTLS NA; certificados antigos não verificados; escolha D4 V, implementação/testes NM | Só identidades específicas e operações previstas; WS → projects limitado às consultas (V); 0 aceitações indevidas na matriz E | 0 E; PKI-C1 V: CA local 365 dias, serviço 30 dias, renovar a 7 dias; verificar arranque, retorno após >30 dias, emissão limitada pela CA e rejeições; parâmetros não são prova de cumprimento |
 | S09 G | Falhas em chamadas de serviço legítimas, nº/total, incluindo quota e billing | NM com PKI nova | 0 | 0; E |
 | S10 G | Joins sem permissão atual ou com contexto sub/projeto/perm adulterado admitidos, nº; consulta autenticada à projects por entrada | Consulta autorizadora NA; W01 mostra join sem autorização | 0; em falha/timeout da projects, 0 novas entradas concedidas | 0; E; controlos positivos incluem nova tentativa após recuperação; sem bilhetes WS |
 | S11 G | Joins admitidos após revogação confirmada, nº, consultas iniciadas depois do ACK da revogação; capturar pedidos em corrida separadamente | NM com asserções temporais completas | 0 permissões concedidas nas consultas posteriores ao corte confirmado | 0; E; sem janela de validade de bilhete. Corridas entre consulta e join entram em S12/S13 |
 | S12 G | Atraso de corte após revogação confirmada, ms; eventos indevidos após limite; prazo local e respostas obsoletas, §4.1 | NM para o novo mecanismo periódico | ≤5 s, local até 5 s desde início da consulta positiva e nunca além do JWT/permissão; falhas não prolongam; negação efetiva retira imediatamente, preservando outras autorizações | ≤2 s; V, critério/meta escolhidos individualmente e ainda por validar experimentalmente; intervalo inicial 1 s sujeito a carga/latência |
-| S13 G | Permissões read/edit/revoked/expired/legadas corretas, nº/total; eliminação do projeto e remoção de media separadas | DELETE atual aceita edit; ACL-C1 altera essa política, novo comportamento NM; expiração de links nova | ACL-C1 V: dono elimina projeto; editor edita/remove media mas não elimina projeto; leitor não elimina nenhum; limpeza autorizada da conta preservada | 100% para política escolhida C/E; testar positivos e negativos em projetos descartáveis; links legados/D8 ainda por fechar, RF53–RF55 não provam a nova exclusividade de DELETE |
+| S13 G | Permissões read/edit/revoked/legadas e eliminação de projeto/media, nº/total | DELETE atual aceita edit; novo ACL-C1 NM; links atuais sem expiresAt | ACL-C1 V: só dono elimina projeto, editor mantém media/edição, leitor não elimina; LINK-C1 A C: legados/novos até revogação | 100% política escolhida C/E; testar fixtures e persistência entre sessões. Expiry/schema/UI de partilhas fora da entrega, não implementação concluída nem perdas temporais presumidas |
 | S14 G | Mudanças indevidas de perfil/consulta de dados pessoais, nº, G05–G07/D09 | 4 casos reportam efeito/exposição | 0 nos casos abrangidos | 0; E, distinguir hardening de regra nova |
 | S15 G | Operações de subscrição legítimas e indevidas, nº/caso | Serviço ausente; G08/G09=500, inconclusivo | 0 indevidas e 100% legítimas | Igual; E; baseline com subscriptions presente |
 | S16 G | TLS de servidor inválido aceite, ligações de BD sem credenciais ou a outra BD de serviço admitidas, nº | D11 leitura local sem credenciais; outros Mongo/TLS NM | TLS validado, credenciais próprias e permissões mínimas onde aplicável (opção A V); 0 admissões indevidas E | 0; testar três Mongo e backup legítimo separadamente, sem exigir mTLS nos clientes de BD |
@@ -255,7 +256,7 @@ estado/payload verificado, não segurança universal.
 | S18 D | Portas internas publicadas por interface e alcançáveis por superfície, nº/lista | Original publica serviços; contagem congelar por configuração | Só loopback nas internas, nginx 8080 conforme D5 | Mesmo limite C; remover portas/segmentar é alternativa, não escolha nova |
 | S19 G | Segredos/chaves privadas nos ficheiros entregues, contextos/imagens/montagens indevidas e leaks em logs, nº | Auditoria estática: 3 caminhos sintéticos sem ignore, 6 chaves antigas seguidas pelo Git, 7 contextos com COPY amplo sem exclusão demonstrada; imagens NM | Proteção D4/PKI-C1: CA fora Git/build/contentores aplicacionais; chaves por serviço, montagens restritas; 0 novos segredos expostos E | 0 ativos expostos no âmbito E; testar marcadores sintéticos ausentes do Git/contexto/camadas; ignorar não retira chaves já seguidas. WS sem chave RS256 do gateway, projects sem segredo HS256 e serviços sem chave CA |
 | S20 G | Retirada de confiança e renovação normal separadas, nº/cenário; fecho de ligações/retomas e uso de nova identidade | NM | PKI-C2 B/PKI-C3 A V: após retirada/reabertura, 0 aceitações da CA antiga e 100% controlos legítimos; aplicação parcial isolada, dois percursos completos e restantes participantes verificados | PKI-C4 B V: isolamento desde comando até corte de novos/persistentes/consumers ≤30 s/meta ≤10 s; falha reportada sem reiniciar relógio. Duração da substituição NM, a calibrar no piloto até 23/11 às 18:00; sem 15/5 min vigentes. Renovação sob mesma CA não revoga por si certificado anterior; não confundir com retirada. Demais cenários E; preservar histórico |
-| S21 G | Sobrecarga em pedidos leves, ms pareados; WS por projeto/membro/contexto: HTTP/s, avaliações/s, fila, bytes JSON, espera/ligação/envio/leitura, CPU/RSS, recusas e justiça | NM para novo mTLS/consultas agrupadas; 4 simultâneas não provam 4/s nem limite de 20 projetos | Mediana +≤10 ms E; revalidação inicial 1 s; timeout total 1 s incluindo fila; até 50 avaliações e 64 KiB por corpo; 4 globais/1 por projeto, alternância V; fila inicial de 16 lotes pendentes/1 por projeto V | ≤5 ms E em pedidos leves; parâmetros V configuráveis, não capacidade medida; medir 500 membros + pequenos, >20 projetos, fila cheia, bytes exatos/+1 e multibyte; sem truncagem/renovação em falha; corte ≤5 s/meta ≤2 s V |
+| S21 G | Sobrecarga em pedidos leves, ms pareados; WS por projeto/membro/contexto: HTTP/s, avaliações/s, fila, bytes JSON, espera/ligação/envio/leitura, CPU/RSS, recusas e justiça | NM para novo mTLS/consultas agrupadas; 4 simultâneas não provam 4/s nem limite de 20 projetos | Mediana +≤10 ms E; revalidação inicial 1 s; timeout total 1 s incluindo fila; até 50 avaliações e 64 KiB por corpo; 4 globais/1 por projeto, alternância V; fila inicial de 16 lotes pendentes/1 por projeto V; WS-C5 B C: 512 ligações/4096 contextos com reservas | ≤5 ms E em pedidos leves; parâmetros V configuráveis, não capacidade medida; medir normal 50, justiça 510, 40 projetos/200 ligações, saturação 513/4097 e fila cheia, bytes exatos/+1 e multibyte; sem truncagem/renovação em falha; corte ≤5 s/meta ≤2 s V |
 | S22 G | Tokens de upload reutilizados/roubados/expirados aceites, nº, 2 PUT concorrentes | NA | 0; exatamente uma reclamação atómica por token | 0; E; token opaco/URL assinado não asseguram uso único sozinhos |
 | S23 G | Metadados/corpo/key/Host manipulados ou TOCTOU aceites, nº, revalidar objeto real | Base valida o ficheiro, não o novo protocolo | 0 objetos inválidos visíveis/acionáveis | 0; E; testar revogação entre emissão e confirmação |
 | S24 G | Exposição de dados pending/URLs internas/SSRF de probe, nº | Pending e probe por URL NA | 0 acessos/leaks; destinos internos fixados pelo servidor | 0; E; não passar URLs arbitrários do cliente ao ffprobe |
@@ -315,7 +316,8 @@ estado/payload verificado, não segurança universal.
    anónimos; terminar a ligação e verificar que o frontend trata explicitamente a
    reconexão, apresenta JWT válido e pede nova autorização de cada sala. Não assumir
    reconexão automática após desconexão pelo servidor. Renovação/transição precisam
-   de preservar identidade e projetos anónimos; esse desenho continua em aberto.
+   de preservar identidade e projetos anónimos; SESS-C1 A escolhe assistência
+   administrativa sem refresh, com prova concreta/emissão-importação ainda pendentes.
 8. **Limites e evolução:** não há demonstração de segurança igual entre tolerar uma
    falha até ao prazo e retirar na primeira falha; também não há medição de raridade
    da expiração ativa. Eventos de revogação ficam como evolução, a reconsiderar se
@@ -376,6 +378,35 @@ não três sucessos já obtidos nem carga/instalação já acordadas.
 Os 30/10 s de isolamento não validam F08 nem redefinem WS ≤5 s/meta ≤2 s.
 Documentação e reinício de consumidores não demonstram conclusão correta, quota
 ou cobertura TLS. Falta de suporte/ensaio não passa por zero ou por NA sem prova.
+
+### 4.4. Seleção individual A/A/A/B — sessões, replay, links e estado WS
+
+O utilizador recomendou **SESS-C1 A/JWT-C1 A/LINK-C1 A/WS-C5 B** para confirmação;
+o assistente confirmou tecnicamente a adequação com as condições registadas no
+[contrato e cenários v1](architecture/fase2-sessoes-identidade-partilhas-ws.md).
+É seleção individual comunicada/confirmada tecnicamente (**C**), não nova declaração
+de acordo dos quatro, execução ou aprovação global de metas. Os 60 IDs mantêm-se.
+
+| Ponto | Escolha, critério e prova necessária | Métricas existentes |
+|-------|-------------------------------------|---------------------|
+| SESS-C1 A | Transição/reemissão assistida e JWT de utilizador 7 dias absolutos, sem refresh; intervenção administrativa também na futura expiração anónima. Mesmo ID/projetos/presets/quota; prova independente do JWT/ID antigo, ou caso pendente/dados preservados. Emissão/importação implementada/ensaiada, sem segredos em logs/Git. Logout não é revogação individual de cópia de bearer. | S06/S19/S20/F06/F09/F10 |
+| JWT-C1 A | RS256 até 30 s/exp da sessão, só admissão, contexto/aud/peer corretos; não limita job/upload já autorizado. Rejeições fora do perfil separadas de reutilização pelo mesmo peer/contexto válido, residual aceite. Sem uso único geral ou exactly-once; não contar jti como registo de utilização. Delegação projects restrita, sem aceitar aud de outro serviço. | S02/S07/S08/S09/S20/S21/F05/F06/F10 |
+| LINK-C1 A / D8 | Legados e novos persistem entre sessões até revogação; expiresAt fora da entrega. Testar read/edit/dono, revogação HTTP/WS e duas vias. Não inventar prazo por idade nem eliminar projetos/media. RNF52 confirmado na p.27 do PDF; expiry de URL S3 continua contrato separado. | S01/S05/S11–S13/F04/F06 |
+| WS-C5 B | Tetos iniciais por processo 512 ligações/4096 contextos, incluindo reservas, 32 salas/ligação e 4 vias/sala. Taxa/buckets/4–8–64 KiB aplicados nas entradas corretas, sem truncagem de saída. Libertação em erro/timeout/saída; saturação recusa sem remover indevidamente acesso já válido. Acima dos tetos é teste de recusa, não suporte integral. | S04–S06/S10–S13/S21/F04/F06/F09/F10 |
+
+**Cenários lógicos v1 fixados:** normal N1 50 ligações/10 projetos; justiça J1
+500+5+5=510 ligações; muitos projetos P1 40×5=200 ligações; limites 512→513 e
+4096→4097, mais tetos por sala, taxa, bytes e falhas. A pré-condição de ocupação
+viva/reservada deve existir antes do teste do limite. Se o corpus exigir mais
+admissões, rever A/tetos explicitamente antes do congelamento físico. Estar abaixo
+do teto não prova capacidade: falhas de cadência/corte/BD não são escondidas como
+recusa por excesso. Manifesto, instalação e corpus físico continuam por congelar.
+
+Projetos protegidos emitidos por salas pessoais também exigem autorização atual;
+preview/progresso não escapam ao corte só por não usarem `project:<id>`. Implementar
+contexto/payload e medir; a inspeção estática não prova divulgação em execução.
+D10 cobre host/contentor não confiável, separando rede/TLS/identidade/domínio, com
+controlos positivos. Todos os novos resultados são NM; sem migração ou ensaio feito.
 
 ## 5. Catálogo de métricas de upload e recursos
 
@@ -456,7 +487,8 @@ observação neutra, dado o comportamento atual de substituição da identidade 
 **Antes de código de aplicação:**
 
 - [ ] Registar as escolhas finais ainda abertas, incluindo compatibilidade da API,
-  expiração de links, hash pendente, revogação/TTL e estado atómico do token.
+  persistência/revogação de links (expiry adiado por LINK-C1 A), hash pendente,
+  validade/revogação de tokens de upload e estado atómico do token.
 - [x] Registar o acordo do par QC-06 + QC-05, comunicado pelo utilizador para PL2-G4;
   fonte no registo coletivo, sem atribuir declarações nominais não recebidas.
 - [ ] Completar e rever o âmbito detalhado e os requisitos quantitativos do par.

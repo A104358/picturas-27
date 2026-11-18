@@ -1,0 +1,456 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Exercício 6 (Bloco 2) — Trade-offs, Cenários de Qualidade e Candidatos a Requisitos Não Funcionais</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+  :root {
+    --paper: #FFFFFF; --surface: #FFFFFF; --surface-alt: #F3F2EE;
+    --ink: #1C1E22; --muted: #63686F; --rule: #E3E0D9;
+    --accent: #1F5F63; --accent-ink: #14464A; --accent-wash: #E8F1F1;
+    --flag: #9A4A16; --flag-wash: #F8EEE5;
+    --shadow: 0 1px 2px rgba(28,30,34,.05);
+    --on-accent: #FFFFFF;
+    color-scheme: light;
+  }
+  :root[data-theme="dark"] {
+    --paper: #16181B; --surface: #1D2024; --surface-alt: #22262A;
+    --ink: #E8E6E1; --muted: #A0A5AC; --rule: #32373C;
+    --accent: #6FBFC2; --accent-ink: #9AD6D8; --accent-wash: #1B2E30;
+    --flag: #E0955C; --flag-wash: #2E2318;
+    --shadow: 0 1px 2px rgba(0,0,0,.35);
+    --on-accent: #10282A;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font-family: "Source Serif 4", Georgia, "Times New Roman", serif;
+    font-size: 17px; line-height: 1.62;
+  }
+  img { max-width: 100%; }
+
+  .masthead { border-bottom: 1px solid var(--rule); background: var(--surface); }
+  .wrap { width: 100%; max-width: 48rem; margin: 0 auto; padding-inline: 20px; }
+  .masthead .wrap { padding-block: 26px 22px; }
+
+  .eyebrow {
+    font-family: Archivo, "Helvetica Neue", Arial, sans-serif;
+    font-size: 12px; font-weight: 600; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--muted); margin: 0 0 14px;
+  }
+  h1 {
+    font-family: Archivo, "Helvetica Neue", Arial, sans-serif;
+    font-weight: 700; font-size: clamp(1.7rem, 1.2rem + 2.1vw, 2.35rem);
+    line-height: 1.12; letter-spacing: -.02em; text-wrap: balance; margin: 0 0 6px;
+  }
+  .subtitle { font-size: 1.05rem; font-style: italic; color: var(--muted); margin: 0 0 20px; text-wrap: balance; }
+
+  /* Percurso das cinco aulas: a aula corrente fica marcada */
+  .roadmap { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 20px; padding: 0; list-style: none; }
+  .roadmap li {
+    font-family: Archivo, sans-serif; font-size: 12px; font-weight: 600;
+    letter-spacing: .01em; color: var(--muted); background: var(--surface-alt);
+    border: 1px solid var(--rule); border-radius: 100px; padding: 4px 11px; margin: 0;
+  }
+  .roadmap li[aria-current="step"] {
+    background: var(--accent); border-color: var(--accent); color: var(--on-accent);
+  }
+
+  .facts {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 2px; background: var(--rule); border: 1px solid var(--rule);
+    border-radius: 3px; overflow: hidden;
+  }
+  .fact { background: var(--surface); padding: 10px 14px; }
+  .fact dt {
+    font-family: Archivo, sans-serif; font-size: 11px; font-weight: 600;
+    letter-spacing: .08em; text-transform: uppercase; color: var(--muted);
+  }
+  .fact dd { margin: 2px 0 0; font-family: Archivo, sans-serif; font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums; }
+
+  main .wrap { padding-block: 8px 64px; }
+  section { padding-block: 32px 0; }
+  h2 {
+    font-family: Archivo, sans-serif; font-size: 1.3rem; font-weight: 700;
+    letter-spacing: -.01em; margin: 0 0 4px; padding-bottom: 8px;
+    border-bottom: 2px solid var(--ink); text-wrap: balance;
+  }
+  h3 { font-family: Archivo, sans-serif; font-size: 1.02rem; font-weight: 600; margin: 24px 0 6px; }
+  p { margin: 0 0 14px; }
+  a { color: var(--accent-ink); }
+  ul, ol { margin: 0 0 14px; padding-left: 1.3em; }
+  li { margin-bottom: 7px; }
+  li::marker { color: var(--muted); }
+  strong { font-weight: 600; }
+  em.term { font-style: italic; }
+  code, .id {
+    font-family: "JetBrains Mono", ui-monospace, Menlo, monospace; font-size: .84em;
+    background: var(--surface-alt); border: 1px solid var(--rule);
+    border-radius: 3px; padding: .08em .34em; white-space: nowrap;
+  }
+  .bad, .good { display: block; margin-bottom: 6px; }
+  .bad { color: var(--flag); }
+  .good { color: var(--accent-ink); }
+
+  .lede { font-size: 1.1rem; border-left: 3px solid var(--accent); padding-left: 18px; margin-block: 26px 0; }
+  .lede p:last-child { margin-bottom: 0; }
+
+  .panel {
+    background: var(--surface); border: 1px solid var(--rule); border-radius: 4px;
+    box-shadow: var(--shadow); padding: 18px 20px; margin-block: 18px;
+  }
+  .panel > :last-child { margin-bottom: 0; }
+  .panel-label {
+    font-family: Archivo, sans-serif; font-size: 11px; font-weight: 600;
+    letter-spacing: .09em; text-transform: uppercase; color: var(--accent-ink); margin: 0 0 10px;
+  }
+  .panel.flagged { background: var(--flag-wash); border-color: var(--flag); }
+  .panel.flagged .panel-label { color: var(--flag); }
+
+  ol.steps { list-style: none; margin: 22px 0 0; padding: 0; counter-reset: step; }
+  ol.steps > li {
+    counter-increment: step; position: relative; padding-left: 52px;
+    padding-bottom: 24px; margin-bottom: 0; border-left: 1px solid var(--rule); margin-left: 15px;
+  }
+  ol.steps > li:last-child { border-left-color: transparent; padding-bottom: 6px; }
+  ol.steps > li::before {
+    content: counter(step); position: absolute; left: -15px; top: -2px;
+    width: 30px; height: 30px; display: grid; place-items: center;
+    background: var(--accent); color: var(--on-accent); border-radius: 50%;
+    font-family: Archivo, sans-serif; font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums;
+  }
+  ol.steps h3 { margin-top: 0; }
+
+  .io {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 2px; background: var(--rule); border: 1px solid var(--rule);
+    border-radius: 3px; overflow: hidden; margin-block: 16px;
+  }
+  .io > div { background: var(--surface); padding: 10px 13px; }
+  .io dt {
+    font-family: Archivo, sans-serif; font-size: 10px; font-weight: 600;
+    letter-spacing: .09em; text-transform: uppercase; color: var(--muted);
+  }
+  .io dd { margin: 3px 0 0; font-size: 15px; line-height: 1.45; }
+
+  .checklist { list-style: none; padding-left: 0; }
+  .checklist li { position: relative; padding-left: 30px; margin-bottom: 9px; }
+  .checklist li::before {
+    content: ""; position: absolute; left: 0; top: .45em;
+    width: 14px; height: 14px; border: 1.5px solid var(--accent); border-radius: 2px;
+  }
+
+  .table-scroll { overflow-x: auto; margin-block: 16px; }
+  table { border-collapse: collapse; width: 100%; font-family: Archivo, sans-serif; font-size: 14px; }
+  th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  th {
+    font-size: 11px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase;
+    color: var(--muted); border-bottom: 1px solid var(--ink); white-space: nowrap;
+  }
+  td.aula { font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+  footer {
+    border-top: 1px solid var(--rule); margin-top: 48px; padding-block: 20px 8px;
+    font-family: Archivo, sans-serif; font-size: 13px; color: var(--muted);
+    display: flex; flex-wrap: wrap; gap: 6px 18px; justify-content: space-between;
+  }
+
+  @media (max-width: 480px) {
+    body { font-size: 16px; }
+    ol.steps > li { padding-left: 42px; }
+  }
+  @media print {
+    body { background: #fff; font-size: 11pt; }
+    .panel, .facts, .io, table { box-shadow: none; }
+    section, ol.steps > li { break-inside: avoid; }
+  }
+
+  /* Ajustes para documentos longos gerados a partir de Markdown */
+  section > section { padding-block: 0; }
+  section > section > h3 { margin-top: 28px; }
+  code { white-space: normal; overflow-wrap: anywhere; }
+  th { white-space: normal; }
+  td, th { min-width: 7rem; }
+  blockquote {
+    margin: 18px 0; padding: 12px 18px; background: var(--accent-wash);
+    border-left: 3px solid var(--accent); border-radius: 0 3px 3px 0;
+  }
+  blockquote > :last-child { margin-bottom: 0; }
+  ul ul, ol ul, ul ol, ol ol { margin-top: 6px; margin-bottom: 6px; }
+  a code { color: inherit; }
+  main .wrap > p:first-child { margin-top: 28px; }
+  .docversion {
+    font-family: Archivo, "Helvetica Neue", Arial, sans-serif; font-size: 13px; color: var(--muted);
+    background: var(--surface-alt); border: 1px solid var(--rule); border-radius: 4px;
+    padding: 8px 12px; margin-bottom: 4px;
+  }
+  .docversion strong { color: var(--ink); }
+  .facts { grid-template-columns: repeat(auto-fit, minmax(128px, 1fr)); }
+  .roadmap li a { color: inherit; text-decoration: none; }
+  .roadmap li a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <p class="eyebrow">Requisitos e Arquiteturas de Software · MEI · Universidade do Minho</p>
+    <h1>Exercício 6 (Bloco 2) — Trade-offs, Cenários de Qualidade e Candidatos a Requisitos Não Funcionais</h1>
+    <p class="subtitle">Fase 2 — Melhoria de Requisitos Não Funcionais do PictuRAS</p>
+    <ol class="roadmap">
+      <li><a href="RAS-exercicio_6_bloco1_SWdesign_PT.html">Bloco 1 · Padrões e alternativas</a></li>
+      <li aria-current="step">Bloco 2 · Trade-offs e candidatos a RNF</li>
+    </ol>
+    <dl class="facts">
+      <div class="fact"><dt>Bloco</dt><dd>2 de 2</dd></div>
+      <div class="fact"><dt>Tarefas</dt><dd>4 e 5</dd></div>
+      <div class="fact"><dt>Resultado</dt><dd>Pontos 4 a 7</dd></div>
+      <div class="fact"><dt>Entra</dt><dd>Resultados do Bloco 1</dd></div>
+      <div class="fact"><dt>Versão</dt><dd>1.1</dd></div>
+    </dl>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+
+<p class="docversion"><strong>Versão:</strong> 1.1 · <strong>Data:</strong> 2026-11-04 · <strong>Estado:</strong> Em vigor · <strong>Template compatível:</strong> 1.1</p>
+<section id="objetivo" class="level2">
+<h2>Objetivo</h2>
+<p>Este bloco continua o <strong>Bloco 1</strong> do Exercício 6. A partir do diagnóstico arquitetural já feito (padrão global, padrão do vídeo, alternativas e matriz de comparação), os estudantes irão <strong>analisar os trade-offs</strong> entre atributos de qualidade, <strong>escrever cenários de qualidade</strong> para a extensão de vídeo e <strong>escolher, de forma fundamentada, os dois requisitos não funcionais</strong> candidatos à melhoria na Fase 2 (por <em>refactoring</em>).</p>
+<p>O bloco termina com as conclusões, os riscos para a preservação funcional e o registo da utilização de IA.</p>
+</section>
+<section id="estrutura-do-exercício-dois-blocos" class="level2">
+<h2>Estrutura do exercício: dois blocos</h2>
+<p>O Exercício 6 está dividido em <strong>dois enunciados relacionados</strong>, a realizar em dois momentos de aula. Este bloco parte dos resultados do Bloco 1.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Bloco</th>
+<th>Tarefas</th>
+<th>Resultado esperado</th>
+<th>Conteúdo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Bloco 1</strong> (<a href="RAS-exercicio_6_bloco1_SWdesign_PT.html"><code>RAS-exercicio_6_bloco1_SWdesign_PT.html</code></a>)</td>
+<td>0 a 3</td>
+<td>1 a 3</td>
+<td>Preparação; identificação dos padrões (global e do vídeo); benefícios e compromissos; alternativas; matriz de comparação</td>
+</tr>
+<tr>
+<td><strong>Bloco 2</strong> (este documento)</td>
+<td>4 e 5</td>
+<td>4 a 7</td>
+<td>Trade-offs; cenários de qualidade; candidatos a RNF da Fase 2; conclusões; utilização de IA</td>
+</tr>
+</tbody>
+</table></div>
+</section>
+<section id="contexto" class="level2">
+<h2>Contexto</h2>
+<section id="enquadramento-na-fase-2" class="level3">
+<h3>Enquadramento na Fase 2</h3>
+<p>Segundo as diretrizes da Fase 2 (<code>20261103__pictoRAS__fase_2__guidelines_v0_2.pdf</code>):</p>
+<ul>
+<li>Na Fase 1, o PictuRAS passou a suportar vídeo numa lógica de <strong>MVP</strong>: o foco foi a validação funcional, sem exigir a qualidade não funcional de uma solução em produção.</li>
+<li>Na Fase 2, cada equipa escolhe <strong>dois requisitos não funcionais distintos</strong>, classificados segundo a <strong>ISO/IEC 25010:2011</strong> (característica e, quando aplicável, subcaracterística), e melhora-os por <em>refactoring</em>, <strong>sem introduzir novas funcionalidades</strong>.</li>
+<li>O trabalho fecha o ciclo: <em>requisito não funcional → quantificação → medição inicial (baseline) → refactoring → medição final</em>.</li>
+<li>A escolha deve partir de <strong>fragilidades concretas</strong> da solução de base, identificadas no código, na arquitetura ou em medições, e ser justificada pelo interesse para os <em>stakeholders</em>.</li>
+<li>As diretrizes incluem uma tabela de ideias <strong>indicativas</strong> de requisitos não funcionais (não obrigatórias nem exaustivas). Podes consultá-la, mas os candidatos devem partir da tua análise e das tuas evidências.</li>
+<li>Entrega: <strong>20 de novembro de 2026</strong>. Defesas: 23–27 de novembro de 2026.</li>
+</ul>
+</section>
+<section id="entradas-resultados-do-bloco-1" class="level3">
+<h3>Entradas: resultados do Bloco 1</h3>
+<p>Este bloco usa, sem os repetir, os resultados do Bloco 1:</p>
+<ul>
+<li>o <em>commit</em> de partida e a vista da arquitetura (global, com o caminho do vídeo destacado);</li>
+<li>os padrões atuais (global e do vídeo) e a relação entre eles;</li>
+<li>as alternativas consideradas e a <strong>matriz de comparação</strong> de padrões;</li>
+<li>o registo de evidências e hipóteses. Novas evidências e hipóteses acrescentam-se a esse registo, continuando a numeração.</li>
+</ul>
+</section>
+<section id="onde-este-bloco-se-insere" class="level3">
+<h3>Onde este bloco se insere</h3>
+<p>O Bloco 1 identificou e comparou padrões. Agora, o foco passa dos padrões para a <strong>qualidade</strong>: que atributos mais importam aos <em>stakeholders</em>, que compromissos existem entre eles e que fragilidades concretas justificam a melhoria de dois requisitos não funcionais na Fase 2.</p>
+</section>
+<section id="âmbito-da-análise" class="level3">
+<h3>Âmbito da análise</h3>
+<p>A análise incide sobre a <strong>extensão de vídeo</strong>, mas <strong>não é feita de forma isolada</strong>: o <strong>padrão arquitetural global</strong> da solução é o contexto em que o vídeo foi integrado e faz parte da análise (ver tarefa 1 do Bloco 1). As ferramentas de imagem, o serviço de utilizadores e o de subscrições são consideradas como <strong>termo de comparação</strong> e como <strong>evidência do padrão global</strong>. A tabela «Elemento em foco / Onde procurar» está no enunciado do Bloco 1 (<a href="RAS-exercicio_6_bloco1_SWdesign_PT.html"><code>RAS-exercicio_6_bloco1_SWdesign_PT.html</code></a>).</p>
+</section>
+</section>
+<section id="descrição-da-tarefa" class="level2">
+<h2>Descrição da Tarefa</h2>
+<ol start="4" type="1">
+<li><p><strong>Análise de Trade-offs</strong></p>
+<ul>
+<li>Parte da <strong>matriz comparativa</strong> do Bloco 1 (<strong>padrão global atual como referência</strong>, padrão atual do vídeo e alternativas) e justifica detalhadamente as avaliações, considerando, no mínimo:
+<ul>
+<li>Eficiência de desempenho (comportamento temporal, utilização de recursos, capacidade/elasticidade)</li>
+<li>Fiabilidade (disponibilidade, tolerância a falhas, recuperabilidade)</li>
+<li>Manutenibilidade (modularidade, reutilização, testabilidade, modificabilidade)</li>
+<li>Segurança</li>
+<li>Usabilidade (operabilidade, e.g., trabalho em segundo plano)</li>
+</ul></li>
+<li>Identifica pré-requisitos e <strong>efeitos colaterais</strong> entre atributos (e.g., melhorar a modularidade pode degradar o desempenho).</li>
+<li>Indica, para cada atributo, em que medida o resultado depende do <strong>padrão global</strong> ou do <strong>padrão do vídeo</strong>.</li>
+</ul></li>
+<li><p><strong>Cenários de Qualidade e Candidatos a RNF da Fase 2</strong></p>
+<ul>
+<li>Escreve cenários de qualidade para a extensão de vídeo, com os elementos: fonte do estímulo, estímulo, artefacto, ambiente, resposta e medida da resposta.</li>
+<li>Prioriza os cenários (por importância para os <em>stakeholders</em> e por dificuldade/risco técnico).</li>
+<li>Propõe <strong>dois requisitos não funcionais distintos</strong> como candidatos para a Fase 2, justificando:
+<ul>
+<li>a <strong>pertinência</strong> (impacto real da fragilidade nos <em>stakeholders</em>) e a <strong>complexidade</strong> (exigência técnica do <em>refactoring</em> e da sua avaliação);</li>
+<li>a <strong>origem</strong> da fragilidade (padrão global, padrão do vídeo ou interação entre ambos), que condiciona o âmbito do <em>refactoring</em> e o risco de regressão;</li>
+<li>os pré-requisitos e efeitos colaterais de cada um sobre o outro e sobre os restantes RNF.</li>
+</ul></li>
+<li>Esboça, para cada candidato, a <strong>escala</strong> (o que se mede e em que unidade) e o <strong>método de medição</strong> (cenário, carga, ambiente, instrumento). Os valores medidos na base, os valores-alvo e os valores mínimos aceitáveis só são fixados após a medição inicial (<em>baseline</em>).</li>
+</ul></li>
+</ol>
+</section>
+<section id="resultado-esperado" class="level2">
+<h2>Resultado Esperado</h2>
+<p>Os resultados deste bloco (pontos 4 a 7) completam os pontos 1 a 3 do Bloco 1 e introduzem-se no <strong>relatório da Fase 2</strong>, nas secções de diagnóstico e de decisões arquiteturais (a estrutura final do relatório será definida numa versão seguinte das diretrizes):</p>
+<ol start="4" type="1">
+<li><p><strong>Análise de Trade-offs no contexto da solução a desenvolver</strong></p>
+<ul>
+<li>Apresenta uma justificação detalhada das avaliações da matriz do Bloco 1 (resultado esperado 3), incluindo a <strong>influência do padrão global</strong> nos resultados do vídeo.</li>
+<li>Define os <strong>cenários de qualidade</strong> relevantes para a extensão de vídeo, por exemplo (a medida da resposta deve ser definida por ti):
+<ul>
+<li><em>Um utilizador submete a legendagem automática de um vídeo enquanto outro utilizador aplica um efeito simples a um vídeo curto. O segundo trabalho deve ser concluído em X segundos.</em> — Eficiência de desempenho</li>
+<li><em>O worker de vídeo falha a meio do processamento de um lote. O sistema deve recuperar sem deixar saídas parciais e sem perder o pedido, em X minutos.</em> — Fiabilidade</li>
+</ul></li>
+<li>Define a lista dos atributos de qualidade mais importantes (por prioridade 1..N) tendo por base os cenários de qualidade mais importantes (e.g., 1. Eficiência de desempenho, 2. Usabilidade, 3. Manutenibilidade, ...).</li>
+<li>Identifica pré-requisitos e efeitos colaterais entre atributos.</li>
+<li>Recomendações para melhorias à solução atual.</li>
+</ul></li>
+<li><p><strong>Candidatos a Requisitos Não Funcionais da Fase 2</strong></p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>#</th>
+<th>Característica / subcaracterística (ISO/IEC 25010)</th>
+<th>Fragilidade na base (evidência)</th>
+<th>Origem (padrão global / padrão do vídeo / interação)</th>
+<th>Impacto nos stakeholders (pertinência)</th>
+<th>Exigência técnica (complexidade)</th>
+<th>Escala e método de medição (esboço)</th>
+<th>Pré-requisitos / efeitos colaterais</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+</tr>
+<tr>
+<td>2</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+</tr>
+</tbody>
+</table></div></li>
+<li><p><strong>Conclusões e Recomendações</strong></p>
+<ul>
+<li>Adequação do padrão atual (global e do vídeo)</li>
+<li>Sugestões de otimização</li>
+<li>Considerações para evolução futura</li>
+<li>Riscos para a <strong>preservação funcional</strong> e como mitigá-los com testes de regressão (imagem e vídeo; ver os testes existentes em <code>Tools/video/tests</code> e <code>projects/tests</code>)</li>
+</ul></li>
+<li><p><strong>Utilização de IA</strong></p>
+<ul>
+<li>Ferramentas, <em>skills</em>, tarefas apoiadas e validação feita pela equipa.</li>
+</ul></li>
+</ol>
+</section>
+<section id="orientações" class="level2">
+<h2>Orientações</h2>
+<ul>
+<li>Foca na análise objetiva baseada em evidências.</li>
+<li>Considera o contexto específico do sistema e a regra da Fase 2: <strong>refactoring, não novas funcionalidades</strong>. Os candidatos a RNF devem poder ser melhorados sem acrescentar funcionalidades e preservando o comportamento existente.</li>
+<li>Distingue claramente factos verificados de hipóteses e inferências.</li>
+<li><strong>Enquadra sempre a análise no padrão global da solução</strong>: a origem de cada fragilidade (padrão global, padrão do vídeo ou interação) condiciona o âmbito do <em>refactoring</em>.</li>
+<li>Se fizeres medições exploratórias, guarda os cenários, <em>scripts</em>, dados e ambiente, para que sejam reprodutíveis e reutilizáveis como <em>baseline</em> na Fase 2 (<em>medir antes de mudar</em>).</li>
+<li>Não inventes valores de <em>baseline</em>, alvo ou mínimo aceitável: fixam-se após a medição inicial.</li>
+<li>Referencia literatura ou casos de estudo relevantes.</li>
+<li>Documenta o uso de agentes de IA. A equipa é responsável por todo o conteúdo entregue.</li>
+</ul>
+</section>
+<section id="resultados-de-aprendizagem" class="level2">
+<h2>Resultados de Aprendizagem</h2>
+<p>Após este bloco, deverás ser capaz de:</p>
+<ul>
+<li>Justificar decisões arquiteturais com base em evidências.</li>
+<li>Compreender trade-offs entre diferentes padrões arquiteturais.</li>
+<li>Transformar fragilidades arquiteturais em requisitos não funcionais verificáveis e escolher, de forma fundamentada, os que serão melhorados na Fase 2.</li>
+</ul>
+</section>
+<section id="books-material-de-apoio" class="level2">
+<h2>📚 Material de Apoio</h2>
+<ul>
+<li>Resultados do Bloco 1 (<a href="RAS-exercicio_6_bloco1_SWdesign_PT.html"><code>RAS-exercicio_6_bloco1_SWdesign_PT.html</code></a>).</li>
+<li><a href="RAS_support_doc_architectural_patterns_PT.html"><code>RAS_support_doc_architectural_patterns_PT.html</code></a> — <strong>Padrões Arquiteturais Comuns para Análise</strong>, em particular a secção sobre os níveis de análise (padrão global e padrões locais).</li>
+<li>Slides da aula teórica (<em>Arch. Styles</em>).</li>
+<li><code>RAS-exercicio_6_bloco2_SWdesign_template_PT.md</code> — template para a resolução deste bloco.</li>
+</ul>
+</section>
+<section id="controlo-de-versões" class="level2">
+<h2>Controlo de versões</h2>
+<p><strong>Esquema:</strong> <code>major.minor</code>. A versão <em>major</em> muda quando mudam as tarefas, os resultados esperados ou o âmbito (a resolução pode ser afetada); a <em>minor</em> muda em clarificações, correções e referências. O template acompanha o enunciado: ao usá-lo, regista no relatório as versões do enunciado e do template que seguiste.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Versão</th>
+<th>Data</th>
+<th>Alterações</th>
+<th>Template compatível</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1.1</td>
+<td>2026-11-04</td>
+<td>Adicionado o controlo de versões (linha de versão no topo e esta secção).</td>
+<td>1.1</td>
+</tr>
+<tr>
+<td>1.0</td>
+<td>2026-11-04</td>
+<td>Primeira versão do Bloco 2: o Exercício 6 foi dividido em dois blocos (tarefas 4 e 5 e resultados 4 a 7 neste bloco). Parte da matriz de comparação criada no Bloco 1.</td>
+<td>1.0</td>
+</tr>
+</tbody>
+</table></div>
+</section>
+
+    <footer>
+      <span>RAS · Fase 2 · Exercício 6 · Bloco 2</span>
+      <span>Universidade do Minho · 2026/2027</span>
+    </footer>
+
+  </div>
+</main>
+
+</body>
+</html>

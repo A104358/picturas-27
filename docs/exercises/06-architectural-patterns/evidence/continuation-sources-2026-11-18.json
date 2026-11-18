@@ -1,0 +1,57 @@
+{
+  "recorded_at": "2026-11-18T14:46:35Z",
+  "record_type": "document_organization_and_static_source_comparison",
+  "current_commit": "1d7103ba05ab68a2baf6f11a3655292cc621e68e",
+  "exercise_start_commit": "484be13b4c8e96c70e7e694a2c368d5601749438",
+  "application_comparison_paths": [
+    "docker-compose.yaml",
+    "apiGateway",
+    "projects",
+    "users",
+    "subscriptions",
+    "imageStorageService",
+    "wsGateway",
+    "nginx",
+    "Tools",
+    "frontend",
+    "generative-mock",
+    "rabbitMQ"
+  ],
+  "application_changed_paths": [],
+  "organized_inputs": [
+    {
+      "original_path": "RAS-exercicio_6_bloco2_SWdesign_PT.html",
+      "organized_path": "docs/exercises/06-architectural-patterns/sources/RAS-exercicio_6_bloco2_SWdesign_PT.html",
+      "sha256": "981d22481b52dd2ab99ecab8d3a3709728888c551ffcd7a2f9e2b0d85c065d8f",
+      "bytes": 24089,
+      "source_bytes_preserved": true
+    },
+    {
+      "original_path": "RAS-exercicio_6_bloco2_SWdesign_template_PT.md",
+      "organized_path": "docs/exercises/06-architectural-patterns/sources/RAS-exercicio_6_bloco2_SWdesign_template_PT.md",
+      "sha256": "6f866840b68f236fa7063c1637d2b77fd27750932a8602cbdf0a28f2c4f350ea",
+      "bytes": 10403,
+      "source_bytes_preserved": true
+    },
+    {
+      "original_path": "RAS-exercicio_7_taticas_SWdesign_PT.html",
+      "organized_path": "docs/exercises/07-architectural-tactics/sources/RAS-exercicio_7_taticas_SWdesign_PT.html",
+      "sha256": "16e7af1935c02dcb826349a55a1210a5100ed3bb18559347589ff0eb3d330c96",
+      "bytes": 29969,
+      "source_bytes_preserved": true
+    },
+    {
+      "original_path": "RAS-exercicio_7_taticas_SWdesign_template_PT.md",
+      "organized_path": "docs/exercises/07-architectural-tactics/sources/RAS-exercicio_7_taticas_SWdesign_template_PT.md",
+      "sha256": "790be3974663dda4a900f3b3913cb72f93708de7992aedfa589fede4924c5193",
+      "bytes": 9360,
+      "source_bytes_preserved": true
+    }
+  ],
+  "limitations": [
+    "No application runtime or load/fault tests executed",
+    "No Docker/database/browser/retained-volume access",
+    "Human academic review remains pending",
+    "Earlier decisions and measured pilots are not a completed formal baseline"
+  ]
+}

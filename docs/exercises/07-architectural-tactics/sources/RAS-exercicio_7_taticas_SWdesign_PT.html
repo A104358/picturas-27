@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt-PT" xml:lang="pt-PT">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>RAS — Exercício 7: Táticas Arquiteturais</title>
+  <style>
+
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+  <style type="text/css">:root{color-scheme:light}
+body{font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;line-height:1.6;max-width:56rem;margin:2rem auto;padding:0 1.2rem;color:#222}
+h1{font-size:1.8rem;border-bottom:3px solid #a4123f;padding-bottom:.3rem}
+h2{margin-top:2.2rem;border-bottom:1px solid #ddd;padding-bottom:.2rem;color:#a4123f}
+h3{margin-top:1.6rem}
+table{border-collapse:collapse;margin:1rem 0;display:block;overflow-x:auto}
+th,td{border:1px solid #ccc;padding:.4rem .6rem;vertical-align:top;text-align:left}
+th{background:#f3f3f3}
+code{background:#f4f4f4;padding:.1rem .3rem;border-radius:3px;font-size:.9em}
+pre{background:#f4f4f4;padding:.8rem;border-radius:5px;overflow-x:auto}
+pre code{background:none;padding:0}
+blockquote{border-left:4px solid #a4123f;margin:1rem 0;padding:.1rem 1rem;background:#fafafa;color:#444}
+hr{border:0;border-top:1px solid #ddd;margin:2rem 0}
+@media print{body{max-width:none;margin:0}a{color:inherit}}
+</style>
+</head>
+<body>
+<h1 id="exercício-7--táticas-arquiteturais-para-melhorar-requisitos-não-funcionais-do-picturas">Exercício
+7 — Táticas Arquiteturais para Melhorar Requisitos Não Funcionais do
+PictuRAS</h1>
+<p><strong>Versão:</strong> 3.0 · <strong>Data:</strong> 2026-11-17 ·
+<strong>Estado:</strong> Em vigor · <strong>Template
+compatível:</strong> 3.0</p>
+<h2 id="objetivo">Objetivo</h2>
+<p>Este exercício introduz as <strong>táticas arquiteturais</strong>
+como a ponte entre um <strong>cenário de qualidade</strong> do PictuRAS
+e a <strong>decisão arquitetural</strong> que o concretiza, no contexto
+da <strong>Fase 2</strong> do projeto (melhoria de requisitos não
+funcionais por <em>refactoring</em>, <strong>sem novas
+funcionalidades</strong>).</p>
+<p>Os cenários de qualidade <strong>não se escrevem aqui</strong>: são
+caracterizados no <strong>Bloco 2 do Exercício 6</strong> (seis
+elementos, escala e método de medição) e este exercício <strong>parte
+dos dois cenários dos candidatos escolhidos</strong>
+(<code>CAND-1</code> e <code>CAND-2</code>). Os estudantes irão, para
+cada um:</p>
+<ol type="1">
+<li>identificar e comparar <strong>táticas candidatas</strong>
+(disponibilidade, desempenho, segurança, usabilidade, modificabilidade,
+testabilidade);</li>
+<li>tomar e justificar uma <strong>decisão arquitetural</strong> que
+seja <em>refactoring</em> e não funcionalidade nova;</li>
+<li>analisar <strong>efeitos colaterais</strong> e planear a
+<strong>medição</strong> (antes e depois) que demonstrará o efeito da
+tática.</li>
+</ol>
+<p>Os resultados alimentam o <strong>relatório da Fase 2</strong>
+(decisões arquiteturais, quantificação, medição).</p>
+<hr />
+<h2 id="contexto">Contexto</h2>
+<h3 id="enquadramento-na-fase-2">Enquadramento na Fase 2</h3>
+<p>Segundo as diretrizes da Fase 2
+(<code>fase-2-guidelines.pdf</code>):</p>
+<ul>
+<li>Cada equipa escolhe <strong>dois requisitos não funcionais
+distintos</strong>, classificados segundo a <strong>ISO/IEC
+25010:2011</strong> (característica e, quando aplicável,
+subcaracterística), a partir de <strong>fragilidades concretas</strong>
+da solução de base.</li>
+<li>O trabalho fecha o ciclo: <em>requisito não funcional →
+quantificação → medição inicial (baseline) → refactoring → medição
+final</em>.</li>
+<li>Para cada requisito esperam-se: diagnóstico, quantificação (escala,
+método de medição, valor na base, valor-alvo e mínimo aceitável),
+<em>baseline</em>, <strong>decisões arquiteturais</strong>
+(alternativas, decisão, consequências), medição final com análise
+crítica e <strong>preservação funcional</strong> (testes de
+regressão).</li>
+<li>A melhoria de um requisito pode ter pré-requisitos ou efeitos
+colaterais noutros: a equipa tem de os identificar e avaliar.</li>
+<li>Valoriza-se a <strong>pertinência</strong> e a
+<strong>complexidade</strong> dos requisitos, a profundidade da análise
+e a <strong>adequação das decisões arquiteturais</strong>.</li>
+<li>Entrega: <strong>20 de novembro de 2026</strong>. Defesas: 23–27 de
+novembro de 2026.</li>
+</ul>
+<h3 id="o-que-é-uma-tática">O que é uma tática</h3>
+<blockquote>
+<p>Uma <strong>tática</strong> é uma decisão de design que influencia a
+resposta de um atributo de qualidade. As táticas ligam os requisitos de
+qualidade às decisões arquiteturais.</p>
+</blockquote>
+<pre><code>Cenário de qualidade → Tática(s) → Elemento(s) arquitetural(is) → Resposta medida
+(Bloco 2, Ex. 6)       (decisão)    (onde se realiza)             (antes/depois)</code></pre>
+<p>Uma tática <strong>não é</strong> um padrão: um padrão (e.g.,
+<em>Competing Consumers</em>, <em>Circuit Breaker</em>) é uma estrutura
+que costuma <strong>realizar</strong> uma ou mais táticas. Neste
+exercício decide-se primeiro a tática (o <em>porquê</em>) e só depois a
+estrutura que a realiza (o <em>como</em>).</p>
+<h3 id="regra-de-ouro-da-fase-2-tática-não-é-funcionalidade">Regra de
+ouro da Fase 2: tática não é funcionalidade</h3>
+<p>Antes de aceitares uma tática, classifica-a:</p>
+<table>
+<thead>
+<tr>
+<th>Classe</th>
+<th>Critério</th>
+<th>Aceitável na Fase 2?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>A. Refactoring puro</strong></td>
+<td>O utilizador não vê diferença funcional; muda só o comportamento de
+qualidade (tempo, falhas, recursos, segurança interna, estrutura).</td>
+<td>Sim</td>
+</tr>
+<tr>
+<td><strong>B. Alteração visível que é o próprio objeto da
+melhoria</strong></td>
+<td>Muda a interação, mas só para melhorar uma qualidade (e.g.,
+usabilidade: explicar porque uma ferramenta não está disponível). Não
+acrescenta capacidades.</td>
+<td>Sim, com justificação</td>
+</tr>
+<tr>
+<td><strong>C. Funcionalidade nova</strong></td>
+<td>O utilizador passa a poder fazer algo que antes não podia (e.g., um
+novo efeito de vídeo, uma nova pasta, um novo perfil).</td>
+<td>Não — rejeitar ou redesenhar</td>
+</tr>
+</tbody>
+</table>
+<p>Teste rápido: <em>«Se retirar a tática, o utilizador perde alguma
+capacidade ou só perde qualidade?»</em></p>
+<h3 id="entradas-resultados-do-bloco-1-e-do-bloco-2-do-exercício-6">Entradas:
+resultados do Bloco 1 e do Bloco 2 do Exercício 6</h3>
+<p>Este exercício <strong>depende do Bloco 2</strong> (e, através dele,
+do Bloco 1). Usa, sem os repetir:</p>
+<ul>
+<li>os <strong>dois candidatos a RNF</strong> (<code>CAND-1</code>,
+<code>CAND-2</code>) e os respetivos <strong>cenários de
+qualidade</strong> (<code>QS-nn</code>), com a escala e o método de
+medição esboçados;</li>
+<li>o <em>commit</em> de partida, os padrões (global e do vídeo) e o
+<strong>registo de evidências e hipóteses</strong> (<code>EV-nn</code>,
+<code>H-nn</code>), cuja numeração continuas.</li>
+</ul>
+<h3 id="onde-procurar-táticas-já-presentes-na-base-relativo-a-picturas-umpicturas-27">Onde
+procurar táticas já presentes na base (relativo a
+<code>picturas-um/picturas-27</code>)</h3>
+<p>Para cada tática candidata, verifica se já existe, total ou
+parcialmente, na solução de base:</p>
+<table>
+<thead>
+<tr>
+<th>Zona</th>
+<th>Onde procurar</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Orquestração e mensagens</td>
+<td><code>projects/</code>, <code>Tools/utils/</code>,
+<code>rabbitMQ/</code></td>
+</tr>
+<tr>
+<td>Worker de vídeo</td>
+<td><code>Tools/video/</code></td>
+</tr>
+<tr>
+<td>Carregamento e armazenamento de ficheiros</td>
+<td><code>apiGateway/routes/projects.js</code>,
+<code>projects/utils/video.js</code>,
+<code>imageStorageService/</code></td>
+</tr>
+<tr>
+<td>Implantação, recursos e saúde dos serviços</td>
+<td><code>docker-compose.yaml</code>, <code>nginx/nginx.conf</code></td>
+</tr>
+<tr>
+<td>Confiança entre serviços, exposição e segredos</td>
+<td><code>docker-compose.yaml</code>, <code>apiGateway/</code>,
+<code>wsGateway/</code>, <code>projects/</code>,
+<code>nginx/</code></td>
+</tr>
+<tr>
+<td>Interface (criação de pipelines, progresso, cancelamento)</td>
+<td><code>frontend/</code>, <code>wsGateway/</code></td>
+</tr>
+<tr>
+<td>Testes e observabilidade</td>
+<td><code>Tools/video/tests/</code>, <code>projects/tests/</code>,
+<em>logs</em> dos serviços</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="material-de-apoio">Material de Apoio</h2>
+<ul>
+<li>Slides <em>9 Design Tactics</em>
+(<code>RAS-slidesEN-9-ARCH-Tactics.pdf</code>) — disponibilidade e
+desempenho.</li>
+<li><code>Apoio/Taticas/availability_tactics.md</code>,
+<code>performance_tatics_PT.md</code>, <code>security_tatics.md</code> —
+folhas de apoio por atributo (cenário geral, táticas, lista de
+verificação).</li>
+<li><code>Apoio/Taticas/RAS_support_doc_tectics_EN.md</code> — visão
+geral das táticas e modelo de documentação.</li>
+<li><strong>Anexo A</strong> deste enunciado — catálogo mínimo de
+táticas, incluindo usabilidade, modificabilidade e testabilidade (que os
+slides apenas enumeram).</li>
+<li><code>RAS-exercicio_7_taticas_SWdesign_template_PT.md</code> —
+template para a resolução.</li>
+</ul>
+<hr />
+<h2 id="descrição-da-tarefa">Descrição da Tarefa</h2>
+<p>Trabalha com os <strong>dois cenários de qualidade</strong>
+(<code>QS-a</code> e <code>QS-b</code>) dos candidatos
+<code>CAND-1</code> e <code>CAND-2</code> do Bloco 2. O <strong>Anexo
+B</strong> mostra um exemplo trabalhado, sobre o cenário de exemplo do
+enunciado do Bloco 2 (não o uses como um dos teus).</p>
+<p><em>Tempos indicativos para uma aula de cerca de 2 h.</em></p>
+<h3 id="sequência-dos-artefactos">Sequência dos artefactos</h3>
+<p>Os artefactos encadeiam-se: cada um parte do anterior e <strong>tem
+de ser rastreável até ele</strong> (pelos identificadores
+<code>QS-nn</code>, <code>EV-nn</code>, <code>H-nn</code>,
+<code>CAND-n</code>, <code>TAT-n</code>, <code>DA-n</code>). Os três
+primeiros vêm do Exercício 6 (<strong>entradas</strong>); os dois
+últimos produzem-se <strong>neste exercício</strong>.</p>
+<pre><code> ENTRADAS (Exercício 6)                          PRODUZIDO NESTE EXERCÍCIO
+┌──────────────────────────────────────────┐    ┌───────────────────────────────────────┐
+│                                          │    │                                       │
+│ 1. Evidências  2. RNF       3. Cenários  │    │ 4. Táticas        5. Decisões         │
+│    e              candi-       de        │───▶│    candidatas        arquiteturais    │
+│    hipóteses      datos        qualidade │    │    (≥ 3 por          (DA-1, DA-2)     │
+│    (EV-nn,H-nn)   (CAND-n)     (QS-nn)   │    │    cenário, A/B/C)                    │
+│                                          │    │                                       │
+└──────────────────────────────────────────┘    └───────────────────────────────────────┘</code></pre>
+<table>
+<thead>
+<tr>
+<th>Passo</th>
+<th>Artefacto</th>
+<th>Pergunta a que responde</th>
+<th>Origem</th>
+<th>Tarefa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>Evidências e hipóteses</strong> (<code>EV-nn</code>,
+<code>H-nn</code>)</td>
+<td>Que factos verificados e que hipóteses revelam uma fragilidade na
+solução de base?</td>
+<td>Blocos 1 e 2, Ex. 6</td>
+<td>1 (referenciar; continuar a numeração)</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>Requisitos não funcionais candidatos</strong>
+(<code>CAND-1</code>, <code>CAND-2</code>)</td>
+<td>Que característica ISO/IEC 25010 se quer melhorar, para resolver
+essa fragilidade?</td>
+<td>Bloco 2, Ex. 6</td>
+<td>1 (copiar, não reescrever)</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>Cenário de qualidade</strong> (<code>QS-nn</code>)</td>
+<td>Que estímulo, em que contexto, e que resposta mensurável (escala e
+método de medição) se espera para cada candidato?</td>
+<td>Bloco 2, Ex. 6</td>
+<td>1 (copiar, não reescrever)</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>Táticas candidatas</strong> (<code>TAT-n</code>)</td>
+<td>Que decisões de design produzem a resposta pretendida face ao
+estímulo? Já existem na base? São classe A, B ou C?</td>
+<td><strong>Este exercício</strong></td>
+<td>2</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>Decisões arquiteturais</strong> (<code>DA-1</code>,
+<code>DA-2</code>)</td>
+<td>Que tática se escolhe, que alternativas se rejeitam e que
+consequências tem?</td>
+<td><strong>Este exercício</strong></td>
+<td>3 (e 4 a 6 para vista, medição e revisão)</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Regra de rastreabilidade:</strong> cada <code>DA-n</code>
+cita a(s) tática(s) escolhida(s), que citam o <code>QS-nn</code> e o
+<code>CAND-n</code> que a motivam, que por sua vez assentam nas
+<code>EV-nn</code>/<code>H-nn</code> que revelaram a fragilidade. Uma
+decisão sem esta cadeia completa não está justificada.</p>
+</blockquote>
+<ol type="1">
+<li><p><strong>Cenários de entrada (10 min)</strong></p>
+<ul>
+<li>Copia para o template os dois cenários e os candidatos do Bloco 2,
+com a evidência (<code>EV-nn</code>), a característica ISO/IEC 25010, a
+origem e a escala e o método de medição. <strong>Não os
+reescrevas</strong>.</li>
+<li>Identifica, em cada um, o <strong>estímulo</strong> a que a tática
+tem de reagir e a <strong>resposta</strong> a obter. Se a medida da
+resposta não for verificável, corrige-a <strong>no Bloco 2</strong>, que
+é o único sítio onde os cenários se caracterizam, e regista a
+alteração.</li>
+<li><strong>Não inventes</strong> valores de <em>baseline</em>, alvo ou
+mínimo aceitável: fixam-se após a medição inicial.</li>
+</ul></li>
+<li><p><strong>Táticas candidatas (25 min)</strong></p>
+<ul>
+<li>Para cada cenário, identifica a <strong>categoria de tática</strong>
+adequada (e.g., disponibilidade: detetar / recuperar / prevenir;
+desempenho: controlar a procura / gerir recursos; segurança: detetar /
+resistir / reagir / recuperar).</li>
+<li>Lista <strong>pelo menos três táticas candidatas</strong> por
+cenário (Anexo A e folhas de apoio) e, para cada uma, explica
+<strong>como produz a resposta</strong> pretendida face ao
+estímulo.</li>
+<li>Verifica <strong>se a tática já existe, total ou parcialmente, na
+solução de base</strong> (com evidência): melhorar uma tática existente
+é diferente de introduzir uma nova.</li>
+<li>Classifica cada candidata como <strong>A, B ou C</strong> (regra de
+ouro). As de classe C são rejeitadas.</li>
+</ul></li>
+<li><p><strong>Decisão arquitetural (25 min)</strong></p>
+<ul>
+<li>Para cada cenário, escolhe <strong>uma tática (ou
+combinação)</strong> e regista a decisão (<code>DA-n</code>): contexto,
+<strong>alternativas consideradas</strong> (pelo menos duas, com a razão
+de rejeição), decisão, <strong>consequências</strong> positivas e
+negativas.</li>
+<li>Indica os <strong>elementos arquiteturais afetados</strong>
+(serviços, filas, ficheiros de configuração, módulos) e como a origem da
+fragilidade (indicada no Bloco 2) condiciona o âmbito do
+<em>refactoring</em> e o risco de regressão.</li>
+<li>Indica a <strong>estrutura ou padrão</strong> que realiza a tática
+(se aplicável).</li>
+</ul></li>
+<li><p><strong>Vista arquitetural (10 min)</strong></p>
+<ul>
+<li>Produz um diagrama (componentes, implantação ou sequência) com o
+<strong>antes e o depois</strong> da decisão, destacando os elementos ou
+as interações introduzidos ou alterados pela tática (e.g., com um
+estereótipo <code>«tática: …»</code> ou cor).</li>
+<li>Pode ser PlantUML, Mermaid ou imagem.</li>
+</ul></li>
+<li><p><strong>Trade-offs e plano de medição (20 min)</strong></p>
+<ul>
+<li><strong>Matriz de efeitos:</strong> para cada decisão, indica o
+efeito (melhora / degrada / neutro) em, pelo menos, quatro atributos
+(incluindo a característica do outro cenário), com justificação.</li>
+<li><strong>Interação entre <code>DA-1</code> e
+<code>DA-2</code>:</strong> pré-requisito, sinergia ou conflito.</li>
+<li><strong>Plano de medição:</strong> concretiza o esboço de escala e
+método do Bloco 2 (cenário de teste e carga, ambiente, o que se regista,
+como se repete). A mesma medição serve antes e depois do
+<em>refactoring</em>.</li>
+<li><strong>Preservação funcional:</strong> que testes de regressão
+existentes cobrem a zona alterada (<code>Tools/video/tests</code>,
+<code>projects/tests</code>) e que lacunas de teste encontraste.</li>
+</ul></li>
+<li><p><strong>Utilização de IA (durante a aula, 2–3 min)</strong></p>
+<ul>
+<li>Se usaste um agente de IA para propor táticas ou diagramas, regista:
+ferramenta, pedido, o que <strong>aceitaste e rejeitaste</strong>, e
+<strong>como validaste</strong> (código, medição ou documentação). A
+equipa é responsável por todo o conteúdo.</li>
+</ul></li>
+</ol>
+<hr />
+<h2 id="resultado-esperado">Resultado Esperado</h2>
+<p>O resultado (preenchido no template) deve incluir:</p>
+<ol type="1">
+<li><strong>Os dois cenários de entrada</strong> (<code>QS-nn</code>, do
+Bloco 2) referenciados com os seus candidatos, sem os reescrever.</li>
+<li><strong>Tabela de táticas candidatas</strong> por cenário (≥ 3
+cada), com a classificação A/B/C e a indicação de existência parcial na
+base.</li>
+<li><strong>Duas decisões arquiteturais</strong> (<code>DA-1</code>,
+<code>DA-2</code>) com alternativas, decisão e consequências.</li>
+<li><strong>Vista arquitetural antes/depois</strong> das decisões.</li>
+<li><strong>Matriz de efeitos</strong>, interação entre as duas decisões
+e <strong>plano de medição</strong> com plano de regressão.</li>
+<li><strong>Registo de utilização de IA</strong>.</li>
+</ol>
+<h3 id="ligação-às-expectativas-e-critérios-da-fase-2">Ligação às
+expectativas e critérios da Fase 2</h3>
+<table>
+<thead>
+<tr>
+<th>Critério ou expectativa (diretrizes)</th>
+<th>Onde se treina neste exercício</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Pertinência</strong> (impacto da fragilidade nos
+<em>stakeholders</em>)</td>
+<td>Bloco 2 (candidatos)</td>
+</tr>
+<tr>
+<td><strong>Complexidade</strong> (exigência do <em>refactoring</em> e
+da avaliação)</td>
+<td>Tarefas 2 e 3 (alternativas, âmbito, origem)</td>
+</tr>
+<tr>
+<td><strong>Adequação das decisões arquiteturais</strong></td>
+<td>Tarefas 2, 3 e 4</td>
+</tr>
+<tr>
+<td><strong>Solidez da avaliação</strong> (medir antes e depois)</td>
+<td>Bloco 2 (escala e método) e tarefa 5 (plano de medição)</td>
+</tr>
+<tr>
+<td><strong>Preservação funcional</strong> (expectativa 6 por RNF)</td>
+<td>Tarefa 5 (testes de regressão)</td>
+</tr>
+<tr>
+<td><strong>IA documentada e validada</strong> (princípio)</td>
+<td>Tarefa 6</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="orientações">Orientações</h2>
+<ul>
+<li>Foca na <strong>análise objetiva baseada em evidências</strong>.
+Distingue <strong>factos verificados</strong> de
+<strong>hipóteses</strong>.</li>
+<li>Uma tática responde a <strong>um estímulo e uma resposta
+mensurável</strong>. Se não consegues dizer como medir o efeito, o
+cenário ainda não está bem definido: corrige-o no Bloco 2.</li>
+<li>A regra da Fase 2 é <em>refactoring, não novas funcionalidades</em>:
+rejeita (e justifica) as táticas de classe C.</li>
+<li>Considera <strong>sempre o custo da tática</strong>: toda a tática
+tem um preço noutro atributo (e.g., redundância melhora a
+disponibilidade e aumenta o custo e a complexidade).</li>
+<li>Não inventes valores de <em>baseline</em>, alvo ou mínimo
+aceitável.</li>
+<li>Se fizeres medições exploratórias, guarda os cenários,
+<em>scripts</em>, dados e ambiente para os reutilizares como
+<em>baseline</em> na Fase 2 (<em>medir antes de mudar</em>).</li>
+<li>Documenta o uso de agentes de IA. A equipa é responsável por todo o
+conteúdo entregue.</li>
+</ul>
+<hr />
+<h2 id="resultados-de-aprendizagem">Resultados de Aprendizagem</h2>
+<p>Após este exercício, deverás ser capaz de:</p>
+<ul>
+<li>Escrever um <strong>cenário de qualidade</strong> verificável a
+partir de uma fragilidade concreta.</li>
+<li>Distinguir <strong>táticas</strong> de <strong>padrões</strong> e
+escolher táticas adequadas a um estímulo e a uma resposta.</li>
+<li>Justificar uma <strong>decisão arquitetural</strong> comparando
+alternativas e consequências.</li>
+<li>Distinguir <strong>refactoring</strong> de <strong>funcionalidade
+nova</strong>.</li>
+<li>Antecipar <strong>efeitos colaterais</strong> entre atributos e
+planear a <strong>medição antes/depois</strong>.</li>
+</ul>
+<hr />
+<h2 id="anexo-a--catálogo-mínimo-de-táticas">Anexo A — Catálogo mínimo
+de táticas</h2>
+<blockquote>
+<p>Os slides e as folhas de apoio cobrem disponibilidade, desempenho e
+segurança. Para usabilidade, modificabilidade e testabilidade, o
+catálogo abaixo segue Bass, Clements &amp; Kazman, <em>Software
+Architecture in Practice</em> (4.ª ed.), capítulos dos respetivos
+atributos. É um ponto de partida: consulta a fonte para as definições
+completas.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Atributo</th>
+<th>Categoria</th>
+<th>Táticas</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Disponibilidade</strong></td>
+<td>Detetar falhas</td>
+<td><em>Ping/echo</em>, <em>monitor</em>, <em>heartbeat</em>,
+<em>timestamp</em>, <em>sanity checking</em>, <em>voting</em>, deteção
+de exceções, <em>self-test</em></td>
+</tr>
+<tr>
+<td></td>
+<td>Recuperar</td>
+<td>Redundância ativa / passiva / <em>spare</em>, tratamento de
+exceções, <em>rollback</em>, <em>retry</em>, ignorar comportamento
+errado, degradação, reconfiguração; reintrodução: <em>shadow</em>,
+ressincronização de estado, reinício escalonado, <em>non-stop
+forwarding</em></td>
+</tr>
+<tr>
+<td></td>
+<td>Prevenir</td>
+<td>Remoção de serviço, transações, modelo preditivo, prevenção de
+exceções, aumentar o conjunto de competências</td>
+</tr>
+<tr>
+<td><strong>Desempenho</strong></td>
+<td>Controlar a procura de recursos</td>
+<td>Gerir pedidos de trabalho (e.g., filas, <em>throttling</em>),
+limitar a resposta a eventos, priorizar eventos, reduzir a sobrecarga
+(e.g., intermediários, reutilizar ligações), limitar o tempo de
+execução, aumentar a eficiência dos recursos</td>
+</tr>
+<tr>
+<td></td>
+<td>Gerir recursos</td>
+<td>Aumentar recursos, introduzir concorrência, manter várias cópias de
+computação (réplicas) ou de dados (<em>caching</em>), limitar o tamanho
+das filas, escalonar recursos (arbitragem: prioridades e políticas de
+escalonamento)</td>
+</tr>
+<tr>
+<td><strong>Segurança</strong></td>
+<td>Detetar ataques</td>
+<td>Detetar intrusão, detetar negação de serviço, verificar a
+integridade de mensagens, detetar atraso de mensagens</td>
+</tr>
+<tr>
+<td></td>
+<td>Resistir</td>
+<td>Identificar, autenticar e autorizar atores, limitar acesso, limitar
+exposição, cifrar dados, separar entidades, alterar definições por
+omissão</td>
+</tr>
+<tr>
+<td></td>
+<td>Reagir / recuperar</td>
+<td>Revogar acesso, bloquear, informar atores; manter <em>audit
+trail</em>; táticas de disponibilidade</td>
+</tr>
+<tr>
+<td><strong>Usabilidade</strong></td>
+<td>Apoiar a iniciativa do utilizador</td>
+<td>Cancelar, anular (<em>undo</em>), pausar/retomar, agregar</td>
+</tr>
+<tr>
+<td></td>
+<td>Apoiar a iniciativa do sistema</td>
+<td>Manter o modelo da tarefa, do utilizador e do sistema (e.g.,
+antecipar erros, indicar progresso e estado)</td>
+</tr>
+<tr>
+<td><strong>Modificabilidade</strong></td>
+<td>Reduzir o custo de alterar</td>
+<td>Aumentar a coesão (dividir módulos), reduzir o acoplamento
+(encapsular, intermediários, restringir dependências, refatorizar,
+abstrair serviços comuns), adiar a ligação (configuração, registo em
+<em>runtime</em>, <em>plug-ins</em>, <em>publish-subscribe</em>,
+parametrização)</td>
+</tr>
+<tr>
+<td><strong>Testabilidade</strong></td>
+<td>Controlar e observar o estado</td>
+<td>Interfaces especializadas, gravar/repetir, localizar o estado,
+abstrair fontes de dados, <em>sandbox</em>, <em>assertions</em>
+executáveis</td>
+</tr>
+<tr>
+<td></td>
+<td>Limitar a complexidade</td>
+<td>Limitar a complexidade estrutural, limitar o não-determinismo</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Atenção (regra de ouro):</strong> táticas como <em>undo</em>,
+pausar/retomar, bloquear utilizadores ou um <em>audit trail</em> visível
+ao utilizador dão capacidades novas e são <strong>classe C</strong>,
+salvo se já existirem na base (que hoje só tem cancelamento do projeto).
+A mesma tática pode ser classe A se for interna (e.g., um registo de
+auditoria só para operação).</p>
+</blockquote>
+<hr />
+<h2 id="anexo-b--exemplo-trabalhado-não-uses-este-cenário">Anexo B —
+Exemplo trabalhado (não uses este cenário)</h2>
+<p>Parte do <strong>cenário de exemplo completo</strong> do enunciado do
+Bloco 2 (<code>RAS-exercicio_6_bloco2_SWdesign_PT.md</code>): publicar o
+lote de mensagens de um projeto com vários vídeos, com uma ligação AMQP
+nova por mensagem (<code>projects/utils/rabbit_mq.js:11-30</code>). O
+cenário já está caracterizado lá (característica: eficiência de
+desempenho; medida: tempo de publicação do lote e ligações abertas por
+lote). Aqui só se aplicam táticas.</p>
+<ul>
+<li><strong>Táticas candidatas:</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Tática (categoria)</th>
+<th>Como produz a resposta</th>
+<th>Já existe na base?</th>
+<th>Classe</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TAT-EX1</td>
+<td>Reduzir a sobrecarga: reutilizar ligações (desempenho → controlar a
+procura)</td>
+<td>Uma ligação e um canal duradouros eliminam o <em>handshake</em> por
+mensagem</td>
+<td>Não neste ficheiro</td>
+<td>A</td>
+</tr>
+<tr>
+<td>TAT-EX2</td>
+<td>Introduzir concorrência (desempenho → gerir recursos)</td>
+<td>Publicar em paralelo</td>
+<td>Não</td>
+<td>A (mas o custo de ligação mantém-se por mensagem)</td>
+</tr>
+<tr>
+<td>TAT-EX3</td>
+<td>Gerir pedidos de trabalho: agrupar mensagens (desempenho → controlar
+a procura)</td>
+<td>Menos operações de rede</td>
+<td>Não: cada mensagem é publicada individualmente
+(<code>projects/utils/processBatch.js:11</code>); só os registos
+<code>Process</code> são criados antes do envio</td>
+<td>A, com risco de regressão alto: altera o contrato de mensagens
+partilhado por todos os consumidores</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Decisão <code>DA-EX</code>:</strong> TAT-EX1. Alternativas
+rejeitadas: TAT-EX2 (não reduz o custo por mensagem), TAT-EX3 (altera o
+contrato de todos os consumidores) e manter como está (sem melhoria).
+<strong>Consequências:</strong> (+) menos ligações e menor latência de
+despacho; (−) a ligação duradoura exige <strong>reconexão</strong> e
+tratamento de falhas, que hoje não são necessários porque a ligação é
+efémera (efeito colateral em <strong>disponibilidade</strong>); (−) é
+preciso garantir a confirmação de publicação se a perda de mensagens
+passar a ser relevante.</li>
+<li><strong>Classe:</strong> A — refactoring puro; o utilizador não vê
+diferença funcional.</li>
+<li><strong>Efeitos:</strong> desempenho ↑; disponibilidade ↓ se não
+houver reconexão (pré-requisito: tática de recuperação); testabilidade
+neutra.</li>
+<li><strong>Hipótese (<code>H-EX</code>)</strong>: o fecho com atraso
+fixo de 500 ms pode fechar a ligação antes de a mensagem ser enviada se
+o canal demorar a abrir. Não verificada: tem de ser confirmada por teste
+antes de ser tratada como facto.</li>
+</ul>
+<hr />
+<h2 id="controlo-de-versões">Controlo de versões</h2>
+<p><strong>Esquema:</strong> <code>major.minor</code>. A versão
+<em>major</em> muda quando mudam as tarefas, os resultados esperados ou
+o âmbito (a resolução pode ser afetada); a <em>minor</em> muda em
+clarificações, correções e referências. O template acompanha o
+enunciado: ao usá-lo, regista no relatório as versões do enunciado e do
+template que seguiste.</p>
+<table>
+<thead>
+<tr>
+<th>Versão</th>
+<th>Data</th>
+<th>Alterações</th>
+<th>Template compatível</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3.0</td>
+<td>2026-11-17</td>
+<td>Removida a tarefa de revisão cruzada; a utilização de IA passa a
+tarefa 6. Acrescentado à «Descrição da Tarefa» o esquema da sequência
+dos artefactos (evidências e hipóteses → RNF candidatos → cenários →
+táticas → decisões) e a regra de rastreabilidade.</td>
+<td>3.0</td>
+</tr>
+<tr>
+<td>2.0</td>
+<td>2026-11-05</td>
+<td>Os cenários de qualidade deixam de ser escritos neste exercício: são
+a entrada, vindos do Bloco 2 do Exercício 6 (v1.2). O exercício passa a
+cobrir só táticas, decisões, trade-offs e plano de medição; tarefa 0
+removida e tarefas renumeradas; Anexo B reduzido à aplicação de
+táticas.</td>
+<td>2.0</td>
+</tr>
+<tr>
+<td>1.0</td>
+<td>2026-11-05</td>
+<td>Primeira versão: o Exercício 7 passa a ser dedicado às táticas
+arquiteturais, enquadrado nas diretrizes da Fase 2. Substitui o anterior
+Exercício 7 (alocação de requisitos funcionais), arquivado em
+<code>_ex7-10_anteriores/</code>.</td>
+<td>1.0</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

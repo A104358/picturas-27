@@ -13,7 +13,11 @@ Security coverage option A is individually validated: internal APIs use mTLS;
 other channels require verified server TLS and service-specific least-privilege
 credentials where applicable. Exact configuration/proof and session transition
 remain open; prior JWT/WS decisions are preserved.
-Construction has not started.
+Construction has not started. The newly supplied teaching materials are organized
+and resolved in [Exercise 6 Block 2](../docs/exercises/06-architectural-patterns/resolution-block-2.md)
+and [Exercise 7](../docs/exercises/07-architectural-tactics/resolution.md), preserving
+original sources, shared EV/H/ALT and canonical QS/CAND. This documentation work
+does not select remaining upload options or complete formal baseline/human review.
 Current security review: [WS queue, revocation and persistent connections](../docs/architecture/fase2-fila-ws-e-revogacao.md)
 records individually validated WS-C4 A/PKI-C2 B/PKI-C3 A and a testable maintenance
 procedure. Channel proof, PKI timing/emergency reconciliation remain open; no

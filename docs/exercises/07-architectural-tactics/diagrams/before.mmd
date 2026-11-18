@@ -1,0 +1,13 @@
+flowchart LR
+    B["Browser: projeto e pipeline"] -->|HTTPS| N["nginx"]
+    N -->|multipart| G["API gateway: buffer integral e JWT"]
+    G -->|HTTPS sem validar servidor| P["projects: buffer, probe e hash"]
+    P -->|HTTP multipart| S["Storage: buffer integral"]
+    S --> O[("SeaweedFS S3")]
+    N --> W["WS gateway: join sem autorização de projeto"]
+    W -->|eventos| B
+    P --> U["users: perfil e quota Apply"]
+    P --> Q["RabbitMQ e workers imagem/vídeo"]
+    Q -->|eventos/resultados| P
+    classDef weak fill:#fff0ee,stroke:#b3312d,color:#111;
+    class G,P,S,W weak;

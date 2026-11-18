@@ -11,10 +11,19 @@ PG63522 — José Miguel da Silva Santos\
 **Commit de partida do checkout:** `484be13b4c8e96c70e7e694a2c368d5601749438` (`484be13`).\
 **Base da aplicação no histórico oficial:** `052310226c51fa57a17101c7bd1ad795674aac95` (`0523102`); o commit local seguinte acrescenta documentação e infraestrutura de agentes, sem alterar a aplicação.\
 **Data da análise:** 2026-11-09 (Europe/Lisbon).\
-**Versão deste documento:** 1.1.\
+**Versão deste documento:** 1.2 (registo continuado em 2026-11-18).\
 **Versões usadas:** enunciado 1.1 e template 1.1, de 2026-11-04; diretrizes da Fase 2, versão 1, da mesma data. (EV-01–EV-05)
 
 Este documento resolve o **Bloco 1**, tarefas 0 a 3. Analisa a extensão de vídeo no contexto da arquitetura global; não executa refactoring nem escolhe definitivamente os dois RNF da Fase 2. As avaliações arquiteturais são inferências justificadas pelos elementos identificados como `EV-nn`; previsões ainda não verificadas são identificadas como `H-nn`. Os IDs serão mantidos no Bloco 2. (EV-02, EV-05)
+
+**Continuação de 18/11:** o diagnóstico e as observações de execução acima/abaixo
+são os de 09/11, não o estado runtime atual. Esta revisão acrescenta somente
+EV-38–EV-48 e H-14–H-18 à secção 2.6, preservando os IDs/linhas anteriores e a
+matriz 3.3. A escolha posterior do par e as decisões estão na
+[resolução do Bloco 2](resolution-block-2.md) e no
+[Exercício 7](../07-architectural-tactics/resolution.md). O código de aplicação
+comparado permanece equivalente no âmbito de EV-40; isso não torna os ensaios
+históricos uma baseline formal nem mantém 32 serviços em execução hoje.
 
 ---
 
@@ -377,6 +386,39 @@ Todos os caminhos de código são relativos à raiz do repositório e as linhas 
 | H-11 | A aprovação da suite não implica taxa de sucesso operacional ≥95% ou ≥99,5%. | Definir corpus válido, distribuição de efeitos e falhas, repetições e denominador; medir sucesso de ponta a ponta com intervalo de confiança. | Por confirmar |
 | H-12 | Com várias réplicas e Apply concorrentes no mesmo projeto, caminhos de trabalho comuns podem colidir; tokens protegem o commit mas não isolam todos os ficheiros. | Dois Apply sobre o mesmo projeto e sobre projetos distintos; verificar escrita/limpeza de `src`/`out`, duplicados, tokens e integridade final, com diretórios isolados por execução no protótipo. | Por confirmar |
 | H-13 | Os mecanismos herdados podem apoiar RNF de partilha, presets e IA, mas a inspeção estática e os testes de vídeo não demonstram os percentis, limites temporais, disponibilidade, retenção e invariantes sob concorrência exigidos nesses RNF. | Ensaiar geração de links (99% <1 s), sincronização entre dispositivos (≤5 s), presets (95% ≤2 s; 100 ciclos sem duplicação/perda), concorrência de edição/presença, retenção do assistente e carga/uptime de IA. Resolver o conflito 10 s/3 s de RNF54 antes de aceitar um limiar. Reutilizar corpus/ambiente fixos; não inventar novos alvos. | Por confirmar |
+
+#### Continuação do registo para o Bloco 2 e Exercício 7 — 18/11/2026
+
+Os IDs EV-01–EV-37, H-01–H-13 e ALT-1/ALT-2 acima mantêm o seu significado e
+contexto temporal. As referências novas abaixo usam o checkout de documentação
+`1d7103b`; as provas históricas conservam data/ambiente próprios. Uma decisão
+documentada é facto sobre a decisão, não prova de que a aplicação a implementa.
+
+| **ID** | **Tipo** | **Localização** | **O que mostra** |
+|--------|----------|----------------|------------------|
+| EV-38 | Material fornecido | [Enunciado Bloco 2](sources/RAS-exercicio_6_bloco2_SWdesign_PT.html) e [template](sources/RAS-exercicio_6_bloco2_SWdesign_template_PT.md), 1.1, 2026-11-04 | Secções 4–7, seis elementos dos cenários, dois candidatos, continuação de IDs e quantificação final após baseline. Originais organizados sem alterar bytes. |
+| EV-39 | Material fornecido | [Enunciado Ex. 7](../07-architectural-tactics/sources/RAS-exercicio_7_taticas_SWdesign_PT.html) e [template](../07-architectural-tactics/sources/RAS-exercicio_7_taticas_SWdesign_template_PT.md), 3.0, 2026-11-17, incluindo Anexos A/B | Cenários vêm do Bloco 2 sem redefinição; pelo menos três táticas por cenário, classes A/B/C, duas DA, duas alternativas por DA, vistas/trade-offs/medição/regressão/IA. A versão 3.0 remove revisão cruzada. |
+| EV-40 | Verificação estática | [Manifesto de organização/comparação](evidence/continuation-sources-2026-11-18.json); `git diff --name-only 484be13 1d7103b` limitado a aplicação/Compose, caminhos registados | Nenhuma diferença de aplicação nesses caminhos; quatro novos materiais preservados por SHA-256. Não foi arrancada stack nem consultado runtime/volumes. |
+| EV-41 | Exploração histórica B14 | [Índice de evidências](../../../memory-bank/intents/001-phase-2-quality-improvements/evidence/README.md), [achados](../../../memory-bank/intents/001-phase-2-quality-improvements/live-findings.md) | Ensaios Linux de 14/11: uploads/recursos, acessos com controlo, vídeo e uma interrupção. Há leitura de objeto verificada por hash no suplemento. Universo e limitações não se agregam ao B16 ARM. |
+| EV-42 | Exploração histórica B16 — upload | [Auditoria dos JSON](../../../memory-bank/intents/001-phase-2-quality-improvements/evidence/baseline-audit-2026-11-16.json), [originais e scripts](../../../memory-bank/intents/001-phase-2-quality-improvements/evidence/nfr-2026-11-16/README.md), [métricas §2.2](../../fase2-metricas-e-baseline.md) | 14 uploads válidos observados; 500 MiB premium: três sucessos, pós-envio 6704,0–7976,6 ms; gateway até 2049,6 MiB absolutos. Outro caso free-500 registou 502/OOM. São pilotos Mac/ARM com pequeno n, não BF nesta máquina. |
+| EV-43 | Exploração histórica auditada — segurança | [Auditoria por caso](../../../memory-bank/intents/001-phase-2-quality-improvements/evidence/baseline-audit-2026-11-16.json), [métricas §2.3](../../fase2-metricas-e-baseline.md) | G03/G04 verificam mutações no projeto da vítima; W01 recebeu evento sem token. G02/D06 têm asserções incompletas e G08/G09 serviço ausente/500: não os contar como efeito provado ou proteção. Não há taxa universal de bypass. |
+| EV-44 | Decisões e âmbito | [Ideias/justificação](../../fase2-ideias-1-e-2.md), [histórico](../../../memory-bank/intents/001-phase-2-quality-improvements/inception-log.md), [upload](../../architecture/fase2-upload-decisoes-pendentes.md), [WS](../../architecture/fase2-contrato-websocket.md) | Par QC-06+QC-05 acordado como comunicado pelo utilizador; escolhas técnicas individuais de identidade/mTLS/WS/PKI e UP-C1/C2/C3 A. UP-C4–C9 continuam não selecionadas e não há implementação/refactoring iniciado. |
+| EV-45 | Planeamento e recursos observados | [Plano](../../fase2-plano-avaliacao.md), [revisão](../../fase2-revisao-plano-avaliacao.md), [manifesto de host](../../../memory-bank/intents/001-phase-2-quality-improvements/evidence/evaluation-host-2026-11-18.json) | Host desta máquina/Luís selecionado; EVAL-B1/C1/R1/M1 A têm validação individual limitada; U25 é G. 60 dimensões de avaliação; BF/MF e calibração por executar, sem aprovação implícita dos 60 limiares. |
+| EV-46 | Código/testes, releitura estática | [Testes do orquestrador](../../../projects/tests/), [vídeo](../../../Tools/video/tests/), [schemas](../../../projects/models/project.js), [caller](../../../projects/utils/caller.js), [WS](../../../wsGateway/index.js), [frontend](../../../frontend/lib/projects.ts) | Suites existentes de processamento/áudio/extração/legendas simuladas; caller decodifica JWT sem verificar assinatura e WS não autoriza salas como no contrato proposto; frontend envia multipart. Não há novos testes executados nesta continuação. |
+| EV-47 | Referências primárias complementares | [ISO 25010:2011](https://www.iso.org/standard/35733.html); fichas/resumos SEI [Deriving Architectural Tactics](https://www.sei.cmu.edu/library/deriving-architectural-tactics-a-step-toward-methodical-architectural-design/) e [Security and Survivability](https://www.sei.cmu.edu/library/security-and-survivability-reasoning-frameworks-and-architectural-design-tactics/), consulta 18/11 | Edição ISO exigida e ligação entre cenários, táticas e decisões. Consultados os resumos oficiais, não o livro SAIP nem o texto integral desses relatórios; o catálogo concreto utilizado é o Anexo A de EV-39. |
+| EV-48 | Inventário dos materiais consultados | Quatro novos ficheiros e `docs/lectures/`; [índice Ex. 7](../07-architectural-tactics/README.md) | Não foram fornecidos no workspace os slides 9 nem as quatro folhas `Apoio/Taticas` citadas no Ex. 7. Usa-se o Anexo A incluído no HTML 3.0 e as fontes disponíveis; não se simula leitura dos materiais ausentes. |
+
+| **ID** | **Hipótese** | **Como confirmar ou refutar** | **Estado** |
+|--------|--------------|-----------------------------|------------|
+| H-14 | Autenticar/autorizar em cada fronteira e revalidar WS reduz os efeitos indevidos dos casos conhecidos, com custos de CPU/latência e indisponibilidade em falha. | Repetir casos corrigidos com controlos positivos, TLS/peer/domínio e carga WS; medir corte e overhead sem apresentar erro 500 como segurança. | Não demonstrada na solução proposta; escolhas individuais em EV-44 |
+| H-15 | Novo percurso nginx/S3 e streaming limitado no adaptador reduzem a dependência RSS Node/tamanho, sem deslocar um custo inaceitável para nginx/S3/disco. | BF/MF no mesmo host/budget/corpus, C=1/C=3, memória agregada, temporários, bytes/CPU e tempos até ready/hash/cleanup; comparar cada transporte. | Por confirmar; EV-42 confirma o problema em alguns casos da base, não a melhoria |
+| H-16 | Hash posterior pode reduzir t_ready, mas acrescenta atraso/leituras e exige cache/retoma coerentes. | Medir t_ready/t_hash/t_complete, originais e previews antes/depois do hash; injetar falhas só em fixtures autorizadas. | Proposta UP-C7 por selecionar; não é decisão nova deste exercício |
+| H-17 | Adaptador, controlos de confiança e tentativas cabem no orçamento do host e no prazo académico sem reduzir cobertura. | Calibrar por fase, inventariar disco/serviços e esforço da equipa; materializar instrumentos/corpus antes do congelamento. | Por confirmar; 10 GiB/≥60 GiB são condições de planeamento, não capacidade |
+| H-18 | Benefícios conjuntos de segurança e upload mantêm U25 e os fluxos legítimos, apesar de mais TLS/queries/estados. | Ensaios de coexistência/latência pareados e regressões de imagem/vídeo/partilha/quota/billing, conservando todos os erros. | Por confirmar; U25 G selecionada, resultado NM |
+
+H-05 e H-07 têm agora suporte exploratório **parcial** em EV-41–EV-43. Não se
+declaram confirmadas para ZIP, todos os perfis, todas as fronteiras ou C=3. Os
+estados originais acima registam a análise de 09/11 e não são reescritos.
 
 ## 3. Alternativas e matriz de comparação
 

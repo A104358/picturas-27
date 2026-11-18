@@ -5,6 +5,11 @@ deliverables. For application setup and usage, see the [project README](../READM
 
 Start with the [Exercise 6 resolution](exercises/06-architectural-patterns/resolution.md)
 or its [artifact index](exercises/06-architectural-patterns/README.md).
+The [Block 2 continuation](exercises/06-architectural-patterns/resolution-block-2.md)
+defines quality scenarios and the two selected candidates; the
+[Exercise 7 resolution](exercises/07-architectural-tactics/resolution.md) maps
+those scenarios to tactics, decisions and before/after views. Original newly
+supplied assignments/templates are preserved in each exercise's sources folder.
 
 For Phase 2 planning, see the [comparison of six quality directions and team
 decision record](../memory-bank/intents/001-phase-2-quality-improvements/quality-exploration.md).
@@ -66,6 +71,8 @@ pending; prior JWT/WS decisions are preserved.
 | Exercise | Deliverable | Supporting artifacts |
 |----------|-------------|----------------------|
 | 6 — Architectural patterns, Block 1 | [Resolution — PL2-G4](exercises/06-architectural-patterns/resolution.md) | [Assignment, support material, diagrams and evidence](exercises/06-architectural-patterns/README.md) |
+| 6 — Trade-offs and quality scenarios, Block 2 | [Resolution — PL2-G4](exercises/06-architectural-patterns/resolution-block-2.md) | [Original assignment/template](exercises/06-architectural-patterns/README.md), shared EV/H registry and canonical QS/CAND definitions. |
+| 7 — Architectural tactics | [Resolution — PL2-G4](exercises/07-architectural-tactics/resolution.md) | [Version 3.0 sources and diagram index](exercises/07-architectural-tactics/README.md); scenarios reused from Block 2, not rewritten. |
 
 ## Folder layout
 
@@ -77,12 +84,18 @@ docs/
 ├── guidelines/                      # Project phase instructions
 ├── lectures/                        # Course slides
 └── exercises/
-    └── 06-architectural-patterns/
-        ├── README.md                # Exercise artifact index
-        ├── resolution.md            # Completed Block 1 report
-        ├── sources/                 # Original assignment and support HTML
-        ├── diagrams/                # PlantUML sources and SVG renderings
-        └── evidence/                # Reproduction script and execution record
+    ├── 06-architectural-patterns/
+    │   ├── README.md                # Blocks 1 and 2 artifact index
+    │   ├── resolution.md            # Block 1 and shared EV/H registry
+    │   ├── resolution-block-2.md     # Trade-offs, canonical QS and two CAND
+    │   ├── sources/                 # Original assignments and templates
+    │   ├── diagrams/                # PlantUML sources and SVG renderings
+    │   └── evidence/                # Historical runs and source comparison
+    └── 07-architectural-tactics/
+        ├── README.md                # Sources, versions and status
+        ├── resolution.md            # Tactics, DA and evaluation/regression
+        ├── sources/                 # Original version 3.0 HTML/template
+        └── diagrams/                # Editable before/after Mermaid
 ```
 
 Keep shared reference material in its topic folder and exercise-specific work

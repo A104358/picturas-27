@@ -13,6 +13,18 @@ Define o que recolher para segurança e eficiência dos uploads, incluindo efeit
 colaterais e preservação funcional. As 60 métricas são dimensões de avaliação dos
 dois RNF e suas guardas; não são 60 RNF nem autorização para implementar as 19 ideias.
 
+**Preparação da campanha, 18/11:** o utilizador escolheu esta máquina, administrada
+pelo Luís, como anfitrião da avaliação. O [plano antes/depois](fase2-plano-avaliacao.md)
+detalha instalação isolada proposta, recursos observados, budgets, corpus, cargas,
+repetições, relógios e modelos de manifesto/resultado. O host está escolhido;
+projeto Compose, volumes de teste/configuração, critérios E e corpus físico ainda
+não estão congelados. Ambos os conjuntos retidos continuam preservados. A leitura
+de recursos do host não é uma nova medição da aplicação nem conclusão de BF.
+A [revisão do plano](fase2-revisao-plano-avaliacao.md) regista EVAL-B1/C1/R1/M1 A
+individualmente selecionadas, com calibração antes do congelamento: disco ≥60 GiB,
+recursos/cargas e critérios explicitamente enumerados. **U25 passa de D a G**.
+Não aprova implicitamente todos os valores das 60 métricas nem demonstra capacidade.
+
 **Acordo do par registado:** QC-06 Segurança — autorização ponta a ponta + QC-05
 Eficiência de desempenho — utilização de recursos nos uploads, por instrução
 explícita do utilizador em 16/11. Ver [fonte e âmbito do acordo](../memory-bank/intents/001-phase-2-quality-improvements/quality-exploration.md#decision-record--pair-agreement).
@@ -92,8 +104,10 @@ operacional não estão demonstrados nem definidos pelo cutoff WS.
 - **V:** critério/condição explicitamente validado pelo utilizador nesta conversa;
   validação individual, sem acordo dos quatro nem prova experimental presumidos.
 
-Os limites absolutos de 64/32 MiB substituem, como **proposta mais recente**, a antiga
-ideia de redução de 50%/75%. Não combinar dois critérios diferentes sem decisão.
+Os limites absolutos de 64/32 MiB substituíram a antiga proposta de redução de
+50%/75% e estão agora individualmente validados no âmbito U01/U02 de EVAL-M1.
+A origem continua a ser engenharia; não combinar os dois critérios nem aprovar
+os restantes limiares por associação.
 Tempos inferiores a 3 s (MVP) e 1 s (alvo) vêm de `REQ-VID-SUBMIT-008`; a forma de
 observar «pós-envio» tem de ficar fixa. As diretrizes não impõem os restantes números.
 
@@ -229,7 +243,9 @@ O diff de aplicação entre `66bc6f9` e `7d994d8` é vazio.
 
 ## 4. Catálogo de métricas de segurança
 
-Mínimos e metas nesta tabela são **propostos**, salvo as condições marcadas **V**.
+Mínimos e metas nesta tabela mantêm o estado por cláusula; **V** identifica
+validação individual, incluindo o âmbito enumerado de EVAL-M1. Os restantes
+valores propostos não ficam aprovados por associação.
 Em particular, S12 tem critério ≤5 s e meta ≤2 s validados individualmente, ainda
 por ensaiar. «100%» significa todos os casos da matriz finita acordada, com
 estado/payload verificado, não segurança universal.
@@ -435,34 +451,58 @@ aprovação de recursos/horas da equipa.
 Recolher gateway, projects, storage **e** nginx/SeaweedFS. Um valor Node pequeno não
 é melhoria se apenas deslocar memória ilimitada, disco ou trabalho para outro serviço.
 
-| ID / prioridade | Métrica, unidade e método | Base disponível | Mínimo aceitável proposto | Meta proposta / origem |
+| ID / prioridade | Métrica, unidade e método | Base disponível | Mínimo / estado por cláusula | Meta / origem e estado |
 |-----------------|--------------------------|-----------------|----------------------------|-------------------------|
-| U01 P | Pico RSS adicional por serviço Node, MiB, VmHWM/RSS/cgroup e PID | B16 tabela §2.2 | ≤64 MiB em cada serviço, por cenário até 500 MiB | ≤32 MiB; E dos novos documentos |
-| U02 G | RSS absoluto/retido antes/depois e após 10 s de repouso, MiB | RSS pré/pós no JSON; pós-10 s NM | Sem OOM; aumento retido ≤64 MiB face ao estado inicial equivalente | ≤32 MiB; E; reportar casos sem plateau |
-| U03 G | Pico cgroup e eventos `oom`/`oom_kill` por serviço/VM, bytes/nº | B14 amostras; B16 flag final de OOM no gateway | 0 OOM em uploads válidos/negativos | 0; E; falha não pode passar como baixo RSS |
-| U04 G | Pico memória nginx/SeaweedFS e agregado simultâneo, MiB | B14 nginx; B16 NM | Incremento ≤128 MiB nginx e ≤256 MiB SeaweedFS a concorrência 1, sem OOM | ≤64/128 MiB; E, calibrar com BF e declarar budget total para concorrência 3 |
+| U01 P | Pico RSS adicional por serviço Node, MiB, VmHWM/RSS/cgroup e PID | B16 tabela §2.2 | ≤64 MiB em cada serviço, por cenário até 500 MiB | ≤32 MiB; E dos novos documentos; V EVAL-M1 no âmbito enumerado da revisão |
+| U02 G | RSS absoluto/retido antes/depois e após hash/trabalho/limpeza normal +10 s sem carga, MiB | RSS pré/pós no JSON; pós-10 s NM | Sem OOM; aumento retido ≤64 MiB face ao estado inicial equivalente | ≤32 MiB; E; reportar casos sem plateau; V EVAL-M1 no âmbito enumerado da revisão |
+| U03 G | Pico cgroup e eventos `oom`/`oom_kill` por serviço/VM, bytes/nº | B14 amostras; B16 flag final de OOM no gateway | 0 OOM em uploads válidos/negativos | 0; E; falha não pode passar como baixo RSS; V EVAL-M1 no âmbito enumerado da revisão |
+| U04 G | Pico memória nginx/SeaweedFS e agregado simultâneo, MiB | B14 nginx; B16 NM | Incremento ≤128 MiB nginx e ≤256 MiB SeaweedFS a concorrência 1, sem OOM | ≤64/128 MiB; E, calibrar com BF e declarar budget total para concorrência 3; V EVAL-M1 no âmbito enumerado da revisão |
 | U05 D | Relação tamanho→memória, MiB/MiB, 10/100/500 com mesmo estado | Pilotos com reutilização, regressão ainda inválida | Diagnóstico, não gate isolado | Inclinação próxima de zero, tolerância a fixar após ruído; E |
 | U06 D | CPU user/system e CPU-segundos por upload/serviço, s | B16 NM para upload | Reportar consumo completo até hash | Reduzir/explicar custos; sem meta artificial |
 | U07 D | Bytes de rede por fronteira e amplificação total, bytes/byte útil | B16 NM | Reportar até hash e limpeza | Explicar leitura adicional; não esconder custo de hash assíncrono |
 | U08 G | Bytes/ficheiros de disco temporário e pico, MiB/nº | NM | Por componente, ≤C×(F+16 MiB), F tamanho do ficheiro e C concorrência; 0 resíduos depois da limpeza | Sem spool integral no caminho nginx/S3; ≤16 MiB por upload de overhead temporário; E, compatibilidade por testar |
-| U09 P | Aceitação após envio `t_ready−t_send`, ms, incluindo confirmação | B16 500: 6704–7976,6 ms | <3000 ms para cada amostra válida de 500 MiB | <1000 ms; F do requisito, não medir só PUT |
-| U10 G | Tempo total `t_ready−t0`, ms e débito útil bytes/s | B16 §2.2 | Mediana ≤1,10× baseline equivalente por cenário | ≤baseline; E, evitar aceleração obtida por mudar origem do relógio |
-| U11 D | Pedido inicial de autorização/preflight, ms | NA | ≤500 ms | ≤200 ms; E, só se escolhido protocolo novo |
+| U09 P | Aceitação após envio `t_ready−t_send`, ms, incluindo confirmação | B16 500: 6704–7976,6 ms | <3000 ms para cada amostra válida de 500 MiB | <1000 ms; F do requisito, não medir só PUT; V EVAL-M1 no âmbito enumerado da revisão |
+| U10 G | Tempo total `t_ready−t0`, ms e débito útil bytes/s | B16 §2.2 | Mediana ≤1,10× baseline equivalente por cenário | ≤baseline; E, evitar aceleração obtida por mudar origem do relógio; V EVAL-M1 no âmbito enumerado da revisão |
+| U11 D | Pedido inicial de autorização/preflight, ms | NA | Referência ≤500 ms; D, sem gate independente | Referência ≤200 ms; E, só se escolhido protocolo novo; gates temporais U09/U10 |
 | U12 D | Confirmação/HEAD/ffprobe/Mongo separados, ms | Base não separa etapas; NM | Total respeita U09 | Reportar decomposição, meta por etapa só após BF |
 | U13 G | Bytes/ranges/tempo de ffprobe remoto, bytes/nº/ms; moov início/fim e formatos | NM | Valida metadados reais, limites de I/O/timeout definidos | Menos bytes que o ficheiro nos casos seekable; hipótese, não promessa universal |
-| U14 G | Tempo até hash completo `t_hash−t_send` e atraso após ready, ms | Base calcula antes da resposta; separado NM | Hash correto; se assíncrono ≤10 s após ready | ≤5 s; E, rever com 500 MiB/carga |
-| U15 G | Igualdade SHA-256 do original após upload e resultado, nº/total | Uploads B16 não verificam todos os bytes; B14 verificações limitadas | 100% originais iguais | 100%; E; ETag não substitui hash multipart |
-| U16 G | Preview correto antes/depois do hash/cache, nº e trocas entre ficheiros | Base exige og_sha256; novo estado NA | 0 colisões/trocas; 100% resultados corretos | Igual; E; desativar leitura **e escrita** de cache enquanto hash falta |
+| U14 G | Tempo até hash completo `t_hash−t_send` e atraso após ready, ms | Base calcula antes da resposta; separado NM | Hash correto; se assíncrono ≤10 s após ready por ficheiro até 500 MiB em C=1/C=3, incluindo fila | ≤5 s; origem E, âmbito precisado e validado individualmente; registar t_complete e custo integral; V EVAL-M1 no âmbito enumerado da revisão |
+| U15 G | Integridade SHA-256 do original após upload e processamento, nº/total; outputs transformados seguem F02 | Uploads B16 não verificam todos os bytes; B14 verificações limitadas | 100% originais iguais | 100%; E; ETag não substitui hash multipart; V EVAL-M1 no âmbito enumerado da revisão |
+| U16 G | Preview correto antes/depois do hash/cache, nº e trocas entre ficheiros | Base exige og_sha256; novo estado NA | 0 colisões/trocas; 100% resultados corretos | Igual; E; desativar leitura **e escrita** de cache enquanto hash falta; V EVAL-M1 no âmbito enumerado da revisão |
 | U17 G | Sucesso válido por tamanho/perfil/formato, nº/total | B16 14/14 nos uploads válidos medidos | 100% dos casos do corpus | 100%; E, não suprimir perfis/formatos existentes |
 | U18 G | Rejeição correta de tamanho/duração/codec/tipo/zero/corrupção, nº/caso | Free-500 falhou 502; demais NM neste conjunto | 100% recusados com resposta definida; 0 objetos ready inválidos | 100%; F/E; manter diferenças de erro relevantes |
 | U19 G | Recusa sem token antes do corpo e memória/bytes lidos, ms/MiB/bytes | Sem token 500: 401, 3578,7 ms de envio, +500,1 MiB gateway | 401/403, ≤8 MiB adicionais no gateway | ≤100 ms após cabeçalhos; E, usar cliente lento/controlado |
-| U20 G | Três uploads premium simultâneos 500 MiB, nº de sucessos/reinícios/tempo | NM | 3/3 sem OOM/reinício, conteúdo íntegro | 3/3 em 3 rodadas; E, medir budget total e recusa de excesso |
+| U20 G | Três uploads premium simultâneos 500 MiB, nº de sucessos/reinícios/tempo | NM | 3/3 sem OOM/reinício, conteúdo íntegro | 3/3 em 3 rodadas; E, medir budget total e recusa de excesso; V EVAL-M1 no âmbito enumerado da revisão |
 | U21 G | Recuperação de interrupção de PUT/confirm/hash/serviço, objetos/estados/tempo | Novo protocolo NA; cenários equivalentes BF pendentes | 0 ready inválidos/pendentes sem prazo; erro/repetição definida | Igual; E; não pressupor atomicidade SeaweedFS |
-| U22 G | Limpeza após expiração, idade s, nº e bytes órfãos | Baseline de abandono NM | 0 órfãos após TTL +60 s | TTL +10 s; E; TTL em aberto, retenção nunca infinita |
+| U22 G | Limpeza após expiração, idade s, nº e bytes órfãos | Baseline de abandono NM | 0 órfãos após TTL +60 s | TTL +10 s; E; TTL em aberto, retenção nunca infinita; V EVAL-M1 no âmbito enumerado da revisão |
 | U23 G | Integridade de versão/associação ao projeto após confirmar duas vezes, nº | Base usa versão; novo confirm NA | Um media por upload, sem perdas/duplicados; 409 tratado | Igual; E, confirmação idempotente |
-| U24 G | Quota/limites antes/depois de upload e Apply, nº/caso | Upload não reserva operações; Apply cobra por efeito/vídeo | Nenhuma cobrança nova no upload; cálculo existente preservado | Igual; F/E; pré-checagem de quota não pode proibir upload antes permitido sem decisão |
-| U25 D | Pedidos leves durante upload, ms, erros e throughput | NM; OOM B16 afetou gateway | 0 falhas; mediana ≤1,10× controlo equivalente | ≤controlo; E, amostrar 100 pedidos leves sem esgotar VM |
+| U24 G | Quota/limites antes/depois de upload e Apply, nº/caso | Upload não reserva operações; Apply cobra por efeito/vídeo | Nenhuma cobrança/reserva nova ou recusa por saldo zero no upload; cálculo Apply preservado | Igual; política UP-C2 A selecionada individualmente; demais cobertura por validar |
+| U25 G | Pedidos leves durante upload, ms, erros e throughput | NM; OOM B16 afetou gateway | 0 falhas; mediana ≤1,10× controlo sem carga na mesma campanha, por par | ≤controlo; origem E, V EVAL-M1; 100 pedidos/janela e todas as tentativas/erros preservados |
 | U26 G | Uso único/retry/expiry/cleanup após falha de auth_request, nº e códigos | NA | 0 replay/duplo consumo; retry e erro documentados | Igual; E; 401/403/2xx/erro interno distinguidos |
+
+**Âmbito preservado:** U11/U12 continuam D sem gate próprio; a referência de
+preflight não é aprovada como mínimo independente. A precisão F02 validada em
+EVAL-M1 distingue original íntegro de output transformado, sem aprovar toda a
+cobertura funcional. U22 seleciona os prazos relativos, não o TTL. S12/S20 retêm
+a validação anterior; demais limiares conservam o estado anterior.
+
+### 5.1. Seleção do primeiro grupo de upload e ciclo por decidir
+
+UP-C1 A/UP-C2 A/UP-C3 A foram selecionadas individualmente com confirmação
+técnica: adaptador multipart limitado e seguro antes do corpo, quota só no Apply,
+tentativas/staging controlados; validação/autorização final e commit comuns, sem
+duplicar upload/débito. Não é prova de compatibilidade, memória ou isolamento.
+A política de U24 fica selecionada; outros números não ficam aprovados por isso.
+
+O [ciclo de vida](architecture/fase2-upload-ciclo-vida.md) propõe UP-C4–C9 e
+**UL-01–UL-12** para S22–S24/U01–U04/U08–U26/F04/F06/F10, sem novos IDs de
+métricas. Token 300 s, tentativa 900 s, corpo 600 s/idle 30 s, limites de vagas,
+probe 15 s/2×F+16 MiB, hash 1 ativo, limpeza 5 s e journal 24 h são **propostas
+não selecionadas**; não derivam de EVAL-M1. Preservam-se os prazos relativos U22
+e U14 já selecionados. Testar CAS do projeto/barreira vs journal/S3 e atualizações
+por snapshot: versão isolada não autoriza e uma lease não cancela escritor antigo.
+Cópias/candidatos aumentam disco/rede/latência; recalcular piso ≥60 GiB antes de BF.
+Nenhum novo ensaio ou suporte SeaweedFS foi demonstrado.
 
 ## 6. Guardas funcionais e de implantação
 
@@ -492,7 +532,9 @@ experiência de 14/11 tem 13 contas gratuitas/10 projetos. Os hashes dos quatro
 volumes originais mantiveram-se iguais; cópias/contentores temporários removidos.
 Isto fornece fixtures agregadas de inventário, não resultados da migração ou
 cumprimento de F06. Browsers/associações, outros computadores e ensaios de transição
-continuam pendentes; instalação de desenvolvimento/avaliação não selecionada.
+continuam pendentes. Em 18/11 o utilizador escolheu esta máquina/Luís como host de
+avaliação; configuração/instalação experimental e eventual fonte de desenvolvimento
+continuam por definir, sem escolher nenhum dos conjuntos retidos como fixture.
 Não confundir contagem de contas anónimas com sessões ativas nem recarregar o frontend como
 observação neutra, dado o comportamento atual de substituição da identidade em erro.
 

@@ -3,10 +3,20 @@ intent: 001-phase-2-quality-improvements
 phase: inception
 status: draft
 created: 2026-11-14T17:31:51Z
-updated: 2026-11-16T15:51:14Z
+updated: 2026-11-18T11:33:28Z
 ---
 
 # Investigation Plan for the Six Quality Directions
+
+## Current Pair Evaluation Preparation — November 18
+
+The six-direction exploration below is retained as historical context. The
+[evaluation plan for the selected QC-06/QC-05 pair](../../../docs/fase2-plano-avaliacao.md)
+now consolidates the proposed physical campaign. User selected this machine/Luís
+as evaluation host; resource metadata is archived read-only. The isolated
+synthetic installation, budgets, concrete corpus and criteria still need review/
+freeze, and BF/MF have not run. Both retained datasets remain preserved. Do not
+infer current unselected-pair status from the older exploratory passages below.
 
 ## Scope and Confirmed Constraints
 

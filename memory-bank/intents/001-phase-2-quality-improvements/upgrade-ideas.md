@@ -463,10 +463,13 @@ no servidor. Esta evidência reduz a lacuna anterior, mas não congela a baselin
 
 *Mínimo aceitável:* pico de RSS adicional por upload ≤ 64 MiB em cada serviço, para qualquer
 tamanho até 500 MiB; aceitação pós-envio < 3 s a 500 MiB (valor MVP do requisito).
-*Alvo proposto para revisão:* ≤32 MiB adicionais por serviço e cenário, com 3 uploads
+*Alvo individualmente validado em EVAL-M1:* ≤32 MiB adicionais por serviço C=1
+até 500 MiB; C=3 é avaliado como grupo com 3 uploads
 simultâneos de 500 MiB sem reinícios. O plano de métricas propõe distinguir <3 s como
 mínimo pós-envio e <1 s como meta também a 500 MiB; isso corrige a ambiguidade anterior
-de repetir <3 s no mínimo e na meta. Os valores não ficam aprovados por esta revisão. Guardas: mesmo SHA-256
+de repetir <3 s no mínimo e na meta. A validação individual posterior EVAL-M1
+abrange os critérios enumerados na revisão do plano, sem provar resultados ou
+aprovar todos os limiares. Guardas: mesmo SHA-256
 guardado, mesmas respostas de validação (400 para duração, tamanho, codec), temporários removidos
 após sucesso e após erro, ocupação de disco temporário reportada.
 
@@ -513,12 +516,12 @@ multer (ideia 8), e podem migrar para o mesmo fluxo mais tarde.
 1. **Pedido de upload.** O frontend faz `POST /:user/:project/video/uploads` (pelo gateway, com
    JWT) com `{ name, size, type, duration, width, height }`. A duração e a resolução são lidas no
    browser por um elemento `<video preload="metadata">`, sem enviar o ficheiro.
-2. **Validação prévia.** A `projects` verifica perfil, quota diária e limites
-   (`VIDEO_FREE_*`, `VIDEO_PREMIUM_*`) sobre os valores declarados. A validação real continua no servidor. A pré-condição de
-   quota no upload exige uma decisão de preservação funcional: hoje a quota é debitada no
-   Apply, não no upload; não chamar «mesmas respostas de hoje» à recusa nova de um upload
-   só porque o saldo é zero. Se passar, cria o registo
-   do media com `status: "pending"` e `expires_at`, fixa a chave definitiva no stage `src` e
+2. **Validação prévia.** A `projects` verifica perfil e limites
+   (`VIDEO_FREE_*`, `VIDEO_PREMIUM_*`) sobre os valores declarados. A validação real
+   continua no servidor. **UP-C2 A preserva a quota só no Apply:** upload não cobra,
+   reserva ou recusa por saldo zero. Se passar, cria uma tentativa numa coleção
+   separada e chave staging controlada (**UP-C3 A**), sem media utilizável no projeto;
+   estado/deadlines concretos continuam propostos no ciclo de vida. O fluxo proposto
    devolve um **token opaco** de uso único, válido por poucos minutos, com o endereço de envio
    (ex.: `/api-gateway/uploads/<token>`).
 3. **Envio.** O browser faz `PUT /api-gateway/uploads/<token>` com o ficheiro. É a mesma origem,
@@ -538,7 +541,9 @@ multer (ideia 8), e podem migrar para o mesmo fluxo mais tarde.
    ficheiro, não uma garantia de ler apenas o início e o `moov` em todos os formatos. É esta a validação
    que manda, porque os valores do passo 1 podem ser falsos. Compara também o tamanho real
    (`HEAD`) com o declarado. Se falhar, apaga o objeto e o registo e responde 400 como hoje. Se
-   passar, marca `status: "ready"` e responde ao utilizador.
+   passar, revalida a autorização e associa o media por commit idempotente; o mecanismo
+   de confirmação/promoção e corridas é proposta no ciclo de vida, ainda por selecionar.
+   Só depois responde pronto ao utilizador.
 6. **Hash em segundo plano.** Depois de responder, a `projects` lê o objeto em fluxo, calcula o
    SHA-256 e grava `og_sha256`. É uma leitura integral posterior à resposta; o
    ffprobe pode também ler uma parte substancial, dependendo do ficheiro. O custo completo
@@ -553,7 +558,8 @@ multer (ideia 8), e podem migrar para o mesmo fluxo mais tarde.
 
 *Validação em dois momentos.* A validação prévia pode detetar os erros honestos de
 metadados antes de transferir o corpo; o prazo é uma meta a medir. O tratamento da quota
-no upload não está fechado, porque pode mudar uma condição funcional existente. A validação final, no servidor, continua a
+no upload ficou selecionado em UP-C2 A: nenhuma cobrança/reserva ou recusa por
+saldo zero; Apply mantém a política existente. A validação final, no servidor, continua a
 ser obrigatória e é a única em que se confia. Os objetos órfãos não desaparecem, mas passam a
 vir só de uploads interrompidos ou de clientes mal-intencionados, e o passo 7 remove-os.
 
@@ -573,12 +579,14 @@ podem passar mais tarde pelo mesmo esquema de token opaco.
 - `frontend/lib/projects.ts`: upload de vídeo em três passos (pedido com metadados lidos por
   `<video>`, `PUT` com progresso por `XMLHttpRequest.upload.onprogress`, confirmação).
 - `apiGateway/routes/projects.js`: rotas JSON de pedido e confirmação, sem multer; rota interna
-  para o `auth_request` (verifica o JWT e consulta a `projects`). A retirada da rota multipart
-  `POST /:user/:project/video` precisa de decisão de compatibilidade/adaptação antes de código.
+  para o `auth_request` (verifica o JWT e consulta a `projects`). **UP-C1 A preserva**
+  `POST /:user/:project/video` por adaptador limitado, autenticação/autorização antes
+  do corpo, streaming/contrapressão e motor final comum; testar ambos os transportes.
 - `projects/routes/projects.js`: rotas de pedido e confirmação; verificação simplificada do
   token; `addProjectMedia` deixa de receber vídeos; tarefa de limpeza.
-- `projects/models/project.js`: `og_sha256` deixa de ser `required`; novos campos `status`,
-  `expires_at` e token (ou uma coleção `uploads` própria).
+- Modelos: **UP-C3 A** usa coleção de tentativas própria; não inserir pending na
+  lista normal. Proposta de hash em falta só no vídeo depende de UP-C7; não retirar
+  globalmente a validação atual de imagens em `projects/models/project.js`.
 - `projects/utils/video.js`: `probeVideoBuffer` → `probeVideoUrl(url)`.
 - `projects/utils/imageStorage.js` e `imageStorageService`: rotas para o URL pré-assinado de `PUT`
   (`getSignedUrlPromise("putObject", …)` com `ContentLength`), `HEAD`, leitura em fluxo para o
@@ -606,7 +614,8 @@ podem passar mais tarde pelo mesmo esquema de token opaco.
 Hipótese a testar: RSS adicional limitado nos serviços Node e no nginx, contando também
 o hash assíncrono, TLS e concorrência. O pós-envio tem de incluir a confirmação e validação
 final; não se demonstra independência do tamanho sem medir ranges, formatos e estágios.
-A meta <1 s a 500 MiB continua proposta, não resultado. Guardas novas:
+A meta <1 s a 500 MiB está individualmente validada em EVAL-M1, ainda sem
+resultado experimental. Guardas novas:
 SHA-256 presente pouco depois da resposta e igual ao calculado hoje; mesmas respostas 400/403;
 nenhum objeto `pending` depois do prazo de limpeza; 3 uploads simultâneos de 500 MiB sem
 reinício de nenhum serviço.

@@ -312,7 +312,10 @@ terminação TLS, congelar a instalação e dispor do script PKI; confiança bai
 
 Os restantes canais e o script PKI têm esforço adicional a estimar no plano global;
 não somar esta tabela e apresentá-la como estimativa do projeto inteiro. Horas da
-equipa continuam desconhecidas e a escolha da instalação foi explicitamente adiada.
+equipa continuam desconhecidas. Em 18/11 o utilizador escolheu esta máquina/Luís
+como anfitrião de avaliação; a instalação isolada, carga física e budget continuam
+propostos no [plano de avaliação](../fase2-plano-avaliacao.md), sem reutilizar por
+inferência os volumes retidos ou declarar o piloto PKI executado.
 
 **Recuo:** desenvolver/ensaiar em contexto e dados descartáveis; preservar a baseline
 identificada e os volumes retidos. Se o mTLS do mock não passar o controlo de

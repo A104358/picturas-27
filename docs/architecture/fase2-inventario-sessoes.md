@@ -84,6 +84,14 @@ não é um método neutro de recolher o estado antigo.
 
 ## Roteiro de recolha local antes de executar a transição
 
+**Escolha de anfitrião em 18/11/2026:** o utilizador selecionou esta máquina,
+administrada pelo Luís, para a avaliação. Isto resolve o computador de avaliação,
+não a seleção entre os dois conjuntos retidos. O [plano de avaliação](../fase2-plano-avaliacao.md)
+propõe uma instalação nova com fixtures e regista recursos do host apenas por
+leitura; nenhum projeto/volume foi criado ou iniciado. Continuam preservados
+`picturas` e `picturas-quality-20261114`; associações/prova anónima reais e origem
+de desenvolvimento não ficam resolvidas por esta escolha.
+
 1. **Listar ambientes com cada responsável.** Conferir os checkouts/projetos Compose
    e volumes atuais, incluindo os parados. `docker compose ls -a` e, no projeto
    correto, `docker compose ps -a` são entradas de consulta de metadados. Registar

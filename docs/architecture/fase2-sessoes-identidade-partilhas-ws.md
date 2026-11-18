@@ -243,6 +243,12 @@ revalidação/permissões/timers definidos pela aplicação. Fonte:
 
 ## Cenários lógicos D10/segurança v1 — fixados para avaliação
 
+**Preparação física de 18/11:** o anfitrião foi escolhido pelo utilizador: esta
+máquina/Luís. O [plano de avaliação](../fase2-plano-avaliacao.md) reúne a observação
+de hardware, instalação isolada proposta, cargas/repetições e critérios. O host
+escolhido não congela o runtime, corpus, digests ou budgets; não seleciona volumes
+retidos nem demonstra capacidade. Os cenários lógicos abaixo ficam preservados.
+
 D10 concretiza o âmbito D1/PKI-C5 no host **e** contentor não confiável da rede de
 ensaio, sem credenciais privilegiadas. Separar rede/TLS/identidade/domínio e usar
 controlo positivo/estado/bytes; erro 500 ou serviço ausente não comprova proteção.

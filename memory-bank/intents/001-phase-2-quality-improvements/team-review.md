@@ -13,7 +13,9 @@ broader security scope and a different preferred upload design. Use the current
 [decision rationale](../../../docs/fase2-ideias-1-e-2.md) and
 [measurement specification](../../../docs/fase2-metricas-e-baseline.md) for that
 review. The old 50%/75% suggestions below are preserved as history, not combined
-with the newer unapproved 64/32 MiB proposals. No team approval is inferred.
+with the newer 64/32 MiB proposals. The later EVAL-M1 review individually validates
+U01/U02 within its precise scope; no approval of every threshold or new whole-team
+agreement is inferred. See the [current evaluation review](../../../docs/fase2-revisao-plano-avaliacao.md).
 
 **Deadline correction:** The user later corrected delivery to **27 November
 2026**. Use that date for current planning. The 20 November date in this historical

@@ -3,7 +3,7 @@ intent: 001-phase-2-quality-improvements
 phase: inception
 status: draft
 created: 2026-11-14T17:16:06Z
-updated: 2026-11-17T22:48:42Z
+updated: 2026-11-18T14:11:52Z
 ---
 
 # Quality Options and Team Decision
@@ -395,6 +395,39 @@ callback conflicts, 12 planned tests and implementation effort. No record was
 approved, JWT issued or real browser/data inspected. This elaborates SESS-C1 A;
 it does not add a new claimed individual validation, completed proof or construction
 approval. Both retained datasets remain preserved and unselected for evaluation.
+
+## Evaluation Preparation — Host Selected, Protocol Still Proposed
+
+On November 18 the user chose evaluation preparation and this machine/Luís as
+host. The [evaluation plan](../../../docs/fase2-plano-avaliacao.md) and empty
+manifest/result templates consolidate all 60 metrics, scenarios/repetitions,
+minimums/targets, baseline/final comparability and report rules. A host-only
+resource readout is archived; no application metrics were collected. Isolated
+synthetic deployment/budgets/corpus remain proposals, preserving both retained
+volume sets and the existing security/upload decision states. Host selection
+is individual; it neither freezes the campaign nor approves the whole requirement
+baseline. The former six-direction protocols remain historical exploration.
+
+## Evaluation Review — Individual A/A/A/A Selection with Conditions
+
+User requested plan review. The [review](../../../docs/fase2-revisao-plano-avaliacao.md)
+records the subsequent individual EVAL-B1/C1/R1/M1 A selection with conditions,
+resource/retention arithmetic and disk floor at least 60 GiB. U25 is now G;
+exact M1 scope is enumerated, other criteria keep prior status. Calibration,
+physical freeze and BF/MF remain open; no whole-team approval or runtime capacity
+inferred. UP-C1/C2/C3 were later individually selected on their own source;
+UP-C4–C9 remain proposals in the [lifecycle](../../../docs/architecture/fase2-upload-ciclo-vida.md).
+
+## Upload First Group — Individual A/A/A Selection
+
+User recommends UP-C1/C2/C3 A with explicit conditions; assistant confirms
+technically and records individual selection. Preserve bounded multipart
+compatibility, charge only Apply and separate controlled attempts/staging, with
+shared final authorization/validation/commit and real resource/failure tests.
+The [lifecycle](../../../docs/architecture/fase2-upload-ciclo-vida.md) proposes
+remaining states/deadlines/retry/candidate arbitration/hash/probe/cleanup and 12
+UL cases; none of UP-C4–C9 or its numbers is inferred selected. No runtime proof,
+whole-team agreement or app/data changes. Prior EVAL/60 metric/U25 G states retained.
 
 ## Traceability and AI Assistance
 

@@ -1,0 +1,860 @@
+{
+  "schema_version": 1,
+  "template_only": true,
+  "frozen": false,
+  "campaign_ref": null,
+  "phase": null,
+  "created_at": null,
+  "frozen_at": null,
+  "scope": {
+    "selected_pair": [
+      "QC-06",
+      "QC-05"
+    ],
+    "plan_ref": "docs/fase2-plano-avaliacao.md",
+    "criteria_ref": "docs/fase2-metricas-e-baseline.md",
+    "criteria_sha256": null,
+    "criteria_review_status": "EVAL_M1_scoped_individual_validation_remaining_criteria_review_pending",
+    "whole_team_review_ref": null,
+    "review_ref": "docs/fase2-revisao-plano-avaliacao.md",
+    "upload_lifecycle_ref": "docs/architecture/fase2-upload-ciclo-vida.md"
+  },
+  "host": {
+    "selection_status": "user_selected",
+    "host_ref": "LOCAL-HOST-01",
+    "administrator_ref": "ADM-01",
+    "administrator_name": "Luís",
+    "observation_ref": "memory-bank/intents/001-phase-2-quality-improvements/evidence/evaluation-host-2026-11-18.json",
+    "runtime_observation_at": null,
+    "docker_version": null,
+    "compose_version": null,
+    "cgroup_version": null,
+    "resource_controller_support": null,
+    "mem_available_bytes_before": null,
+    "disk_free_bytes_before": null,
+    "swap_policy": null,
+    "background_load": null,
+    "power_profile": null
+  },
+  "installation": {
+    "status": "proposed_not_created",
+    "proposed_compose_project": "picturas-eval-20261118",
+    "effective_compose_project": null,
+    "public_origin": "https://localhost:8080",
+    "effective_configuration_sanitized_ref": null,
+    "effective_configuration_sha256": null,
+    "project_isolation_verified": null,
+    "port_conflict_check_ref": null,
+    "protected_volume_sets": [
+      "picturas",
+      "picturas-quality-20261114"
+    ],
+    "protected_sets_unused_verified": null,
+    "experimental_volumes": [],
+    "experimental_networks": [],
+    "bind_mounts": [],
+    "published_ports": [],
+    "browser_profile_ref": null,
+    "known_test_trust_ref": null,
+    "private_artifact_store_ref": null,
+    "containment_difference_from_original": null
+  },
+  "revision": {
+    "application_commit": null,
+    "worktree_diff_sanitized_ref": null,
+    "worktree_diff_sha256": null,
+    "instrument_commit": null,
+    "instrument_hashes": [],
+    "dependency_lock_hashes": []
+  },
+  "resources": {
+    "status": "proposal_pending_calibration",
+    "proposed_aggregate_memory_limit_bytes": 10737418240,
+    "proposed_host_reserve_bytes": 4294967296,
+    "aggregate_limit_mechanism": null,
+    "aggregate_limit_verified": null,
+    "proposed_node_limits": {
+      "services": [
+        "api_gateway",
+        "projects",
+        "img_storage"
+      ],
+      "cpu_per_service": 2,
+      "memory_bytes_per_service": 2147483648
+    },
+    "effective_service_limits": [],
+    "generator_limits": null,
+    "collector_limits": null,
+    "proposed_min_disk_free_bytes": 64424509440,
+    "proposed_stop_disk_free_bytes": 10737418240,
+    "resource_preflight_result": null,
+    "host_margin_is_nominal_not_reserved": true
+  },
+  "services": [],
+  "corpus": {
+    "status": "not_materialized",
+    "definition_ref": null,
+    "definition_sha256": null,
+    "files": [],
+    "identity_fixture_definition_ref": null,
+    "initial_state_snapshot_ref": null,
+    "initial_state_sha256": null,
+    "profile_and_quota_checks_ref": null,
+    "expected_media_validation_ref": null
+  },
+  "protocol": {
+    "status": "proposed_not_frozen",
+    "normal_upload_combinations": [
+      [
+        "free",
+        10
+      ],
+      [
+        "free",
+        100
+      ],
+      [
+        "premium",
+        10
+      ],
+      [
+        "premium",
+        100
+      ],
+      [
+        "premium",
+        500
+      ]
+    ],
+    "size_unit": "MiB",
+    "bytes_per_mib": 1048576,
+    "metadata_positions": [
+      "head",
+      "tail"
+    ],
+    "states": [
+      "process_restart",
+      "warm"
+    ],
+    "normal_repetitions_per_stratum": 5,
+    "normal_attempts_per_campaign": 100,
+    "warmup_size_mib": 10,
+    "warmup_excluded": true,
+    "concurrent_uploads": 3,
+    "concurrent_rounds": 3,
+    "concurrent_attempts_per_campaign": 9,
+    "negative_repetitions_per_case": 3,
+    "ws_repetitions_per_case": 3,
+    "ws_steady_state_seconds": 30,
+    "ws_preload_joins_per_second": 5,
+    "sample_interval_ms": 50,
+    "light_requests_per_window": 100,
+    "light_requests_per_second": 5,
+    "coexistence_upload_rate_mib_per_second": 10,
+    "coexistence_window_pairs": 3,
+    "operation_timeout_seconds_proposed": 180,
+    "failure_observation_seconds_proposed": 180,
+    "clock_and_uncertainty_method_ref": null,
+    "peak_window_verification_ref": null,
+    "sequence_ref": null,
+    "sequence_sha256": null,
+    "concrete_cases": [],
+    "coexistence_upload_attempts_per_campaign": 3,
+    "coexistence_light_requests_per_campaign": 600,
+    "coexistence_window_start_after_body_seconds_proposed": 5,
+    "retained_rss_idle_seconds_after_work_and_cleanup": 10
+  },
+  "pending_decisions": [
+    "EVAL-I1 effective experimental installation/configuration",
+    "EVAL-B1 selected conditions: per-phase calibration and effective containment",
+    "EVAL-C1/R1 selected coverage: materialize and hash physical corpus/scenarios",
+    "Remaining metric criteria outside scoped EVAL-M1 selection",
+    "UP-C4-C9 lifecycle/state/token/TTL/retry/commit/hash/probe/cleanup and transport support",
+    "Physical scenario and channel matrix freeze",
+    "Full requirements and applicable Inception reviews"
+  ],
+  "coverage": [
+    {
+      "metric_id": "S01",
+      "priority": "P",
+      "applicability": "pending",
+      "criterion_ref": "docs/fase2-metricas-e-baseline.md",
+      "criterion_approval_ref": null,
+      "scenario_refs": [],
+      "baseline_state": "not_measured"
+    },
+    {
+      "metric_id": "S02",
+      "priority": "P",
+      "applicability": "pending",
+      "criterion_ref": "docs/fase2-metricas-e-baseline.md",
+      "criterion_approval_ref": null,
+      "scenario_refs": [],
+      "baseline_state": "not_measured"
+    },
+    {
+      "metric_id": "S03",
+      "priority": "P",
+      "applicability": "pending",
+      "criterion_ref": "docs/fase2-metricas-e-baseline.md",
+      "criterion_approval_ref": null,
+      "scenario_refs": [],
+      "baseline_state": "not_measured"
+    },
+    {
+      "metric_id": "S04",
+      "priority": "P",
+      "applicability": "pending",
+      "criterion_ref": "docs/fase2-metricas-e-baseline.md",
+      "criterion_approval_ref": null,
+      "scenario_refs": [],
+      "baseline_state": "not_measured"
+    },
+    {
+      "metric_id": "S05",
+      "priority": "G",
+      "applicability": "pending",
+      "criterion_ref": "docs/fase2-metricas-e-baseline.md",
+      "criterion_approval_ref": null,
+      "scenario_refs": [],
+      "baseline_state": "not_measured"
+    },
+    {
+      "metric_id": "S06",
+      "priority": "G",
+      "applicability": "pending",
+      "criterion_ref": "docs/fase2-metricas-e-baseline.md",
+      "criterion_approval_ref": null,
+      "scenario_refs": [],
+      "baseline_state": "not_measured"
+    },
+    {
+      "metric_id": "S07",
+      "priority": "G",
+      "applicability": "pending",
+      "criterion_ref": "docs/fase2-metricas-e-baseline.md",
+      "criterion_approval_ref": null,
+      "scenario_refs": [],
+      "baseline_state": "not_measured"
+    },
+    {
+      "metric_id": "S08",
+      "priority": "G",
+      "applicability": "pending",
+      "criterion_ref": "docs/fase2-metricas-e-baseline.md",
+      "criterion_approval_ref": null,
+      "scenario_refs": [],
+      "baseline_state": "not_measured"
+    },
+    {
+      "metric_id": "S09",
+      "priority": "G",
+      "applicability": "pending",
+      "criterion_ref": "docs/fase2-metricas-e-baseline.md",
+      "criterion_approval_ref": null,
+      "scenario_refs": [],
+      "baseline_state": "not_measured"
+    },
+    {
+      "metric_id": "S10",
+      "priority": "G",
+      "applicability": "pending",
+      "criterion_ref": "docs/fase2-metricas-e-baseline.md",
+      "criterion_approval_ref": null,
+      "scenario_refs": [],
+      "baseline_state": "not_measured"
+    },
+    {
+      "metric_id": "S11",
+      "priority": "G",
+      "applicability": "pending",
+      "criterion_ref": "docs/fase2-metricas-e-baseline.md",
+      "criterion_approval_ref": null,
+      "scenario_refs": [],
+      "baseline_state": "not_measured"
+    },
+    {
+      "metric_id": "S12",
+      "priority": "G",
+      "applicability": "pending",
+      "criterion_ref": "docs/fase2-metricas-e-baseline.md",
+      "criterion_approval_ref": null,
+      "scenario_refs": [],
+      "baseline_state": "not_measured"
+    },
+    {
+      "metric_id": "S13",
+      "priority": "G",
+      "applicability": "pending",
+      "criterion_ref": "docs/fase2-metricas-e-baseline.md",
+      "criterion_approval_ref": null,
+      "scenario_refs": [],
+      "baseline_state": "not_measured"
+    },
+    {
+      "metric_id": "S14",
+      "priority": "G",
+      "applicability": "pending",
+      "criterion_ref": "docs/fase2-metricas-e-baseline.md",
+      "criterion_approval_ref": null,
+      "scenario_refs": [],
+      "baseline_state": "not_measured"
+    },
+    {
+      "metric_id": "S15",
+      "priority": "G",
+      "applicability": "pending",
+      "criterion_ref": "docs/fase2-metricas-e-baseline.md",
+      "criterion_approval_ref": null,
+      "scenario_refs": [],
+      "baseline_state": "not_measured"
+    },
+    {
+      "metric_id": "S16",
+      "priority": "G",
+      "applicability": "pending",
+      "criterion_ref": "docs/fase2-metricas-e-baseline.md",
+      "criterion_approval_ref": null,
+      "scenario_refs": [],
+      "baseline_state": "not_measured"
+    },
+    {
+      "metric_id": "S17",
+      "priority": "G",
+      "applicability": "pending",
+      "criterion_ref": "docs/fase2-metricas-e-baseline.md",
+      "criterion_approval_ref": null,
+      "scenario_refs": [],
+      "baseline_state": "not_measured"
+    },
+    {
+      "metric_id": "S18",
+      "priority": "D",
+      "applicability": "pending",
+      "criterion_ref": "docs/fase2-metricas-e-baseline.md",
+      "criterion_approval_ref": null,
+      "scenario_refs": [],
+      "baseline_state": "not_measured"
+    },
+    {
+      "metric_id": "S19",
+      "priority": "G",
+      "applicability": "pending",
+      "criterion_ref": "docs/fase2-metricas-e-baseline.md",
+      "criterion_approval_ref": null,
+      "scenario_refs": [],
+      "baseline_state": "not_measured"
+    },
+    {
+      "metric_id": "S20",
+      "priority": "G",
+      "applicability": "pending",
+      "criterion_ref": "docs/fase2-metricas-e-baseline.md",
+      "criterion_approval_ref": null,
+      "scenario_refs": [],
+      "baseline_state": "not_measured"
+    },
+    {
+      "metric_id": "S21",
+      "priority": "G",
+      "applicability": "pending",
+      "criterion_ref": "docs/fase2-metricas-e-baseline.md",
+      "criterion_approval_ref": null,
+      "scenario_refs": [],
+      "baseline_state": "not_measured"
+    },
+    {
+      "metric_id": "S22",
+      "priority": "G",
+      "applicability": "pending",
+      "criterion_ref": "docs/fase2-metricas-e-baseline.md",
+      "criterion_approval_ref": null,
+      "scenario_refs": [],
+      "baseline_state": "not_measured"
+    },
+    {
+      "metric_id": "S23",
+      "priority": "G",
+      "applicability": "pending",
+      "criterion_ref": "docs/fase2-metricas-e-baseline.md",
+      "criterion_approval_ref": null,
+      "scenario_refs": [],
+      "baseline_state": "not_measured"
+    },
+    {
+      "metric_id": "S24",
+      "priority": "G",
+      "applicability": "pending",
+      "criterion_ref": "docs/fase2-metricas-e-baseline.md",
+      "criterion_approval_ref": null,
+      "scenario_refs": [],
+      "baseline_state": "not_measured"
+    },
+    {
+      "metric_id": "U01",
+      "priority": "P",
+      "applicability": "pending",
+      "criterion_ref": "docs/fase2-metricas-e-baseline.md",
+      "criterion_approval_ref": "docs/fase2-revisao-plano-avaliacao.md",
+      "scenario_refs": [],
+      "baseline_state": "not_measured",
+      "criterion_approval_scope": "64/32 MiB per Node, C=1 up to 500 MiB, full work window",
+      "approval_is_scoped_not_full_requirement_review": true
+    },
+    {
+      "metric_id": "U02",
+      "priority": "G",
+      "applicability": "pending",
+      "criterion_ref": "docs/fase2-metricas-e-baseline.md",
+      "criterion_approval_ref": "docs/fase2-revisao-plano-avaliacao.md",
+      "scenario_refs": [],
+      "baseline_state": "not_measured",
+      "criterion_approval_scope": "64/32 MiB retained, after work/normal cleanup plus 10 s idle",
+      "approval_is_scoped_not_full_requirement_review": true
+    },
+    {
+      "metric_id": "U03",
+      "priority": "G",
+      "applicability": "pending",
+      "criterion_ref": "docs/fase2-metricas-e-baseline.md",
+      "criterion_approval_ref": "docs/fase2-revisao-plano-avaliacao.md",
+      "scenario_refs": [],
+      "baseline_state": "not_measured",
+      "criterion_approval_scope": "zero OOM/restarts in the selected evaluated workload",
+      "approval_is_scoped_not_full_requirement_review": true
+    },
+    {
+      "metric_id": "U04",
+      "priority": "G",
+      "applicability": "pending",
+      "criterion_ref": "docs/fase2-metricas-e-baseline.md",
+      "criterion_approval_ref": "docs/fase2-revisao-plano-avaliacao.md",
+      "scenario_refs": [],
+      "baseline_state": "not_measured",
+      "criterion_approval_scope": "nginx 128/64 MiB and SeaweedFS 256/128 MiB increments, C=1",
+      "approval_is_scoped_not_full_requirement_review": true
+    },
+    {
+      "metric_id": "U05",
+      "priority": "D",
+      "applicability": "pending",
+      "criterion_ref": "docs/fase2-metricas-e-baseline.md",
+      "criterion_approval_ref": null,
+      "scenario_refs": [],
+      "baseline_state": "not_measured"
+    },
+    {
+      "metric_id": "U06",
+      "priority": "D",
+      "applicability": "pending",
+      "criterion_ref": "docs/fase2-metricas-e-baseline.md",
+      "criterion_approval_ref": null,
+      "scenario_refs": [],
+      "baseline_state": "not_measured"
+    },
+    {
+      "metric_id": "U07",
+      "priority": "D",
+      "applicability": "pending",
+      "criterion_ref": "docs/fase2-metricas-e-baseline.md",
+      "criterion_approval_ref": null,
+      "scenario_refs": [],
+      "baseline_state": "not_measured"
+    },
+    {
+      "metric_id": "U08",
+      "priority": "G",
+      "applicability": "pending",
+      "criterion_ref": "docs/fase2-metricas-e-baseline.md",
+      "criterion_approval_ref": null,
+      "scenario_refs": [],
+      "baseline_state": "not_measured"
+    },
+    {
+      "metric_id": "U09",
+      "priority": "P",
+      "applicability": "pending",
+      "criterion_ref": "docs/fase2-metricas-e-baseline.md",
+      "criterion_approval_ref": "docs/fase2-revisao-plano-avaliacao.md",
+      "scenario_refs": [],
+      "baseline_state": "not_measured",
+      "criterion_approval_scope": "<3000/<1000 ms per valid 500 MiB sample through ready",
+      "approval_is_scoped_not_full_requirement_review": true
+    },
+    {
+      "metric_id": "U10",
+      "priority": "G",
+      "applicability": "pending",
+      "criterion_ref": "docs/fase2-metricas-e-baseline.md",
+      "criterion_approval_ref": "docs/fase2-revisao-plano-avaliacao.md",
+      "scenario_refs": [],
+      "baseline_state": "not_measured",
+      "criterion_approval_scope": "median <=1.10x valid equivalent BF, target <=BF; no invented ratio",
+      "approval_is_scoped_not_full_requirement_review": true
+    },
+    {
+      "metric_id": "U11",
+      "priority": "D",
+      "applicability": "pending",
+      "criterion_ref": "docs/fase2-metricas-e-baseline.md",
+      "criterion_approval_ref": null,
+      "scenario_refs": [],
+      "baseline_state": "not_measured"
+    },
+    {
+      "metric_id": "U12",
+      "priority": "D",
+      "applicability": "pending",
+      "criterion_ref": "docs/fase2-metricas-e-baseline.md",
+      "criterion_approval_ref": null,
+      "scenario_refs": [],
+      "baseline_state": "not_measured"
+    },
+    {
+      "metric_id": "U13",
+      "priority": "G",
+      "applicability": "pending",
+      "criterion_ref": "docs/fase2-metricas-e-baseline.md",
+      "criterion_approval_ref": null,
+      "scenario_refs": [],
+      "baseline_state": "not_measured"
+    },
+    {
+      "metric_id": "U14",
+      "priority": "G",
+      "applicability": "pending",
+      "criterion_ref": "docs/fase2-metricas-e-baseline.md",
+      "criterion_approval_ref": "docs/fase2-revisao-plano-avaliacao.md",
+      "scenario_refs": [],
+      "baseline_state": "not_measured",
+      "criterion_approval_scope": "conditional asynchronous hash <=10/<=5 s after ready, each file <=500 MiB under C=1/C=3 including queue",
+      "approval_is_scoped_not_full_requirement_review": true
+    },
+    {
+      "metric_id": "U15",
+      "priority": "G",
+      "applicability": "pending",
+      "criterion_ref": "docs/fase2-metricas-e-baseline.md",
+      "criterion_approval_ref": "docs/fase2-revisao-plano-avaliacao.md",
+      "scenario_refs": [],
+      "baseline_state": "not_measured",
+      "criterion_approval_scope": "original SHA-256 preserved, not transformed output equality",
+      "approval_is_scoped_not_full_requirement_review": true
+    },
+    {
+      "metric_id": "U16",
+      "priority": "G",
+      "applicability": "pending",
+      "criterion_ref": "docs/fase2-metricas-e-baseline.md",
+      "criterion_approval_ref": "docs/fase2-revisao-plano-avaliacao.md",
+      "scenario_refs": [],
+      "baseline_state": "not_measured",
+      "criterion_approval_scope": "correct preview/cache; no shared cache read/write without hash or proven isolation",
+      "approval_is_scoped_not_full_requirement_review": true
+    },
+    {
+      "metric_id": "U17",
+      "priority": "G",
+      "applicability": "pending",
+      "criterion_ref": "docs/fase2-metricas-e-baseline.md",
+      "criterion_approval_ref": null,
+      "scenario_refs": [],
+      "baseline_state": "not_measured"
+    },
+    {
+      "metric_id": "U18",
+      "priority": "G",
+      "applicability": "pending",
+      "criterion_ref": "docs/fase2-metricas-e-baseline.md",
+      "criterion_approval_ref": null,
+      "scenario_refs": [],
+      "baseline_state": "not_measured"
+    },
+    {
+      "metric_id": "U19",
+      "priority": "G",
+      "applicability": "pending",
+      "criterion_ref": "docs/fase2-metricas-e-baseline.md",
+      "criterion_approval_ref": null,
+      "scenario_refs": [],
+      "baseline_state": "not_measured"
+    },
+    {
+      "metric_id": "U20",
+      "priority": "G",
+      "applicability": "pending",
+      "criterion_ref": "docs/fase2-metricas-e-baseline.md",
+      "criterion_approval_ref": "docs/fase2-revisao-plano-avaliacao.md",
+      "scenario_refs": [],
+      "baseline_state": "not_measured",
+      "criterion_approval_scope": "3/3 valid intact successes per each of three C=3 rounds, no OOM/restarts",
+      "approval_is_scoped_not_full_requirement_review": true
+    },
+    {
+      "metric_id": "U21",
+      "priority": "G",
+      "applicability": "pending",
+      "criterion_ref": "docs/fase2-metricas-e-baseline.md",
+      "criterion_approval_ref": null,
+      "scenario_refs": [],
+      "baseline_state": "not_measured"
+    },
+    {
+      "metric_id": "U22",
+      "priority": "G",
+      "applicability": "pending",
+      "criterion_ref": "docs/fase2-metricas-e-baseline.md",
+      "criterion_approval_ref": "docs/fase2-revisao-plano-avaliacao.md",
+      "scenario_refs": [],
+      "baseline_state": "not_measured",
+      "criterion_approval_scope": "zero orphans TTL+60 s / target TTL+10 s; concrete TTL unselected",
+      "approval_is_scoped_not_full_requirement_review": true
+    },
+    {
+      "metric_id": "U23",
+      "priority": "G",
+      "applicability": "pending",
+      "criterion_ref": "docs/fase2-metricas-e-baseline.md",
+      "criterion_approval_ref": null,
+      "scenario_refs": [],
+      "baseline_state": "not_measured"
+    },
+    {
+      "metric_id": "U24",
+      "priority": "G",
+      "applicability": "pending",
+      "criterion_ref": "docs/fase2-metricas-e-baseline.md",
+      "criterion_approval_ref": null,
+      "scenario_refs": [],
+      "baseline_state": "not_measured",
+      "domain_policy_validation_ref": "docs/architecture/fase2-upload-decisoes-pendentes.md",
+      "domain_policy_scope": "UP-C2 A: no upload charge/reservation or new zero-balance refusal; Apply policy preserved, not full metric baseline approval"
+    },
+    {
+      "metric_id": "U25",
+      "priority": "G",
+      "applicability": "pending",
+      "criterion_ref": "docs/fase2-metricas-e-baseline.md",
+      "criterion_approval_ref": "docs/fase2-revisao-plano-avaliacao.md",
+      "scenario_refs": [],
+      "baseline_state": "not_measured",
+      "criterion_approval_scope": "G; zero errors, per-pair median <=1.10x same-phase control, target <=control",
+      "approval_is_scoped_not_full_requirement_review": true
+    },
+    {
+      "metric_id": "U26",
+      "priority": "G",
+      "applicability": "pending",
+      "criterion_ref": "docs/fase2-metricas-e-baseline.md",
+      "criterion_approval_ref": null,
+      "scenario_refs": [],
+      "baseline_state": "not_measured"
+    },
+    {
+      "metric_id": "F01",
+      "priority": "G",
+      "applicability": "pending",
+      "criterion_ref": "docs/fase2-metricas-e-baseline.md",
+      "criterion_approval_ref": null,
+      "scenario_refs": [],
+      "baseline_state": "not_measured"
+    },
+    {
+      "metric_id": "F02",
+      "priority": "G",
+      "applicability": "pending",
+      "criterion_ref": "docs/fase2-metricas-e-baseline.md",
+      "criterion_approval_ref": "docs/fase2-revisao-plano-avaliacao.md",
+      "scenario_refs": [],
+      "baseline_state": "not_measured",
+      "criterion_approval_scope": "original integrity versus transformed-output semantics only; no blanket functional coverage approval",
+      "approval_is_scoped_not_full_requirement_review": true
+    },
+    {
+      "metric_id": "F03",
+      "priority": "G",
+      "applicability": "pending",
+      "criterion_ref": "docs/fase2-metricas-e-baseline.md",
+      "criterion_approval_ref": null,
+      "scenario_refs": [],
+      "baseline_state": "not_measured"
+    },
+    {
+      "metric_id": "F04",
+      "priority": "G",
+      "applicability": "pending",
+      "criterion_ref": "docs/fase2-metricas-e-baseline.md",
+      "criterion_approval_ref": null,
+      "scenario_refs": [],
+      "baseline_state": "not_measured"
+    },
+    {
+      "metric_id": "F05",
+      "priority": "G",
+      "applicability": "pending",
+      "criterion_ref": "docs/fase2-metricas-e-baseline.md",
+      "criterion_approval_ref": null,
+      "scenario_refs": [],
+      "baseline_state": "not_measured"
+    },
+    {
+      "metric_id": "F06",
+      "priority": "G",
+      "applicability": "pending",
+      "criterion_ref": "docs/fase2-metricas-e-baseline.md",
+      "criterion_approval_ref": null,
+      "scenario_refs": [],
+      "baseline_state": "not_measured"
+    },
+    {
+      "metric_id": "F07",
+      "priority": "D",
+      "applicability": "pending",
+      "criterion_ref": "docs/fase2-metricas-e-baseline.md",
+      "criterion_approval_ref": null,
+      "scenario_refs": [],
+      "baseline_state": "not_measured"
+    },
+    {
+      "metric_id": "F08",
+      "priority": "G",
+      "applicability": "pending",
+      "criterion_ref": "docs/fase2-metricas-e-baseline.md",
+      "criterion_approval_ref": null,
+      "scenario_refs": [],
+      "baseline_state": "not_measured"
+    },
+    {
+      "metric_id": "F09",
+      "priority": "D",
+      "applicability": "pending",
+      "criterion_ref": "docs/fase2-metricas-e-baseline.md",
+      "criterion_approval_ref": null,
+      "scenario_refs": [],
+      "baseline_state": "not_measured"
+    },
+    {
+      "metric_id": "F10",
+      "priority": "G",
+      "applicability": "pending",
+      "criterion_ref": "docs/fase2-metricas-e-baseline.md",
+      "criterion_approval_ref": null,
+      "scenario_refs": [],
+      "baseline_state": "not_measured"
+    }
+  ],
+  "review": {
+    "preparation_review_ref": null,
+    "instrument_checks_ref": null,
+    "criteria_approval_ref": null,
+    "freeze_approved_by": null,
+    "freeze_approved_at": null
+  },
+  "results": {
+    "attempts_planned": null,
+    "attempts_executed": null,
+    "attempts_not_executed": null,
+    "raw_index_ref": null,
+    "summary_ref": null
+  },
+  "evaluation_review": {
+    "status": "individually_selected_with_technical_confirmation_and_conditions",
+    "recommendations": [
+      {
+        "decision_ref": "EVAL-B1",
+        "recommended_option": "A",
+        "selected_option": "A",
+        "validated_by": "user_individual_with_assistant_technical_confirmation",
+        "validated_at": null,
+        "validation_recorded_at": "2026-11-18T11:55:48Z"
+      },
+      {
+        "decision_ref": "EVAL-C1",
+        "recommended_option": "A",
+        "selected_option": "A",
+        "validated_by": "user_individual_with_assistant_technical_confirmation",
+        "validated_at": null,
+        "validation_recorded_at": "2026-11-18T11:55:48Z"
+      },
+      {
+        "decision_ref": "EVAL-R1",
+        "recommended_option": "A",
+        "selected_option": "A",
+        "validated_by": "user_individual_with_assistant_technical_confirmation",
+        "validated_at": null,
+        "validation_recorded_at": "2026-11-18T11:55:48Z"
+      },
+      {
+        "decision_ref": "EVAL-M1",
+        "recommended_option": "A",
+        "selected_option": "A",
+        "validated_by": "user_individual_with_assistant_technical_confirmation",
+        "validated_at": null,
+        "validation_recorded_at": "2026-11-18T11:55:48Z"
+      }
+    ],
+    "u25_priority": "G",
+    "u25_proposed_priority": "G",
+    "u25_promotion_validated": true,
+    "planned_input_and_pad_corpus_logical_gib": 41.23046875,
+    "arithmetic_is_not_measured_disk_use": true,
+    "EVAL_M1_scope": {
+      "scoped_criterion_details": {
+        "U01": "64/32 MiB per Node, C=1 up to 500 MiB, full work window",
+        "U02": "64/32 MiB retained, after work/normal cleanup plus 10 s idle",
+        "U03": "zero OOM/restarts in the selected evaluated workload",
+        "U04": "nginx 128/64 MiB and SeaweedFS 256/128 MiB increments, C=1",
+        "U09": "<3000/<1000 ms per valid 500 MiB sample through ready",
+        "U10": "median <=1.10x valid equivalent BF, target <=BF; no invented ratio",
+        "U14": "conditional asynchronous hash <=10/<=5 s after ready, each file <=500 MiB under C=1/C=3 including queue",
+        "U15": "original SHA-256 preserved, not transformed output equality",
+        "U16": "correct preview/cache; no shared cache read/write without hash or proven isolation",
+        "U20": "3/3 valid intact successes per each of three C=3 rounds, no OOM/restarts",
+        "U22": "zero orphans TTL+60 s / target TTL+10 s; concrete TTL unselected",
+        "U25": "G; zero errors, per-pair median <=1.10x same-phase control, target <=control",
+        "F02": "original integrity versus transformed-output semantics only; no blanket functional coverage approval"
+      },
+      "diagnostic_only_no_independent_gate": [
+        "U11",
+        "U12"
+      ],
+      "existing_validations_preserved": [
+        "S12",
+        "S20"
+      ],
+      "other_criteria_retain_previous_status": true,
+      "all_60_criteria_approved": false,
+      "technical_capacity_demonstrated": false
+    },
+    "conditions": [
+      "Calibration and effective containment before freeze",
+      ">=60 GiB is a floor; increase if full retention inventory requires",
+      "Baseline OOM/timeout is an observation with working instrumentation, not a reason to hide the defect",
+      "Resource or method revisions documented and applied comparably to BF and MF",
+      "No omitted required services; preserve complete observations and errors"
+    ]
+  },
+  "upload_decisions": {
+    "status": "UP_C1_C2_C3_individual_selection_with_technical_confirmation",
+    "source_ref": "docs/architecture/fase2-upload-decisoes-pendentes.md",
+    "validation_recorded_at": "2026-11-18T14:11:52Z",
+    "selected_options": {
+      "UP-C1": "A",
+      "UP-C2": "A",
+      "UP-C3": "A"
+    },
+    "whole_team_approval": false,
+    "compatibility_or_capacity_proven": false,
+    "remaining_lifecycle_decisions": {
+      "UP-C4": null,
+      "UP-C5": null,
+      "UP-C6": null,
+      "UP-C7": null,
+      "UP-C8": null,
+      "UP-C9": null
+    },
+    "proposal_ref": "docs/architecture/fase2-upload-ciclo-vida.md",
+    "UL_scenarios_planned": 12,
+    "UL_scenarios_executed": 0
+  }
+}

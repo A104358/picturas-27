@@ -398,10 +398,13 @@ no servidor. Esta evidência reduz a lacuna anterior, mas não congela a baselin
 
 *Mínimo aceitável:* pico de RSS adicional por upload ≤ 64 MiB em cada serviço, para qualquer
 tamanho até 500 MiB; aceitação pós-envio < 3 s a 500 MiB (valor MVP do requisito).
-*Alvo proposto para revisão:* ≤32 MiB adicionais por serviço e cenário, com 3 uploads
+*Alvo individualmente validado em EVAL-M1:* ≤32 MiB adicionais por serviço C=1
+até 500 MiB; C=3 é avaliado como grupo com 3 uploads
 simultâneos de 500 MiB sem reinícios. O plano de métricas propõe distinguir <3 s como
 mínimo pós-envio e <1 s como meta também a 500 MiB; isso corrige a ambiguidade anterior
-de repetir <3 s no mínimo e na meta. Os valores não ficam aprovados por esta revisão. Guardas: mesmo SHA-256
+de repetir <3 s no mínimo e na meta. A validação individual posterior EVAL-M1
+abrange os critérios enumerados na revisão do plano, sem provar resultados ou
+aprovar todos os limiares. Guardas: mesmo SHA-256
 guardado, mesmas respostas de validação (400 para duração, tamanho, codec), temporários removidos
 após sucesso e após erro, ocupação de disco temporário reportada.
 
@@ -448,12 +451,12 @@ multer (ideia 8), e podem migrar para o mesmo fluxo mais tarde.
 1. **Pedido de upload.** O frontend faz `POST /:user/:project/video/uploads` (pelo gateway, com
    JWT) com `{ name, size, type, duration, width, height }`. A duração e a resolução são lidas no
    browser por um elemento `<video preload="metadata">`, sem enviar o ficheiro.
-2. **Validação prévia.** A `projects` verifica perfil, quota diária e limites
-   (`VIDEO_FREE_*`, `VIDEO_PREMIUM_*`) sobre os valores declarados. A validação real continua no servidor. A pré-condição de
-   quota no upload exige uma decisão de preservação funcional: hoje a quota é debitada no
-   Apply, não no upload; não chamar «mesmas respostas de hoje» à recusa nova de um upload
-   só porque o saldo é zero. Se passar, cria o registo
-   do media com `status: "pending"` e `expires_at`, fixa a chave definitiva no stage `src` e
+2. **Validação prévia.** A `projects` verifica perfil e limites
+   (`VIDEO_FREE_*`, `VIDEO_PREMIUM_*`) sobre os valores declarados. A validação real
+   continua no servidor. **UP-C2 A preserva a quota só no Apply:** upload não cobra,
+   reserva ou recusa por saldo zero. Se passar, cria uma tentativa numa coleção
+   separada e chave staging controlada (**UP-C3 A**), sem media utilizável no projeto;
+   estado/deadlines concretos continuam propostos no ciclo de vida. O fluxo proposto
    devolve um **token opaco** de uso único, válido por poucos minutos, com o endereço de envio
    (ex.: `/api-gateway/uploads/<token>`).
 3. **Envio.** O browser faz `PUT /api-gateway/uploads/<token>` com o ficheiro. É a mesma origem,
@@ -473,7 +476,9 @@ multer (ideia 8), e podem migrar para o mesmo fluxo mais tarde.
    ficheiro, não uma garantia de ler apenas o início e o `moov` em todos os formatos. É esta a validação
    que manda, porque os valores do passo 1 podem ser falsos. Compara também o tamanho real
    (`HEAD`) com o declarado. Se falhar, apaga o objeto e o registo e responde 400 como hoje. Se
-   passar, marca `status: "ready"` e responde ao utilizador.
+   passar, revalida a autorização e associa o media por commit idempotente; o mecanismo
+   de confirmação/promoção e corridas é proposta no ciclo de vida, ainda por selecionar.
+   Só depois responde pronto ao utilizador.
 6. **Hash em segundo plano.** Depois de responder, a `projects` lê o objeto em fluxo, calcula o
    SHA-256 e grava `og_sha256`. É uma leitura integral posterior à resposta; o
    ffprobe pode também ler uma parte substancial, dependendo do ficheiro. O custo completo
@@ -488,7 +493,8 @@ multer (ideia 8), e podem migrar para o mesmo fluxo mais tarde.
 
 *Validação em dois momentos.* A validação prévia pode detetar os erros honestos de
 metadados antes de transferir o corpo; o prazo é uma meta a medir. O tratamento da quota
-no upload não está fechado, porque pode mudar uma condição funcional existente. A validação final, no servidor, continua a
+no upload ficou selecionado em UP-C2 A: nenhuma cobrança/reserva ou recusa por
+saldo zero; Apply mantém a política existente. A validação final, no servidor, continua a
 ser obrigatória e é a única em que se confia. Os objetos órfãos não desaparecem, mas passam a
 vir só de uploads interrompidos ou de clientes mal-intencionados, e o passo 7 remove-os.
 
@@ -508,12 +514,14 @@ podem passar mais tarde pelo mesmo esquema de token opaco.
 - `frontend/lib/projects.ts`: upload de vídeo em três passos (pedido com metadados lidos por
   `<video>`, `PUT` com progresso por `XMLHttpRequest.upload.onprogress`, confirmação).
 - `apiGateway/routes/projects.js`: rotas JSON de pedido e confirmação, sem multer; rota interna
-  para o `auth_request` (verifica o JWT e consulta a `projects`). A retirada da rota multipart
-  `POST /:user/:project/video` precisa de decisão de compatibilidade/adaptação antes de código.
+  para o `auth_request` (verifica o JWT e consulta a `projects`). **UP-C1 A preserva**
+  `POST /:user/:project/video` por adaptador limitado, autenticação/autorização antes
+  do corpo, streaming/contrapressão e motor final comum; testar ambos os transportes.
 - `projects/routes/projects.js`: rotas de pedido e confirmação; verificação simplificada do
   token; `addProjectMedia` deixa de receber vídeos; tarefa de limpeza.
-- `projects/models/project.js`: `og_sha256` deixa de ser `required`; novos campos `status`,
-  `expires_at` e token (ou uma coleção `uploads` própria).
+- Modelos: **UP-C3 A** usa coleção de tentativas própria; não inserir pending na
+  lista normal. Proposta de hash em falta só no vídeo depende de UP-C7; não retirar
+  globalmente a validação atual de imagens em `projects/models/project.js`.
 - `projects/utils/video.js`: `probeVideoBuffer` → `probeVideoUrl(url)`.
 - `projects/utils/imageStorage.js` e `imageStorageService`: rotas para o URL pré-assinado de `PUT`
   (`getSignedUrlPromise("putObject", …)` com `ContentLength`), `HEAD`, leitura em fluxo para o
@@ -541,7 +549,8 @@ podem passar mais tarde pelo mesmo esquema de token opaco.
 Hipótese a testar: RSS adicional limitado nos serviços Node e no nginx, contando também
 o hash assíncrono, TLS e concorrência. O pós-envio tem de incluir a confirmação e validação
 final; não se demonstra independência do tamanho sem medir ranges, formatos e estágios.
-A meta <1 s a 500 MiB continua proposta, não resultado. Guardas novas:
+A meta <1 s a 500 MiB está individualmente validada em EVAL-M1, ainda sem
+resultado experimental. Guardas novas:
 SHA-256 presente pouco depois da resposta e igual ao calculado hoje; mesmas respostas 400/403;
 nenhum objeto `pending` depois do prazo de limpeza; 3 uploads simultâneos de 500 MiB sem
 reinício de nenhum serviço.
@@ -1069,6 +1078,43 @@ são testes planeados, não execução. Ferramenta, UI, validação do perfil e 
 continuam por implementar; estimativa preliminar 8–16 h/pessoa, sem orçamento
 aprovado. Nenhum dado/perfil real foi consultado ou alterado nesta revisão.
 
+### Avaliação de 18/11 — host escolhido, protocolo por congelar
+
+O utilizador escolheu **esta máquina, administrada pelo Luís**, para avaliar o
+par. O [plano de avaliação](fase2-plano-avaliacao.md) reúne os recursos observados,
+instalação nova proposta, budgets, corpus, cargas/repetições, relógios, mínimos/
+metas e modelos de manifesto/resultado. Os 60 IDs de métricas são preservados;
+B14/B16 não passam a BF por reutilização dos seus números. O host está escolhido,
+não o runtime, os critérios E ou os dois volumes retidos, que continuam preservados.
+
+Alternativa considerada: reutilizar uma instalação retida reduz preparação, mas
+mistura estado histórico, sessões sem associação comprovada e risco de alteração
+de dados; recomenda-se instalação sintética isolada para comparação controlada.
+Esse isolamento não demonstra migração das contas reais nem elimina a necessidade
+de cobrir as funcionalidades existentes. Confiança média na adequação do plano,
+baixa na capacidade até piloto: recursos disponíveis variam e a stack/carga não
+foi executada. Horas da equipa e demais decisões de upload mantêm-se em aberto.
+
+### Avaliação — EVAL-B1/C1/R1/M1 A selecionadas individualmente
+
+O utilizador validou a proposta técnica com as condições da
+[revisão](fase2-revisao-plano-avaliacao.md): recursos/corpus/repetições e critérios
+explicitamente enumerados, **U25 G**, calibração antes de congelar BF. A confirmação
+é individual; não prova capacidade/prontidão nem aprova todos os 60 limiares.
+OOM/timeout da base observado com instrumento/ambiente corretos é resultado;
+não aumentar recursos só para o esconder. Ajustes necessários são documentados
+e aplicados comparavelmente às duas campanhas. Disco ≥60 GiB é piso, com cerca
+de 8,77 GiB restantes após as entradas calculadas e reserva de 10 GiB, podendo
+precisar de aumento pelo inventário. Os volumes retidos continuam preservados.
+
+As [decisões de upload](architecture/fase2-upload-decisoes-pendentes.md) registam
+UP-C1/C2/C3 A selecionadas individualmente com condições: adaptador multipart
+seguro/limitado, quota só no Apply e pending/staging controlados, com motor de
+validação/autorização final/commit comum e testes nos dois transportes. O
+[ciclo de vida](architecture/fase2-upload-ciclo-vida.md) apresenta UP-C4–C9 e
+12 casos UL ainda por selecionar/ensaiar. TTL/retry/estado do token, confirmação,
+hash/probe/limpeza e suporte nginx/SeaweedFS não ficam decididos por associação.
+
 ### Ideia 2 — porquê nginx/S3 e o que ainda precisa de prova
 
 **U1 — Envio pelo nginx para S3, em vez de atravessar os três Node.**
@@ -1081,16 +1127,18 @@ exige CORS/origens apropriadas e um modelo de capacidade temporária explícito.
 O custo de nginx/S3 é real: novo protocolo frontend/API, auth_request, coordenação de estado,
 URLs internos, limpeza e testes de interrupção. O endereço continuar a ter `/api-gateway/`
 não preserva o contrato quando POST multipart passa a pedido JSON + PUT + confirmação.
-Retirar a rota antiga ou manter um adaptador é uma decisão de compatibilidade em aberto.
-Manter a rota antiga como bypass inseguro também não é aceitável. Prova U01–U13/U17–U26 e F02–F04.
+**UP-C1 A** mantém um adaptador limitado para a rota antiga, com autorização antes
+do corpo e regras/commit comuns, testes de recursos e compatibilidade; não como bypass
+inseguro. O custo/performance ainda precisam de prova. Prova U01–U13/U17–U26 e F02–F04.
 
 **U2 — Validar duas vezes, só confiar na validação final do servidor.**
 Os metadados do browser evitam transferências honestamente inválidas; podem ser falsificados.
 O HEAD/ffprobe final tem de verificar o objeto efetivo. O vídeo pending não pode aparecer
 em listagens, previews, Apply ou URLs normais antes de pronto; criar o registo no stage src
 não o isola por si. Pode usar-se coleção/área de staging ou regras explícitas de visibilidade:
-a escolha ainda precisa de ser fechada. Aplicar quota como pré-condição nova de upload
-exige justificação, porque hoje a operação é cobrada no Apply. Prova S23–S24/U18/U21–U24.
+**UP-C3 A** selecionou coleção de tentativas e staging controlado; o mecanismo de
+commit/limpeza está proposto no ciclo de vida, não implementado. **UP-C2 A** mantém
+a cobrança só no Apply e não impede upload por saldo zero. Prova S23–S24/U18/U21–U24.
 
 **U3 — Hash depois da resposta.**
 Pode reduzir o tempo até ready, mas adia uma leitura integral que continua a gastar CPU,
@@ -1142,7 +1190,7 @@ ou ensaios sobre o storage/configuração, sem começar já o refactoring do pro
 | Porque nginx/S3 em vez de spool? | Retira Node do envio grande; spool preserva API e pode ser mais simples. | Que o contrato se mantém só por usar a mesma origem ou que todos os buffers ficam a zero. |
 | Porque hash assíncrono? | Pode melhorar tempo até aceitação; custo completo continua medido. | Melhoria total sem mostrar t_hash, recuperação e isolamento da cache. |
 | Quais os números atuais? | Tabelas B14/B16 e bruto com ambiente; 500 MiB B16 teve 6,7–8,0 s pós-envio cliente e gateway até 2049,6 MiB de RSS. | Que tempos Intel e M4 são comparáveis ou que 10/13 e 17/22 são contagens finais validadas. |
-| Porque mínimos/metas diferentes? | 64/32 MiB são orçamentos propostos; 3/1 s vêm do requisito no cenário correspondente. Segurança exige zero no corpus. | Que esses números foram impostos pelos docentes ou aprovados por toda a equipa. |
+| Porque mínimos/metas diferentes? | 64/32 MiB são budgets de engenharia agora validados individualmente em EVAL-M1; 3/1 s vêm do requisito no cenário correspondente, com método selecionado. Não é validação de todos os 60 limiares. | Que esses números foram impostos pelos docentes ou aprovados por toda a equipa. |
 | O que falta antes de programar? | Decisões abertas, requisitos/métricas aprovados, baseline BF reproduzível e guardas preenchidas. | Que pedir análise dos documentos autoriza resolver todas as decisões em nome da equipa. |
 
 ### Referências técnicas da revisão

@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "template_only": true,
+  "campaign_ref": null,
+  "manifest_sha256": null,
+  "phase": null,
+  "attempt_ref": null,
+  "scenario_ref": null,
+  "metric_id": null,
+  "repetition": null,
+  "recorded_at": null,
+  "measurement_state": "not_measured",
+  "execution_state": "not_run",
+  "criterion_outcome": null,
+  "applicability_justification": null,
+  "context": {
+    "fixture_refs": [],
+    "fixture_sha256": [],
+    "profile": null,
+    "initial_quota": null,
+    "process_state": null,
+    "concurrency": null,
+    "surface": null,
+    "service_refs": [],
+    "pid_and_cgroup_refs": []
+  },
+  "criterion": {
+    "criterion_ref": null,
+    "criterion_revision_sha256": null,
+    "criterion_origin": null,
+    "approval_ref": null,
+    "direction": null,
+    "unit": null,
+    "minimum": null,
+    "target": null
+  },
+  "observation": {
+    "value": null,
+    "numerator": null,
+    "denominator": null,
+    "bytes_sent": null,
+    "bytes_received": null,
+    "http_status": null,
+    "error_class": null,
+    "state_before_ref": null,
+    "state_after_ref": null,
+    "content_integrity_ref": null,
+    "positive_control_ref": null,
+    "expected_effect_observed": null,
+    "restart_delta": null,
+    "oom_delta": null
+  },
+  "timing": {
+    "observer_ref": null,
+    "clock": null,
+    "uncertainty_ms": null,
+    "t0_monotonic_ms": null,
+    "t_send_monotonic_ms": null,
+    "t_put_monotonic_ms": null,
+    "t_confirm_monotonic_ms": null,
+    "t_ready_monotonic_ms": null,
+    "t_hash_monotonic_ms": null,
+    "t_cleanup_monotonic_ms": null,
+    "interval_lower_ms": null,
+    "interval_upper_ms": null
+  },
+  "evidence": {
+    "raw_refs": [],
+    "raw_sha256": [],
+    "sampling_ref": null,
+    "redaction_checked": null,
+    "contains_no_live_credentials_verified": null,
+    "limitations": []
+  },
+  "comparison": {
+    "baseline_attempt_ref": null,
+    "absolute_difference": null,
+    "relative_reduction_percent": null,
+    "not_comparable_reason": null
+  },
+  "review": {
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  }
+}

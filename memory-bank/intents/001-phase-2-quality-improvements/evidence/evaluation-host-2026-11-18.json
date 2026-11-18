@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-11-18T11:26:12Z",
+  "record_type": "read_only_host_metadata",
+  "host_ref": "LOCAL-HOST-01",
+  "administrator_ref": "ADM-01",
+  "host_selection": {
+    "status": "selected_by_user",
+    "source": "User answer: Usar esta máquina, administrada pelo Luís",
+    "scope": "Evaluation host only; no selection of retained datasets or runtime deployment"
+  },
+  "source_checkout_commit": "662af7322d1884f2cf53a86be06c88cd6b5920c2",
+  "os": "Linux",
+  "kernel": "6.8.0-149-generic",
+  "architecture": "x86_64",
+  "cpu": {
+    "model": "13th Gen Intel(R) Core(TM) i7-13700H",
+    "logical_online": 20,
+    "affinity_available": 20
+  },
+  "memory": {
+    "total_kib": 16066840,
+    "available_kib_at_observation": 9987856,
+    "swap_total_kib": 2097148
+  },
+  "workspace_filesystem": {
+    "total_bytes": 382754775040,
+    "free_bytes_at_observation": 111274950656
+  },
+  "tools_on_path": {
+    "docker": true,
+    "node": true,
+    "bun": false,
+    "ffmpeg": true,
+    "ffprobe": true,
+    "pdftotext": true,
+    "openssl": true
+  },
+  "collection_sources": [
+    "platform.system/release/machine",
+    "os.cpu_count/sched_getaffinity",
+    "/proc/cpuinfo model name",
+    "/proc/meminfo selected aggregate fields",
+    "shutil.disk_usage workspace aggregates",
+    "shutil.which tool presence",
+    "git rev-parse HEAD"
+  ],
+  "limitations": [
+    "Tool presence is not version/daemon/controller support verification",
+    "Available RAM and disk are point-in-time values, not reserved budgets",
+    "No Docker, database, browser or retained-volume query",
+    "Not an application baseline, runtime capacity or successful evaluation",
+    "No service started, data changed or workload generated"
+  ]
+}

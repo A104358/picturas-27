@@ -3,7 +3,7 @@ intent: 001-phase-2-quality-improvements
 phase: inception
 status: draft
 created: 2026-11-14T17:10:27Z
-updated: 2026-11-17T22:48:42Z
+updated: 2026-11-18T14:11:52Z
 ---
 
 # Requirements: Phase 2 Quality Improvements
@@ -47,6 +47,114 @@ options. Its proposed percentages and zero-bypass criterion are unapproved
 engineering proposals. Pair agreement selects two requirements and does not
 approve these numerical options or replace the later full requirements review.
 
+## Evaluation Preparation — November 18, Host Selected
+
+The user selected preparation of installation, workloads, metrics, minimums and
+targets, then chose **this machine, administered by Luís**, as evaluation host.
+This is an individual host selection, not selection of either retained dataset,
+approval of budgets/remaining numerical targets or permission to start services.
+The [evaluation plan](../../../docs/fase2-plano-avaliacao.md) specifies a proposed
+isolated synthetic deployment, per-phase service coverage, proposed aggregate
+10 GiB budget/4 GiB host reserve, corpus, repeated workloads, clock origins,
+all 60 existing metrics and report/exit rules. These budgets need calibration:
+point-in-time available RAM was below the proposed aggregate budget.
+
+A [read-only host observation](evidence/evaluation-host-2026-11-18.json) records
+Linux/x86_64, i7-13700H/20 logical CPUs, approximately 15.32 GiB total RAM and
+point-in-time available memory/disk. It is not a Docker/runtime inventory or
+application baseline. Empty manifest/result templates separate host selection
+from an uncreated deployment, unfrozen criteria/corpus and unmeasured outcomes.
+EVAL-I1 runtime remains proposed; B1/C1/R1 were subsequently individually selected
+with M1 as recorded below. Previous validated security choices,
+PKI pilot milestone, unknown real anonymous evidence and upload decisions are
+preserved. BF/MF, full requirements review and construction remain incomplete.
+No application, Docker, credentials, browsers or retained volumes were changed.
+
+## Evaluation Plan Review — Initial Recommendations (Superseded by Selection Below)
+
+The user selected review of budgets, workloads, minimums and targets. The
+[review](../../../docs/fase2-revisao-plano-avaliacao.md) recommends A for
+EVAL-B1/C1/R1/M1; none is inferred selected from the request to review. Keep the
+10 GiB aggregate proposal, clarify the nominal host margin and dependency budget,
+and revise the proposed free-disk floor from 20 to at least 60 GiB: retaining
+both campaigns' primary/concurrent/coexistence inputs and warm-ups plus PAD corpus
+already totals about 41.23 GiB of logical bytes before other overhead/results.
+This is planning arithmetic, not measured disk use or demonstrated capacity.
+
+Keep proposed 100 normal and 9 concurrent uploads per campaign; coexistence adds
+3 uploads and 600 light requests. Retained-memory timing starts after quiescence,
+U10 needs a valid comparator, U11/U12 stay diagnostic, U14's proposed deadline
+includes queueing per file up to 500 MiB under C=1/C=3. Original integrity is
+separate from transformed-output correctness. U25 promotion D to G is recommended
+but NOT applied; all 60 IDs/priorities and previous security validations remain.
+Manifest/result still template-only/unfrozen/unmeasured; calibration, pending
+upload choices, full criteria review and BF/MF remain required. No runtime or
+new individual/whole-team validation, application/data/credential change inferred.
+
+## Individual Evaluation Selection — EVAL-B1/C1/R1/M1 A
+
+The user communicates validation of the technical proposal with conditions;
+confirm A/A/A/A individually, without inferring whole-team approval, readiness
+or capacity. Source: November 18 message explicitly stating that the technical
+proposal is validated, confirming the arithmetic and requiring precise M1 scope.
+The [review](../../../docs/fase2-revisao-plano-avaliacao.md) enumerates that scope:
+
+- B1: 10 GiB aggregate, nominal host margin, at least 60 GiB free, effective
+  containment/per-phase calibration; increase disk floor if full retention needs it.
+- C1: 10/100/500 MiB, H/T/formats/codecs, separate 1024 MiB/+1 byte functional
+  coverage, without extending the selected 500 MiB performance requirement.
+- R1: 100 normal uploads and three rounds of three concurrent uploads per
+  campaign; coexistence and other cases keep separate complete denominators.
+- M1: scoped details U01/U02/U03/U04/U09/U10/U14/U15/U16/U20/U22/U25 and the
+  F02 original/transformed-output distinction; U25 promoted **D to G**.
+  U11/U12 remain diagnostic without independent numeric gates. S12/S20 preserve
+  their earlier validations. The other criteria of the 60 IDs keep prior states;
+  this is not full F02 coverage approval or blanket acceptance of every threshold.
+
+Calibration precedes freeze. Application OOM/timeout is a baseline observation
+when instrumentation/environment work; do not raise resources only to hide it.
+Required resource/method revisions must be documented and applied comparably to
+both campaigns. Preserve errors, post-ready hash work and same-phase U25 controls.
+The manifest records scoped validation and remains template-only/unfrozen; no
+runtime or full requirements approval is inferred. Both retained datasets and
+unknown real anonymous evidence are preserved.
+
+The [upload decision group](../../../docs/architecture/fase2-upload-decisoes-pendentes.md)
+was initially proposed independently of EVAL; the subsequent individual
+UP-C1/C2/C3 selection is recorded below. No application/configuration/runtime
+changes, account/token emission, browser or retained-volume access performed.
+
+## Individual Upload Selection — UP-C1 A/UP-C2 A/UP-C3 A
+
+User explicitly recommends the three A options with conditions and requests
+closure of the lifecycle; assistant technical confirmation records the individual
+selection, not a statement from all four members or executed compatibility proof.
+
+- **UP-C1 A:** preserve legacy multipart POST/204/X-Project-Version with a bounded
+  adapter; authenticate and authorize before body parsing/storage, use streaming/
+  backpressure and limited temporary files. Both transports share final validation,
+  authorization and commit, without duplicate upload/charge; resource, failure and
+  compatibility tests required. Reconsider explicitly if cost threatens delivery.
+- **UP-C2 A:** operations charged only on Apply, no upload charge/reservation or
+  new zero-balance rejection. Existing profile/media restrictions remain.
+- **UP-C3 A:** separate attempt collection and controlled staging; no pending
+  object through normal URLs, previews, Apply/export. Require actual permissions,
+  conditional state transitions, idempotent confirmation and failure reconciliation;
+  a MongoDB write is not atomic with S3.
+
+The [lifecycle proposal](../../../docs/architecture/fase2-upload-ciclo-vida.md)
+now details UP-C4–C9 alternatives, states, bounded admission/deadlines, per-attempt
+claim/retry, unique private candidates, project-level commit/cleanup arbitration,
+durable hash/cache behavior, bounded probe and active cleanup, with 12 planned
+UL cases. **UP-C4–C9 and their numeric parameters are not selected.** No transaction,
+immutability, support/capacity or deadline compliance is assumed from the diagram.
+Existing snapshot updates would need to preserve new control fields; logical
+barriers do not cancel in-flight storage writes. These are implementation risks,
+not defects fixed by documenting them. Original datasets remain untouched.
+
+EVAL-M1 scoped approvals/U25 G remain; no new 60-metric blanket approval, runtime
+campaign, migration, code changes, tokens/certificates or construction readiness.
+
 ## Pair Agreement
 
 **Recorded:** 2026-11-16T15:12:33Z. **Team:** PL2-G4.
@@ -87,7 +195,8 @@ The [measurement specification](../../../docs/fase2-metricas-e-baseline.md) now
 catalogs 60 security/upload/regression metrics, origins of proposed minimums/targets,
 audited existing values and missing formal baseline measurements. It supersedes
 the older percentage-reduction suggestion for discussion with the more recent
-64/32 MiB proposals; neither set is an approved requirement. The Mac/ARM pilot
+64/32 MiB proposals, unapproved at that stage; later EVAL-M1 individually selects
+the scoped 64/32 MiB criteria without approving all numerical targets. The Mac/ARM pilot
 and the earlier Intel/Linux experiments must remain separate.
 
 The final rationale section of the decision document records each choice's reason,
@@ -673,10 +782,10 @@ will be maintained separately from these intent-specific requirements.
 | Question | Owner | Resolution |
 |----------|-------|------------|
 | Which two quality weaknesses should this intent prioritize? | PL2-G4 | Resolved: QC-06 security/end-to-end authorization + QC-05 performance efficiency/upload resource utilization. Pair agreement recorded on the user's explicit instruction at 2026-11-16T15:12:33Z; details and measurements remain open. |
-| What hardware/resource budget, time, representative workloads and participants are available? | PL2-G4 | Pilot resources are recorded. Team hours, final workload scope and participant access remain open for the team review. |
+| What hardware/resource budget, time, representative workloads and participants are available? | PL2-G4 | November 18: user selects this machine/Luís as evaluation host. Read-only hardware observation archived. Isolated deployment, 10 GiB aggregate/4 GiB host reserve, corpus/repetitions and metric review proposed in the evaluation plan; not frozen or executed. Team hours and final workload/participant scope remain open. |
 | What delivery deadline applies? | PL2-G4 | User explicitly corrected delivery to 27 November 2026; the previous 20 November planning date is superseded. Submission time remains unknown. |
-| What deployment/browser context must session migration preserve? | PL2-G4 / each local administrator | Local-only/no external users confirmed. Luís administers LOCAL-HOST-01 and requires both volume sets preserved. On isolated copies: picturas 4 accounts/2 projects (2 anonymous accounts, 0 anonymous projects); experiment 13 accounts/10 projects (0 anonymous accounts). Browser associations, presets/media integrity and other computers pending; no development/evaluation installation selected. |
-| What target and minimum acceptable values are justified by the baseline and stakeholder needs? | PL2-G4 | WS cutoff ≤5 s/target ≤2 s and initial 1 s revalidation are individually validated, awaiting experimental proof. Other metric proposals remain unapproved; complete applicable gate review, whole-team agreement and reproducible formal baseline before refactoring. |
+| What deployment/browser context must session migration preserve? | PL2-G4 / each local administrator | Local-only/no external users confirmed. Luís administers LOCAL-HOST-01 and requires both volume sets preserved. On isolated copies: picturas 4 accounts/2 projects (2 anonymous accounts, 0 anonymous projects); experiment 13 accounts/10 projects (0 anonymous accounts). Browser associations, presets/media integrity and other computers pending; evaluation host selected as this machine/Luís on November 18; runtime deployment/configuration and development source still unselected, with neither retained set adopted as fixture. |
+| What target and minimum acceptable values are justified by the baseline and stakeholder needs? | PL2-G4 | WS cutoff 5/2 s and initial 1 s individually validated; EVAL-B1/C1/R1/M1 A now individually selected with exact criterion scope in the review, U25 G. Other values retain prior status, not blanket approval. Calibration, remaining gate review, team review and reproducible BF still required. |
 | Which architecture details remain undecided? | PL2-G4 | SESS-C1 A/JWT-C1 A/LINK-C1 A/WS-C5 B are individually selected with assistant technical confirmation, not pending A/B choices. Concrete anonymous proof/browser mapping, physical corpus/installation/manifest, executable migration/emission/reconciliation controls and per-channel support still need completion; upload/API/token/hash decisions remain separate. Logical scenarios v1 fixed; excess 513/4097 is refusal testing, not capacity. Full requirements and formal baseline remain incomplete. |
 
 ## Sources

@@ -22,7 +22,8 @@ implementation or measured compliance is inferred.
 record individually validated PKI-C4 B/PKI-C5 A/OPS-C1 A: isolation 30/10 s,
 measured replacement/pilot planned by 23 November 18:00 UTC, current/target channel
 proof and implemented/tested administrative recovery required. Runtime proof is
-pending; installation/load not selected.
+pending; this machine/Luís selected as evaluation host on November 18, while the
+experimental configuration and physical load remain proposals.
 The [November 17 remaining-security review](../docs/architecture/fase2-sessoes-identidade-partilhas-ws.md)
 records SESS-C1 A/JWT-C1 A/LINK-C1 A/WS-C5 B individual selections with assistant
 technical confirmation. D8/replay/capacity distinctions and logical scenarios v1
@@ -38,7 +39,19 @@ administered by each member, no shared installation or external users. The
 one-host Docker metadata and isolated-copy account/project counts (picturas 4/2;
 experiment 13/10). Luís is the administrator, both sets are preserved, and original
 hashes remained unchanged. Other computers/browser mappings, migration and the
-development/evaluation installation choice remain pending.
+development source and experimental runtime configuration remain pending. The
+evaluation host is now selected as this machine/Luís; neither retained dataset
+was selected for evaluation. The [before/after evaluation plan](../docs/fase2-plano-avaliacao.md)
+and empty templates specify proposed workloads, budgets, clocks and all 60 metric
+criteria. The [plan review](../docs/fase2-revisao-plano-avaliacao.md) records
+individual EVAL-B1/C1/R1/M1 A selection with conditions, disk floor ≥60 GiB and
+U25 promoted to G. Only enumerated M1 criteria are covered, not all 60 values.
+Calibration, physical freeze and remaining upload choices stay open. The
+[upload decisions](../docs/architecture/fase2-upload-decisoes-pendentes.md)
+now record individual UP-C1/C2/C3 A selection with conditions; the
+[lifecycle proposal](../docs/architecture/fase2-upload-ciclo-vida.md) leaves UP-C4–C9
+unselected and no implementation/support proof inferred. [Host metadata](intents/001-phase-2-quality-improvements/evidence/evaluation-host-2026-11-18.json)
+is recorded, with no runtime campaign or final baseline completed.
 
 - `intents/`: draft requirements and future units/stories.
 - `bolts/`: future execution plans and artifacts.

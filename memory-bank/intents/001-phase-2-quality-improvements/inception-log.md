@@ -1,7 +1,7 @@
 ---
 intent: 001-phase-2-quality-improvements
 created: 2026-11-14T17:10:27Z
-updated: 2026-11-17T22:53:41Z
+updated: 2026-11-18T14:25:57Z
 completed: null
 status: in-progress
 ---
@@ -38,6 +38,10 @@ that instruction; no separate nominal declarations or reviewed commit are invent
 | Live findings | 13-service experiment; upload RSS, three processing batches, access matrix, progress and one worker recovery; discussion shortlist unapproved | [live-findings.md](live-findings.md) |
 | Team review | Six-direction synthesis, recommended discussion pair, scope/metric proposals and decision questions prepared; human review pending | [team-review.md](team-review.md) |
 | Updated decision rationale | Communicated November 16 choices preserved, undecided points explicit, final rationale and presentation answers completed | [Ideas 1/2](../../../docs/fase2-ideias-1-e-2.md) |
+| Before/after evaluation preparation | User selects this host/Luís; resources observed read-only. Isolated deployment, budgets/corpus/repetitions, all 60 metric gates and report protocol proposed; empty manifest/result templates. BF/MF not executed | [Plan](../../../docs/fase2-plano-avaliacao.md), [host observation](evidence/evaluation-host-2026-11-18.json) |
+| Evaluation-plan review | EVAL-B1/C1/R1/M1 A individually selected with conditions; exact M1 scope and U25 G synchronized. Disk ≥60 GiB, calibration before freeze, complete denominators and no fabricated capacity/readiness; other thresholds unchanged | [Review](../../../docs/fase2-revisao-plano-avaliacao.md) |
+| Upload decisions | UP-C1/C2/C3 A individually selected with technical confirmation and body-auth/resource/shared-domain/staging/idempotence conditions. Token/TTL/commit/hash/probe/transport still open | [Upload proposals](../../../docs/architecture/fase2-upload-decisoes-pendentes.md) |
+| Upload lifecycle proposal | UP-C4–C9 unselected; full state/retry/deadline/candidate/commit/hash/probe/cleanup design and 12 UL cases, no implementation or support proof | [Lifecycle](../../../docs/architecture/fase2-upload-ciclo-vida.md) |
 | Measurement specification | 60 metrics, methods, baseline values/limits, proposed minimums/targets and explicit pre-code gates; formal baseline incomplete | [Metrics and baseline](../../../docs/fase2-metricas-e-baseline.md) |
 | WS authorization contract | WS-C1 A/WS-C2 A/WS-C3 A individually validated; rest proposed. D4 mTLS replaces asymmetric service JWT; certificate/pair lifecycle detailed for review; 10 verification cases not run | [Contract proposal](../../../docs/architecture/fase2-contrato-websocket.md) |
 | WS/PKI/ACL source audit | Three synthetic key paths not ignored, six tracked legacy private-key paths and seven reviewed broad-copy build contexts; readonly planning evidence, not image/runtime testing | [Security planning audit](evidence/security-planning-audit-2026-11-16.json) |
@@ -111,6 +115,10 @@ No units have been decomposed. Boundaries depend on the selected requirements.
 | 2026-11-17T11:33:22Z | Prepare remaining security alternatives after user selects option 1. | SESS-C1 A recommends assisted transition/7-day user JWT, JWT-C1 A scoped 30-second gateway identity without generic single-use guarantee, LINK-C1 A preserves old/new links until explicit revocation per RNF52, WS-C5 initial state/rate/bytes and D10 host/container proofs. | Choices requested, still pending; no new individual validation inferred. Replay/logout/session-revocation residuals explicit. Code also emits preview/progress into personal rooms and producer messages lack project context: include protected emission checks/payload migration in tests, not a claimed live leak. No app, secrets, browsers, Docker or original data changed; only source/PDF/primary-doc review and Markdown. |
 | 2026-11-17T11:53:34Z | Record individual SESS-C1 A/JWT-C1 A/LINK-C1 A/WS-C5 B recommendations and assistant technical confirmation. | User asks to close these choices with conditions: assisted same-ID preservation/future anonymous reissue and actual proof/tool tests, 30 s admission-only contextual identity with accepted reuse residual, links until revocation and lower WS caps 512/4096. | Technical confirmation, not a literal validation statement invented for four members. RNF52 verified PDF p.27; D8 expiry preference deferred. S07 no longer claims zero contextual replay; excess caps are refusal tests, not fully admitted load. Logical scenarios v1 fixed (normal 50, fairness 510, many-project 200, limits/rates/bytes/personal events); physical corpus/proof/controls still pending. No app/secrets/browsers/Docker/data changes or new runtime tests. |
 | 2026-11-17T22:48:42Z | Concretize anonymous recovery, administrative issuance and browser import under SESS-C1 A. | User selected option 2 and answered they do not yet know whether an independent reliable identity/browser association record exists. Prepare proof criteria, private case states, restricted issuer, private normal JWT delivery and server-validation-before-import with suspended frontend bootstrap. | Evidence existence unknown, not absent/present. No case proof/approval or token created. Direct bearer file is not single-use/refresh; expiry starts at issuance, deletion does not revoke. Existing root provider can register/validate before import; tabs/callbacks require explicit handling. Empty JSON template outside real data, 12 planned scenarios and preliminary effort/rollback specified; no app/browser/DB/Docker/secret/volume change or runtime tests. |
+| 2026-11-18T11:33:28Z | Prepare the before/after evaluation; select LOCAL-HOST-01 / Luís as host. | User steers to option 2 (installation, loads, metrics, minimums and targets), then explicitly answers to use this machine administered by Luís. Host-only readout: Linux/x86_64, i7-13700H/20 logical CPUs, about 15.32 GiB RAM; point-in-time resources archived. | Individual host selection only. New isolated synthetic deployment, 10 GiB aggregate/4 GiB reserve, physical corpus/repetitions and E criteria are review proposals. Neither retained volume set selected; no runtime deployment, load/fault run, baseline, application/data/browser/credential/PKI change or new team approval. Existing security choices and upload questions preserved; templates empty/unfrozen. |
+| 2026-11-18T11:49:23Z | Review evaluation budgets, workloads, minimums and targets. | User selects option 1 to review the prepared plan. Arithmetic: 7.625 GiB candidate service caps, 2.375 GiB remaining under 10; retaining BF/MF inputs/warm-ups and PAD corpus totals 41.2305 GiB before other data. Recommend EVAL-B1/C1/R1/M1 A. | Recommendations only, no option validation inferred. Revise disk proposal to ≥60 GiB, nominal RAM margin/calibration, workload denominators, quiescence, valid time comparator, diagnostics, queued hash deadline and original/output distinction. U25 remains D pending promotion decision. Existing 60 metric IDs, security selections and preserved data remain; no app/runtime/volume/browser/credential changes or campaign. |
+| 2026-11-18T11:55:48Z | Record EVAL-B1/C1/R1/M1 A with conditions and promote U25 D→G. | User states validation of the technical proposal, verifies retention arithmetic and requests exact M1 scope; assistant confirms A/A/A/A. | Individual technical validation, not four-member agreement/readiness/capacity. M1 scoped to U01/U02/U03/U04/U09/U10/U14/U15/U16/U20/U22/U25 and F02 integrity distinction; U11/U12 diagnostic, S12/S20 earlier validations preserved, other criteria unchanged. Calibration before freeze, full retention budget, no hidden baseline failures, comparable revisions and complete U25/errors/hash observations required. Upload alternatives prepared only; no runtime/app/data/browser/credential changes. |
+| 2026-11-18T14:11:52Z | Confirm UP-C1 A/UP-C2 A/UP-C3 A individually with user conditions. | User repeats recommendations and asks to continue/close lifecycle. Preserve multipart adapter/204/version, quota only on Apply and controlled separate pending/staging. | Technical confirmation of individual selection only. Auth/authorization before body, backpressure/limited spool, common final validation/commit, no duplicate charge, actual pending isolation, conditional transitions/idempotent confirm/reconciliation and tests required. UP-C4–C9 lifecycle proposed, not selected; numbers/support/atomicity not demonstrated. No app/runtime/volume/browser/secret/certificate/token change. |
 
 ## Scope Changes
 
@@ -170,6 +178,7 @@ maintenance task is claimed. The dedicated stack is stopped with volumes retaine
 - [x] PKI-C4 B/PKI-C5 A/OPS-C1 A individually validated with pilot milestone, current/target channel matrix and actual implementation/test obligations.
 - [x] SESS-C1 A/JWT-C1 A/LINK-C1 A/WS-C5 B individually communicated/technically confirmed; D8/replay/capacity distinctions and logical scenarios v1 recorded.
 - [x] Anonymous proof/issuance/import working procedure and empty case template prepared; user evidence status recorded as unknown, not fabricated proof.
+- [x] Evaluation host selected (this machine/Luís); plan/templates prepared and EVAL-B1/C1/R1/M1 A individually selected with exact scope/U25 G; physical configuration, calibration, remaining criteria and BF still pending.
 - [ ] Open architecture/compatibility decisions closed and applicable metric gates approved.
 - [ ] Formal initial baseline completed for every mandatory metric or justified NA mechanism.
 - [ ] Exploratory evidence and feasibility assessed with the team.
@@ -184,6 +193,71 @@ maintenance task is claimed. The dedicated stack is stopped with volumes retaine
 - [ ] Artifacts reviewed and construction readiness confirmed.
 
 ## Next Steps
+
+**User-requested stopping point, 2026-11-18T14:25:57Z:** stop the decision
+discussion here and commit the current documentation. UP-C1/C2/C3 A and scoped
+EVAL selections are recorded; UP-C4–C9 remain unselected proposals, including the
+new questions not answered before the stop. Do not infer an option from silence
+or continue the decision discussion until the user resumes it. No runtime/app
+work authorized by this stopping/commit instruction.
+
+**Pre-commit documentation verification, 2026-11-18T14:25:57Z:** 20 artifacts,
+60 metric IDs, U25 G, 264 local links, Markdown tables, JSON, catalog alignment
+and original line endings checked. EVAL-M1 scope, individual first-upload choices
+and remaining unselected lifecycle options consistent; 12 UL/10 WS/12 AR planned
+cases retained. Diff whitespace and credential-payload checks passed. These are
+static documentation checks, not executed application/PKI/upload scenarios.
+
+**Current upload selection:** UP-C1 A/UP-C2 A/UP-C3 A recorded individually with
+technical confirmation; do not ask again which of those three was selected.
+Review the [lifecycle](../../../docs/architecture/fase2-upload-ciclo-vida.md):
+UP-C4–C9 are proposals, not selected by EVAL or the first upload group. Materialize
+safe shared commit/cleanup, deadlines/support and tests after selecting the
+remaining contract and completing baseline/requirements gates. Keep both retained
+volume sets, unknown real anonymous proof, EVAL scope and U25 G unchanged.
+No runtime campaign or application implementation inferred.
+
+
+**Evaluation-review documentation verification, 2026-11-18T11:51:04Z:**
+16 documentation/template/evidence artifacts; 60 metric IDs/priorities and
+10 WS/12 AR cases retained. U25 remains D, all four recommendations have no
+selected option or validation timestamp, and templates remain unfrozen/unmeasured.
+Retention/workload arithmetic, 217 local file links, table continuity, JSON,
+catalog synchronization, original line endings and diff whitespace passed.
+No runtime tests, new host/volume/browser queries, application changes or option
+approvals performed; 60 GiB is the revised disk proposal, not measured usage.
+
+**Current evaluation selection:** EVAL-B1/C1/R1/M1 A are individually selected
+with technical confirmation and conditions; **U25 is G**, not pending promotion.
+Exact M1 scope is in the [review](../../../docs/fase2-revisao-plano-avaliacao.md)
+and manifest. Do not ask again which of A/A/A/A was selected or infer all 60
+thresholds approved. Calibration/physical freeze/full requirements remain open.
+UP-C1/C2/C3 A were subsequently selected individually as recorded above. Next
+review the [UP-C4–C9 lifecycle](../../../docs/architecture/fase2-upload-ciclo-vida.md);
+these new state/TTL/retry/commit/hash/probe/cleanup options remain unselected.
+Preserve both retained datasets, unknown real anonymous proof and complete
+baseline failures. No runtime campaign or construction authorization inferred.
+
+
+**Evaluation-plan documentation verification, 2026-11-18T11:36:55Z:**
+15 documentation/evidence/template artifacts; plan and manifest cover all 60
+existing metric IDs, 10 WS cases and 12 AR cases retained. Three JSON records
+parse; templates remain unfrozen/unmeasured, host selection does not approve the
+deployment or criteria. Workload arithmetic (100 normal and 9 concurrent attempts
+per BF/MF campaign), 208 local file links, Markdown table continuity, catalog
+synchronization, original line endings and diff whitespace passed. New artifacts
+checked for JWT/private-key payloads. These are static checks, not runtime tests;
+no Docker/application/browser/retained-data changes or campaign executed.
+
+**Initial evaluation preparation, November 18 (superseded by selection above):** the user selects this host/Luís;
+do not ask again which host was chosen. Review EVAL-I1/B1/C1/R1 in the
+[evaluation plan](../../../docs/fase2-plano-avaliacao.md): experimental deployment,
+resource preflight, corpus/repetitions, metric minimums/targets and measurement
+clocks. Hardware readout is archived, not a runtime baseline. Complete the
+remaining upload choices, materialize cases and freeze the manifesto/protocol
+before BF. Preserve both retained volume sets and unknown real anonymous proof.
+No stack start, workload, final criteria approval, BF/MF or construction inferred.
+
 
 **Anonymous-recovery documentation verification, 2026-11-17T22:53:41Z:**
 12 documentation/template artifacts; empty JSON parses, remains template-only,

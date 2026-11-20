@@ -41,6 +41,8 @@ pending; prior JWT/WS decisions are preserved.
 
 | Document | Purpose |
 |----------|---------|
+| [Selected metrics](metricas.md) | November 20 selection: 10 security and 11 upload metrics (principal + guards), each with rationale, minimum, target and value origin. To be confirmed by the team. |
+| [Measurement plan](planoMedicao.md) | Implementation specification of `evaluation/med.py`: isolated stack, instruments, case matrices, procedures, repetitions, outputs and criteria for BF/MF. |
 | [Ideas 1 and 2, choices and rationale](fase2-ideias-1-e-2.md) | Communicated choices, unresolved questions, alternatives, risks and presentation answers. The final section is the canonical decision rationale. |
 | [Metrics, acceptance criteria and baseline](fase2-metricas-e-baseline.md) | 60 metrics, existing values, proposed minimums/targets and individually validated WS criteria (≤5 s/≤2 s, initial 1 s revalidation), with pending experimental proof and pre-implementation gates. |
 | [Before/after evaluation plan](fase2-plano-avaliacao.md) | This machine/Luís selected as evaluation host on November 18; isolated deployment proposed, both retained volume sets preserved. EVAL-B1/C1/R1/M1 A selected individually with scoped criteria/U25 G; runtime/corpus materialization, calibration and other thresholds remain pending; no campaign run. |

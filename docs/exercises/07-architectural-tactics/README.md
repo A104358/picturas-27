@@ -15,11 +15,12 @@ they do not select UP-C4–C9 or authorize application changes.
 |----------|---------|
 | [Assignment HTML](sources/RAS-exercicio_7_taticas_SWdesign_PT.html) | Original version 3.0, including the minimum tactics catalog in Annex A. |
 | [Original Markdown template](sources/RAS-exercicio_7_taticas_SWdesign_template_PT.md) | Version 3.0, preserved unfilled as supplied; completed work is resolution.md. |
-| [Resolution](resolution.md) | Scenario references, 13 candidate tactics, two decisions, trade-offs, measurement/regression plans and AI record. |
+| [Resolution](resolution.md) | Revision 1.1: canonical primary scenarios plus the QS-07 complement, 13 candidate tactics, two decisions, trade-offs, measurement/regression plans and AI record. |
 | [Before diagram source](diagrams/before.mmd) | Mermaid source of the observed application view, embedded in the resolution. |
 | [After diagram source](diagrams/after.mmd) | Mermaid source of selected design versus still-open mechanisms; not deployed behavior. |
 | [Input hashes and source comparison](../06-architectural-patterns/evidence/continuation-sources-2026-11-18.json) | Proves preservation of the four supplied files and records the static application diff scope. |
-| [Documentary verification](evidence/verification-2026-11-18.md) | ID/scenario/template/source/reference checks; no runtime tests or rendered-diagram claim. |
+| [Documentary verification — November 18](evidence/verification-2026-11-18.md) | Historical ID/scenario/template/source/reference checks; no runtime tests or rendered-diagram claim. |
+| [Review verification — November 20](evidence/verification-2026-11-20.md) | Scenario split, effect interpretation and event-routing corrections; current static checks and remaining academic/runtime validation. |
 
 ## Material actually available
 

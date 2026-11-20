@@ -10,6 +10,8 @@ defines quality scenarios and the two selected candidates; the
 [Exercise 7 resolution](exercises/07-architectural-tactics/resolution.md) maps
 those scenarios to tactics, decisions and before/after views. Original newly
 supplied assignments/templates are preserved in each exercise's sources folder.
+The [November 20 review](exercises/07-architectural-tactics/evidence/verification-2026-11-20.md)
+records the scenario, trade-off and diagram corrections and their static checks.
 
 For Phase 2 planning, see the [comparison of six quality directions and team
 decision record](../memory-bank/intents/001-phase-2-quality-improvements/quality-exploration.md).

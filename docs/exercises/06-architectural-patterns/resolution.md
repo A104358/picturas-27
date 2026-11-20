@@ -11,7 +11,7 @@ PG63522 — José Miguel da Silva Santos\
 **Commit de partida do checkout:** `484be13b4c8e96c70e7e694a2c368d5601749438` (`484be13`).\
 **Base da aplicação no histórico oficial:** `052310226c51fa57a17101c7bd1ad795674aac95` (`0523102`); o commit local seguinte acrescenta documentação e infraestrutura de agentes, sem alterar a aplicação.\
 **Data da análise:** 2026-11-09 (Europe/Lisbon).\
-**Versão deste documento:** 1.2 (registo continuado em 2026-11-18).\
+**Versão deste documento:** 1.3 (continuação em 2026-11-18; revisão documental em 2026-11-20).\
 **Versões usadas:** enunciado 1.1 e template 1.1, de 2026-11-04; diretrizes da Fase 2, versão 1, da mesma data. (EV-01–EV-05)
 
 Este documento resolve o **Bloco 1**, tarefas 0 a 3. Analisa a extensão de vídeo no contexto da arquitetura global; não executa refactoring nem escolhe definitivamente os dois RNF da Fase 2. As avaliações arquiteturais são inferências justificadas pelos elementos identificados como `EV-nn`; previsões ainda não verificadas são identificadas como `H-nn`. Os IDs serão mantidos no Bloco 2. (EV-02, EV-05)
@@ -24,6 +24,12 @@ matriz 3.3. A escolha posterior do par e as decisões estão na
 [Exercício 7](../07-architectural-tactics/resolution.md). O código de aplicação
 comparado permanece equivalente no âmbito de EV-40; isso não torna os ensaios
 históricos uma baseline formal nem mantém 32 serviços em execução hoje.
+
+**Revisão de 20/11:** acrescenta-se EV-49 para a revisão documental sobre
+`405b6c0`. O Bloco 2 separa admissão (QS-01) de revogação (QS-07, complemento
+da mesma CAND-1); o Exercício 7 corrige a matriz de efeitos e os percursos dos
+eventos nos diagramas. EV-01–EV-48, H-01–H-18 e a matriz 3.3 mantêm-se
+inalterados. Não se executaram novos ensaios nem se selecionaram opções de upload.
 
 ---
 
@@ -407,6 +413,7 @@ documentada é facto sobre a decisão, não prova de que a aplicação a impleme
 | EV-46 | Código/testes, releitura estática | [Testes do orquestrador](../../../projects/tests/), [vídeo](../../../Tools/video/tests/), [schemas](../../../projects/models/project.js), [caller](../../../projects/utils/caller.js), [WS](../../../wsGateway/index.js), [frontend](../../../frontend/lib/projects.ts) | Suites existentes de processamento/áudio/extração/legendas simuladas; caller decodifica JWT sem verificar assinatura e WS não autoriza salas como no contrato proposto; frontend envia multipart. Não há novos testes executados nesta continuação. |
 | EV-47 | Referências primárias complementares | [ISO 25010:2011](https://www.iso.org/standard/35733.html); fichas/resumos SEI [Deriving Architectural Tactics](https://www.sei.cmu.edu/library/deriving-architectural-tactics-a-step-toward-methodical-architectural-design/) e [Security and Survivability](https://www.sei.cmu.edu/library/security-and-survivability-reasoning-frameworks-and-architectural-design-tactics/), consulta 18/11 | Edição ISO exigida e ligação entre cenários, táticas e decisões. Consultados os resumos oficiais, não o livro SAIP nem o texto integral desses relatórios; o catálogo concreto utilizado é o Anexo A de EV-39. |
 | EV-48 | Inventário dos materiais consultados | Quatro novos ficheiros e `docs/lectures/`; [índice Ex. 7](../07-architectural-tactics/README.md) | Não foram fornecidos no workspace os slides 9 nem as quatro folhas `Apoio/Taticas` citadas no Ex. 7. Usa-se o Anexo A incluído no HTML 3.0 e as fontes disponíveis; não se simula leitura dos materiais ausentes. |
+| EV-49 | Revisão documental e releitura estática — 20/11/2026 | [Verificação da revisão](../07-architectural-tactics/evidence/verification-2026-11-20.md), checkout `405b6c0`; [WS](../../../wsGateway/index.js), [caller](../../../projects/utils/caller.js) e [rotas](../../../projects/routes/projects.js) | QS-01 distingue tentativa de acesso de revogação, agora QS-07 complementar; corrigem-se o sentido dos efeitos e as filas dos diagramas. Diff da aplicação vazio desde o início do Bloco 1 no âmbito registado; originais e registo anterior preservados. Não prova implementação, testes, acordo adicional ou baseline. |
 
 | **ID** | **Hipótese** | **Como confirmar ou refutar** | **Estado** |
 |--------|--------------|-----------------------------|------------|

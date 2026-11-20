@@ -1,7 +1,7 @@
 ---
 intent: 001-phase-2-quality-improvements
 created: 2026-11-14T17:10:27Z
-updated: 2026-11-18T14:59:46Z
+updated: 2026-11-20T10:36:44Z
 completed: null
 status: in-progress
 ---
@@ -42,7 +42,7 @@ that instruction; no separate nominal declarations or reviewed commit are invent
 | Evaluation-plan review | EVAL-B1/C1/R1/M1 A individually selected with conditions; exact M1 scope and U25 G synchronized. Disk ≥60 GiB, calibration before freeze, complete denominators and no fabricated capacity/readiness; other thresholds unchanged | [Review](../../../docs/fase2-revisao-plano-avaliacao.md) |
 | Upload decisions | UP-C1/C2/C3 A individually selected with technical confirmation and body-auth/resource/shared-domain/staging/idempotence conditions. Token/TTL/commit/hash/probe/transport still open | [Upload proposals](../../../docs/architecture/fase2-upload-decisoes-pendentes.md) |
 | Upload lifecycle proposal | UP-C4–C9 unselected; full state/retry/deadline/candidate/commit/hash/probe/cleanup design and 12 UL cases, no implementation or support proof | [Lifecycle](../../../docs/architecture/fase2-upload-ciclo-vida.md) |
-| Exercise 6 Block 2 and Exercise 7 | Supplied 1.1/3.0 sources organized intact; resolutions reuse EV/H/ALT, define QS/CAND once and trace tactics/DA to selected pair. No new upload option or construction approval | [Block 2](../../../docs/exercises/06-architectural-patterns/resolution-block-2.md), [Exercise 7](../../../docs/exercises/07-architectural-tactics/resolution.md) |
+| Exercise 6 Block 2 and Exercise 7 | Supplied 1.1/3.0 sources intact; November 20 review separates admission/revocation in seven canonical QS, retains two CAND, corrects effects/queue diagrams and appends EV-49. No new upload option or construction approval | [Block 2](../../../docs/exercises/06-architectural-patterns/resolution-block-2.md), [Exercise 7](../../../docs/exercises/07-architectural-tactics/resolution.md) |
 | Measurement specification | 60 metrics, methods, baseline values/limits, proposed minimums/targets and explicit pre-code gates; formal baseline incomplete | [Metrics and baseline](../../../docs/fase2-metricas-e-baseline.md) |
 | WS authorization contract | WS-C1 A/WS-C2 A/WS-C3 A individually validated; rest proposed. D4 mTLS replaces asymmetric service JWT; certificate/pair lifecycle detailed for review; 10 verification cases not run | [Contract proposal](../../../docs/architecture/fase2-contrato-websocket.md) |
 | WS/PKI/ACL source audit | Three synthetic key paths not ignored, six tracked legacy private-key paths and seven reviewed broad-copy build contexts; readonly planning evidence, not image/runtime testing | [Security planning audit](evidence/security-planning-audit-2026-11-16.json) |
@@ -121,6 +121,7 @@ No units have been decomposed. Boundaries depend on the selected requirements.
 | 2026-11-18T11:55:48Z | Record EVAL-B1/C1/R1/M1 A with conditions and promote U25 D→G. | User states validation of the technical proposal, verifies retention arithmetic and requests exact M1 scope; assistant confirms A/A/A/A. | Individual technical validation, not four-member agreement/readiness/capacity. M1 scoped to U01/U02/U03/U04/U09/U10/U14/U15/U16/U20/U22/U25 and F02 integrity distinction; U11/U12 diagnostic, S12/S20 earlier validations preserved, other criteria unchanged. Calibration before freeze, full retention budget, no hidden baseline failures, comparable revisions and complete U25/errors/hash observations required. Upload alternatives prepared only; no runtime/app/data/browser/credential changes. |
 | 2026-11-18T14:11:52Z | Confirm UP-C1 A/UP-C2 A/UP-C3 A individually with user conditions. | User repeats recommendations and asks to continue/close lifecycle. Preserve multipart adapter/204/version, quota only on Apply and controlled separate pending/staging. | Technical confirmation of individual selection only. Auth/authorization before body, backpressure/limited spool, common final validation/commit, no duplicate charge, actual pending isolation, conditional transitions/idempotent confirm/reconciliation and tests required. UP-C4–C9 lifecycle proposed, not selected; numbers/support/atomicity not demonstrated. No app/runtime/volume/browser/secret/certificate/token change. |
 | 2026-11-18T14:56:38Z | Organize newly supplied exercise sources and complete Exercise 6 Block 2 / Exercise 7. | User requests analysis, organization under docs and resolution based on current decisions/project. Four originals (assignment/template pairs 1.1 and 3.0) moved with unchanged bytes; static app diff from Block 1 start is empty. | Documentation-only continuation: retain prior EV/H/ALT, append EV-38–48/H-14–18, six canonical QS and exactly two CAND; 13 tactics, two DA and before/after Mermaid distinguish existing/selected/proposed. No final baseline/target invented, runtime tests, app/data/credential change or new human approval. UP-C4–C9 discussion remains stopped; this request does not select options or begin construction. |
+| 2026-11-20T10:32:42Z | Review Exercise 6/7 resolutions (menu option 3). | Correct the canonical admission/revocation split as QS-01 plus QS-07 complementary to CAND-1; update exact Exercise 7 transcription, tactic wording, effect arrows and RabbitMQ result/event diagrams. Record EV-49 and preserve the original sources, earlier registry and matrix. | Documentary correction only; two quality requirements and prior individual decisions unchanged. ACL owner-only remains an explicit visible policy change requiring academic justification. No UP-C4–C9 selection, application/runtime change, baseline, rendered-diagram claim or new human approval. |
 
 ## Scope Changes
 
@@ -195,6 +196,14 @@ maintenance task is claimed. The dedicated stack is stopped with volumes retaine
 - [ ] Artifacts reviewed and construction readiness confirmed.
 
 ## Next Steps
+
+**Exercise review, November 20:** resolutions revised without resuming the stopped
+upload choices. Seven canonical scenarios now distinguish unauthorized access
+(QS-01) from revocation (QS-07, same CAND-1); QS-02 is unchanged. Effect arrows
+refer to attribute quality, and project_queue/ws_queue routes are distinguished.
+EV-49 records the static review on 405b6c0; previous records remain historical.
+Academic review, open requirements and formal BF/MF gates remain pending. See
+[review verification](../../../docs/exercises/07-architectural-tactics/evidence/verification-2026-11-20.md).
 
 **Exercise documentation continuation, November 18:** the user requests organizing
 and solving the new exercise materials. The Block 2/Exercise 7 resolutions are

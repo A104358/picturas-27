@@ -1,18 +1,19 @@
 flowchart LR
-    B["Browser: mesmas operações"] -->|HTTPS e sessão| N["nginx: TLS validado"]
-    N -->|controlo JSON e auth_request| G["Gateway: autenticar e delegar identidade"]
+    B["Browser: mesmas operações"] -->|HTTPS e sessão| N["nginx"]
+    N -->|TLS validado: JSON e auth_request| G["Gateway: autenticar e delegar identidade"]
     G -->|mTLS e RS256 contextual| P["projects: autorizar e validar/commit comuns"]
-    N -->|corpo novo autorizado em fluxo| O[("S3: TLS e permissões mínimas")]
-    N -->|multipart legado em fluxo| G
-    G -->|adaptador limitado, sem buffer integral| P
+    N -->|TLS: corpo novo autorizado em fluxo| O[("S3: TLS e permissões mínimas")]
+    N -->|TLS validado: multipart legado em fluxo| G
+    G -->|mTLS e RS256: adaptador limitado| P
     P -->|mTLS e operações autorizadas| S["Storage: staging controlado"]
-    S --> O
-    N --> W["WS: JWT e permanência autorizada"]
+    S -->|TLS e credenciais próprias| O
+    N -->|TLS validado| W["WS: JWT e permanência autorizada"]
     W -->|mTLS: join e revalidação| P
     W -->|eventos só com autorização| B
     P -->|mTLS, quota só Apply| U["users e integrações legítimas"]
-    P --> Q["Filas/workers: semântica preservada"]
-    Q -->|eventos/resultados| P
+    P -->|TLS e credenciais: pedidos| Q["RabbitMQ e workers: semântica preservada"]
+    Q -->|project_queue: resultados| P
+    Q -.->|ws_queue: payload/contexto a concretizar| W
     P -.-> L["UP-C4-C9: estado, retry, candidato, hash e limpeza propostos"]
     classDef selected fill:#edf8ef,stroke:#287c45,color:#111;
     classDef proposed fill:#f4f4f4,stroke:#777,stroke-dasharray:5 5,color:#111;

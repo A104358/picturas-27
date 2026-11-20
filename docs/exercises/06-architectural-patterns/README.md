@@ -6,11 +6,12 @@ Read the [completed resolution](resolution.md) for the architectural diagnosis,
 requirements mapping, evidence register and comparison of alternatives.
 
 Continue with the [Block 2 resolution](resolution-block-2.md) for quality
-trade-offs, six canonical scenarios and the two selected requirement candidates.
+trade-offs, seven canonical scenarios and the two selected requirement candidates.
+QS-07 complements CAND-1 for revocation; QS-01/QS-02 remain the primary scenarios.
 The [Exercise 7 resolution](../07-architectural-tactics/resolution.md) reuses
 CAND-1/QS-01 and CAND-2/QS-02 for tactics and decisions. The evidence/hypothesis
-registry stays in Block 1 §2.6; its November 18 update preserves the earlier rows
-and matrix. Historical runs are distinct from today's documentation review.
+registry stays in Block 1 §2.6; its November 18 continuation and November 20
+review preserve the earlier rows and matrix. Historical runs are distinct from today's documentation review.
 
 ## Assignment and supporting material
 
@@ -36,7 +37,8 @@ and matrix. Historical runs are distinct from today's documentation review.
 | [Execution record — 2026-11-09](evidence/validacao-2026-11-09.txt) | Environment, source hashes, existing test results, API checks and limitations. Historical command paths are preserved and the current path is stated at the top. |
 | [Preparation script](evidence/preparacao.cjs) | Reproduces the mixed image/video project, processing, frame extraction and ZIP checks through nginx and the API Gateway. |
 | [November 18 continuation sources](evidence/continuation-sources-2026-11-18.json) | Hashes of four newly organized originals and empty application diff from the Block 1 baseline. Static evidence only, no new workload. |
-| [Continuation document checks](../07-architectural-tactics/evidence/verification-2026-11-18.md) | Previous registry/matrix preserved, scenarios transcribed exactly and new exercise content checked; academic review remains pending. |
+| [Continuation document checks](../07-architectural-tactics/evidence/verification-2026-11-18.md) | Historical November 18 verification; earlier registry/matrix preserved and scenarios transcribed exactly. |
+| [November 20 review](../07-architectural-tactics/evidence/verification-2026-11-20.md) | Scenario separation, effect matrix and queue diagrams corrected; source/registry/link checks and outstanding human review recorded. |
 
 With the application running, execute the script from the repository root:
 

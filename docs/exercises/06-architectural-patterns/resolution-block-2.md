@@ -7,16 +7,16 @@
 Monsanto; PG63941 — Diogo Alexandre Gomes Silva; PG63522 — José Miguel da Silva Santos.  
 **Commit de partida:** `484be13b4c8e96c70e7e694a2c368d5601749438`, o mesmo do Bloco 1;
 base oficial da aplicação `0523102`.  
-**Checkout consultado nesta continuação:** `1d7103b`; comparação estática de
-aplicação sem diferenças no âmbito registado em EV-40.  
-**Data da análise:** 2026-11-18, Europe/Lisbon. **Versão deste documento:** 1.0.  
+**Checkout inicial consultado:** `1d7103b`; revisão sobre `405b6c0`, sem
+alterações de aplicação no âmbito registado em EV-40/EV-49.\
+**Data da análise:** 2026-11-18; revisão documental em 2026-11-20, Europe/Lisbon. **Versão deste documento:** 1.1.\
 **Versões usadas:** enunciado 1.1 e template 1.1, de 2026-11-04.  
-**Versão do Bloco 1 usada como entrada:** 1.2, que acrescenta o registo da continuação
+**Versão do Bloco 1 usada como entrada:** 1.3, que acrescenta o registo da continuação/revisão
 sem alterar os IDs antigos nem a matriz 3.3. (EV-01, EV-38, EV-40)
 
 Este ficheiro continua as secções 0–3 da [resolução do Bloco 1](resolution.md).
 O registo único de EV/H fica na sua secção 2.6; aqui não se renumeram evidências,
-hipóteses ou ALT-1/ALT-2. Os cenários QS-01–QS-06 são caracterizados **neste**
+hipóteses ou ALT-1/ALT-2. Os cenários QS-01–QS-07 são caracterizados **neste**
 documento; o [Exercício 7](../07-architectural-tactics/resolution.md) referencia-os
 sem redefinir os seis elementos. (EV-38, EV-39)
 
@@ -50,23 +50,28 @@ A observação posterior de um problema não demonstra o efeito de uma alternati
 
 Esta é a definição canónica dos seis elementos. As medidas são variáveis e
 procedimentos observáveis; não se inventam valores de aceitação. QS-01 e QS-02
-alimentam os dois candidatos escolhidos; os restantes contextualizam trade-offs,
-sem alargar o âmbito de implementação a outros RNF. (EV-38, EV-44)
+alimentam os dois candidatos escolhidos. QS-07 é um complemento de CAND-1 para
+a política de revogação já escolhida; QS-03–QS-06 contextualizam trade-offs.
+Não se alarga o âmbito a outro RNF. A revisão 1.1 separa em QS-07 o estímulo de
+revogação antes misturado com admissão em QS-01. IDs anteriores não são reutilizados.
+(EV-38, EV-44, EV-49)
 
 | ID | Característica ISO/IEC 25010:2011 | Fonte do estímulo | Estímulo | Artefacto | Ambiente | Resposta | Medida da resposta |
 |----|---------------------------------|-------------------|----------|-----------|----------|----------|-------------------|
-| QS-01 | Segurança — confidencialidade, integridade e autenticidade | Cliente de outra conta ou peer interno sem a identidade/permissão exigida | Tentar ler/alterar media ou projeto alheio, entrar numa sala não autorizada ou continuar a receber eventos após revogação | Fronteiras nginx/gateways, projects, users/subscriptions, storage/S3 e WS usadas pelo vídeo | Instalação de teste isolada, fixtures dono/editor/leitor/outro, superfícies pública/host/rede Docker; normalidade e falha do autorizador em casos separados | Verificar identidade e autorização efetiva, recusar efeitos/receção indevidos e preservar operações legítimas; retirar receção quando deixar de existir via autorizada | Por caso: tentativas, admissões, efeitos de domínio/bytes/eventos verificados e sucessos legítimos; intervalo entre ACK de revogação e corte, recusas TLS separadas de domínio/erro interno. EV-24/EV-43; H-14 |
+| QS-01 | Segurança — confidencialidade, integridade e autenticidade | Cliente de outra conta ou peer interno sem a identidade/permissão exigida | Apresentar um pedido de acesso/operação sobre recurso de projeto sem autorização efetiva, incluindo entrada numa sala de projeto | Fronteiras nginx/gateways, projects, users/subscriptions, storage/S3 e admissão WS usadas pelo vídeo | Instalação isolada, fixtures dono/editor/leitor/outro e superfícies pública/host/rede Docker; uma operação/rota/contexto por caso, com controlo legítimo correspondente; falha do autorizador é variante identificada | Verificar identidade e autorização, recusar o acesso/efeito/entrada indevidos e preservar a operação legítima do controlo | Por caso: tentativas, admissões e efeitos de domínio/bytes/eventos verificados, fração de efeitos indevidos sobre tentativas e sucessos legítimos sobre controlos; recusas de rede/TLS/domínio e erros internos separados, sem contar 500/timeout como proteção. EV-24/EV-43; H-14 |
 | QS-02 | Eficiência de desempenho — utilização de recursos; comportamento temporal como guarda | Utilizador free/premium legitimamente autorizado | Enviar um vídeo válido de tamanho crescente, isolado ou com outros uploads | Percurso nginx → gateway → projects → storage/S3, incluindo validação, hash e limpeza, com adaptador legado preservado | Mesmo host, recursos e corpus de teste BF/MF; C=1 e C=3 separados, posições de metadados e estado do processo identificados | Aceitar e disponibilizar apenas o ficheiro validado/associado corretamente, limitando recursos e mantendo pedidos leves utilizáveis | Por serviço/janela: RSS absoluto/adicional/retido, memória cgroup/agregada, CPU/rede/disco, OOM/reinícios; t_ready−t_send, t_ready−t0, t_hash e cleanup; SHA-256 do original e respostas corretas, coexistência pareada. EV-08/EV-11/EV-42; H-15/H-17/H-18 |
 | QS-03 | Eficiência de desempenho — capacidade/comportamento temporal | Dois utilizadores com projetos distintos | Submeter reconhecimento de fala e, durante esse trabalho, um vídeo curto com efeito comum | video_queue, video_tool e orquestrador | Budget fixo, fala real/modelo identificado, carga mista; sem ativar réplicas por este exercício | Concluir corretamente os trabalhos e tornar observável a espera/consumo dos dois tipos | Tempos de fila/execução/commit por vídeo, conclusões válidas por minuto, CPU/RSS e integridade de áudio; cenário para avaliar H-02/H-08, sem meta numérica criada aqui. EV-16/EV-19 |
 | QS-04 | Fiabilidade — tolerância a falhas/recuperabilidade | Falha controlada do worker/broker/orquestrador experimental | Interromper numa fronteira de execução/persistência identificada | Filas, Process/Result, fontes, saídas e quota de um lote | Fixtures descartáveis com estados antes/depois conhecidos, controlo sem interrupção | Manter originais/último resultado confirmado e classificar recuperado/falhado/indeterminado sem duplicar efeitos | Pedidos aceites, resultados corretos/duplicados/parciais/pendentes, diferenças de quota, tempo observado de recuperação e evidência de cada fronteira; sem prometer recuperação automática. EV-15/EV-21/EV-41; H-03/H-12 |
 | QS-05 | Manutenibilidade — modificabilidade/testabilidade | Programador em tarefa controlada | Corrigir uma regra já existente de parâmetro/validação comum a imagem e vídeo | Efeitos PIL, validação/orquestração e testes | Mesmo requisito/correção em base e protótipo, sem novo efeito funcional | Alterar a regra coerentemente sem regressões fora do âmbito | Tempo da tarefa, módulos/serviços/contratos alterados, reconstruções e resultados de regressão; medir esforço, não apenas linhas. EV-18/EV-27; H-04 |
 | QS-06 | Usabilidade — operabilidade | Utilizador com processamento já submetido | Tentar acompanhar e continuar a operar o editor durante o trabalho | Frontend, estado de tarefa e eventos WS existentes | Projeto imagem/vídeo/misto, tarefa e corpus iguais; prova por utilizadores ainda não recolhida | Tornar compreensíveis estado/erros e preservar as operações já existentes | Sucesso/erros/tempo de tarefas e compreensão do estado, cadência dos eventos; overlay e reload são observados, não dados como resolvidos. EV-22/EV-23/EV-25; H-06/H-10 |
+| QS-07 | Segurança — confidencialidade e integridade | Proprietário autorizado do projeto | Revogar a última via de partilha que autoriza um membro já ligado a receber eventos desse projeto | Autorização de domínio em projects e emissão de eventos de projeto no wsGateway, em salas pessoais e de projeto | Instalação isolada; membro previamente admitido e JWT ainda válido; fluxo de eventos sequenciados; normalidade, atraso e indisponibilidade em variantes identificadas; outra autorização válida é controlo separado | Retirar a receção protegida do projeto afetado quando a autorização efetiva cessar, sem renovar em falha nem retirar outras salas/vias legítimas | Intervalo em ms entre ACK observado da revogação e corte verificado, com incerteza; eventos protegidos entregues após o limite aplicável, novas entradas indevidas e controlos preservados. Confirmar receção inicial e atividade do produtor; ausência de eventos não prova corte. Critério previamente selecionado em S12 permanece na fonte, não é resultado desta ficha. EV-22/EV-44/EV-46; H-14/H-18 |
 
 **Priorização dos cenários — juízo argumentado, não votação inventada**
 
 | ID | Importância para os stakeholders | Dificuldade / risco técnico | Prioridade |
 |----|---------------------------------|----------------------------|------------|
-| QS-01 | Alta: donos/colaboradores dependem de confidencialidade e integridade; há efeitos indevidos verificados | Alta: atravessa identidades, APIs, dados e permanência WS sem impedir clientes legítimos | 1 |
+| QS-01 | Alta: donos/colaboradores dependem de confidencialidade e integridade; há efeitos indevidos verificados | Alta: atravessa identidades/APIs/dados/admissão WS sem impedir clientes legítimos | 1 |
+| QS-07 | Alta: retirar uma partilha deve retirar a receção que dela depende; é política já selecionada, não terceiro RNF | Alta: permanência, corridas, falhas e eventos pessoais precisam de observação temporal | 1, complemento de CAND-1 |
 | QS-02 | Alta: carregar vídeo é entrada do fluxo central; RAM/OOM afeta todos os clientes do gateway | Alta: dois transportes, estado/storage, validação e custo adiado, preservando contratos | 2 |
 | QS-04 | Alta: perda/duplicação/quota comprometem confiança | Alta: várias fronteiras de falha; tratamento operacional é guarda do âmbito escolhido, recuperação geral não é terceiro RNF | 3 |
 | QS-06 | Média-alta: impacto direto na operação, porém faltam ensaios com participantes | Média-alta: cliente/estado/eventos e delimitação de alterações visíveis | 4 |
@@ -75,7 +80,7 @@ sem alargar o âmbito de implementação a outros RNF. (EV-38, EV-44)
 
 ### 4.3 Atributos de qualidade por ordem de prioridade
 
-1. **Segurança** — QS-01, CAND-1: proteger efeitos/receção no domínio que já existe;
+1. **Segurança** — QS-01 e complemento QS-07, CAND-1: proteger acesso e permanência no domínio que já existe;
    prioridade do par comunicado, não conclusão de que todos os casos passaram.
 2. **Eficiência de desempenho** — QS-02, CAND-2: utilização de recursos no upload;
    QS-03 é contexto de capacidade, não outro requisito incluído na entrega.
@@ -119,15 +124,15 @@ se transforma num terceiro requisito de implementação. (EV-38, EV-44)
 
 | ID | Característica / subcaracterística ISO/IEC 25010:2011 | Fragilidade na base | Origem | Impacto / pertinência | Exigência técnica / complexidade | Escala e método | Pré-requisitos / efeitos |
 |----|-----------------------------------------------------|--------------------|--------|----------------------|----------------------------------|-----------------|-------------------------|
-| CAND-1 = QC-06; QS-01 | Segurança — confidencialidade, integridade e autenticidade | Proteção do gateway não cobre todas as identidades/rotas/storage/WS; alguns efeitos indevidos verificados | Padrão global, herdado pelas operações de vídeo | Protege projetos, originais, resultados e colaboradores; relevante para imagem e vídeo | Coordenar verificação de ator, autorização de domínio, mTLS/TLS, identidade delegada e revogação, preservando rotas legítimas | Casos finitos por fronteira, efeitos/bytes/eventos antes/depois e latência/recusa/corte, segundo §5.1 | PKI/sessões/migração e dados legítimos; overhead/disponibilidade/manutenibilidade. EV-24/EV-43/EV-44; H-14 |
+| CAND-1 = QC-06; QS-01 principal, QS-07 complementar | Segurança — confidencialidade, integridade e autenticidade | Proteção do gateway não cobre todas as identidades/rotas/storage/WS; alguns efeitos indevidos verificados | Padrão global, herdado pelas operações de vídeo | Protege projetos, originais, resultados e colaboradores; relevante para imagem e vídeo | Coordenar verificação de ator, autorização de domínio, mTLS/TLS, identidade delegada e revogação, preservando rotas legítimas | Casos finitos por fronteira para QS-01; efeitos/bytes/eventos e latência de corte para QS-07, segundo §5.1 | PKI/sessões/migração e dados legítimos; overhead/disponibilidade/manutenibilidade. EV-24/EV-43/EV-44; H-14 |
 | CAND-2 = QC-05; QS-02 | Eficiência de desempenho — utilização de recursos; comportamento temporal como guarda | Buffers integrais em três Node; pressão/retenção/OOM e aceitação lenta em pilotos | Interação entre entrada global e tamanho do vídeo; não um defeito dos efeitos PIL | Viabiliza o carregamento existente sem esgotar o gateway/host ou impedir outros pedidos | Streaming limitado nos dois transportes, validação/estado/S3, métricas até trabalho completo e compatibilidade | Memória/CPU/rede/disco, tempos até ready/hash/cleanup, falhas/integridade, segundo §5.1 | Autorização antes do corpo, staging, quota preservada, cache/hash coerentes; não esconder custo no storage. EV-08/EV-11/EV-42/EV-44; H-15/H-18 |
 
 ### 5.1 Esboço de quantificação
 
-| Campo | CAND-1 / QS-01 | CAND-2 / QS-02 |
+| Campo | CAND-1 / QS-01 e complemento QS-07 | CAND-2 / QS-02 |
 |-------|----------------|----------------|
 | Escala | Tentativas/efeitos indevidos e sucessos legítimos por caso; bytes/eventos e tempo de corte/latência em ms | RSS/cgroup/pico agregado em MiB, CPU-s, bytes por fronteira/disco, OOM/reinícios, tempos em ms, integridade e sucesso por tentativa |
-| Cenário de medição | Clientes público, host e peer Docker controlado; dono/editor/leitor/outro; chamadas válidas e adulteradas, revogação/falha e salas pessoais/projeto | Corpus de vídeo PAD e real, transportes novo/legado separados, validação/hash/cleanup e pedidos leves pareados |
+| Cenário de medição | QS-01: público/host/peer Docker, dono/editor/leitor/outro e chamada/entrada válida ou adulterada por caso. QS-07: membro admitido, revogação, eventos ativos e controlo de via alternativa; falhas identificadas | Corpus de vídeo PAD e real, transportes novo/legado separados, validação/hash/cleanup e pedidos leves pareados |
 | Carga | Casos materializados com controlo positivo; WS-N1/J1/P1 e fronteiras L/R/B/E do contrato; não testar só credencial errada | 10/100 MiB free/premium e 500 MiB premium, H/T e processo reiniciado/aquecido; C=1/C=3; 1024 MiB/+1 byte como fronteira funcional separada |
 | Ambiente | Esta máquina/Luís, instalação experimental isolada por concretizar, mesmo budget/configuração por cenário antes/depois; não usar volumes retidos | Mesmo host; EVAL-B1 e todos os serviços necessários por fase, imagens/dependências fixadas, gerador fora dos Node medidos; manifesto ainda não congelado |
 | Instrumento | Adaptar probes históricos com asserções corrigidas, verificação de estado/bytes/eventos, TLS/peer/domínio separados e logs sanitizados | Gerador em fluxo, timestamps monotónicos, RSS/cgroup/CPU/rede/disco e verificação SHA-256; scripts históricos são ponto de partida, não runner final pronto |
@@ -139,6 +144,11 @@ anteriores, nem se inventa uma BF para as justificar. Elas mantêm a proveniênc
 no [plano/revisão](../../fase2-revisao-plano-avaliacao.md); a consolidação final
 exige BF, calibração e revisão. A lista de 60 métricas é decomposição dos dois
 candidatos/guardas; U25 é G e nem todos os limiares estão aprovados. (EV-38, EV-45)
+
+Especificar variáveis/medidas nesta ficha não aprova um alvo novo. Critérios já
+selecionados continuam com essa proveniência; uma alteração precisa de decisão
+e versão explícitas. Não ajustar mínimos/metas para fazer passar MF; revisões de
+método/recursos exigem comparação documentada equivalente nas campanhas.
 
 ### 5.2 Relação entre os dois candidatos
 
@@ -191,14 +201,16 @@ UP-C4–C9 não são fechados por preencher este exercício. (EV-44; H-01–H-04
 ACL owner-only para eliminar projeto é uma mudança de política já escolhida
 individualmente, não comportamento herdado demonstrado; deve ser justificada e
 testada, não escondida como refactoring puro. Preservar remoção de media pelo
-editor. A revisão académica não é inferida da escolha individual. (EV-44)
+editor. A escolha individual não prova, por si, conformidade académica com a regra
+de preservação funcional: justificar o enquadramento B e registar a restrição na
+revisão da equipa, sem atribuir concordância à docência. (EV-39, EV-44)
 
 ## 7. Utilização de IA
 
 | Ferramenta / skill | Tarefa apoiada | Validação feita pela equipa / estado | Onde está documentado |
 |-------------------|----------------|-------------------------------------|------------------------|
-| Codex; contexto da skill local specsmd-inception-agent previamente usada | Ler materiais/código, continuar IDs, cruzar decisões/pilotos, formular QS/CAND e redigir trade-offs | Utilizador forneceu equipa, par e escolhas com âmbito registado; esta resolução ainda requer revisão académica dos quatro. Não atribuir ao grupo a verificação estática feita pelo agente | §4–§6; EV-38–EV-48; histórico de Inception |
-| Codex e verificações estáticas locais | Organizar quatro originais preservando hash, comparar caminhos de aplicação, verificar referências/tabelas/IDs e coerência entre exercícios | Resultado automático reportado separadamente; não substitui ensaios BF/MF nem aprovação humana | EV-40; índices e registo de verificação da continuação |
+| Codex; contexto da skill local specsmd-inception-agent previamente usada | Ler materiais/código, continuar IDs, cruzar decisões/pilotos, formular QS/CAND e redigir trade-offs | Utilizador forneceu equipa, par e escolhas com âmbito registado; esta resolução ainda requer revisão académica dos quatro. Não atribuir ao grupo a verificação estática feita pelo agente | §4–§6; EV-38–EV-49; histórico de Inception |
+| Codex e verificações estáticas locais | Organizar quatro originais preservando hash, comparar caminhos de aplicação, verificar referências/tabelas/IDs e rever a separação de cenários e a coerência entre exercícios | Resultado automático reportado separadamente; não substitui ensaios BF/MF nem aprovação humana | EV-40/EV-49; índices e registos de verificação da continuação/revisão |
 
 ### Lista de verificação do Bloco 2
 

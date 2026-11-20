@@ -6,16 +6,17 @@
 **Elementos:** PG64000 — Luís Miguel Coelho; PG65397 — Alexandre de Oliveira
 Monsanto; PG63941 — Diogo Alexandre Gomes Silva; PG63522 — José Miguel da Silva Santos.  
 **Commit de partida:** `484be13b4c8e96c70e7e694a2c368d5601749438`, igual ao Bloco 1;
-base oficial `0523102`. **Checkout consultado:** `1d7103b`.  
-**Data da análise:** 2026-11-18, Europe/Lisbon. **Versão deste documento:** 1.0.  
+base oficial `0523102`. **Checkout inicial consultado:** `1d7103b`; revisão sobre `405b6c0`, sem
+alterações de aplicação no âmbito de EV-49.\
+**Data da análise:** 2026-11-18; revisão documental em 2026-11-20, Europe/Lisbon. **Versão deste documento:** 1.1.\
 **Versões usadas:** enunciado 3.0 e template 3.0, de 2026-11-17.  
-**Entradas:** Bloco 1, resolução 1.2; Bloco 2, resolução 1.0 baseada no material 1.1.
+**Entradas:** Bloco 1, resolução 1.3; Bloco 2, resolução 1.1 baseada no material 1.1.
 
 O catálogo de EV/H e ALT é o da [secção 2.6 do Bloco 1](../06-architectural-patterns/resolution.md).
 Os cenários só se caracterizam no [Bloco 2, §4.2](../06-architectural-patterns/resolution-block-2.md#42-cenários-de-qualidade-para-a-extensão-de-vídeo).
 DA-1/DA-2 aqui são IDs **deste exercício**, não substituem D1–D11, as escolhas WS/
 PKI/UP/EVAL ou DA-01–DA-10 do PDF histórico PL1-G4. A cadeia de rastreabilidade é
-CAND → QS → TAT → DA → elementos → observação BF/MF. (EV-38–EV-40, EV-44)
+CAND → QS → TAT → DA → elementos → observação BF/MF. (EV-38–EV-40, EV-44, EV-49)
 
 **Estado:** é uma síntese académica das escolhas já registadas e das alternativas,
 não aprovação adicional, código alterado ou melhoria demonstrada. UP-C4–C9 e
@@ -31,18 +32,21 @@ utilizador, distinta do 20/11 nos originais. (EV-44, EV-45)
 Os campos de estímulo e resposta/medida abaixo são copiados literalmente da
 definição canónica, não uma segunda versão do cenário. Fonte, artefacto e ambiente
 continuam no Bloco 2; a carga/ambiente de medição é concretizada em §5.3.
+QS-07 é complemento da mesma CAND-1 para revogação; não se caracteriza novamente
+aqui nem cria uma terceira entrada principal.
 (EV-38, EV-39)
 
 | Candidato | Cenário | Característica / subcaracterística | Evidência / hipótese | Origem | Estímulo a que a tática reage — transcrito | Resposta e medida — transcritas | Escala e método |
 |-----------|---------|----------------------------------|----------------------|--------|-------------------------------------------|--------------------------------|-----------------|
-| CAND-1 | QS-01 | Segurança — confidencialidade, integridade e autenticidade | EV-24/EV-43; H-14 | Padrão global, herdado pelas operações de vídeo | Tentar ler/alterar media ou projeto alheio, entrar numa sala não autorizada ou continuar a receber eventos após revogação | Verificar identidade e autorização efetiva, recusar efeitos/receção indevidos e preservar operações legítimas; retirar receção quando deixar de existir via autorizada — Por caso: tentativas, admissões, efeitos de domínio/bytes/eventos verificados e sucessos legítimos; intervalo entre ACK de revogação e corte, recusas TLS separadas de domínio/erro interno. EV-24/EV-43; H-14 | Bloco 2 §5.1; mesmo cenário e método, concretizado em §5.3 |
+| CAND-1 | QS-01 | Segurança — confidencialidade, integridade e autenticidade | EV-24/EV-43; H-14 | Padrão global, herdado pelas operações de vídeo | Apresentar um pedido de acesso/operação sobre recurso de projeto sem autorização efetiva, incluindo entrada numa sala de projeto | Verificar identidade e autorização, recusar o acesso/efeito/entrada indevidos e preservar a operação legítima do controlo — Por caso: tentativas, admissões e efeitos de domínio/bytes/eventos verificados, fração de efeitos indevidos sobre tentativas e sucessos legítimos sobre controlos; recusas de rede/TLS/domínio e erros internos separados, sem contar 500/timeout como proteção. EV-24/EV-43; H-14 | Bloco 2 §5.1; mesmo cenário e método, concretizado em §5.3 |
 | CAND-2 | QS-02 | Eficiência de desempenho — utilização de recursos; comportamento temporal como guarda | EV-08/EV-11/EV-42; H-15/H-17/H-18 | Interação entrada global/tamanho do vídeo | Enviar um vídeo válido de tamanho crescente, isolado ou com outros uploads | Aceitar e disponibilizar apenas o ficheiro validado/associado corretamente, limitando recursos e mantendo pedidos leves utilizáveis — Por serviço/janela: RSS absoluto/adicional/retido, memória cgroup/agregada, CPU/rede/disco, OOM/reinícios; t_ready−t_send, t_ready−t0, t_hash e cleanup; SHA-256 do original e respostas corretas, coexistência pareada. EV-08/EV-11/EV-42; H-15/H-17/H-18 | Bloco 2 §5.1; mesmo cenário e método, concretizado em §5.3 |
 
 ### 1.2 Alterações feitas ao Bloco 2
 
 | Cenário | O que mudou e porquê | Onde foi atualizado |
 |---------|---------------------|--------------------|
-| QS-01/QS-02 | Nenhuma alteração posterior à definição 1.0 criada nesta continuação; IDs/texto canónicos mantidos | Bloco 2 §4.2 e §5.1; este exercício limita-se a reutilizar |
+| QS-01 → QS-01 + QS-07 complementar | Revisão 1.1 em 20/11 separa tentativa de acesso de revogação de uma autorização existente, porque têm fontes/estímulos/relógios distintos. QS-01 mantém o ID para admissão; QS-07 é novo ID, sem reutilizar qualquer eliminado. CAND-1 permanece a mesma | Bloco 2 §4.2/§5.1, priorização e âmbito de CAND-1; campos de QS-01 retranscritos literalmente na §1.1 e TAT-04 referencia o complemento |
+| QS-02 | Texto canónico inalterado; não se altera o cenário para o adequar à tática escolhida | Bloco 2 §4.2 e cópia literal na §1.1 |
 
 **Quantificação:** baseline formal NM e valores finais a consolidar depois de
 BF, conforme os materiais. Os critérios individuais de planeamento anteriores
@@ -62,12 +66,12 @@ da melhoria; **C:** capacidade nova, rejeitada para esta entrega. (EV-39, EV-47)
 |----|---------------------|----------------------|--------|----------------------------------------|-----------------|--------|
 | TAT-01 | QS-01 / CAND-1 | Segurança → resistir | Identificar/autenticar atores em cada fronteira | Pedido de peer/cliente → verificar perfil de identidade e peer autorizado → rejeitar impersonação em vez de confiar num header | Parcial: JWT no gateway; caller interno decodifica e header é confiado; mTLS proposto ainda não existe. EV-08/EV-24/EV-46; H-14 | A |
 | TAT-02 | QS-01 / CAND-1 | Segurança → resistir | Autorizar atores/operações no domínio | Leitura/mutação/join → projects decide posse/contexto/read/edit → só efeito/receção permitidos | Parcial: partilha/versionamento existem, sem matriz transversal e autorização de sala prevista. EV-24/EV-37/EV-46; H-14 | B na correção owner-only da eliminação; A no núcleo interno |
-| TAT-03 | QS-01 / CAND-1 | Segurança → resistir | Limitar acesso/exposição e cifrar comunicação com validação | Caminho direto/certificado indevido → TLS/mTLS, credenciais próprias e identidade/operação específicas → reduzir superfície e confiança indevida | Parcial: HTTPS/portas e cifra de campos existem; não há validação completa do servidor/peer nem gestão de chaves escolhida. EV-07/EV-09/EV-24; H-14 | A |
-| TAT-04 | QS-01 / CAND-1 | Segurança → reagir | Revogar acesso e limitar autorização local | Permissão/JWT deixa de valer → consulta por entrada e revalidação/corte da sala afetada → não manter receção indevida | Parcial: links revogados no HTTP; permanência WS não segue contrato. EV-22/EV-37/EV-44/EV-46; H-14/H-18 | A no mecanismo, B nos erros/reconexão visíveis necessários à melhoria |
-| TAT-05 | QS-01 / CAND-1 | Segurança → resistir | Concentrar autorização só no gateway/limitar reachability | Pedido externo → filtro da fachada/rede → bloquear parte das entradas | Parcial: checkToken já existe, mas acessos internos e efeitos verificados mostram cobertura insuficiente. EV-08/EV-24/EV-43 | A; alternativa insuficiente para o cenário completo |
+| TAT-03 | QS-01 / CAND-1 | Segurança → resistir | Limitar acesso/exposição e cifrar comunicação com validação | Caminho direto/certificado indevido → TLS/mTLS, credenciais próprias e identidade/operação específicas → reduzir superfície e confiança indevida | Parcial: HTTPS/portas e cifra de campos existem; não há validação completa do servidor/peer nem a gestão de chaves prevista nas decisões implementada. EV-07/EV-09/EV-24; H-14 | A |
+| TAT-04 | QS-01, complemento QS-07 / CAND-1 | Segurança → reagir | Revogar acesso e limitar autorização local | Permissão/JWT deixa de valer → consulta por entrada e revalidação/corte da sala afetada → não manter receção indevida | Parcial: links revogados no HTTP; permanência WS não segue contrato. EV-22/EV-37/EV-44/EV-46; H-14/H-18 | A no mecanismo, B nos erros/reconexão visíveis necessários à melhoria |
+| TAT-05 | QS-01 / CAND-1 | Segurança → resistir | Limitar exposição apenas no perímetro | Pedido externo → filtro da fachada/rede → bloquear parte das entradas | Parcial: checkToken já existe, mas acessos internos e efeitos verificados mostram cobertura insuficiente. EV-08/EV-24/EV-43 | A; alternativa insuficiente para o cenário completo |
 | TAT-06 | QS-01 / CAND-1 | Segurança → resistir | Autorizar entrada WS por credencial de sala localmente verificada | Join → bilhete assinado/contextual → verificação local sem consulta por entrada | Não; era alternativa D6.2 A, substituída pela consulta B. Continua a exigir revogação/invalidação/permanência. EV-44; H-14 | A; não selecionada |
 | TAT-07 | QS-01 / CAND-1 | Segurança → resistir | Separar entidades através de nova biblioteca/pastas privadas no produto | Utilizador organiza vídeos em capacidade nova → dados separados pela nova interface | Não; a biblioteca do requisito histórico não está implementada. EV-04/EV-10/EV-23 | **C — rejeitada**; separar internamente permissões não exige criar biblioteca |
-| TAT-08 | QS-02 / CAND-2 | Desempenho → controlar procura | Reduzir sobrecarga/intermediação do fluxo de dados | Corpo grande → nginx encaminha bytes autorizados para S3, Node mantém controlo → menor buffer/cópia nos Node | Não no percurso novo; corpo hoje passa pelos três Node. EV-08/EV-11/EV-12/EV-42; H-15 | A |
+| TAT-08 | QS-02 / CAND-2 | Desempenho → controlar procura | Reduzir a sobrecarga do transporte do corpo, separando-o do controlo | Corpo grande → nginx encaminha bytes autorizados para S3, Node mantém controlo → menor buffer/cópia nos Node | Não no percurso novo; corpo hoje passa pelos três Node. EV-08/EV-11/EV-12/EV-42; H-15 | A |
 | TAT-09 | QS-02 / CAND-2 | Desempenho → controlar procura/gerir recursos | Aumentar eficiência por streaming/contrapressão e temporários limitados | Produtor rápido/ficheiro grande → consumo limitado e backpressure → não acumular corpo integral em RAM | Parcial: S3/worker têm processamento incremental, mas multer usa memória no upload. EV-11/EV-12/EV-17/EV-46; H-15 | A; obrigatória também no adaptador selecionado |
 | TAT-10 | QS-02 / CAND-2 | Desempenho → gerir recursos | Escalonar cálculo do hash depois de ready, com estado/cache coerentes | Validação concluída → adiar leitura integral e controlar execução → reduzir caminho até ready sem fingir reduzir custo total | Não: hash atual é síncrono e required. Mecanismo UP-C7 ainda por selecionar. EV-12/EV-26/EV-44; H-16 | A se só interno e sem alterar conteúdo; candidata pendente |
 | TAT-11 | QS-02 / CAND-2 | Desempenho → gerir recursos | Aumentar recursos sem alterar buffering | Upload → mais RAM disponível → adiar OOM | O Compose original não fixa limites de RAM; esta estratégia não elimina a dependência do tamanho observada. EV-09/EV-42 | A, mas não escolhida como solução principal; não provar melhoria mudando só budget final |
@@ -81,19 +85,19 @@ audit trail consultável pelo utilizador. (EV-39; H-17)
 
 ## 3. Decisões arquiteturais
 
-### DA-1 — Verificar confiança e autorização em cada fronteira (QS-01)
+### DA-1 — Verificar confiança e autorização em cada fronteira (QS-01; QS-07 complementar)
 
 | Campo | Conteúdo |
 |-------|----------|
 | Contexto | CAND-1/QS-01: portas/headers/TLS e WS permitem contornar verificações; efeitos conhecidos em EV-43. Preservar edição, partilha, imagem/vídeo, quota e billing, sem tratar a presença de serviços como prova de proteção. EV-24/EV-43; H-14 |
-| Táticas escolhidas | TAT-01 + TAT-02 + TAT-03 + TAT-04, como síntese das decisões existentes D3/D4/D6/D7 e ACL; não nova aprovação da equipa. Cadeia: EV-24/EV-43 → CAND-1 → QS-01 → TAT-01–04 → DA-1 → S01–S21/guardas → BF/MF. EV-44 |
+| Táticas escolhidas | TAT-01 + TAT-02 + TAT-03 + TAT-04, como síntese das decisões existentes D3/D4/D6/D7 e ACL; não nova aprovação da equipa. Cadeia: EV-24/EV-43 → CAND-1 → QS-01/QS-07 → TAT-01–04 → DA-1 → S01–S21/guardas → BF/MF. EV-44 |
 | Estrutura/padrão realizador | Gateway como fachada e projetos como autoridade de domínio; mTLS nas APIs internas com autorização de serviço/operação; TLS validado/credenciais mínimas nos restantes canais. JWT HS256 utilizador e RS256 contextual interno têm funções distintas. WS consulta projects por join/revalidação; PKI local/retirada de confiança conforme contratos selecionados |
 | Alternativas consideradas/rejeitadas | **TAT-05 isolada:** menor intervenção, mas gateway/loopback não impedem impersonação/ação indevida do peer interno. **TAT-06:** pode retirar consultas do caminho de entrada, mas acrescenta emissão/validade/invalidação de credenciais de sala; a consulta atual foi escolhida em D6.2 B, sem necessidade medida de bilhetes. **TAT-07:** rejeitada C, pois biblioteca nova não é refactoring desta fragilidade. EV-24/EV-43/EV-44; H-14 |
 | Consequências positivas esperadas | Cobrir pedidos diretos, identificar peer/contexto, autorizar operação e retirar receção quando a permissão cessar. São previsões H-14/H-18, não resultados. EV-44 |
 | Consequências negativas/riscos | Mais configuração, certificados/chaves e consultas; novos joins indisponíveis em falha, intervenção na renovação de sessões anónimas, custo de revogação/isolamento e risco de recusar caller legítimo. Claims curtas não dão exactly-once nem uso único; cópias de JWT têm residual registado. Prova anónima real continua desconhecida. EV-44/EV-45; H-14/H-17/H-18 |
 | Elementos afetados | nginx, apiGateway/auth/rotas, wsGateway, projects/caller/middleware/rotas, users, subscriptions, imageStorageService, clientes Mongo/S3/broker, Tools/expand_ai e generative-mock, Compose/PKI/segredos e frontend de sessão/reconexão. É cobertura por canal, não só trocar um algoritmo |
 | Origem/âmbito e risco | Global/interação: vídeo herda as mesmas APIs, dados, quota e eventos. Não muda efeitos nem formato de vídeo; alto risco de regressão nas operações legítimas. Testar imagem, vídeo, mistos e duas vias de acesso. EV-09/EV-14/EV-21/EV-44 |
-| Classe | **B no conjunto; núcleo interno A.** Corrigir owner-only para eliminar projeto e explicitar corte/reconexão muda comportamento visível como objeto da segurança, sem criar nova capacidade de edição. A restrição DELETE não é regra herdada inequívoca; está explicitamente escolhida e precisa de justificação/teste. O editor continua a remover media. Não esconder essa mudança como refactoring puro. EV-44 |
+| Classe | **B no conjunto; núcleo interno A.** Corrigir owner-only para eliminar projeto e explicitar corte/reconexão muda comportamento visível como objeto da segurança, sem criar nova capacidade de edição. A restrição DELETE não é regra herdada inequívoca; está explicitamente escolhida e precisa de justificação/teste. O editor continua a remover media. A seleção individual não é aprovação académica de preservação funcional: a equipa deve justificar a restrição como objeto da melhoria, sem a tratar como comportamento herdado ou concordância da docência. EV-39/EV-44 |
 
 ### DA-2 — Separar controlo de bytes e limitar recursos mantendo o contrato (QS-02)
 
@@ -123,8 +127,9 @@ flowchart LR
     N --> W["WS gateway: join sem autorização de projeto"]
     W -->|eventos| B
     P --> U["users: perfil e quota Apply"]
-    P --> Q["RabbitMQ e workers imagem/vídeo"]
-    Q -->|eventos/resultados| P
+    P -->|pedidos de processamento| Q["RabbitMQ e workers imagem/vídeo"]
+    Q -->|project_queue: resultados| P
+    Q -->|ws_queue: eventos| W
     classDef weak fill:#fff0ee,stroke:#b3312d,color:#111;
     class G,P,S,W weak;
 ```
@@ -132,26 +137,30 @@ flowchart LR
 [Fonte editável](diagrams/before.mmd). Vista parcial das interações relevantes;
 mantém-se a [vista global do Bloco 1](../06-architectural-patterns/diagrams/arquitetura_global_plantuml.svg)
 para os restantes serviços/volume. Vermelho identifica fragilidades de código,
-sem afirmar falha de cada pedido. EV-07–EV-12/EV-22/EV-24/EV-40/EV-46.
+sem afirmar falha de cada pedido. ws_queue entrega eventos ao WS;
+project_queue entrega resultados ao orquestrador. As setas de resposta ao browser
+são lógicas: o proxy nginx permanece no percurso físico público.
+EV-07–EV-12/EV-22/EV-24/EV-40/EV-46/EV-49.
 
 ### Depois — desenho selecionado, ainda não implementado
 
 ```mermaid
 flowchart LR
-    B["Browser: mesmas operações"] -->|HTTPS e sessão| N["nginx: TLS validado"]
-    N -->|controlo JSON e auth_request| G["Gateway: autenticar e delegar identidade"]
+    B["Browser: mesmas operações"] -->|HTTPS e sessão| N["nginx"]
+    N -->|TLS validado: JSON e auth_request| G["Gateway: autenticar e delegar identidade"]
     G -->|mTLS e RS256 contextual| P["projects: autorizar e validar/commit comuns"]
-    N -->|corpo novo autorizado em fluxo| O[("S3: TLS e permissões mínimas")]
-    N -->|multipart legado em fluxo| G
-    G -->|adaptador limitado, sem buffer integral| P
+    N -->|TLS: corpo novo autorizado em fluxo| O[("S3: TLS e permissões mínimas")]
+    N -->|TLS validado: multipart legado em fluxo| G
+    G -->|mTLS e RS256: adaptador limitado| P
     P -->|mTLS e operações autorizadas| S["Storage: staging controlado"]
-    S --> O
-    N --> W["WS: JWT e permanência autorizada"]
+    S -->|TLS e credenciais próprias| O
+    N -->|TLS validado| W["WS: JWT e permanência autorizada"]
     W -->|mTLS: join e revalidação| P
     W -->|eventos só com autorização| B
     P -->|mTLS, quota só Apply| U["users e integrações legítimas"]
-    P --> Q["Filas/workers: semântica preservada"]
-    Q -->|eventos/resultados| P
+    P -->|TLS e credenciais: pedidos| Q["RabbitMQ e workers: semântica preservada"]
+    Q -->|project_queue: resultados| P
+    Q -.->|ws_queue: payload/contexto a concretizar| W
     P -.-> L["UP-C4-C9: estado, retry, candidato, hash e limpeza propostos"]
     classDef selected fill:#edf8ef,stroke:#287c45,color:#111;
     classDef proposed fill:#f4f4f4,stroke:#777,stroke-dasharray:5 5,color:#111;
@@ -164,6 +173,8 @@ flowchart LR
 TAT-01–04 estão nas fronteiras/WS; TAT-08/09 no percurso de bytes/adaptador.
 Certificados/identidade não substituem autorização de operação ou objeto. S3
 não é a API mTLS de domínio: usa o TLS/credenciais escolhido para esse canal.
+O payload/contexto dos eventos tem de ser adequado para autorizar emissões em
+salas pessoais e de projeto; o tracejado não demonstra esse mecanismo pronto.
 As cópias/candidato/hash e callbacks de transporte não são omitidos da medição
 só por aparecerem resumidos na vista. EV-44/EV-45; H-14–H-18.
 
@@ -171,14 +182,16 @@ só por aparecerem resumidos na vista. EV-44/EV-45; H-14–H-18.
 
 ### 5.1 Matriz de efeitos
 
-Setas descrevem **hipóteses de efeito**, não ganhos provados. ↑ favorável, ↓ custo
-ou risco de degradação, = sem mudança direta; combinações indicam trade-off que
-exige medição. Não se somam setas nem se cria ranking quantitativo. (H-14–H-18)
+Setas descrevem **hipóteses de efeito**, não ganhos provados. ↑ favorável ao
+atributo, ↓ risco de degradação do atributo, = sem mudança direta;
+as setas não indicam o sinal numérico de RSS/tempo. Por exemplo, baixar RSS
+pode melhorar utilização de recursos, sem provar menor latência. As combinações
+indicam trade-off que exige medição. Não se somam setas nem se cria ranking quantitativo. (H-14–H-18)
 
 | Decisão | Desempenho | Disponibilidade / fiabilidade | Segurança | Usabilidade | Manutenibilidade / testabilidade | Justificação |
 |---------|------------|--------------------------------|-----------|-------------|----------------------------------|--------------|
-| DA-1 | ↓ custo adicional possível | ↓ novas entradas em falha/rotação; integridade de acesso ↑ | ↑ esperado | = capacidade; ↓ intervenção/reconexão se mal tratada | ↓ gestão de trust/pares; ↑ contratos/probes verificáveis | TLS/queries/leases têm custo; não autorizar em falha protege o domínio, mas reduz disponibilidade. Controlos positivos impedem «melhorar» segurança desligando operações. EV-44; H-14/H-17/H-18 |
-| DA-2 | ↑ RSS Node esperado; custo total/tempo ainda pode ↓ | ↑ menor pressão/OOM esperado; ↓ estados/cópias ambíguos se mal implementados | ↑ auth antes de corpo; ↓ risco pending/capacidades S3 se sem controlo | = capacidade; ↑ aceitação esperada, ↓ erros mal explicados | ↓ dois transportes/estados; ↑ domínio/commit comuns e probes | Deslocar bytes/cálculo não os elimina; adaptar com limites pode preservar API, mas exige validar ambos os percursos e as guardas. EV-42/EV-44; H-15–H-18 |
+| DA-1 | ↓ possível pelo overhead de identidade/TLS/consultas | ↓ novas entradas em falha/rotação; integridade de acesso ↑ | ↑ esperado | = capacidade; ↓ intervenção/reconexão se mal tratada | ↓ gestão de trust/pares; ↑ contratos/probes verificáveis | TLS/queries/leases têm custo; não autorizar em falha protege o domínio, mas reduz disponibilidade. Controlos positivos impedem «melhorar» segurança desligando operações. EV-44; H-14/H-17/H-18 |
+| DA-2 | ↑ esperado em eficiência de memória; ↓ possível no comportamento temporal por I/O adicional | ↑ esperado por menor pressão; ↓ se estados/cópias não forem reconciliados | ↑ esperado por auth antes do corpo; ↓ se o isolamento pending/capacidades S3 falhar | = capacidade; ↑ aceitação esperada, ↓ erros mal explicados | ↓ dois transportes/estados; ↑ domínio/commit comuns e probes | Deslocar bytes/cálculo não os elimina; adaptar com limites pode preservar API, mas exige validar ambos os percursos e as guardas. EV-42/EV-44; H-15–H-18 |
 
 ### 5.2 Interação entre DA-1 e DA-2
 
@@ -193,7 +206,7 @@ exige medição. Não se somam setas nem se cria ranking quantitativo. (H-14–H
 
 | Cenário | Teste/carga | Ambiente | O que registar | Repetições/agregação | Scripts/dados |
 |---------|-------------|----------|---------------|----------------------|---------------|
-| QS-01 | Matriz pública/host/peer Docker com dono/editor/leitor/outro, rotas users/subscriptions/storage, TLS por canal; join/revogação/falha/expiração WS. N1=50, J1=510, P1=200; L1/L2 testam recusa de 513/4097, não suporte integral | Esta máquina/Luís; projeto experimental/configuração/corpus ainda por congelar; serviços de cada caso presentes. Mesmo cenário físico/cliente antes/depois; baseline sem mecanismos novos mede o efeito equivalente | Tentativas e controlos positivos, estado/bytes/eventos, timings, falhas de rede/TLS/domínio separadas, fila/CPU/RSS/latência e alcance efetivo; sem segredos | Plano selecionado: três repetições por caso materializado e janelas WS de 30 s; raw/mediana/máximo sem p95 de três amostras. Preparação, admissão e janela distinguidas | [Probes históricos auditados](../../../memory-bank/intents/001-phase-2-quality-improvements/evidence/nfr-2026-11-16/README.md), [métricas](../../fase2-metricas-e-baseline.md), [contrato WS](../../architecture/fase2-sessoes-identidade-partilhas-ws.md). Instrumentos novos ainda não existem |
+| QS-01 e complemento QS-07 | Matriz pública/host/peer Docker com dono/editor/leitor/outro, rotas users/subscriptions/storage, TLS por canal; join/revogação/falha/expiração WS. N1=50, J1=510, P1=200; L1/L2 testam recusa de 513/4097, não suporte integral | Esta máquina/Luís; projeto experimental/configuração/corpus ainda por congelar; serviços de cada caso presentes. Mesmo cenário físico/cliente antes/depois; baseline sem mecanismos novos mede o efeito equivalente | Tentativas e controlos positivos, estado/bytes/eventos, timings, falhas de rede/TLS/domínio separadas, fila/CPU/RSS/latência e alcance efetivo; sem segredos | Plano selecionado: três repetições por caso materializado e janelas WS de 30 s; raw/mediana/máximo sem p95 de três amostras. Preparação, admissão e janela distinguidas | [Probes históricos auditados](../../../memory-bank/intents/001-phase-2-quality-improvements/evidence/nfr-2026-11-16/README.md), [métricas](../../fase2-metricas-e-baseline.md), [contrato WS](../../architecture/fase2-sessoes-identidade-partilhas-ws.md). Instrumentos novos ainda não existem |
 | QS-02 | Plano EVAL selecionado: 100 normais (perfis/tamanhos/H-T/estados), nove C=3, coexistência separada com três uploads/600 pedidos leves; formatos/fronteiras e ambos os transportes materializados. 1024 MiB/+1 byte só guarda funcional separada | Mesmo host e budgets por fase; 10 GiB agregado e piso ≥60 GiB são condições a calibrar, não prontidão. Não usar volumes retidos. Imagens/dependências/gerador/controle fixados e corpo do gerador em fluxo | RSS absoluto/incremento/retido, cgroup e pico simultâneo, CPU/rede/disco/temporários, t0/t_send/t_ready/t_hash/t_cleanup, integridade, nomes/versão/quota, OOM/erros e pedidos leves | Cinco tentativas por estrato, três rodadas C=3 e três pares de coexistência; conservar falhas e denominador. Memória do grupo não é dividida por três. U25 compara com/sem carga na mesma campanha | [Plano/revisão](../../fase2-plano-avaliacao.md), [manifesto](../../templates/phase2-evaluation-manifest.template.json), [modelo resultado](../../templates/phase2-evaluation-result.template.json), scripts históricos para adaptar; corpus gerado fora do Git |
 
 **Gates:** medir BF antes do refactoring; condições/método/corpus congelados,
@@ -231,7 +244,7 @@ cenários futuros, não uma suite existente nem resultados aprovados.
 | Ferramenta/modelo | Tarefa apoiada | Conteúdo incorporado na resolução | O que foi rejeitado e porquê | Como foi validado / estado humano |
 |------------------|----------------|----------------------------------|-----------------------------|----------------------------------|
 | Codex; contexto da skill specsmd-inception-agent previamente usada | Ler enunciados/templates, código/decisões/pilotos; sintetizar táticas/DA e vistas | Rastreabilidade e distinção entre base, decisões individuais e hipóteses; versões 1.1/3.0 e uso literal dos cenários | Confundir mTLS com autorização, retirar legado, cobrar upload, escolher UP-C4–C9 por preencher a ficha ou prometer ganhos sem BF | Confronto estático com código/fontes e histórico; utilizador comunicou escolhas anteriores, mas a equipa ainda deve rever esta resolução |
-| Codex com verificações documentais locais | Organizar fontes com hash, comparar aplicação, conferir IDs/cópias/caminhos/Mermaid editável | Material original intacto e referências explícitas | Inventar testes, fontes letivas ausentes, medidas finais ou livro consultado sem conteúdo | Registo de verificação; validação automática não é revisão nominal da equipa nem teste de arquitetura em runtime |
+| Codex com verificações documentais locais | Organizar fontes com hash, comparar aplicação, conferir IDs/cópias/caminhos/Mermaid editável | Material original intacto, referências explícitas e revisão de cenários/matriz/filas em EV-49 | Inventar testes, fontes letivas ausentes, medidas finais ou livro consultado sem conteúdo | Registo de verificação; validação automática não é revisão nominal da equipa nem teste de arquitetura em runtime |
 
 ### Lista de verificação antes da entrega
 
@@ -244,6 +257,7 @@ cenários futuros, não uma suite existente nem resultados aprovados.
 - [x] Versões 3.0 usadas; não se reintroduz a revisão cruzada removida do enunciado.
 - [ ] Revisão académica pela equipa; quantificação final, implementação e avaliação.
 
-O [índice](README.md) identifica as fontes presentes e as folhas/slides de apoio
-não fornecidos. Usou-se o Anexo A do HTML; não se afirma leitura integral de SAIP
+O [registo da revisão](evidence/verification-2026-11-20.md) separa as correções
+documentais de ensaios e validação humana. O [índice](README.md) identifica as
+fontes presentes e as folhas/slides de apoio não fornecidos. Usou-se o Anexo A do HTML; não se afirma leitura integral de SAIP
 ou de PDFs ausentes. EV-39/EV-47/EV-48.

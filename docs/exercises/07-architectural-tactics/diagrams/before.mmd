@@ -7,7 +7,8 @@ flowchart LR
     N --> W["WS gateway: join sem autorização de projeto"]
     W -->|eventos| B
     P --> U["users: perfil e quota Apply"]
-    P --> Q["RabbitMQ e workers imagem/vídeo"]
-    Q -->|eventos/resultados| P
+    P -->|pedidos de processamento| Q["RabbitMQ e workers imagem/vídeo"]
+    Q -->|project_queue: resultados| P
+    Q -->|ws_queue: eventos| W
     classDef weak fill:#fff0ee,stroke:#b3312d,color:#111;
     class G,P,S,W weak;

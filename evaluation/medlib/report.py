@@ -32,6 +32,8 @@ def _matrix(sm: dict) -> tuple[str, str]:
 def evaluate(metric: str, sm: dict | None, crit: dict) -> tuple[str, str]:
     if not sm:
         return NM, ""
+    if "erro" in sm:
+        return INC, f'a medição falhou: {sm["erro"]}'
     c = crit.get(metric, {})
     try:
         if metric in ("S01", "S02", "S03", "S04", "S16", "S17"):
@@ -40,7 +42,7 @@ def evaluate(metric: str, sm: dict | None, crit: dict) -> tuple[str, str]:
             if sm.get("invalidas"):
                 return INC, f'{sm["invalidas"]} repetições sem controlo positivo'
             if sm.get("censurado") or sm.get("limite_superior_max_ms") is None:
-                return NAO, "sem corte durante a janela (>30 s)"
+                return NAO, "sem corte durante a janela de observação"
             up = sm["limite_superior_max_ms"]
             if sm.get("eventos_apos_limite", 0) > 0 or not sm.get("controlos_ok"):
                 return NAO, f'{up:.0f} ms; eventos após limite={sm.get("eventos_apos_limite")}; controlos={sm.get("controlos_ok")}'
@@ -64,18 +66,26 @@ def evaluate(metric: str, sm: dict | None, crit: dict) -> tuple[str, str]:
             return COMP, "avaliada em `compare` contra a BF"
         if metric == "U01":
             worst = max((v["max_mib"] or 0) for v in sm["por_servico"].values())
-            if any(v["por_tamanho"][s]["processo_morreu"] for v in sm["por_servico"].values() for s in v["por_tamanho"]):
-                return NAO, "processo morreu durante uploads"
+            died = {k: sum(t["processo_morreu"] for t in v["por_tamanho"].values())
+                    for k, v in sm["por_servico"].items()}
+            if any(died.values()):
+                who = ", ".join(f"{k} {n}×" for k, n in died.items() if n)
+                return NAO, f"pico {worst:.0f} MiB (limite do contentor 2 GiB); processo morreu: {who}"
             return _le(worst, c["alvo"], c["minimo"], "MiB")
         if metric == "U04":
             vals = {k: sm[k]["max_delta_anon_mib"] for k in ("nginx", "seaweedfs")}
             if any(v is None for v in vals.values()):
-                return INC, "sem amostras cgroup"
+                return INC, "sem uploads de 500 MiB aceites"
+            txt = f'nginx +{vals["nginx"]} MiB, seaweedfs +{vals["seaweedfs"]} MiB (máx.)'
+            if "validas" in sm:
+                txt += f'; {sm["validas"]}/{sm["tentativas"]} amostras válidas'
+                if sm["validas"] < sm.get("pedidas", 0):
+                    return INC, txt + f' (pedidas {sm["pedidas"]})'
             if all(vals[k] <= c["alvo"][k] for k in vals):
-                return ALVO, f"{vals}"
+                return ALVO, txt
             if all(vals[k] <= c["minimo"][k] for k in vals):
-                return MINIMO, f"{vals}"
-            return NAO, f"{vals}"
+                return MINIMO, txt
+            return NAO, txt
         if metric == "U08":
             comp = sm["por_componente"]
             resid = any((v["residuo_max_kib"] or 0) > 0 for v in comp.values())
@@ -87,11 +97,15 @@ def evaluate(metric: str, sm: dict | None, crit: dict) -> tuple[str, str]:
                 return NAO, f"pico {ratio:.2f}×(F+16 MiB)"
             return (ALVO, f"pico máx. {peak} MiB") if peak <= c["alvo"]["pico_mib"] else (MINIMO, f"pico máx. {peak} MiB")
         if metric == "U09":
-            vals = sm.get("amostras_500_ms") or []
+            vals = [v for v in (sm.get("amostras_500_ms") or []) if v is not None]
+            fails = sm.get("falhas_500") or 0
+            if fails:
+                tot = sm.get("tentativas_500") or (len(vals) + fails)
+                extra = (f'; aceites: máx. {max(vals):.0f} ms, mediana {sm.get("mediana_500_ms"):.0f} ms'
+                         if vals else "")
+                return NAO, f"{fails}/{tot} uploads de 500 MiB falharam{extra}"
             if not vals:
                 return INC, "sem amostras de 500 MiB"
-            if any(v is None for v in vals):
-                return NAO, f'{sm.get("falhas_500")} uploads de 500 MiB falharam'
             return _lt(max(vals), c["alvo"], c["minimo"], "ms")
         if metric == "U19":
             if not sm.get("todas_401_403"):
@@ -221,4 +235,6 @@ def _cmp_u10(b, m, c):
         return INC, "", ""
     worst = max(ratios.values())
     st = ALVO if worst <= c["alvo"] else (MINIMO if worst <= c["minimo"] else NAO)
-    return st, f"{len(bb)} estratos", f"razão máx. {worst:.2f}"
+    no_base = sorted(s for s in bb if not bb[s])
+    note = f" ({len(no_base)} estratos sem base: nenhum upload aceite na BF)" if no_base else ""
+    return st, f"{len(ratios)} estratos comparados{note}", f"razão máx. {worst:.2f}"

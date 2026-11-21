@@ -276,7 +276,7 @@ O código HTTP nunca chega para `ADMITIDO`: decide sempre a verificação de efe
 5. **S12** (revogação).
 6. **S05** (controlos legítimos) e **S21** (latência).
 7. `docker compose restart` dos serviços medidos; espera pela prontidão.
-8. **Upload:** estratos U01/U04/U08/U09/U10/U15/U17 → U18 → U19 → U20 → U25.
+8. **Upload:** estratos U01/U08/U09/U10/U15/U17 → U04 → U18 → U19 → U20 → U25.
 9. Resíduos finais (U08), `summary.json`, `report.md`.
 10. `stack down` (com `-v`), só no fim e só no projeto isolado. Limpeza completa: §12.
 
@@ -510,7 +510,7 @@ A partir de `samples/video/sample_10s_720p.mp4`:
 Limite free: 100 MiB (`VIDEO_FREE_MAX_SIZE_MB × 1024 × 1024`, `projects/utils/video.js`),
 por isso 100 MiB exatos são válidos no free.
 
-### 8.2 Estratos principais — U01, U04, U08, U09, U10, U15, U17
+### 8.2 Estratos principais — U01, U08, U09, U10, U15, U17
 
 Estratos (EVAL: 100 uploads normais):
 
@@ -545,13 +545,34 @@ Valores:
 | Métrica | Cálculo | Critério |
 |---------|---------|----------|
 | U01 | máx. `delta` por serviço e por tamanho (e mediana) | máx. ≤64 MiB (mínimo), ≤32 MiB (alvo) em todos os estratos |
-| U04 | máx. (`pico − idle`) de `anon` no nginx e no seaweedfs, estratos de 500 MiB | ≤128/≤256 MiB (mínimo), ≤64/≤128 MiB (alvo) |
 | U08 | pico de disco por componente e resíduos 60 s depois do estrato | pico ≤ F + 16 MiB por componente e 0 resíduos (mínimo); ≤16 MiB e sem spool integral (alvo) |
 | U09 | `post_send_ms` de cada tentativa premium de 500 MiB | todas <3000 ms (mínimo), todas <1000 ms (alvo) |
 | U10 | mediana de `total_ms` por estrato | `compare`: ≤1,10× BF (mínimo), ≤ BF (alvo) |
 | U15 | SHA-256 iguais / aceites | 100% |
 | U17 | aceites corretamente / tentativas válidas | 100% |
 
+
+### 8.2a U04 — memória do nginx e do SeaweedFS (revisão de 21/11)
+
+O SeaweedFS (Go) fica com a memória que ocupou num upload e reutiliza-a nos seguintes.
+Medido dentro dos estratos, o `pico − idle` depende do que veio antes: na BF de 21/11
+deu +560–582 MiB nos dois uploads feitos com o SeaweedFS acabado de arrancar
+(idle ~130 MiB) e ~0 nos restantes (idle 1,1–1,9 GiB). Por isso a U04 tem um passo
+próprio, com o mesmo estado inicial em todas as amostras:
+
+1. Reiniciar o `seaweedfs`, depois os serviços Node e o nginx (`restart_app`); esperar
+   pela API e mais 5 s.
+2. Upload premium de `pad_500MiB_H.mp4` (C=1) com os amostradores de cgroup (§5.4) no
+   nginx e no seaweedfs.
+3. Só contam amostras com upload aceite (2xx): se o gateway morrer antes, o ficheiro
+   não chega ao SeaweedFS.
+4. Repetir até 5 amostras válidas (máximo 40 tentativas; na base o gateway só sobrevive
+   a uma minoria dos uploads de 500 MiB). Com `--resume`, as amostras já feitas com
+   este método contam. Com menos de 5 válidas o resultado é INCONCLUSIVO.
+
+| Métrica | Cálculo | Critério |
+|---------|---------|----------|
+| U04 | máx. (`pico − idle`) de `anon` no nginx e no seaweedfs, nas amostras válidas | ≤128/≤256 MiB (mínimo), ≤64/≤128 MiB (alvo) |
 ### 8.3 U18 — Uploads inválidos
 
 3 repetições por caso, aquecido, com memória Node e eventos OOM recolhidos:

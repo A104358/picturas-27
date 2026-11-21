@@ -47,8 +47,9 @@ def exec_sh(service: str, script: str, timeout: float = 30, check: bool = True) 
     return r.stdout
 
 
-def popen_sh(service: str, script: str) -> subprocess.Popen:
-    return subprocess.Popen(["docker", "exec", cname(service), "sh", "-c", script],
+def popen_sh(service: str, script: str, user: str | None = None) -> subprocess.Popen:
+    cmd = ["docker", "exec"] + (["-u", user] if user else []) + [cname(service), "sh", "-c", script]
+    return subprocess.Popen(cmd,
                             stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True)
 
 
@@ -110,9 +111,10 @@ def published_port(service: str, target: int) -> int | None:
     if r.returncode != 0 or not out:
         return None
     try:
-        return int(out.splitlines()[0].rsplit(":", 1)[1])
+        port = int(out.splitlines()[0].rsplit(":", 1)[1])
     except (ValueError, IndexError):
         return None
+    return port or None  # compose prints ":0" for an unpublished port
 
 
 def delivered_config() -> dict:
@@ -215,6 +217,18 @@ def stack_purge() -> list[str]:
 
 def restart(services: list[str]) -> None:
     compose("restart", *services, timeout=300)
+
+
+def restart_app() -> None:
+    """Restart the three Node services and then nginx.
+
+    - The Node services run under nodemon: after an OOM kill the container stays
+      "Up" while the app is dead ("app crashed - waiting for file changes"), so a
+      running container does not mean a live service.
+    - nginx resolves upstream names at start-up; after the Node containers restart
+      their IPs may change and nginx answers 502 until it is restarted too."""
+    restart(["api_gateway", "projects", "img_storage"])
+    restart(["nginx"])
 
 
 def stop(service: str) -> None:

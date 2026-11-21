@@ -87,8 +87,9 @@ def node_read_all(mems: dict[str, NodeMem]) -> dict:
 class Sampler:
     """Background in-container loop; stops via a flag file or a hard deadline."""
 
-    def __init__(self, service: str, body: str, interval: float, max_s: int = 900):
+    def __init__(self, service: str, body: str, interval: float, max_s: int = 900, user: str | None = None):
         self.service = service
+        self.user = user
         self.id = uuid.uuid4().hex[:8]
         self.lines: list[str] = []
         flag = f"/tmp/med_stop_{self.id}"
@@ -102,7 +103,7 @@ class Sampler:
 
     def start(self) -> "Sampler":
         try:
-            self.proc = dockerctl.popen_sh(self.service, self.script)
+            self.proc = dockerctl.popen_sh(self.service, self.script, user=self.user)
         except Exception as exc:  # noqa: BLE001
             log(f"sampler {self.service}: {exc!r}")
             return self
@@ -187,17 +188,29 @@ def temp_dirs() -> dict[str, str]:
 
 
 def disk_sampler(service: str, directory: str) -> Sampler:
-    body = f"du -sk {directory} 2>/dev/null | awk '{{printf \"%d\\n\", $1}}' || echo 0"
-    return Sampler(service, body, 0.2)
+    """Visible files (du) plus files deleted but still open under `directory`.
+
+    nginx unlinks its client-body temp file right after creating it, so du alone
+    never sees it; the open descriptor in /proc/*/fd still holds the disk space."""
+    body = (
+        f'd=$(du -sk {directory} 2>/dev/null | cut -f1); t=0; '
+        f'for f in /proc/[0-9]*/fd/*; do l=$(readlink "$f" 2>/dev/null); '
+        f'case "$l" in "{directory}/"*" (deleted)") s=$(stat -L -c %s "$f" 2>/dev/null); '
+        f't=$((t + ${{s:-0}}));; esac; done; echo "${{d:-0}} $((t / 1024))"')
+    # nginx workers run as user nginx; root in the container cannot read their fds.
+    return Sampler(service, body, 0.1, user="nginx" if service == "nginx" else None)
 
 
 def disk_peak_kib(rows: list[list[float]]) -> dict:
-    rows = [r for r in rows if len(r) >= 2]
+    """rows: [uptime, du_kib, deleted_open_kib]."""
+    rows = [r for r in rows if len(r) >= 3]
     if not rows:
         return {"samples": 0}
-    base = rows[0][1]
-    peak = max(r[1] for r in rows)
-    return {"samples": len(rows), "start_kib": base, "peak_kib": peak, "delta_peak_kib": peak - base}
+    totals = [r[1] + r[2] for r in rows]
+    base = totals[0]
+    peak = max(totals)
+    return {"samples": len(rows), "start_kib": base, "peak_kib": peak, "delta_peak_kib": peak - base,
+            "peak_deleted_open_kib": max(r[2] for r in rows)}
 
 
 def disk_snapshot(service: str, directory: str) -> dict:

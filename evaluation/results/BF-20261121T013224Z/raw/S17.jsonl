@@ -1,0 +1,48 @@
+{"metric": "S17", "campaign": "BF", "case": "R1", "surface": "rede", "rep": 1, "result": "ADMITIDO", "reason": "operação aceite", "t_utc": "2026-11-21T01:35:21Z", "error_kind": null}
+{"metric": "S17", "campaign": "BF", "case": "R2", "surface": "rede", "rep": 1, "result": "ADMITIDO", "reason": "operação aceite", "t_utc": "2026-11-21T01:35:21Z", "status": 200, "error_kind": null}
+{"metric": "S17", "campaign": "BF", "case": "R3", "surface": "rede", "rep": 1, "result": "ADMITIDO", "reason": "operação aceite", "t_utc": "2026-11-21T01:35:21Z", "error_kind": null}
+{"metric": "S17", "campaign": "BF", "case": "R4", "surface": "rede", "rep": 1, "result": "ADMITIDO", "reason": "operação aceite", "t_utc": "2026-11-21T01:35:21Z", "error_kind": null}
+{"metric": "S17", "campaign": "BF", "case": "R5", "surface": "rede", "rep": 1, "result": "ADMITIDO", "reason": "operação aceite", "t_utc": "2026-11-21T01:35:22Z", "status": 200, "error_kind": null}
+{"metric": "S17", "campaign": "BF", "case": "B1", "surface": "rede", "rep": 1, "result": "ADMITIDO", "reason": "operação aceite", "t_utc": "2026-11-21T01:35:22Z", "error_kind": null}
+{"metric": "S17", "campaign": "BF", "case": "B2", "surface": "rede", "rep": 1, "result": "ADMITIDO", "reason": "operação aceite", "t_utc": "2026-11-21T01:35:22Z", "error_kind": null}
+{"metric": "S17", "campaign": "BF", "case": "R1", "surface": "host", "rep": 1, "result": "ADMITIDO", "reason": "operação aceite", "t_utc": "2026-11-21T01:35:22Z", "error_kind": null}
+{"metric": "S17", "campaign": "BF", "case": "R2", "surface": "host", "rep": 1, "result": "ADMITIDO", "reason": "operação aceite", "t_utc": "2026-11-21T01:35:22Z", "status": 200, "error_kind": null}
+{"metric": "S17", "campaign": "BF", "case": "R3", "surface": "host", "rep": 1, "result": "ADMITIDO", "reason": "operação aceite", "t_utc": "2026-11-21T01:35:22Z", "error_kind": null}
+{"metric": "S17", "campaign": "BF", "case": "R4", "surface": "host", "rep": 1, "result": "ADMITIDO", "reason": "operação aceite", "t_utc": "2026-11-21T01:35:22Z", "error_kind": null}
+{"metric": "S17", "campaign": "BF", "case": "R5", "surface": "host", "rep": 1, "result": "ADMITIDO", "reason": "operação aceite", "t_utc": "2026-11-21T01:35:22Z", "status": 200, "error_kind": null}
+{"metric": "S17", "campaign": "BF", "case": "B1", "surface": "host", "rep": 1, "result": "ADMITIDO", "reason": "operação aceite", "t_utc": "2026-11-21T01:35:23Z", "error_kind": null}
+{"metric": "S17", "campaign": "BF", "case": "B2", "surface": "host", "rep": 1, "result": "ADMITIDO", "reason": "operação aceite", "t_utc": "2026-11-21T01:35:23Z", "error_kind": null}
+{"metric": "S17", "campaign": "BF", "case": "B3", "surface": "publica", "rep": 1, "result": "RECUSADO_DOMINIO", "reason": "HTTP 403, sem efeito", "t_utc": "2026-11-21T01:35:24Z", "status": 403}
+{"metric": "S17", "campaign": "BF", "control": "url_assinada_legitima", "rep": 1, "ok": true, "note": "", "t_utc": "2026-11-21T01:35:24Z"}
+{"metric": "S17", "campaign": "BF", "case": "R1", "surface": "rede", "rep": 2, "result": "ADMITIDO", "reason": "operação aceite", "t_utc": "2026-11-21T01:35:24Z", "error_kind": null}
+{"metric": "S17", "campaign": "BF", "case": "R2", "surface": "rede", "rep": 2, "result": "ADMITIDO", "reason": "operação aceite", "t_utc": "2026-11-21T01:35:24Z", "status": 200, "error_kind": null}
+{"metric": "S17", "campaign": "BF", "case": "R3", "surface": "rede", "rep": 2, "result": "ADMITIDO", "reason": "operação aceite", "t_utc": "2026-11-21T01:35:24Z", "error_kind": null}
+{"metric": "S17", "campaign": "BF", "case": "R4", "surface": "rede", "rep": 2, "result": "ADMITIDO", "reason": "operação aceite", "t_utc": "2026-11-21T01:35:25Z", "error_kind": null}
+{"metric": "S17", "campaign": "BF", "case": "R5", "surface": "rede", "rep": 2, "result": "ADMITIDO", "reason": "operação aceite", "t_utc": "2026-11-21T01:35:25Z", "status": 200, "error_kind": null}
+{"metric": "S17", "campaign": "BF", "case": "B1", "surface": "rede", "rep": 2, "result": "ADMITIDO", "reason": "operação aceite", "t_utc": "2026-11-21T01:35:25Z", "error_kind": null}
+{"metric": "S17", "campaign": "BF", "case": "B2", "surface": "rede", "rep": 2, "result": "ADMITIDO", "reason": "operação aceite", "t_utc": "2026-11-21T01:35:25Z", "error_kind": null}
+{"metric": "S17", "campaign": "BF", "case": "R1", "surface": "host", "rep": 2, "result": "ADMITIDO", "reason": "operação aceite", "t_utc": "2026-11-21T01:35:26Z", "error_kind": null}
+{"metric": "S17", "campaign": "BF", "case": "R2", "surface": "host", "rep": 2, "result": "ADMITIDO", "reason": "operação aceite", "t_utc": "2026-11-21T01:35:26Z", "status": 200, "error_kind": null}
+{"metric": "S17", "campaign": "BF", "case": "R3", "surface": "host", "rep": 2, "result": "ADMITIDO", "reason": "operação aceite", "t_utc": "2026-11-21T01:35:26Z", "error_kind": null}
+{"metric": "S17", "campaign": "BF", "case": "R4", "surface": "host", "rep": 2, "result": "ADMITIDO", "reason": "operação aceite", "t_utc": "2026-11-21T01:35:26Z", "error_kind": null}
+{"metric": "S17", "campaign": "BF", "case": "R5", "surface": "host", "rep": 2, "result": "ADMITIDO", "reason": "operação aceite", "t_utc": "2026-11-21T01:35:26Z", "status": 200, "error_kind": null}
+{"metric": "S17", "campaign": "BF", "case": "B1", "surface": "host", "rep": 2, "result": "ADMITIDO", "reason": "operação aceite", "t_utc": "2026-11-21T01:35:26Z", "error_kind": null}
+{"metric": "S17", "campaign": "BF", "case": "B2", "surface": "host", "rep": 2, "result": "ADMITIDO", "reason": "operação aceite", "t_utc": "2026-11-21T01:35:26Z", "error_kind": null}
+{"metric": "S17", "campaign": "BF", "case": "B3", "surface": "publica", "rep": 2, "result": "RECUSADO_DOMINIO", "reason": "HTTP 403, sem efeito", "t_utc": "2026-11-21T01:35:27Z", "status": 403}
+{"metric": "S17", "campaign": "BF", "control": "url_assinada_legitima", "rep": 2, "ok": true, "note": "", "t_utc": "2026-11-21T01:35:27Z"}
+{"metric": "S17", "campaign": "BF", "case": "R1", "surface": "rede", "rep": 3, "result": "ADMITIDO", "reason": "operação aceite", "t_utc": "2026-11-21T01:35:27Z", "error_kind": null}
+{"metric": "S17", "campaign": "BF", "case": "R2", "surface": "rede", "rep": 3, "result": "ADMITIDO", "reason": "operação aceite", "t_utc": "2026-11-21T01:35:27Z", "status": 200, "error_kind": null}
+{"metric": "S17", "campaign": "BF", "case": "R3", "surface": "rede", "rep": 3, "result": "ADMITIDO", "reason": "operação aceite", "t_utc": "2026-11-21T01:35:27Z", "error_kind": null}
+{"metric": "S17", "campaign": "BF", "case": "R4", "surface": "rede", "rep": 3, "result": "ADMITIDO", "reason": "operação aceite", "t_utc": "2026-11-21T01:35:28Z", "error_kind": null}
+{"metric": "S17", "campaign": "BF", "case": "R5", "surface": "rede", "rep": 3, "result": "ADMITIDO", "reason": "operação aceite", "t_utc": "2026-11-21T01:35:28Z", "status": 200, "error_kind": null}
+{"metric": "S17", "campaign": "BF", "case": "B1", "surface": "rede", "rep": 3, "result": "ADMITIDO", "reason": "operação aceite", "t_utc": "2026-11-21T01:35:28Z", "error_kind": null}
+{"metric": "S17", "campaign": "BF", "case": "B2", "surface": "rede", "rep": 3, "result": "ADMITIDO", "reason": "operação aceite", "t_utc": "2026-11-21T01:35:28Z", "error_kind": null}
+{"metric": "S17", "campaign": "BF", "case": "R1", "surface": "host", "rep": 3, "result": "ADMITIDO", "reason": "operação aceite", "t_utc": "2026-11-21T01:35:29Z", "error_kind": null}
+{"metric": "S17", "campaign": "BF", "case": "R2", "surface": "host", "rep": 3, "result": "ADMITIDO", "reason": "operação aceite", "t_utc": "2026-11-21T01:35:29Z", "status": 200, "error_kind": null}
+{"metric": "S17", "campaign": "BF", "case": "R3", "surface": "host", "rep": 3, "result": "ADMITIDO", "reason": "operação aceite", "t_utc": "2026-11-21T01:35:29Z", "error_kind": null}
+{"metric": "S17", "campaign": "BF", "case": "R4", "surface": "host", "rep": 3, "result": "ADMITIDO", "reason": "operação aceite", "t_utc": "2026-11-21T01:35:29Z", "error_kind": null}
+{"metric": "S17", "campaign": "BF", "case": "R5", "surface": "host", "rep": 3, "result": "ADMITIDO", "reason": "operação aceite", "t_utc": "2026-11-21T01:35:29Z", "status": 200, "error_kind": null}
+{"metric": "S17", "campaign": "BF", "case": "B1", "surface": "host", "rep": 3, "result": "ADMITIDO", "reason": "operação aceite", "t_utc": "2026-11-21T01:35:29Z", "error_kind": null}
+{"metric": "S17", "campaign": "BF", "case": "B2", "surface": "host", "rep": 3, "result": "ADMITIDO", "reason": "operação aceite", "t_utc": "2026-11-21T01:35:29Z", "error_kind": null}
+{"metric": "S17", "campaign": "BF", "case": "B3", "surface": "publica", "rep": 3, "result": "RECUSADO_DOMINIO", "reason": "HTTP 403, sem efeito", "t_utc": "2026-11-21T01:35:30Z", "status": 403}
+{"metric": "S17", "campaign": "BF", "control": "url_assinada_legitima", "rep": 3, "ok": true, "note": "", "t_utc": "2026-11-21T01:35:30Z"}

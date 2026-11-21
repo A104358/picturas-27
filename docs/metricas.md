@@ -18,11 +18,13 @@ valores. O procedimento de recolha está no [plano de medição](planoMedicao.md
   O catálogo continua a ser a decomposição completa; este documento escolhe as que
   contam para a avaliação e diz porquê. As restantes ficam como diagnóstico (§4).
   A seleção ainda tem de ser confirmada pela equipa.
-- **Os valores "base" indicados são exploratórios** (B16, 16/11, Apple M4/ARM64, estado
-  reutilizado) ou estimativas. **Não são a baseline formal.** A baseline formal (BF) é
-  a primeira execução do [plano de medição](planoMedicao.md) sobre a solução de base,
-  antes de qualquer alteração ao código. A medição final (MF) repete-a com o mesmo
-  método, no mesmo host.
+- **Os valores "base" são os da baseline formal (BF)**, medida em 21/11/2026 com o
+  `med.py` (campanha `BF-20261121T013224Z`, Apple M4 Pro, Docker Desktop com 12 CPU e
+  7,7 GiB). O commit medido foi `d6b4497`, cujo código da aplicação é idêntico ao de
+  `0523102` (só mudaram documentação e ferramentas de avaliação). Os resultados brutos
+  estão em `evaluation/results/BF-20261121T013224Z/`. A medição final (MF) repete-a
+  com o mesmo método, no mesmo host. Os valores exploratórios anteriores (B16, 16/11)
+  ficam no [catálogo](fase2-metricas-e-baseline.md).
 - **Os mínimos e alvos são fixados antes da BF** e revistos uma única vez depois dela
   (calibração), com registo da alteração. **Nunca se ajustam para fazer passar a MF.**
 - **Quem mede e onde (decisão de 20/11).** A BF e a MF oficiais são recolhidas por um
@@ -50,29 +52,29 @@ valores. O procedimento de recolha está no [plano de medição](planoMedicao.md
 
 ## Resumo
 
-| ID | Tipo | Métrica | Base (exploratória) | Mínimo | Alvo | Origem |
+| ID | Tipo | Métrica | Base (BF, 21/11) | Mínimo | Alvo | Origem |
 |----|------|---------|---------------------|--------|------|--------|
-| S01 | Principal | Efeitos indevidos sobre recursos de outra conta, pela entrada pública | ≥5 confirmados (G03–G07) | 0 | 0 | P |
-| S02 | Principal | Efeitos indevidos por chamada direta aos serviços internos com API (host e rede Docker) | D02/D03 → 200; D09 confirmado | 0 | 0 | P |
-| S03 | Principal | Operações indevidas no storage/signer (originais e resultados) | D07/D08 → 201 | 0 | 0 | P |
-| S04 | Principal | Eventos protegidos ou entradas em sala WS sem autorização | ≥1 (W01) | 0 | 0 | P |
-| S12 | Principal | Tempo de corte da receção WS após revogação | sem corte (>30 s) | ≤5 s | ≤2 s | D |
-| S16 | Principal | Acessos indevidos às bases de dados Mongo | D11: leitura sem credenciais | 0 | 0 | P / D |
-| S17 | Principal | Acessos indevidos ao broker RabbitMQ e ao S3 | D10: credencial publicada funciona | 0 | 0 | P / D |
+| S01 | Principal | Efeitos indevidos sobre recursos de outra conta, pela entrada pública | 36/45 admitidos (12 de 15 casos) | 0 | 0 | P |
+| S02 | Principal | Efeitos indevidos por chamada direta aos serviços internos com API (host e rede Docker) | 54/60 admitidos (9 de 10 casos, host e rede) | 0 | 0 | P |
+| S03 | Principal | Operações indevidas no storage/signer (originais e resultados) | 24/24 admitidos (4 de 4 casos) | 0 | 0 | P |
+| S04 | Principal | Eventos protegidos ou entradas em sala WS sem autorização | 15/15 admitidos (5 de 5 casos) | 0 | 0 | P |
+| S12 | Principal | Tempo de corte da receção WS após revogação | sem corte (>30 s); 263 eventos após o limite | ≤5 s | ≤2 s | D |
+| S16 | Principal | Acessos indevidos às bases de dados Mongo | 63/72 admitidos (todos os casos alcançáveis) | 0 | 0 | P / D |
+| S17 | Principal | Acessos indevidos ao broker RabbitMQ e ao S3 | 42/45 admitidos (14 de 15 casos) | 0 | 0 | P / D |
 | S18 | Principal | Portas de serviços internos publicadas no host | 12 em 10 serviços, todas as interfaces | 0 fora do loopback | 0 publicadas | E / diretrizes |
-| S05 | Guarda | Operações legítimas concluídas | 100% | 100% | 100% | P |
-| S21 | Guarda | Sobrecarga de latência em pedidos leves (Δ da mediana) | 0 | ≤ +10 ms | ≤ +5 ms | E |
-| U01 | Principal | Pico de memória adicional por serviço Node no upload | 1767 / 759 / 729 MiB (500 MiB) | ≤64 MiB | ≤32 MiB | D (EVAL-M1) |
-| U20 | Principal | 3 uploads simultâneos de 500 MiB | não medido (previsão: falha) | 3/3 sem OOM | 3/3 em 3 rondas | D (EVAL-M1) |
-| U19 | Principal | Recurso gasto antes de recusar um upload sem token | +500 MiB, 401 após 3,6 s | ≤8 MiB | ≤100 ms após cabeçalhos | E |
-| U18 | Principal | Recusa correta de uploads inválidos | free 500 MiB → 502 + OOM | 100% | 100% | P / R |
-| U04 | Principal | Memória do nginx e do SeaweedFS no upload | não medido | +≤128 / +≤256 MiB | +≤64 / +≤128 MiB | D (EVAL-M1) / E |
-| U08 | Principal | Disco temporário por componente e resíduos | não medido | ≤C×(F+16 MiB); 0 resíduos | ≤16 MiB por upload, sem spool integral | E |
-| U09 | Guarda | Aceitação após o fim do envio | mediana 6923 ms (500 MiB) | <3000 ms | <1000 ms | **R** |
-| U25 | Guarda | Pedidos leves durante uploads | não medido | 0 falhas; ≤1,10× controlo | ≤ controlo | D (EVAL-M1) |
-| U15 | Guarda | Integridade SHA-256 do original | não verificada em todos | 100% | 100% | P |
-| U17 | Guarda | Uploads válidos aceites | 14/14 | 100% | 100% | P |
-| U10 | Guarda | Tempo total do upload | mediana 10 525 ms (500 MiB) | ≤1,10× BF | ≤ BF | D (EVAL-M1) |
+| S05 | Guarda | Operações legítimas concluídas | 45/45 (100%) | 100% | 100% | P |
+| S21 | Guarda | Sobrecarga de latência em pedidos leves (Δ da mediana) | 6,1 ms / 3,5 ms (medianas de referência) | ≤ +10 ms | ≤ +5 ms | E |
+| U01 | Principal | Pico de memória adicional por serviço Node no upload | 1976 / 1011 / 1001 MiB (500 MiB); gateway morreu 12/20 | ≤64 MiB | ≤32 MiB | D (EVAL-M1) |
+| U20 | Principal | 3 uploads simultâneos de 500 MiB | 0/3 nas 3 rondas, OOM em todas | 3/3 sem OOM | 3/3 em 3 rondas | D (EVAL-M1) |
+| U19 | Principal | Recurso gasto antes de recusar um upload sem token | +966 MiB, 401 após 10,6 s (500 MiB recebidos) | ≤8 MiB | ≤100 ms após cabeçalhos | E |
+| U18 | Principal | Recusa correta de uploads inválidos | 15/21 (71%); I1 e I6 → 502 + OOM | 100% | 100% | P / R |
+| U04 | Principal | Memória do nginx e do SeaweedFS no upload | +0,4 / +619 MiB (máx.; mediana +585) | +≤128 / +≤256 MiB | +≤64 / +≤128 MiB | D (EVAL-M1) / E |
+| U08 | Principal | Disco temporário por componente e resíduos | 500 MiB no nginx e 500 MiB no `projects`; 0 resíduos | ≤C×(F+16 MiB); 0 resíduos | ≤16 MiB por upload, sem spool integral | E |
+| U09 | Guarda | Aceitação após o fim do envio | 14/20 falharam; aceites: mediana 6171 ms, máx. 15 776 ms | <3000 ms | <1000 ms | **R** |
+| U25 | Guarda | Pedidos leves durante uploads | 6 erros (2 por par), OOM do gateway nos 3 pares | 0 falhas; ≤1,10× controlo | ≤ controlo | D (EVAL-M1) |
+| U15 | Guarda | Integridade SHA-256 do original | 86/86 (100%) | 100% | 100% | P |
+| U17 | Guarda | Uploads válidos aceites | 86/100 (86%) | 100% | 100% | P |
+| U10 | Guarda | Tempo total do upload | 500 MiB (H): 8440–8904 ms; 500 MiB (T): sem uploads aceites | ≤1,10× BF | ≤ BF | D (EVAL-M1) |
 
 ---
 
@@ -115,8 +117,11 @@ na MF.
   G03 (adicionar ferramenta ao pipeline da vítima), G04 (carregar media para o projeto
   da vítima), G05 (ler o perfil de outro sem token), G06/G07 (tornar-se premium sem
   pagar). Afeta imagem e vídeo.
-- **Base.** ≥5 efeitos confirmados (G03, G04, G05, G06, G07). G02 e outros casos
-  precisam de asserções corrigidas antes de contarem.
+- **Base (BF).** 36 admissões em 45 tentativas: 12 dos 15 casos admitidos nas 3
+  repetições (G02–G13: leitura com `?owner=`, pipeline, upload, URL do original,
+  renomear, eliminar media e projeto, perfil sem token, autopromoção a premium, ler e
+  cancelar a subscrição de outro). Recusados: G01 (JWT de outsider sem `?owner`), G14
+  (listar partilhas) e G15 (leitor a editar). Controlos legítimos: 3/3.
 - **Mínimo / alvo:** 0 / 0 (P).
 - **Cuidados.** G06 (registo público com `type=premium`) e G07 dizem respeito ao perfil
   e não a um projeto, mas pertencem ao QS-01 (rotas de `users`). A regra D7 (`owner`
@@ -134,10 +139,11 @@ na MF.
   essência do "ponta a ponta". Medir também na rede Docker impede que o problema
   pareça resolvido apenas por se fecharem portas (S18): um serviço comprometido dentro
   da rede continuaria a ter acesso total.
-- **Base.** D02/D03 → 200 com o projeto da vítima (efeito a confirmar com asserção de
-  conteúdo na BF). D09: `PUT` direto ao `users` sem token mudou o perfil da vítima para
-  premium (efeito confirmado). Na rede Docker: não medido, mas o código não verifica
-  nada.
+- **Base (BF).** 54 admissões em 60 tentativas, 27 no host e 27 na rede Docker: 9 dos 10
+  casos admitidos nas duas superfícies (`X-Caller-Id` forjado, JWT de outro, JWT com
+  chave errada e `alg=none`, adicionar ferramenta, eliminar projeto, tornar a vítima
+  premium, reservar quota, ler subscrição). Só D01 (pedido sem identidade nenhuma) é
+  recusado. Controlos legítimos: 3/3.
 - **Mínimo / alvo:** 0 / 0 (P), nas duas superfícies.
 
 ### S03 — Storage e emissão de URLs assinadas
@@ -147,9 +153,9 @@ na MF.
   efeito verifica-se com HEAD/SHA-256 do objeto antes e depois.
 - **Por que foi escolhida.** Os originais e os resultados (vídeos) são o ativo mais
   valioso do utilizador. Hoje o serviço de storage não tem autenticação.
-- **Base.** D07 (escrita sem token → 201) e D08 (eliminação sem token → 2xx); D06
-  (pedir URL assinado do original) tem de ser repetido com o campo certo (`og_img_key`
-  obtido do estado do projeto).
+- **Base (BF).** 24 admissões em 24 tentativas: os 4 casos (URL assinado do original
+  com bytes coincidentes, escrita, cópia `src`→`out` e eliminação do original) são
+  admitidos no host e na rede Docker, em todas as repetições. Controlos: 3/3.
 - **Mínimo / alvo:** 0 / 0 (P).
 
 ### S04 — Admissão no WebSocket (inclui S10)
@@ -161,7 +167,10 @@ na MF.
 - **Por que foi escolhida.** Fuga confirmada (W01: um socket sem token recebeu o
   pipeline de outro utilizador). Os eventos de progresso também revelam atividade e
   nomes de ficheiros.
-- **Base.** ≥1 (W01). Na base, `join-project` aceita qualquer `projectId` sem verificar.
+- **Base (BF).** 15 admissões em 15 tentativas: os 5 casos (sem token, JWT de outsider,
+  assinatura errada, JWT expirado, entrada com o `projects` parado) recebem os eventos
+  do projeto. Na base, `join-project` aceita qualquer `projectId` sem verificar.
+  Controlos: 15/15.
 - **Mínimo / alvo:** 0 / 0 (P).
 
 ### S12 — Tempo de corte após revogação (QS-07)
@@ -175,9 +184,9 @@ na MF.
   retirar uma partilha tem de retirar a receção que dela depende. É a única métrica
   temporal de segurança e a de maior exigência técnica (revalidação periódica, falhas,
   corridas), o que pesa na classificação.
-- **Base.** Na base o socket nunca é cortado, porque a sala não depende da partilha.
-  Regista-se como **"sem corte durante a janela de 30 s"** (valor censurado: >30 000 ms)
-  e conta-se o número de eventos recebidos depois da revogação.
+- **Base (BF).** Sem corte nas 3 repetições (valor censurado: >30 000 ms). Depois do ACK
+  da revogação (204), o membro revogado recebeu todos os eventos emitidos (103–104 por
+  repetição), 263 deles depois do limite de 5 s. Controlos válidos nas 3 repetições.
 - **Mínimo / alvo:** ≤5 s / ≤2 s, e 0 eventos depois do limite (D: critério e meta
   validados individualmente; revalidação inicial a cada 1 s).
 - **Por que estes valores.** Com revalidação a cada 1 s e um timeout total de 1 s
@@ -201,8 +210,11 @@ na MF.
   portas publicadas, lê e altera diretamente todos os projetos e utilizadores, o que
   anula qualquer autorização feita acima. É parte da opção A de segurança (credenciais
   próprias e privilégio mínimo por serviço) e é fácil de medir de forma objetiva.
-- **Base.** D11: leitura do `projects_mongoDB` sem credenciais aceite. As outras duas
-  instâncias não foram medidas, mas não têm autenticação configurada.
+- **Base (BF).** 63 admissões em 72 tentativas: todos os casos alcançáveis são
+  admitidos (leitura sem credenciais, leitura da BD de outro serviço, escrita noutra BD,
+  listagem de todas as BD), na rede Docker e no host. As 9 recusas são só de rede: a
+  `subscriptions_mongoDB` não tem porta publicada no host. A família (b) é não
+  aplicável (18 tentativas), porque a base não tem credenciais Mongo. Controlos: 6/6.
 - **Mínimo / alvo:** 0 / 0 (P), com 100% dos controlos legítimos (D: opção A).
 - **Fora desta métrica (decisão de 20/11).** O TLS com validação do certificado do
   servidor nas ligações às BD, ao RabbitMQ e ao S3 (a outra metade da opção A) não é
@@ -227,8 +239,11 @@ na MF.
   comprometido pode ler, apagar ou injetar mensagens de processamento (e assim alterar
   resultados de outros utilizadores) ou ler os objetos de todos. Também faz parte da
   opção A.
-- **Base.** D10: a API de gestão aceita a credencial publicada (200). S3 com a
-  credencial por omissão: não medido.
+- **Base (BF).** 42 admissões em 45 tentativas: os 7 casos de RabbitMQ e S3 (AMQP e API
+  de gestão com `user`/`password`, credencial de worker a ler `ws_queue`, a criar/apagar
+  filas e a usar a API de gestão, S3 com `admin`/`admin123`, criação de buckets) são
+  admitidos no host e na rede Docker. A leitura anónima do original via `/s3/` (B3) é
+  recusada. Controlos: 3/3.
 - **Mínimo / alvo:** 0 / 0 (P), com 100% dos controlos legítimos (D: opção A).
 
 ### S18 — Superfície exposta: portas internas publicadas
@@ -241,7 +256,8 @@ na MF.
   estão acessíveis diretamente a partir do exterior". É objetiva, barata e mostra um
   ganho claro. Por si só não chega (ver S02 na rede Docker), por isso entra ao lado das
   métricas de efeito e não em vez delas.
-- **Base.** 12 bindings em 10 serviços, todos em todas as interfaces: `seaweedfs`
+- **Base (BF).** 12 bindings em 10 serviços, todos em todas as interfaces e os 12
+  alcançáveis a partir do IP da LAN: `seaweedfs`
   (9000, 9090), `img_storage` (11000), `rabbitmq` (5672, 15672), `projects_mongoDB`
   (27018), `users_mongoDB` (27019), `projects` (9002), `users` (10001), `subscriptions`
   (11001), `generative-mock` (7860), `ws_gateway` (4000). Só o nginx (8080) devia estar
@@ -262,6 +278,7 @@ na MF.
 - **Por que foi escolhida.** Sem esta guarda, "0 admissões" poderia ser conseguido
   partindo a aplicação. É também a evidência de preservação funcional que as diretrizes
   pedem para este RNF.
+- **Base (BF).** 45/45 operações legítimas concluídas (100%).
 - **Mínimo / alvo:** 100% / 100% (P). Exceção declarada: a política ACL-C1 (só o dono
   elimina o projeto) altera de propósito um comportamento da base. O caso "editor
   elimina o projeto" passa de permitido a recusado e é justificado como objeto da
@@ -276,6 +293,9 @@ na MF.
 - **Por que foi escolhida.** O Ex. 7 regista o conflito DA-1 vs DA-2: mTLS, assinatura
   da identidade interna e a consulta de autorização acrescentam trabalho a cada pedido.
   Esta guarda mostra que a segurança não degradou a utilização normal.
+- **Base (BF).** Medianas de referência: `GET /projects/:user/:project` 6,1 ms
+  (máx. 15,4) e `GET /users/:id` 3,5 ms (máx. 9,5), 0 erros em 100 pedidos de cada. A
+  métrica é a diferença da MF para estes valores.
 - **Mínimo / alvo:** ≤ +10 ms / ≤ +5 ms (E).
 - **Por que estes valores.** Com ligações reutilizadas (keep-alive), o handshake mTLS é
   amortizado e o custo por pedido reduz-se a uma assinatura/verificação RS256 e a uma
@@ -292,9 +312,12 @@ nginx → `api_gateway` → `projects` → `img_storage` → S3. Nos três servi
 mantido **inteiro em memória** (`multer.memoryStorage()`), e o `projects` grava-o ainda
 num ficheiro temporário para o `ffprobe`. O gateway lê o corpo **antes** de verificar o
 JWT, e os limites do perfil (tamanho, duração) só são verificados no fim. Com limites
-de 2 GiB por contentor, um upload de 500 MiB leva o gateway a ~1,8 GiB e um segundo
-upload provoca OOM, que derruba o gateway para **todos** os utilizadores. A aceitação
-após o envio demora ~7 s a 500 MiB, contra os <3 s do `REQ-VID-SUBMIT-008`. Os
+de 2 GiB por contentor, um upload de 500 MiB leva o gateway a ~1,9 GiB e, na BF, 12 de
+20 uploads de 500 MiB mataram o gateway por OOM, o que o derruba para **todos** os
+utilizadores. Como o gateway corre sob `nodemon`, depois do OOM o contentor continua
+"Up" mas a aplicação fica indisponível até alguém a reiniciar. A aceitação após o envio
+demora ~6,2 s a 500 MiB (mediana dos uploads aceites), contra os <3 s do
+`REQ-VID-SUBMIT-008`. Os
 stakeholders afetados são os utilizadores que carregam vídeos, todos os outros
 utilizadores ligados (o gateway é partilhado) e o operador.
 
@@ -312,8 +335,10 @@ reiniciado e também aquecido. Todas as falhas ficam no denominador.
   descrevem ("cada vídeo é mantido inteiro em memória em cada serviço que atravessa").
   Medida em três tamanhos com o mesmo teto, prova também que a memória deixa de
   depender do tamanho do ficheiro, pelo que dispensa a métrica U05 (inclinação).
-- **Base.** A 500 MiB: +1767 MiB (gateway), +759 MiB (projects), +729 MiB (storage). A
-  100 MiB: +366 / +172 / +163 MiB.
+- **Base (BF).** A 500 MiB (pico): +1976 MiB (gateway, a 2 GiB do limite do contentor),
+  +1011 MiB (`projects`), +1001 MiB (`img_storage`); o gateway morreu por OOM em 12 dos
+  20 uploads. A 100 MiB (máx. / mediana): +405 / 385 MiB, +209 / 147 MiB, +209 / 143 MiB.
+  A 10 MiB: +42 / 26 / 24 MiB (máx.). A memória cresce com o tamanho do ficheiro.
 - **Mínimo / alvo:** ≤64 MiB / ≤32 MiB em cada serviço e em cada tamanho
   (D: EVAL-M1).
 - **Por que estes valores.** Em streaming, a memória fica limitada pelos buffers (os
@@ -330,8 +355,8 @@ reiniciado e também aquecido. Todas as falhas ficam no denominador.
 - **Por que foi escolhida.** É o efeito que os stakeholders sentem: hoje, uploads
   grandes em simultâneo derrubam o serviço. Deve ser a diferença mais visível entre BF e
   MF.
-- **Base.** Não medida. Previsão: falha, porque 3 × ~1,7 GiB excede os 2 GiB do gateway.
-  B16 já registou um OOM do gateway num único upload de 500 MiB feito depois de outros.
+- **Base (BF).** 0/3 uploads concluídos em cada uma das 3 rondas, com OOM do gateway em
+  todas. Pico de memória anónima agregado: 2291 MiB.
 - **Mínimo:** 3/3 numa ronda, 0 OOM, 0 reinícios, conteúdo íntegro. **Alvo:** 3/3 nas 3
   rondas (D: EVAL-M1).
 - **Por que estes valores.** 3 é a concorrência C=3 escolhida no plano de avaliação:
@@ -348,8 +373,9 @@ reiniciado e também aquecido. Todas as falhas ficam no denominador.
 - **Por que foi escolhida.** Liga os dois RNF (§5.2 do Bloco 2): autenticar antes do
   corpo é pré-requisito da eficiência e, ao mesmo tempo, impede que qualquer pessoa sem
   conta esgote a memória do gateway (negação de serviço barata).
-- **Base.** 401 só depois de transferir os 500 MiB (3579 ms de envio), +500,1 MiB no
-  gateway.
+- **Base (BF).** 401 nas 8 tentativas, mas só depois de o servidor receber os 500 MiB
+  inteiros: até 10,6 s após os cabeçalhos (cliente lento), até +966 MiB no gateway e
+  500 MiB no disco temporário do nginx.
 - **Mínimo:** recusa 401/403 com ≤8 MiB de incremento no gateway. **Alvo:** resposta
   ≤100 ms após os cabeçalhos (E).
 - **Por que estes valores.** 8 MiB é o que o gateway pode precisar de ler para analisar
@@ -369,8 +395,11 @@ reiniciado e também aquecido. Todas as falhas ficam no denominador.
   por exceder o limite do perfil, deu **502 e matou o gateway por OOM**. É uma falha real
   causada pelo buffering integral. Esta métrica mostra a melhoria e preserva as regras
   de validação existentes.
-- **Base.** free 500 MiB → 502 + OOM; os outros casos não foram medidos (os pequenos são
-  recusados pela validação existente).
+- **Base (BF).** 15/21 recusas corretas (71%). Os 5 casos pequenos dão 400: free com
+  mais de 60 s (I2, e I7 com o WebM real de 177 s), corrompido (I3), vazio (I4) e
+  imagem no endpoint de vídeo (I5). Free com 500 MiB
+  (I1) e premium com 1 GiB + 1 byte (I6) dão 502 com OOM do gateway nas 3 repetições
+  (6 OOM).
 - **Mínimo / alvo:** 100% / 100% (P/R: as regras de validação vêm do documento PL1-G4 e
   de `projects/utils/video.js`), e 0 OOM durante as recusas.
 
@@ -378,11 +407,22 @@ reiniciado e também aquecido. Todas as falhas ficam no denominador.
 
 - **Escala.** MiB: pico da memória anónima do cgroup (`memory.stat` → `anon`, amostrada
   a cada 50 ms) acima do repouso, nos contentores `nginx` e `seaweedfs`, a 500 MiB com
-  C=1; reportado também para C=3.
+  C=1, com o SeaweedFS reiniciado antes de cada amostra (5 amostras com upload aceite).
+- **Revisão da medição (21/11, depois da BF).** O SeaweedFS fica com a memória de
+  uploads anteriores e reutiliza-a. Medido a meio dos estratos, o mesmo upload dava
+  +582 MiB (SeaweedFS acabado de arrancar) ou ~0 (memória já ocupada), conforme o que
+  tinha acontecido antes. A medição passou a partir sempre do mesmo estado e a U04 da
+  BF foi medida de novo com esse método. Os mínimos e alvos não mudaram. Na BF, a parte
+  do nginx já cumpre o alvo: funciona como guarda, e a melhoria demonstra-se pelo
+  SeaweedFS.
 - **Por que foi escolhida.** O QS-02 exige "não esconder o custo no storage": retirar o
   ficheiro dos serviços Node pode simplesmente empurrar a memória para o proxy ou para o
   S3. Sem esta métrica, U01 poderia melhorar sem que a instalação gastasse menos.
-- **Base.** Não medida em B16; no ambiente B14 houve amostras do nginx.
+- **Base (BF, medida de novo a 21/11 com o SeaweedFS reiniciado).** 5 amostras válidas
+  em 38 tentativas (nas outras 33 o gateway morreu antes de o ficheiro chegar ao
+  SeaweedFS). SeaweedFS: +522 a +619 MiB (mediana +585 MiB), ou seja, cerca do tamanho
+  do ficheiro, a partir de um repouso de 148–165 MiB. nginx: +0,4 MiB, porque guarda o
+  corpo em disco e não em memória (ver U08). Não cumpre o mínimo por causa do SeaweedFS.
 - **Mínimo:** +≤128 MiB (nginx) e +≤256 MiB (SeaweedFS). **Alvo:** +≤64 / +≤128 MiB
   (D: EVAL-M1, a calibrar com a BF).
 - **Por que estes valores.** O nginx faz buffering para disco e não para memória, por
@@ -404,7 +444,9 @@ reiniciado e também aquecido. Todas as falhas ficam no denominador.
   Na base o ficheiro é gravado em disco duas vezes (o spool do nginx e o temporário do
   `ffprobe` no `projects`), além do armazenamento final. Resíduos acumulados esgotam o
   disco do host ao longo do tempo.
-- **Base.** Não medida. Previsão: ~F no nginx e ~F no `projects` por upload.
+- **Base (BF).** Confirmada a previsão: pico de 500 MiB no nginx (spool do corpo) e
+  500 MiB no `projects` (temporário do `ffprobe`) por upload de 500 MiB; 0 no gateway e
+  no `img_storage`; 0 KiB residuais 60 s depois. Cumpre o mínimo (guarda), não o alvo.
 - **Mínimo:** em cada componente, pico ≤ C×(F + 16 MiB), com F o tamanho do ficheiro e C
   a concorrência, e 0 resíduos 60 s depois. **Alvo:** sem spool integral no caminho
   nginx → S3, e ≤16 MiB de disco temporário por upload (E).
@@ -422,7 +464,9 @@ reiniciado e também aquecido. Todas as falhas ficam no denominador.
   `REQ-VID-SUBMIT-008` do documento PL1-G4, que a base falha. No QS-02 o tempo é guarda
   (o objeto principal são os recursos), mas uma guarda com origem externa e que mostra
   uma melhoria.
-- **Base.** Mediana 6923 ms (mín. 6704, máx. 7977).
+- **Base (BF).** 14 dos 20 uploads de 500 MiB falharam (12× 502, 2× 501
+  `Error storing image`). Nos 6 aceites: mediana 6171 ms, máx. 15 776 ms. A 100 MiB:
+  mediana 1174 ms; a 10 MiB: 202 ms.
 - **Mínimo / alvo:** <3000 ms / <1000 ms em cada amostra (R: MVP / alvo do requisito).
 - **Cuidado.** O buffering do nginx pode dominar este tempo. O cliente regista
   `t_send` depois de entregar o último byte ao socket, como em B16.
@@ -436,7 +480,9 @@ reiniciado e também aquecido. Todas as falhas ficam no denominador.
 - **Por que foi escolhida.** O gateway é partilhado: o pior efeito da base é que um
   upload grande degrada ou derruba o serviço para quem nem está a carregar nada. Esta
   guarda mostra a relevância para todos os stakeholders.
-- **Base.** Não medida. Em B16, um OOM do gateway afetou todos os clientes.
+- **Base (BF).** 6 erros nos pedidos leves (2 em cada um dos 3 pares), com OOM do
+  gateway em todos os pares. A razão das medianas (≤0,90) não é representativa, porque
+  o serviço caiu durante a janela.
 - **Mínimo:** 0 falhas e mediana ≤1,10× o controlo. **Alvo:** mediana ≤ controlo
   (D: EVAL-M1, U25 promovida a guarda em 18/11).
 
@@ -447,6 +493,7 @@ reiniciado e também aquecido. Todas as falhas ficam no denominador.
 - **Por que foi escolhida.** O streaming e as partes multipart introduzem novas formas
   de corromper ou truncar ficheiros; o ETag do S3 não é um hash do conteúdo em
   multipart.
+- **Base (BF).** 86/86 uploads aceites com SHA-256 igual (100%).
 - **Mínimo / alvo:** 100% / 100% (P).
 
 ### U17 — Guarda: uploads válidos aceites
@@ -456,7 +503,8 @@ reiniciado e também aquecido. Todas as falhas ficam no denominador.
   formato (MP4, MOV, WebM real).
 - **Por que foi escolhida.** É a preservação funcional do próprio fluxo melhorado,
   incluindo o adaptador de compatibilidade multipart (UP-C1 A).
-- **Base.** 14/14 em B16.
+- **Base (BF).** 86/100 (86%). Os 80 uploads de 10 e 100 MiB foram todos aceites; nos
+  20 premium de 500 MiB só 6 (4/10 com o `moov` no início, 0/10 com o `moov` no fim).
 - **Mínimo / alvo:** 100% / 100% (P).
 
 ### U10 — Guarda: tempo total do upload
@@ -464,7 +512,10 @@ reiniciado e também aquecido. Todas as falhas ficam no denominador.
 - **Escala.** Mediana de `t_ready − t0` (ms) por estrato.
 - **Por que foi escolhida.** Impede que a redução de memória seja conseguida tornando o
   upload mais lento (por exemplo, com buffers minúsculos ou um hash síncrono adicional).
-- **Base.** Mediana 10 525 ms a 500 MiB.
+- **Base (BF).** Medianas por estrato, só com uploads aceites: 10 MiB 232–314 ms;
+  100 MiB 1551–1857 ms; 500 MiB com `moov` no início 8440 ms (aquecido) e 8904 ms (frio).
+  Os dois estratos de 500 MiB com `moov` no fim não têm base (0/10 aceites) e ficam fora
+  da comparação.
 - **Mínimo:** ≤1,10× a mediana BF do mesmo estrato. **Alvo:** ≤ a mediana BF
   (D: EVAL-M1).
 - **Por que estes valores.** 10% de tolerância cobre o ruído típico entre campanhas no
@@ -503,6 +554,7 @@ reiniciado e também aquecido. Todas as falhas ficam no denominador.
 - [Catálogo de 60 métricas e baseline exploratória](fase2-metricas-e-baseline.md).
 - [Plano de avaliação](fase2-plano-avaliacao.md) e [revisão](fase2-revisao-plano-avaliacao.md) (EVAL-B1/C1/R1/M1).
 - [Ex. 6, Bloco 2](exercises/06-architectural-patterns/resolution-block-2.md) (QS-01, QS-02, QS-07, CAND-1/2) e [Ex. 7](exercises/07-architectural-tactics/resolution.md) (DA-1/DA-2).
+- Resultados da BF: `evaluation/results/BF-20261121T013224Z/` (`report.md`, `summary.json`, `raw/`).
 - [Evidência B16](../memory-bank/intents/001-phase-2-quality-improvements/evidence/nfr-2026-11-16/README.md).
 - Documento de requisitos PL1-G4: [doc-ext-requisitos-2627.pdf](requirements/doc-ext-requisitos-2627.pdf) (`REQ-VID-SUBMIT-008`).
 - Nielsen, J. (1993). *Usability Engineering*, cap. 5 (limiares de 0,1 s / 1 s / 10 s).

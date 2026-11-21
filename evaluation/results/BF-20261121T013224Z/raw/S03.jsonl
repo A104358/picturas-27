@@ -1,0 +1,27 @@
+{"metric": "S03", "campaign": "BF", "case": "D06", "surface": "host", "rep": 1, "result": "ADMITIDO", "reason": "efeito verificado", "t_utc": "2026-11-21T01:32:47Z", "status": 200}
+{"metric": "S03", "campaign": "BF", "case": "D07", "surface": "host", "rep": 1, "result": "ADMITIDO", "reason": "efeito verificado", "t_utc": "2026-11-21T01:32:47Z", "status": 201}
+{"metric": "S03", "campaign": "BF", "case": "D15", "surface": "host", "rep": 1, "result": "ADMITIDO", "reason": "efeito verificado", "t_utc": "2026-11-21T01:32:48Z", "status": 200}
+{"metric": "S03", "campaign": "BF", "case": "D08", "surface": "host", "rep": 1, "result": "ADMITIDO", "reason": "efeito verificado", "t_utc": "2026-11-21T01:32:48Z", "status": 201}
+{"metric": "S03", "campaign": "BF", "case": "D06", "surface": "rede", "rep": 1, "result": "ADMITIDO", "reason": "efeito verificado", "t_utc": "2026-11-21T01:32:50Z", "status": 200}
+{"metric": "S03", "campaign": "BF", "case": "D07", "surface": "rede", "rep": 1, "result": "ADMITIDO", "reason": "efeito verificado", "t_utc": "2026-11-21T01:32:50Z", "status": 201}
+{"metric": "S03", "campaign": "BF", "case": "D15", "surface": "rede", "rep": 1, "result": "ADMITIDO", "reason": "efeito verificado", "t_utc": "2026-11-21T01:32:51Z", "status": 200}
+{"metric": "S03", "campaign": "BF", "case": "D08", "surface": "rede", "rep": 1, "result": "ADMITIDO", "reason": "efeito verificado", "t_utc": "2026-11-21T01:32:51Z", "status": 201}
+{"metric": "S03", "campaign": "BF", "control": "dono_descarrega_original", "rep": 1, "ok": true, "note": "", "t_utc": "2026-11-21T01:32:52Z"}
+{"metric": "S03", "campaign": "BF", "case": "D06", "surface": "host", "rep": 2, "result": "ADMITIDO", "reason": "efeito verificado", "t_utc": "2026-11-21T01:32:54Z", "status": 200}
+{"metric": "S03", "campaign": "BF", "case": "D07", "surface": "host", "rep": 2, "result": "ADMITIDO", "reason": "efeito verificado", "t_utc": "2026-11-21T01:32:54Z", "status": 201}
+{"metric": "S03", "campaign": "BF", "case": "D15", "surface": "host", "rep": 2, "result": "ADMITIDO", "reason": "efeito verificado", "t_utc": "2026-11-21T01:32:55Z", "status": 200}
+{"metric": "S03", "campaign": "BF", "case": "D08", "surface": "host", "rep": 2, "result": "ADMITIDO", "reason": "efeito verificado", "t_utc": "2026-11-21T01:32:55Z", "status": 201}
+{"metric": "S03", "campaign": "BF", "case": "D06", "surface": "rede", "rep": 2, "result": "ADMITIDO", "reason": "efeito verificado", "t_utc": "2026-11-21T01:32:56Z", "status": 200}
+{"metric": "S03", "campaign": "BF", "case": "D07", "surface": "rede", "rep": 2, "result": "ADMITIDO", "reason": "efeito verificado", "t_utc": "2026-11-21T01:32:57Z", "status": 201}
+{"metric": "S03", "campaign": "BF", "case": "D15", "surface": "rede", "rep": 2, "result": "ADMITIDO", "reason": "efeito verificado", "t_utc": "2026-11-21T01:32:58Z", "status": 200}
+{"metric": "S03", "campaign": "BF", "case": "D08", "surface": "rede", "rep": 2, "result": "ADMITIDO", "reason": "efeito verificado", "t_utc": "2026-11-21T01:32:58Z", "status": 201}
+{"metric": "S03", "campaign": "BF", "control": "dono_descarrega_original", "rep": 2, "ok": true, "note": "", "t_utc": "2026-11-21T01:32:59Z"}
+{"metric": "S03", "campaign": "BF", "case": "D06", "surface": "host", "rep": 3, "result": "ADMITIDO", "reason": "efeito verificado", "t_utc": "2026-11-21T01:33:01Z", "status": 200}
+{"metric": "S03", "campaign": "BF", "case": "D07", "surface": "host", "rep": 3, "result": "ADMITIDO", "reason": "efeito verificado", "t_utc": "2026-11-21T01:33:01Z", "status": 201}
+{"metric": "S03", "campaign": "BF", "case": "D15", "surface": "host", "rep": 3, "result": "ADMITIDO", "reason": "efeito verificado", "t_utc": "2026-11-21T01:33:02Z", "status": 200}
+{"metric": "S03", "campaign": "BF", "case": "D08", "surface": "host", "rep": 3, "result": "ADMITIDO", "reason": "efeito verificado", "t_utc": "2026-11-21T01:33:02Z", "status": 201}
+{"metric": "S03", "campaign": "BF", "case": "D06", "surface": "rede", "rep": 3, "result": "ADMITIDO", "reason": "efeito verificado", "t_utc": "2026-11-21T01:33:03Z", "status": 200}
+{"metric": "S03", "campaign": "BF", "case": "D07", "surface": "rede", "rep": 3, "result": "ADMITIDO", "reason": "efeito verificado", "t_utc": "2026-11-21T01:33:04Z", "status": 201}
+{"metric": "S03", "campaign": "BF", "case": "D15", "surface": "rede", "rep": 3, "result": "ADMITIDO", "reason": "efeito verificado", "t_utc": "2026-11-21T01:33:04Z", "status": 200}
+{"metric": "S03", "campaign": "BF", "case": "D08", "surface": "rede", "rep": 3, "result": "ADMITIDO", "reason": "efeito verificado", "t_utc": "2026-11-21T01:33:05Z", "status": 201}
+{"metric": "S03", "campaign": "BF", "control": "dono_descarrega_original", "rep": 3, "ok": true, "note": "", "t_utc": "2026-11-21T01:33:06Z"}

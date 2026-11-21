@@ -1,0 +1,222 @@
+{
+ "campaign": "BF",
+ "started_at": "2026-11-21T01:32:24Z",
+ "med_version": "1.0.0",
+ "git": {
+  "head": "d6b4497d116fe2ec265040084f6ec126cb84ad49",
+  "app_dirty": "",
+  "base_commit": "0523102",
+  "diff_stat_vs_base": ""
+ },
+ "hashes": {
+  "med_py": "b951e25cdd2bebebfa9acc942a798f1850bd3f7c2155ab671bba4f78ad199cc7",
+  "medlib": "9f0208758362f73c59d9208c797d947679ff54b0b69c7dd5314ed86966c19d8d",
+  "criteria": "99f6facdf2c1da7791a48361281ec169e8e0c980f2455a0c1506f5b697f96a88",
+  "cases": "e7daa0a3e80fbdf910416e7a08ea8ce17257ab102d7a7842b93c881c2f1ad5bd",
+  "compose": "2607bfa77fcc05ead07da1d5b9b8accd24b71f007be522da57ec4e43c9b66c83",
+  "override": "2aa6516deb2c453e9186ea5600054d371acc114d513bb674854048686edef40b",
+  "override_limits": "cbcd6f4ac0e32b4bef9b30717dcb096e9af6dd01049edfca7018844215693075"
+ },
+ "host": {
+  "uname": "Darwin Mac.Home 24.6.0 Darwin Kernel Version 24.6.0: Mon Jul 14 11:30:40 PDT 2025; root:xnu-11417.140.69~1/RELEASE_ARM64_T6041 arm64 arm",
+  "machine": "arm64",
+  "cpu": "Apple M4 Pro",
+  "python": "3.13.9",
+  "disk_free_gib": 80.4
+ },
+ "docker": {
+  "ncpu": 12,
+  "mem_total": 8217751552,
+  "kernel": "6.10.14-linuxkit",
+  "cgroup_version": "2",
+  "driver": "overlayfs",
+  "server_version": "28.5.1",
+  "os": "Docker Desktop"
+ },
+ "images": {
+  "picturas-nfr-rabbitmq-1": "sha256:ea0d5a2aef724103911f11b5878bb02d7c771f69b98c190a0fdcd975897e3eee",
+  "picturas-nfr-contrast_tool-1": "sha256:21297eecc9a017e5f8b100e6bf222fd38b15d5dbbb9a5487c713e32adc67c176",
+  "picturas-nfr-rotate_tool-1": "sha256:d137bec94e32f436ff0ee2865c2e35e620fb07497e7ddc4ca8b0af8a38e448d2",
+  "picturas-nfr-users_mongoDB-1": "sha256:4be76f674fc4b27859816811b8baa3c51830eb1dbf4ca81a51e26b79edd662ef",
+  "picturas-nfr-seaweedfs-1": "sha256:ce9e796f1fe6f06968f4c04bdaf8f678dad9c8acdfef3d244133d71bfa6bf882",
+  "picturas-nfr-upgrade_ai_tool-1": "sha256:06f5c824d6d9edf48b6093b1df9da129a60c73a20250b868d0e566130df6a812",
+  "picturas-nfr-cut_ai_tool-1": "sha256:13ad6bcfa6ab813beecb0348116137d15091cca66e2ebcf78a80adc58acd4e50",
+  "picturas-nfr-generative-mock-1": "sha256:c497d58281df3cad26bc108a51e86d986d24caaed2113b4d3409a7aac9785c19",
+  "picturas-nfr-border_tool-1": "sha256:52cd5413d4babcd37daf23c2711d0b2f5f65bcbd73ddd11a84d6ec1640b4af06",
+  "picturas-nfr-subscriptions-1": "sha256:d8d310a6d9aa703db078c30f19172bb53378f365f36ffee1f816eb64e473c93c",
+  "picturas-nfr-projects_mongoDB-1": "sha256:4be76f674fc4b27859816811b8baa3c51830eb1dbf4ca81a51e26b79edd662ef",
+  "picturas-nfr-mongo-backup-1": "sha256:4be76f674fc4b27859816811b8baa3c51830eb1dbf4ca81a51e26b79edd662ef",
+  "picturas-nfr-people_ai_tool-1": "sha256:0b3c3ac9b313d51592e655ad48105da6d37b1660d3dc4dedc61b1cd11903c22c",
+  "picturas-nfr-binarization_tool-1": "sha256:cf6b81cf3737445c4d6d0e49f533afd1041b6890659675cbffb11e2a224f2dcb",
+  "picturas-nfr-text_ai_tool-1": "sha256:ff85477663176c436d98e1606d2ce2759325ea265f1778007c1c51c4c66a35cf",
+  "picturas-nfr-ws_gateway-1": "sha256:e2bb4ca532b911f6b36444278c0b2b5c18153366bd055aaa8195191df206db14",
+  "picturas-nfr-saturation_tool-1": "sha256:d4db859e6e3eba8a18b0468b496ac46222ec8ae441dd3bb29b1c602935619e05",
+  "picturas-nfr-subscriptions_mongoDB-1": "sha256:4be76f674fc4b27859816811b8baa3c51830eb1dbf4ca81a51e26b79edd662ef",
+  "picturas-nfr-obj_ai_tool-1": "sha256:e06c0ca6a0f6231e5ee7e6c983358a0de88a2659af6eca9e5bc6f6b4510c0dfc",
+  "picturas-nfr-watermark_tool_ms-1": "sha256:534007b3904257e877f6246578a3df65e1875b477b92d9627b29e35e60c35835",
+  "picturas-nfr-bg_remove_ai_tool-1": "sha256:17051b5445b25edeb05b37a7c517be8ee93a242e34e5a2f7ffa23efce3ceab23",
+  "picturas-nfr-img_storage-1": "sha256:15c3a48c86f3ddf03231e4c32062dca70ac81672cecae4bcdbf79b3bfa77bb56",
+  "picturas-nfr-video_tool-1": "sha256:b7c2aa329bcef8168957ab211b6ecc398eeb5b468a57a2128477c1bdefe46271",
+  "picturas-nfr-users-1": "sha256:c58aa679cf13e873539ecb26bc3d9bfbf680111c42f68e0af2b4c106ed38c502",
+  "picturas-nfr-projects-1": "sha256:fbeaea2d08557e781e97efd387129815018bce895764b990b6d0aeda0b65dcc2",
+  "picturas-nfr-expand_ai_tool-1": "sha256:5506154d01e18ecb587e142eeef74c1140278720d117a8c509723a20d89122f1",
+  "picturas-nfr-cut_tool-1": "sha256:0575d409ca757de3848891e8c5e2faa177716a88e7fb1359df9746051a811a03",
+  "picturas-nfr-api_gateway-1": "sha256:5164d2ff9b904c7914efd64ac9cee4e0ecf0f722826b84dcfadf7d574f5c2da0",
+  "picturas-nfr-brightness_tool-1": "sha256:a8c1c62cfbed9a3848cdc2d7d6481daed0c1874c9cc8ed77f9116830513d7a16",
+  "picturas-nfr-resize_tool-1": "sha256:51cd9cb5921df55e9f000109ab0505c5fc6429905cea85b84bc61de6e0432a41",
+  "picturas-nfr-frontend-1": "sha256:469c83f8508a54f26bba3cf71cf04d4cc8d8c871e6cad6da78b97c9198d31ade",
+  "picturas-nfr-nginx-1": "sha256:84f7876d21d154885f99554d7ae325d8c2213f9169726ea7ab60642f2573a787"
+ },
+ "corpus": {
+  "pad_10MiB_H.mp4": {
+   "bytes": 10485760,
+   "sha256": "e017f8fe200c37fe99627a29784efa81cc0a43dc84aed5ccc7a15676e6fc8d82",
+   "kind": "pad",
+   "moov": "H"
+  },
+  "pad_10MiB_T.mp4": {
+   "bytes": 10485760,
+   "sha256": "168670ac41481b00115cc376024fc1f0c73f6ce50ae66c3a6702382bbf30836d",
+   "kind": "pad",
+   "moov": "T"
+  },
+  "pad_100MiB_H.mp4": {
+   "bytes": 104857600,
+   "sha256": "1d595e32d50338199dc0dbb93ce6cbe2b15e58111e7d73fe6bbc564202f5a3ba",
+   "kind": "pad",
+   "moov": "H"
+  },
+  "pad_100MiB_T.mp4": {
+   "bytes": 104857600,
+   "sha256": "4c02582e1585b82d7ec0c867b2f0a8a92dada777c929f244493a2d721ebd73af",
+   "kind": "pad",
+   "moov": "T"
+  },
+  "pad_500MiB_H.mp4": {
+   "bytes": 524288000,
+   "sha256": "91df69364f2a26b4d8a352825d6db876e0f53a833b302b5b834be6ab3dba4615",
+   "kind": "pad",
+   "moov": "H"
+  },
+  "pad_500MiB_T.mp4": {
+   "bytes": 524288000,
+   "sha256": "a48006dea1bf8a80de16b600bd049a4180784efbb8e232c174a6f538470dde42",
+   "kind": "pad",
+   "moov": "T"
+  },
+  "pad_1024MiB_plus1_H.mp4": {
+   "bytes": 1073741825,
+   "sha256": "a6697a673b7753fcd53216fa2bb4be912514775306d4acb285c17ada6830e4e8",
+   "kind": "pad_over_limit",
+   "moov": "H"
+  },
+  "sample_6s.mov": {
+   "bytes": 63600,
+   "sha256": "dfae0d1fe6387c792c8e94700927deb8e282a15c449f4f6fabdcedd72940c4be",
+   "kind": "sample",
+   "moov": null
+  },
+  "speech_mandela_177s_1080p.webm": {
+   "bytes": 17467748,
+   "sha256": "3a58e266d7552d700846b362933d1649b384493dc4a68db22df12d0bd3c1db3f",
+   "kind": "sample",
+   "moov": null
+  },
+  "too_long_90s.mp4": {
+   "bytes": 305128,
+   "sha256": "3ebbdf2febda6635ec2483ad05176cb2c9db9299b3f19eba47e54c154a4adb31",
+   "kind": "sample",
+   "moov": null
+  },
+  "corrupted.mp4": {
+   "bytes": 200000,
+   "sha256": "d2ac1ad31b409ab1bf9a94a222a55e6bb036861da13ccc0064ef30f17dbe2864",
+   "kind": "sample",
+   "moov": null
+  },
+  "empty.mp4": {
+   "bytes": 0,
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "kind": "empty",
+   "moov": null
+  },
+  "image.png": {
+   "bytes": 152,
+   "sha256": "8c75ea479ea0ef783a321702243fb09f4d71d748e3f30e3cfd2e0e2a24bca941",
+   "kind": "png",
+   "moov": null
+  }
+ },
+ "corpus_sha": "407122e3f68c39cd7d4af0873e4dd3217ecf1a85df923747fa2caded1d8e83ad",
+ "nginx": {
+  "client_max_body_size": [
+   "1100m"
+  ],
+  "proxy_request_buffering": [
+   "on (omissão)"
+  ],
+  "client_body_temp_path": "/var/cache/nginx/client_temp"
+ },
+ "tls_client_verification": "desligada (nginx autoassinado)",
+ "compose_project": "picturas-nfr",
+ "preflight": {
+  "ok": true,
+  "failed": [],
+  "checks": {
+   "projeto_isolado": {
+    "ok": true,
+    "detail": "picturas-nfr",
+    "fatal": true
+   },
+   "disco_livre": {
+    "ok": true,
+    "detail": "80.4 GiB (mínimo 60)",
+    "fatal": true
+   },
+   "docker": {
+    "ok": true,
+    "detail": "docker info",
+    "fatal": true
+   },
+   "docker_cpus": {
+    "ok": true,
+    "detail": "12 CPUs",
+    "fatal": true
+   },
+   "docker_mem": {
+    "ok": true,
+    "detail": "7.7 GiB",
+    "fatal": true
+   },
+   "ffmpeg": {
+    "ok": true,
+    "detail": "ffmpeg/ffprobe no PATH",
+    "fatal": true
+   },
+   "arvore_limpa": {
+    "ok": true,
+    "detail": "sem alterações locais na aplicação",
+    "fatal": true
+   },
+   "codigo_base": {
+    "ok": true,
+    "detail": "igual a 0523102",
+    "fatal": true
+   }
+  }
+ },
+ "finished_at": "2026-11-21T02:26:55Z",
+ "duration_s": 3270,
+ "remedicoes": [
+  {
+   "metrica": "U04",
+   "motivo": "SeaweedFS retém memória entre uploads; medição revista (SeaweedFS reiniciado antes de cada amostra)",
+   "iniciada": "2026-11-21T12:40:30Z",
+   "terminada": "2026-11-21T13:08:04Z",
+   "med_py": "f0825f2e14caa176bf00903c93a5d470ac713aa27213bd0bed534addb777e646",
+   "medlib": "a32ee3dc42b2073bd1c564ebea9e10c8aa868403d30dd61c54f77a2a68d0b77c",
+   "amostras": "5 válidas em 38 tentativas (raw/U04.jsonl)",
+   "descartada": "1 tentativa anterior sem espera pelo S3 (501), fora de raw/"
+  }
+ ]
+}

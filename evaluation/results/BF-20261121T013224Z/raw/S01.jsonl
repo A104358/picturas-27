@@ -1,0 +1,48 @@
+{"metric": "S01", "campaign": "BF", "case": "G01", "surface": "publica", "rep": 1, "result": "RECUSADO_DOMINIO", "reason": "HTTP 401, sem efeito", "t_utc": "2026-11-21T01:32:27Z", "status": 401}
+{"metric": "S01", "campaign": "BF", "case": "G02", "surface": "publica", "rep": 1, "result": "ADMITIDO", "reason": "efeito verificado", "t_utc": "2026-11-21T01:32:27Z", "status": 200}
+{"metric": "S01", "campaign": "BF", "case": "G03", "surface": "publica", "rep": 1, "result": "ADMITIDO", "reason": "efeito verificado", "t_utc": "2026-11-21T01:32:27Z", "status": 201, "tools": [1, 2]}
+{"metric": "S01", "campaign": "BF", "case": "G04", "surface": "publica", "rep": 1, "result": "ADMITIDO", "reason": "efeito verificado", "t_utc": "2026-11-21T01:32:27Z", "status": 204, "imgs": [1, 2]}
+{"metric": "S01", "campaign": "BF", "case": "G10", "surface": "publica", "rep": 1, "result": "ADMITIDO", "reason": "efeito verificado", "t_utc": "2026-11-21T01:32:27Z", "status": 200}
+{"metric": "S01", "campaign": "BF", "case": "G11", "surface": "publica", "rep": 1, "result": "ADMITIDO", "reason": "efeito verificado", "t_utc": "2026-11-21T01:32:27Z", "status": 204}
+{"metric": "S01", "campaign": "BF", "case": "G14", "surface": "publica", "rep": 1, "result": "RECUSADO_DOMINIO", "reason": "HTTP 401, sem efeito", "t_utc": "2026-11-21T01:32:27Z", "status": 401}
+{"metric": "S01", "campaign": "BF", "case": "G15", "surface": "publica", "rep": 1, "result": "RECUSADO_DOMINIO", "reason": "HTTP 403, sem efeito", "t_utc": "2026-11-21T01:32:27Z", "status": 403, "tools": [2, 2]}
+{"metric": "S01", "campaign": "BF", "case": "G05", "surface": "publica", "rep": 1, "result": "ADMITIDO", "reason": "efeito verificado", "t_utc": "2026-11-21T01:32:27Z", "status": 200}
+{"metric": "S01", "campaign": "BF", "case": "G06", "surface": "publica", "rep": 1, "result": "ADMITIDO", "reason": "efeito verificado", "t_utc": "2026-11-21T01:32:27Z", "status": 201}
+{"metric": "S01", "campaign": "BF", "case": "G07", "surface": "publica", "rep": 1, "result": "ADMITIDO", "reason": "efeito verificado", "t_utc": "2026-11-21T01:32:27Z", "status": 204}
+{"metric": "S01", "campaign": "BF", "case": "G08", "surface": "publica", "rep": 1, "result": "ADMITIDO", "reason": "efeito verificado", "t_utc": "2026-11-21T01:32:27Z", "status": 201}
+{"metric": "S01", "campaign": "BF", "case": "G09", "surface": "publica", "rep": 1, "result": "ADMITIDO", "reason": "efeito verificado", "t_utc": "2026-11-21T01:32:27Z", "status": 200}
+{"metric": "S01", "campaign": "BF", "case": "G12", "surface": "publica", "rep": 1, "result": "ADMITIDO", "reason": "efeito verificado", "t_utc": "2026-11-21T01:32:27Z", "status": 204, "imgs": [2, 1]}
+{"metric": "S01", "campaign": "BF", "case": "G13", "surface": "publica", "rep": 1, "result": "ADMITIDO", "reason": "efeito verificado", "t_utc": "2026-11-21T01:32:27Z", "status": 204}
+{"metric": "S01", "campaign": "BF", "control": "dono_le_projeto", "rep": 1, "ok": true, "note": "", "t_utc": "2026-11-21T01:32:27Z"}
+{"metric": "S01", "campaign": "BF", "case": "G01", "surface": "publica", "rep": 2, "result": "RECUSADO_DOMINIO", "reason": "HTTP 401, sem efeito", "t_utc": "2026-11-21T01:32:28Z", "status": 401}
+{"metric": "S01", "campaign": "BF", "case": "G02", "surface": "publica", "rep": 2, "result": "ADMITIDO", "reason": "efeito verificado", "t_utc": "2026-11-21T01:32:28Z", "status": 200}
+{"metric": "S01", "campaign": "BF", "case": "G03", "surface": "publica", "rep": 2, "result": "ADMITIDO", "reason": "efeito verificado", "t_utc": "2026-11-21T01:32:28Z", "status": 201, "tools": [1, 2]}
+{"metric": "S01", "campaign": "BF", "case": "G04", "surface": "publica", "rep": 2, "result": "ADMITIDO", "reason": "efeito verificado", "t_utc": "2026-11-21T01:32:28Z", "status": 204, "imgs": [1, 2]}
+{"metric": "S01", "campaign": "BF", "case": "G10", "surface": "publica", "rep": 2, "result": "ADMITIDO", "reason": "efeito verificado", "t_utc": "2026-11-21T01:32:28Z", "status": 200}
+{"metric": "S01", "campaign": "BF", "case": "G11", "surface": "publica", "rep": 2, "result": "ADMITIDO", "reason": "efeito verificado", "t_utc": "2026-11-21T01:32:28Z", "status": 204}
+{"metric": "S01", "campaign": "BF", "case": "G14", "surface": "publica", "rep": 2, "result": "RECUSADO_DOMINIO", "reason": "HTTP 401, sem efeito", "t_utc": "2026-11-21T01:32:28Z", "status": 401}
+{"metric": "S01", "campaign": "BF", "case": "G15", "surface": "publica", "rep": 2, "result": "RECUSADO_DOMINIO", "reason": "HTTP 403, sem efeito", "t_utc": "2026-11-21T01:32:28Z", "status": 403, "tools": [2, 2]}
+{"metric": "S01", "campaign": "BF", "case": "G05", "surface": "publica", "rep": 2, "result": "ADMITIDO", "reason": "efeito verificado", "t_utc": "2026-11-21T01:32:29Z", "status": 200}
+{"metric": "S01", "campaign": "BF", "case": "G06", "surface": "publica", "rep": 2, "result": "ADMITIDO", "reason": "efeito verificado", "t_utc": "2026-11-21T01:32:29Z", "status": 201}
+{"metric": "S01", "campaign": "BF", "case": "G07", "surface": "publica", "rep": 2, "result": "ADMITIDO", "reason": "efeito verificado", "t_utc": "2026-11-21T01:32:29Z", "status": 204}
+{"metric": "S01", "campaign": "BF", "case": "G08", "surface": "publica", "rep": 2, "result": "ADMITIDO", "reason": "efeito verificado", "t_utc": "2026-11-21T01:32:29Z", "status": 201}
+{"metric": "S01", "campaign": "BF", "case": "G09", "surface": "publica", "rep": 2, "result": "ADMITIDO", "reason": "efeito verificado", "t_utc": "2026-11-21T01:32:29Z", "status": 200}
+{"metric": "S01", "campaign": "BF", "case": "G12", "surface": "publica", "rep": 2, "result": "ADMITIDO", "reason": "efeito verificado", "t_utc": "2026-11-21T01:32:29Z", "status": 204, "imgs": [2, 1]}
+{"metric": "S01", "campaign": "BF", "case": "G13", "surface": "publica", "rep": 2, "result": "ADMITIDO", "reason": "efeito verificado", "t_utc": "2026-11-21T01:32:29Z", "status": 204}
+{"metric": "S01", "campaign": "BF", "control": "dono_le_projeto", "rep": 2, "ok": true, "note": "", "t_utc": "2026-11-21T01:32:29Z"}
+{"metric": "S01", "campaign": "BF", "case": "G01", "surface": "publica", "rep": 3, "result": "RECUSADO_DOMINIO", "reason": "HTTP 401, sem efeito", "t_utc": "2026-11-21T01:32:30Z", "status": 401}
+{"metric": "S01", "campaign": "BF", "case": "G02", "surface": "publica", "rep": 3, "result": "ADMITIDO", "reason": "efeito verificado", "t_utc": "2026-11-21T01:32:30Z", "status": 200}
+{"metric": "S01", "campaign": "BF", "case": "G03", "surface": "publica", "rep": 3, "result": "ADMITIDO", "reason": "efeito verificado", "t_utc": "2026-11-21T01:32:30Z", "status": 201, "tools": [1, 2]}
+{"metric": "S01", "campaign": "BF", "case": "G04", "surface": "publica", "rep": 3, "result": "ADMITIDO", "reason": "efeito verificado", "t_utc": "2026-11-21T01:32:30Z", "status": 204, "imgs": [1, 2]}
+{"metric": "S01", "campaign": "BF", "case": "G10", "surface": "publica", "rep": 3, "result": "ADMITIDO", "reason": "efeito verificado", "t_utc": "2026-11-21T01:32:30Z", "status": 200}
+{"metric": "S01", "campaign": "BF", "case": "G11", "surface": "publica", "rep": 3, "result": "ADMITIDO", "reason": "efeito verificado", "t_utc": "2026-11-21T01:32:30Z", "status": 204}
+{"metric": "S01", "campaign": "BF", "case": "G14", "surface": "publica", "rep": 3, "result": "RECUSADO_DOMINIO", "reason": "HTTP 401, sem efeito", "t_utc": "2026-11-21T01:32:30Z", "status": 401}
+{"metric": "S01", "campaign": "BF", "case": "G15", "surface": "publica", "rep": 3, "result": "RECUSADO_DOMINIO", "reason": "HTTP 403, sem efeito", "t_utc": "2026-11-21T01:32:30Z", "status": 403, "tools": [2, 2]}
+{"metric": "S01", "campaign": "BF", "case": "G05", "surface": "publica", "rep": 3, "result": "ADMITIDO", "reason": "efeito verificado", "t_utc": "2026-11-21T01:32:30Z", "status": 200}
+{"metric": "S01", "campaign": "BF", "case": "G06", "surface": "publica", "rep": 3, "result": "ADMITIDO", "reason": "efeito verificado", "t_utc": "2026-11-21T01:32:30Z", "status": 201}
+{"metric": "S01", "campaign": "BF", "case": "G07", "surface": "publica", "rep": 3, "result": "ADMITIDO", "reason": "efeito verificado", "t_utc": "2026-11-21T01:32:30Z", "status": 204}
+{"metric": "S01", "campaign": "BF", "case": "G08", "surface": "publica", "rep": 3, "result": "ADMITIDO", "reason": "efeito verificado", "t_utc": "2026-11-21T01:32:30Z", "status": 201}
+{"metric": "S01", "campaign": "BF", "case": "G09", "surface": "publica", "rep": 3, "result": "ADMITIDO", "reason": "efeito verificado", "t_utc": "2026-11-21T01:32:30Z", "status": 200}
+{"metric": "S01", "campaign": "BF", "case": "G12", "surface": "publica", "rep": 3, "result": "ADMITIDO", "reason": "efeito verificado", "t_utc": "2026-11-21T01:32:30Z", "status": 204, "imgs": [2, 1]}
+{"metric": "S01", "campaign": "BF", "case": "G13", "surface": "publica", "rep": 3, "result": "ADMITIDO", "reason": "efeito verificado", "t_utc": "2026-11-21T01:32:30Z", "status": 204}
+{"metric": "S01", "campaign": "BF", "control": "dono_le_projeto", "rep": 3, "ok": true, "note": "", "t_utc": "2026-11-21T01:32:30Z"}

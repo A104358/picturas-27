@@ -29,9 +29,9 @@ from medlib.config import (APP_PATHS, CASES_FILE, CORPUS_DIR, CRITERIA_FILE, EVA
                            RESULTS_DIR, SETTINGS)
 from medlib.util import Results, log, sha256_file, utc_now, utc_stamp  # noqa: E402
 
-UPLOAD_STRATA = {"U01", "U04", "U08", "U09", "U10", "U15", "U17"}
+UPLOAD_STRATA = {"U01", "U08", "U09", "U10", "U15", "U17"}
 SECURITY_ORDER = ["S18", "S01", "S02", "S03", "S04", "S16", "S17", "S12", "S05", "S21"]
-UPLOAD_ORDER = ["STRATA", "U18", "U19", "U20", "U25"]
+UPLOAD_ORDER = ["STRATA", "U04", "U18", "U19", "U20", "U25"]
 
 
 # ---------------------------------------------------------------------------
@@ -233,11 +233,16 @@ def run(args: argparse.Namespace) -> int:
             else:
                 if uploader is None:
                     log("a reiniciar os serviços Node antes da suite de upload")
-                    dockerctl.restart(list(dockerctl.LIMITED_SERVICES[:3]))
+                    dockerctl.restart_app()
                     uploader = Uploader(api, res, args.campaign)
                     uploader.wait_api()
+                    uploader.accounts.clear()  # fresh accounts for the measured runs
+                else:
+                    uploader.ensure_healthy()  # a previous step may have killed the gateway
                 if step == "STRATA":
                     uploader.strata(quick=args.quick)
+                elif step == "U04":
+                    uploader.seaweed_cold(quick=args.quick)
                 elif step == "U18":
                     uploader.invalid(reps=1 if args.quick else 3)
                 elif step == "U19":
@@ -291,6 +296,25 @@ def _check_matrix(res: Results) -> None:
 # CLI
 # ---------------------------------------------------------------------------
 
+def resummarise(out_dir: Path) -> None:
+    """Rebuild the stratum summaries from raw/U_strata.jsonl and U08_residuals.jsonl."""
+    from medlib.uploads import summarise_strata
+    from medlib.util import Results
+    raw = out_dir / "raw"
+    records = [json.loads(l) for l in (raw / "U_strata.jsonl").read_text().splitlines() if l.strip()]
+    resid_file = raw / "U08_residuals.jsonl"
+    resid = {}
+    if resid_file.exists():
+        for l in resid_file.read_text().splitlines():
+            if l.strip():
+                d = json.loads(l)
+                resid[d["stratum"]] = d["residual"]
+    for r in records:
+        r.setdefault("residual", resid.get(r.get("stratum"), {}))
+    summarise_strata(Results(out_dir), records)
+    log(f"resumos dos estratos recalculados a partir de {len(records)} registos")
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -311,6 +335,8 @@ def main() -> int:
     p.add_argument("--force", action="store_true", help="ignorar o preflight (só EXP)")
     p = sub.add_parser("report")
     p.add_argument("dir")
+    p.add_argument("--resummarise", action="store_true",
+                   help="recalcular os resumos dos estratos de upload a partir de raw/ (sem medir)")
     p = sub.add_parser("compare")
     p.add_argument("bf")
     p.add_argument("mf")
@@ -351,6 +377,8 @@ def main() -> int:
     if args.cmd == "run":
         return run(args)
     if args.cmd == "report":
+        if args.resummarise:
+            resummarise(Path(args.dir))
         print(report.write_report(Path(args.dir)).read_text())
         return 0
     if args.cmd == "compare":

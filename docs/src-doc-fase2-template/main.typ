@@ -14,13 +14,12 @@
 #cover(
   title: "Fase 2 — Melhoria de Requisitos Não Funcionais",
   subtitle: "Diagnóstico, decisões arquiteturais e avaliação",
-  group: "Grupo PL?-G?",   // e.g., "Grupo PL3-G2"
+  group: "Grupo PL2-G4",
   authors: (
-    (name: "Nome Apelido", number: "pg00000"),
-    (name: "Nome Apelido", number: "pg00000"),
-    (name: "Nome Apelido", number: "pg00000"),
-    (name: "Nome Apelido", number: "pg00000"),
-    (name: "Nome Apelido", number: "pg00000"),
+    (name: "Luís Miguel Coelho", number: "PG64000"),
+    (name: "Alexandre de Oliveira Monsanto", number: "PG65397"),
+    (name: "Diogo Alexandre Gomes Silva", number: "PG63941"),
+    (name: "José Miguel da Silva Santos", number: "PG63522"),
   ),
   "Novembro, 2026",
 )

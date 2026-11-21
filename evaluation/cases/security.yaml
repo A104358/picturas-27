@@ -1,0 +1,66 @@
+# Frozen security case matrix (docs/planoMedicao.md §7). Its SHA-256 goes into every
+# manifest. Cases may be added before the BF; after the BF none may be removed.
+# med.py checks that every case below was attempted (results/<dir>/matrix_check.json).
+S01:  # public entry (gateway); effect verified through the owner's view
+  - {id: G01, efeito: "outsider JWT lê o projeto do dono"}
+  - {id: G02, efeito: "outsider JWT + ?owner=<dono> lê o projeto (asserção por _id)"}
+  - {id: G03, efeito: "?owner adiciona ferramenta ao pipeline do dono"}
+  - {id: G04, efeito: "?owner carrega media para o projeto do dono"}
+  - {id: G10, efeito: "?owner obtém URL do original e os bytes coincidem"}
+  - {id: G11, efeito: "?owner renomeia o projeto do dono"}
+  - {id: G14, efeito: "outsider lista as partilhas do dono"}
+  - {id: G15, efeito: "leitor (partilha read) adiciona ferramenta"}
+  - {id: G05, efeito: "sem token lê o perfil de outro utilizador"}
+  - {id: G06, efeito: "registo público com type=premium fica premium"}
+  - {id: G07, efeito: "free passa a premium por PUT ao próprio perfil"}
+  - {id: G08, efeito: "sem token lê a subscrição de outro"}
+  - {id: G09, efeito: "sem token cancela a subscrição de outro"}
+  - {id: G12, efeito: "?owner elimina media do dono (destrutivo)"}
+  - {id: G13, efeito: "?owner elimina o projeto do dono (destrutivo)"}
+S02:  # internal APIs, surfaces host and rede (Docker network)
+  - {id: D01, efeito: "projects: sem identidade lê o projeto"}
+  - {id: D02, efeito: "projects: X-Caller-Id forjado lê o projeto"}
+  - {id: D03, efeito: "projects: JWT de outro utilizador lê o projeto"}
+  - {id: D04a, efeito: "projects: JWT HS256 com chave errada lê o projeto"}
+  - {id: D04b, efeito: "projects: JWT alg=none lê o projeto"}
+  - {id: D05, efeito: "projects: X-Caller-Id forjado adiciona ferramenta"}
+  - {id: D09, efeito: "users: PUT sem token torna a vítima premium"}
+  - {id: D13, efeito: "users: reserva de quota da vítima sem token"}
+  - {id: D14, efeito: "subscriptions: estado da subscrição sem token"}
+  - {id: D06, efeito: "projects: X-Caller-Id forjado elimina projeto não vazio (destrutivo)"}
+S03:  # img_storage, surfaces host and rede; effect checked with S3 admin
+  - {id: D06, efeito: "URL assinado do original sem identidade (bytes coincidem)"}
+  - {id: D07, efeito: "escrita de objeto no prefixo do dono"}
+  - {id: D15, efeito: "cópia src->out no prefixo do dono"}
+  - {id: D08, efeito: "eliminação do original (destrutivo)"}
+S04:  # WebSocket admission
+  - {id: W01, efeito: "sem token recebe eventos do projeto"}
+  - {id: W02, efeito: "JWT válido de outsider recebe eventos"}
+  - {id: W03, efeito: "JWT com assinatura errada recebe eventos"}
+  - {id: W04, efeito: "JWT expirado recebe eventos"}
+  - {id: W05, efeito: "entra com projects parado e recebe eventos depois"}
+S16:  # MongoDB, surfaces rede and host
+  - {id: "a:project", efeito: "sem credenciais lê a BD project"}
+  - {id: "a:user", efeito: "sem credenciais lê a BD user"}
+  - {id: "a:subscription", efeito: "sem credenciais lê a BD subscription"}
+  - {id: "b:project", efeito: "credencial versionada no Git lê a BD project"}
+  - {id: "b:user", efeito: "credencial versionada no Git lê a BD user"}
+  - {id: "b:subscription", efeito: "credencial versionada no Git lê a BD subscription"}
+  - {id: "c:projects->user", efeito: "credencial do projects lê a BD user"}
+  - {id: "c:users->project", efeito: "credencial do users lê a BD project"}
+  - {id: "c:subscriptions->project", efeito: "credencial do subscriptions lê a BD project"}
+  - {id: "d1:projects", efeito: "credencial do projects escreve noutra BD"}
+  - {id: "d1:users", efeito: "credencial do users escreve noutra BD"}
+  - {id: "d1:subscriptions", efeito: "credencial do subscriptions escreve noutra BD"}
+  - {id: "d2:projects", efeito: "credencial do projects vê outras BD"}
+  - {id: "d2:users", efeito: "credencial do users vê outras BD"}
+  - {id: "d2:subscriptions", efeito: "credencial do subscriptions vê outras BD"}
+S17:  # RabbitMQ and S3
+  - {id: R1, efeito: "AMQP com a credencial publicada"}
+  - {id: R2, efeito: "API de gestão com a credencial publicada"}
+  - {id: R3, efeito: "credencial de worker lê ws_queue"}
+  - {id: R4, efeito: "credencial de worker cria/apaga filas"}
+  - {id: R5, efeito: "credencial de worker acede à API de gestão"}
+  - {id: B1, efeito: "S3 com admin/admin123 lista o bucket"}
+  - {id: B2, efeito: "credencial do img_storage cria buckets"}
+  - {id: B3, efeito: "leitura anónima do original via /s3/"}

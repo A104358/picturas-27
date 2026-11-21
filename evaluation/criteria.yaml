@@ -1,0 +1,23 @@
+# Minimums and targets - verbatim transcription of docs/metricas.md (single source for med.py).
+# Changing a value requires a recorded decision; never change it to make the MF pass.
+S01: {tipo: principal, unidade: admitidos, minimo: 0, alvo: 0}
+S02: {tipo: principal, unidade: admitidos, minimo: 0, alvo: 0, por_superficie: true}
+S03: {tipo: principal, unidade: admitidos, minimo: 0, alvo: 0}
+S04: {tipo: principal, unidade: eventos_ou_entradas, minimo: 0, alvo: 0}
+S12: {tipo: principal, unidade: ms, minimo: 5000, alvo: 2000, eventos_apos_limite: 0}
+S16: {tipo: principal, unidade: admitidos, minimo: 0, alvo: 0}
+S17: {tipo: principal, unidade: admitidos, minimo: 0, alvo: 0}
+S18: {tipo: principal, unidade: bindings, minimo: {todas: 0}, alvo: {todas: 0, loopback: 0}}
+S05: {tipo: guarda, unidade: fracao, minimo: 1.0, alvo: 1.0}
+S21: {tipo: guarda, unidade: delta_ms_mediana, minimo: 10, alvo: 5, comparativa: true}
+U01: {tipo: principal, unidade: MiB, minimo: 64, alvo: 32, por_servico: true}
+U20: {tipo: principal, unidade: sucessos, minimo: {rondas_3de3: 1, oom: 0}, alvo: {rondas_3de3: 3, oom: 0}}
+U19: {tipo: principal, minimo: {status: [401, 403], gateway_delta_mib: 8}, alvo: {resposta_ms: 100}}
+U18: {tipo: principal, unidade: fracao, minimo: 1.0, alvo: 1.0, oom: 0}
+U04: {tipo: principal, unidade: MiB, minimo: {nginx: 128, seaweedfs: 256}, alvo: {nginx: 64, seaweedfs: 128}}
+U08: {tipo: principal, minimo: {pico: "F+16MiB por componente", residuos: 0}, alvo: {pico_mib: 16, residuos: 0}}
+U09: {tipo: guarda, unidade: ms, minimo: 3000, alvo: 1000, todas_as_amostras: true}
+U25: {tipo: guarda, minimo: {erros: 0, razao: 1.10}, alvo: {erros: 0, razao: 1.00}}
+U15: {tipo: guarda, unidade: fracao, minimo: 1.0, alvo: 1.0}
+U17: {tipo: guarda, unidade: fracao, minimo: 1.0, alvo: 1.0}
+U10: {tipo: guarda, unidade: razao_mediana_BF, minimo: 1.10, alvo: 1.00, comparativa: true}

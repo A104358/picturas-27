@@ -16,3 +16,9 @@ backups/
 __pycache__/
 *.py[cod]
 .venv/
+
+# avaliação da Fase 2 (evaluation/med.py)
+evaluation/.corpus/
+evaluation/.run/
+evaluation/.env.med
+evaluation/.venv/

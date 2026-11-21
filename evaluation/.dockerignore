@@ -1,0 +1,6 @@
+.corpus
+.run
+.venv
+results
+__pycache__
+.env.med

@@ -26,7 +26,7 @@ implementation or measured compliance is inferred.
 record individually validated PKI-C4 B/PKI-C5 A/OPS-C1 A: isolation 30/10 s,
 measured replacement/pilot planned by 23 November 18:00 UTC, current/target channel
 proof and implemented/tested administrative recovery required. Runtime proof is
-pending; this machine/Luís selected as evaluation host on November 18, while the
+pending; this machine/Luís was selected as evaluation host on November 18 (since November 20 the official host is one team member's Mac, with the formal BF taken on November 21; Luís's runs are exploratory), while the
 experimental configuration and physical load remain proposals.
 The [November 17 remaining-security review](../docs/architecture/fase2-sessoes-identidade-partilhas-ws.md)
 records SESS-C1 A/JWT-C1 A/LINK-C1 A/WS-C5 B individual selections with assistant

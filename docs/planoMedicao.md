@@ -24,10 +24,11 @@ O mesmo `med.py` corre **duas vezes, com o mesmo método e no mesmo host**:
 
 ## 1. Regras obrigatórias
 
-1. **Isolamento.** O `med.py` só opera sobre o projeto Compose `picturas-nfr` (variável
-   `MED_COMPOSE_PROJECT`). Recusa-se a correr se o nome for `picturas` ou se o projeto
-   tiver volumes que não criou. Nesta máquina existem contentores `picturas-*` de outra
-   instalação que **não podem ser tocados**.
+1. **Isolamento.** O `med.py` só opera sobre o projeto Compose `picturas-nfr` ou
+   `picturas-nfr-<sufixo>` (variável `MED_COMPOSE_PROJECT`); qualquer outro nome é
+   recusado (lista de permissão, não de proibição). Antes de remover volumes
+   (`stack up`, `stack down`, `stack purge`), exige o marcador `.run/stack.json` desse
+   mesmo projeto: volumes de outra instalação nunca são apagados, seja qual for o nome.
 2. **Nada de alterações à aplicação.** O `med.py` não edita código, `docker-compose.yaml`
    nem `nginx.conf`. A configuração de avaliação é um ficheiro override gerado em
    `evaluation/.run/override.yaml` (§3.2).
@@ -47,7 +48,8 @@ O mesmo `med.py` corre **duas vezes, com o mesmo método e no mesmo host**:
    elemento da equipa, no mesmo computador (decisão de 20/11). Execuções noutros
    computadores usam `--campaign EXP`: servem para verificar que o método dá valores da
    mesma ordem de grandeza, nunca se juntam à BF/MF nem entram na comparação. O
-   `compare` recusa misturar manifestos com hosts diferentes.
+   `compare` não classifica nenhuma métrica se os manifestos diferirem em host,
+   limites, corpus ou versão do instrumento (§9.3).
 9. **Critérios num só sítio.** Os mínimos e alvos são lidos de `evaluation/criteria.yaml`,
    que transcreve [metricas.md](metricas.md). O código não tem valores-limite escritos
    à mão.
@@ -86,6 +88,8 @@ python evaluation/med.py stack up|down|status
 python evaluation/med.py corpus
 python evaluation/med.py run --campaign BF|MF|EXP [--suite security|upload|all] [--metrics S01,U01,...]
 python evaluation/med.py probe --case <id>          # só dentro do contentor de sonda
+python evaluation/med.py report <dir> [--resummarise]  # refazer report.md (e resumos a partir de raw/)
+python evaluation/med.py freeze <dir_BF> --motivo "..."  # registar a versão do instrumento na BF
 python evaluation/med.py compare <dir_BF> <dir_MF>  # tabela BF vs MF vs critérios
 ```
 
@@ -656,9 +660,23 @@ estado em `compare`. Mapear também para o modelo
 ### 9.3 Relatório (`report.md`) e `compare`
 
 `report.md`: uma tabela por RNF (métrica, valor, mínimo, alvo, estado) e as notas.
-`compare <BF> <MF>`: tabela BF | MF | Δ | mínimo | alvo | estado, mais avisos se os
-manifestos diferirem em host, limites, corpus, matriz de casos ou `criteria.yaml`. Uma
-diferença nestes campos invalida a comparação da métrica afetada.
+`compare <BF> <MF>`: tabela BF | MF | estado, mais avisos se os manifestos diferirem
+em host (CPU, arquitetura, CPUs e memória do Docker), limites, corpus, matriz de casos,
+`criteria.yaml` ou **versão do instrumento** (hash de `med.py`, `medlib/`, critérios,
+casos, imagem de sonda e dependências). **Qualquer diferença bloqueia a classificação de
+todas as métricas** (`COMPARACAO_INVALIDA`): a MF tem de ser repetida nas condições da
+BF. Nas matrizes, um número de tentativas diferente entre BF e MF dá INCONCLUSIVO.
+
+**Versão do instrumento da BF.** Se o `med.py` mudar depois da BF sem invalidar os
+dados brutos (só resumos/avaliação, ou passos medidos de novo com `--resume`), regista-se
+a nova versão com `med.py freeze <BF> --motivo "..."`. O manifesto guarda o histórico
+(`instrumento_historico`) e a MF tem de correr exatamente com a versão congelada.
+A BF de 21/11 foi congelada depois da correção dos resumos U09/U10, da nova medição da
+U04 e das correções de avaliação de 21/11 (notas 17–22 de `IMPLEMENTATION_NOTES.md`).
+
+**Regras de avaliação reforçadas (21/11).** Matriz sem tentativas ou sem controlos →
+INCONCLUSIVO. U20 → NAO_CUMPRE com qualquer OOM, mesmo havendo rondas 3/3. S05 na MF →
+NAO_CUMPRE se o editor ainda eliminar o projeto (ACL-C1) ou se esse caso não correr.
 
 ## 10. `criteria.yaml` (transcrição de metricas.md)
 
@@ -688,7 +706,8 @@ U10: {tipo: guarda, unidade: razao_mediana_BF, minimo: 1.10, alvo: 1.00, compara
 
 ## 11. Aceitação do `med.py` (antes de correr a BF)
 
-1. `preflight` falha se o projeto for `picturas` ou se o disco tiver <60 GiB.
+1. `preflight` falha se o projeto não for `picturas-nfr[-<sufixo>]` ou se o disco tiver
+   <60 GiB.
 2. Um ensaio rápido (`--metrics S01,U01 --quick`: 1 repetição, só 10 MiB) corre do
    início ao fim e produz `manifest.json`, `raw/`, `summary.json` e `report.md`.
 3. Uma pesquisa nos resultados por partes conhecidas de segredos (`lisan_al_gaib`,

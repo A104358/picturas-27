@@ -22,7 +22,7 @@ Commit `d6b4497d116fe2ec265040084f6ec126cb84ad49` · host `Apple M4 Pro`
 | Métrica | Tipo | Mínimo | Alvo | Estado | Valor |
 |---|---|---|---|---|---|
 | U01 | principal | 64 | 32 | NAO_CUMPRE | pico 1976 MiB (limite do contentor 2 GiB); processo morreu: api_gateway 12× |
-| U20 | principal | rondas_3de3=1, oom=0 | rondas_3de3=3, oom=0 | NAO_CUMPRE | 0/3 rondas |
+| U20 | principal | rondas_3de3=1, oom=0 | rondas_3de3=3, oom=0 | NAO_CUMPRE | 0/3 rondas; 3 rondas com OOM |
 | U19 | principal | status=[401, 403], gateway_delta_mib=8 | resposta_ms=100 | NAO_CUMPRE | gateway +965.7 MiB |
 | U18 | principal | 1.0 | 1.0 | NAO_CUMPRE | 6 OOM durante recusas |
 | U04 | principal | nginx=128, seaweedfs=256 | nginx=64, seaweedfs=128 | NAO_CUMPRE | nginx +0.4 MiB, seaweedfs +619.2 MiB (máx.); 5/38 amostras válidas |

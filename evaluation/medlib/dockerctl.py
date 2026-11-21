@@ -6,7 +6,9 @@ import subprocess
 import time
 from pathlib import Path
 
-from .config import FORBIDDEN_PROJECTS, REPO, RUN_DIR, SETTINGS, EVAL_DIR
+import re
+
+from .config import ALLOWED_PROJECT_RE, FORBIDDEN_PROJECTS, REPO, RUN_DIR, SETTINGS, EVAL_DIR
 from .util import log
 
 COMPOSE_FILE = REPO / "docker-compose.yaml"
@@ -19,9 +21,30 @@ LIMITED_SERVICES = ("api_gateway", "projects", "img_storage", "video_tool")
 
 def guard_project() -> str:
     p = SETTINGS.project
-    if p in FORBIDDEN_PROJECTS:
-        raise SystemExit(f"Refusing to operate on compose project '{p}'.")
+    if p in FORBIDDEN_PROJECTS or not re.match(ALLOWED_PROJECT_RE, p):
+        raise SystemExit(f"Refusing to operate on compose project '{p}': only picturas-nfr or "
+                         "picturas-nfr-<suffix> are allowed.")
     return p
+
+
+def _marker() -> dict:
+    try:
+        return json.loads(MARKER_FILE.read_text())
+    except (OSError, ValueError):
+        return {}
+
+
+def guard_owned() -> None:
+    """Before any removal (down -v, purge): the project must have been created by this
+    tool (marker for this same project name). Volumes of any other installation are
+    never touched, whatever its name."""
+    p = guard_project()
+    vols = project_volumes()
+    if not vols:
+        return
+    if _marker().get("project") != p:
+        raise SystemExit(f"Project '{p}' has volumes ({', '.join(vols)}) that this tool did not create "
+                         f"(no marker for '{p}' in {MARKER_FILE}). Nothing was removed.")
 
 
 def run(cmd: list[str], *, check: bool = True, timeout: float | None = None,
@@ -172,10 +195,7 @@ def project_volumes() -> list[str]:
 
 def stack_up(services: list[str] | None = None, build: bool = True) -> None:
     guard_project()
-    vols = project_volumes()
-    if vols and not MARKER_FILE.exists():
-        raise SystemExit(f"Project '{SETTINGS.project}' has volumes this tool did not create: "
-                         f"{', '.join(vols)}. Choose another MED_COMPOSE_PROJECT.")
+    guard_owned()
     log("stack: down -v (isolated project only)")
     compose("down", "-v", "--remove-orphans", override=False, check=False, timeout=600)
     write_override()
@@ -191,6 +211,7 @@ def stack_up(services: list[str] | None = None, build: bool = True) -> None:
 
 
 def stack_down() -> None:
+    guard_owned()
     stop_probe()
     compose("down", "-v", "--remove-orphans", check=False, timeout=600)
     if MARKER_FILE.exists():

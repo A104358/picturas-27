@@ -1080,6 +1080,8 @@ aprovado. Nenhum dado/perfil real foi consultado ou alterado nesta revisão.
 
 ### Avaliação de 18/11 — host escolhido, protocolo por congelar
 
+**Atualização de 20/11 e 21/11:** o host oficial passou a ser o Mac (Apple M4 Pro) de um único elemento da equipa, que recolhe a BF e a MF no mesmo computador com o `med.py` (projeto isolado `picturas-nfr`). As medições na máquina do Luís são só exploratórias (campanha EXP). A BF oficial é `evaluation/results/BF-20261121T013224Z`; ver [métricas](metricas.md) e [plano de medição](planoMedicao.md).
+
 O utilizador escolheu **esta máquina, administrada pelo Luís**, para avaliar o
 par. O [plano de avaliação](fase2-plano-avaliacao.md) reúne os recursos observados,
 instalação nova proposta, budgets, corpus, cargas/repetições, relógios, mínimos/

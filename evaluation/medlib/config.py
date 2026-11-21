@@ -26,6 +26,8 @@ APP_PATHS = [
 ]
 
 FORBIDDEN_PROJECTS = {"picturas", ""}
+# Allow-list: only projects named by this tool (picturas-nfr or picturas-nfr-<suffix>).
+ALLOWED_PROJECT_RE = r"^picturas-nfr(-[a-z0-9][a-z0-9-]*)?$"
 
 
 def _load_env_file(path: Path) -> None:

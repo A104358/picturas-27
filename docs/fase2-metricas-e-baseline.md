@@ -13,6 +13,8 @@ Define o que recolher para segurança e eficiência dos uploads, incluindo efeit
 colaterais e preservação funcional. As 60 métricas são dimensões de avaliação dos
 dois RNF e suas guardas; não são 60 RNF nem autorização para implementar as 19 ideias.
 
+**Atualização de 20/11 e 21/11:** o host oficial passou a ser o Mac (Apple M4 Pro) de um único elemento da equipa, que recolhe a BF e a MF no mesmo computador com o `med.py` (projeto isolado `picturas-nfr`). As medições na máquina do Luís são só exploratórias (campanha EXP). A BF oficial é `evaluation/results/BF-20261121T013224Z`; ver [métricas](metricas.md) e [plano de medição](planoMedicao.md).
+
 **Preparação da campanha, 18/11:** o utilizador escolheu esta máquina, administrada
 pelo Luís, como anfitrião da avaliação. O [plano antes/depois](fase2-plano-avaliacao.md)
 detalha instalação isolada proposta, recursos observados, budgets, corpus, cargas,

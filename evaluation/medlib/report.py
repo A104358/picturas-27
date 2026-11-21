@@ -10,6 +10,8 @@ from .config import CRITERIA_FILE
 
 ALVO, MINIMO, NAO, INC, NM, COMP = ("CUMPRE_ALVO", "CUMPRE_MINIMO", "NAO_CUMPRE", "INCONCLUSIVO",
                                     "NAO_MEDIDA", "COMPARATIVA")
+INVALIDA = "COMPARACAO_INVALIDA"
+MATRIX = ("S01", "S02", "S03", "S04", "S16", "S17")
 
 SECURITY = ["S01", "S02", "S03", "S04", "S12", "S16", "S17", "S18", "S05", "S21"]
 UPLOAD = ["U01", "U20", "U19", "U18", "U04", "U08", "U09", "U25", "U15", "U17", "U10"]
@@ -20,6 +22,10 @@ def criteria() -> dict:
 
 
 def _matrix(sm: dict) -> tuple[str, str]:
+    if not sm.get("tentativas"):
+        return INC, "matriz sem tentativas"
+    if not sm.get("controlos_total"):
+        return INC, "sem controlos legítimos positivos"
     if sm.get("admitidos", 0) > 0:
         return NAO, f'{sm["admitidos"]} admitidos: {", ".join(sm.get("casos_admitidos", [])[:12])}'
     if sm.get("inconclusivos", 0) > 0:
@@ -29,14 +35,14 @@ def _matrix(sm: dict) -> tuple[str, str]:
     return ALVO, f'0 admitidos em {sm.get("tentativas", 0)} tentativas'
 
 
-def evaluate(metric: str, sm: dict | None, crit: dict) -> tuple[str, str]:
+def evaluate(metric: str, sm: dict | None, crit: dict, campaign: str | None = None) -> tuple[str, str]:
     if not sm:
         return NM, ""
     if "erro" in sm:
         return INC, f'a medição falhou: {sm["erro"]}'
     c = crit.get(metric, {})
     try:
-        if metric in ("S01", "S02", "S03", "S04", "S16", "S17"):
+        if metric in MATRIX:
             return _matrix(sm)
         if metric == "S12":
             if sm.get("invalidas"):
@@ -55,6 +61,12 @@ def evaluate(metric: str, sm: dict | None, crit: dict) -> tuple[str, str]:
             if sm["loopback"] <= c["alvo"]["loopback"]:
                 return ALVO, "nenhuma porta interna publicada"
             return MINIMO, f'{sm["loopback"]} só em loopback'
+        if metric == "S05" and campaign == "MF":
+            pol = sm.get("politica_acl_editor_elimina") or []
+            if not pol:
+                return INC, "caso ACL-C1 (editor elimina o projeto) não executado"
+            if any(pol):
+                return NAO, "ACL-C1: um editor ainda consegue eliminar o projeto"
         if metric in ("S05", "U15", "U17", "U18"):
             f = sm.get("fracao")
             if f is None:
@@ -118,6 +130,9 @@ def evaluate(metric: str, sm: dict | None, crit: dict) -> tuple[str, str]:
                 else (MINIMO, f"+{gw} MiB, {t} ms")
         if metric == "U20":
             full = sm.get("rondas_3de3_sem_oom", 0)
+            oom = sm.get("oom_total", 0)
+            if oom > c["minimo"]["oom"]:
+                return NAO, f"{full}/3 rondas; {oom} rondas com OOM"
             if full >= c["alvo"]["rondas_3de3"]:
                 return ALVO, f"{full}/3 rondas"
             return (MINIMO, f"{full}/3 rondas") if full >= c["minimo"]["rondas_3de3"] else (NAO, f"{full}/3 rondas")
@@ -165,7 +180,7 @@ def write_report(d: Path) -> Path:
         lines += [f"## {title}", "", "| Métrica | Tipo | Mínimo | Alvo | Estado | Valor |", "|---|---|---|---|---|---|"]
         for m in ids:
             c = crit.get(m, {})
-            st, val = evaluate(m, summary.get(m), crit)
+            st, val = evaluate(m, summary.get(m), crit, manifest.get("campaign"))
             statuses[m] = st
             lines.append(f"| {m} | {c.get('tipo', '')} | {_fmt(c.get('minimo'))} | {_fmt(c.get('alvo'))} | {st} | {val} |")
         lines.append("")
@@ -191,6 +206,11 @@ def compare(bf_dir: Path, mf_dir: Path) -> str:
     mf, mmf = _load(mf_dir)
     crit = criteria()
     warnings = []
+    bf_inst = (mbf.get("instrumento_final") or mbf.get("instrumento") or {}).get("total")
+    mf_inst = (mmf.get("instrumento") or {}).get("total")
+    if not bf_inst or bf_inst != mf_inst:
+        warnings.append(f"- versão do instrumento difere (BF `{str(bf_inst)[:12]}` vs MF `{str(mf_inst)[:12]}`): "
+                        "o med.py, os critérios ou os casos mudaram entre as campanhas")
     for a, b in COMPARABLE_KEYS:
         va = mbf.get(a, {}).get(b) if b else mbf.get(a)
         vb = mmf.get(a, {}).get(b) if b else mmf.get(a)
@@ -201,6 +221,8 @@ def compare(bf_dir: Path, mf_dir: Path) -> str:
     lines = ["# Comparação BF vs MF", "", f"BF: `{bf_dir.name}` · MF: `{mf_dir.name}`", ""]
     if warnings:
         lines += ["## Avisos", ""] + warnings + [""]
+        lines += ["**Comparação inválida:** nenhuma métrica é classificada enquanto as condições "
+                  "acima diferirem. Repita a MF nas condições da BF.", ""]
     lines += ["| Métrica | BF | MF | Estado MF |", "|---|---|---|---|"]
     for m in SECURITY + UPLOAD:
         if m == "S21":
@@ -208,8 +230,13 @@ def compare(bf_dir: Path, mf_dir: Path) -> str:
         elif m == "U10":
             st, bv, mv = _cmp_u10(bf.get(m), mf.get(m), crit[m])
         else:
-            bv = evaluate(m, bf.get(m), crit)[1]
-            st, mv = evaluate(m, mf.get(m), crit)
+            bv = evaluate(m, bf.get(m), crit, "BF")[1]
+            st, mv = evaluate(m, mf.get(m), crit, "MF")
+            tb, tm = (bf.get(m) or {}).get("tentativas"), (mf.get(m) or {}).get("tentativas")
+            if m in MATRIX and tb != tm:
+                st, mv = INC, f"{mv} (denominador difere: BF {tb} vs MF {tm} tentativas)"
+        if warnings:
+            st = INVALIDA
         lines.append(f"| {m} | {bv} | {mv} | {st} |")
     out = "\n".join(lines) + "\n"
     (mf_dir / "compare.md").write_text(out)

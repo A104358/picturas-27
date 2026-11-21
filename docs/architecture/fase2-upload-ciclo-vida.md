@@ -1,13 +1,42 @@
 # Fase 2 — Ciclo de vida dos uploads: proposta para revisão
 
-**Equipa:** PL2-G4. **Preparado:** 18/11/2026. **Estado:** desenho de trabalho,
-não implementação ou seleção implícita de UP-C4–C9. **UP-C1 A/UP-C2 A/UP-C3 A**
+**Equipa:** PL2-G4. **Preparado:** 18/11/2026. **Estado (21/11/2026):** UP-C4 A,
+UP-C5 A, UP-C6 A, UP-C7 A, UP-C8 A e UP-C9 A **selecionadas** individualmente pelo
+utilizador; ver [seleção de 21/11](#seleção-de-21112026). Continua a ser desenho, não
+implementação. **UP-C1 A/UP-C2 A/UP-C3 A**
 estão selecionadas individualmente com confirmação técnica e condições no
 [registo de decisões](fase2-upload-decisoes-pendentes.md). Mantêm-se adaptador
 multipart limitado, cobrança só no Apply e tentativas/staging separados dos
 media normais. Os dois transportes usam as mesmas regras e commit.
 
-## Decisões a tomar — propostas completas, não resultados
+## Seleção de 21/11/2026
+
+| Ponto | Escolha | Nota |
+|-------|---------|------|
+| UP-C4 | **A** — uma tentativa por PUT, sem retoma | Interrupção obriga a nova tentativa e nova chave. |
+| UP-C5 | **A** — parâmetros da tabela abaixo | Valores iniciais; calibração registada antes de os congelar. As 3 vagas globais coincidem com a concorrência C=3 da U20. |
+| UP-C6 | **A** — candidato imutável e commit condicional no projeto | A alternativa B não é viável: MongoDB 4.4 sem replica set nesta instalação. |
+| UP-C7 | **A** — hash depois de ready, em segundo plano | A alternativa B leria o ficheiro inteiro antes de aceitar e falharia a U09 (<3 s). **Dúvida de segurança registada** (abaixo). |
+| UP-C8 | **A** — `ffprobe` sobre o candidato, com leitura e tempo limitados | Único caminho compatível com o alvo da U08 (sem spool integral). Se o `ffprobe` não conseguir ler do SeaweedFS com estes limites, a decisão é revista com registo (B, spool limitado), e a U08 fica no mínimo. |
+| UP-C9 | **A** — PUT com comprimento conhecido, autenticado antes do corpo; limpeza ativa a cada 5 s | Sem retry transparente; journal/tombstones durante 24 h. |
+
+**Dúvida de segurança em UP-C7 A (janela `ready_hash_pending`).** Entre o commit e o
+fim do cálculo do hash, o vídeo já é utilizável sem hash do servidor. Condições para
+que essa janela não seja uma falha de integridade:
+
+1. O candidato é imutável depois de selado (UP-C6 A): nenhum caminho o reescreve, por
+   isso o hash calculado depois corresponde aos bytes publicados.
+2. A cache que depende do hash fica **desativada** para media sem hash; nunca se usa
+   uma chave vazia ou o hash enviado pelo cliente.
+3. O hash é sempre calculado pelo servidor a partir do objeto guardado.
+4. A janela é limitada pelo prazo do hash (U14: 10/5 s) e uma falha fica visível no
+   estado, sem inventar hash nem apagar o original.
+5. A U15 (SHA-256 do original) continua a verificar a integridade em todos os uploads
+   aceites.
+
+Se alguma destas condições não puder ser implementada, a UP-C7 volta a decisão.
+
+## Opções consideradas
 
 | Ponto | A — recomendação de trabalho | B — alternativa e custo |
 |-------|-----------------------------|-------------------------|
@@ -247,7 +276,8 @@ Timeouts de proxy precisam de ser distinguidos de limite total:
 [nginx proxy timeouts](https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_read_timeout).
 
 O desenho mantém 60 métricas existentes, U25 G e seleções EVAL anteriores, sem
-aprovar os outros limiares. **UP-C4–C9 continuam por selecionar**, com parâmetros
-e mecanismos por verificar. Não há novos valores de baseline, commit Git, teste,
+aprovar os outros limiares. **UP-C4–C9 A foram selecionadas em 21/11** (ver o
+início do documento); parâmetros e mecanismos continuam por verificar na
+implementação. Não há novos valores de baseline, commit Git, teste,
 migração ou acesso a volumes/browsers. IA: desenho apoiado por Codex com a skill
 Inception; análise e validação continuam distintas de implementação e avaliação.

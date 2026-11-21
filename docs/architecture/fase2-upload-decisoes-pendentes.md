@@ -5,8 +5,10 @@ selecionadas individualmente com confirmação técnica e condições. Fonte: o
 utilizador recomenda expressamente as três A, descreve condições e pede fechar
 o ciclo; confirmação técnica do assistente, sem inventar acordo dos quatro.
 Não resultam por associação de EVAL-M1. Preferência nginx/S3 e
-[decisões anteriores](../fase2-ideias-1-e-2.md) mantidas. UP-C4–C9 continuam como
-propostas no [ciclo de vida](fase2-upload-ciclo-vida.md). Não há
+[decisões anteriores](../fase2-ideias-1-e-2.md) mantidas. **Atualização de 21/11:**
+UP-C4 A a UP-C9 A selecionadas individualmente pelo utilizador, com a dúvida de
+segurança da UP-C7 registada no [ciclo de vida](fase2-upload-ciclo-vida.md#seleção-de-21112026).
+Com isto, UP-C1 a UP-C9 estão todas escolhidas. Não há
 alteração de aplicação, novo endpoint, esquema ou teste executado nesta tarefa.
 
 ## Primeiro grupo — compatibilidade, quota e isolamento
@@ -28,8 +30,8 @@ MongoDB não abrange S3. A seleção não declara estas capacidades implementada
 Se o custo do adaptador comprometer a entrega, reconsiderar UP-C1 explicitamente;
 não o retirar silenciosamente nem declarar compatibilidade sem a testar. A quota
 permanece só no Apply; isso não escolhe TTL/estado/uso único/retries ou limites
-de admissão. Esses detalhes continuam por selecionar, com alternativas e custos
-no [ciclo de vida proposto](fase2-upload-ciclo-vida.md).
+de admissão. Esses detalhes foram selecionados em 21/11 (UP-C4–C9 A) no
+[ciclo de vida](fase2-upload-ciclo-vida.md).
 
 ### Porquê UP-C1 A e o que exige
 

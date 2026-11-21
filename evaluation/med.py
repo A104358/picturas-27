@@ -118,6 +118,7 @@ def manifest(campaign: str, pre: dict) -> dict:
         "git": {"head": head, "app_dirty": _git("status", "--porcelain", "--", *APP_PATHS),
                 "base_commit": SETTINGS.base_commit,
                 "diff_stat_vs_base": _git("diff", "--stat", SETTINGS.base_commit, "--", *APP_PATHS)[-2000:]},
+        "instrumento": instrument_hashes(),
         "hashes": {
             "med_py": sha256_file(Path(__file__)),
             "medlib": _dir_hash(EVAL_DIR / "medlib"),
@@ -144,6 +145,34 @@ def manifest(campaign: str, pre: dict) -> dict:
         "compose_project": SETTINGS.project,
         "preflight": pre,
     }
+
+
+def instrument_hashes() -> dict:
+    """Version of the measuring instrument: code, criteria, frozen cases and probe image.
+    `compare` refuses to classify when BF and MF were taken with different versions."""
+    files = [Path(__file__), CRITERIA_FILE, CASES_FILE, EVAL_DIR / "probe.Dockerfile",
+             EVAL_DIR / "requirements.txt"] + sorted((EVAL_DIR / "medlib").glob("*.py"))
+    out = {str(f.relative_to(EVAL_DIR)): sha256_file(f) for f in files if f.exists()}
+    total = hashlib.sha256("".join(f"{k}:{v};" for k, v in sorted(out.items())).encode()).hexdigest()
+    return {"ficheiros": out, "total": total}
+
+
+def freeze(out_dir: Path, reason: str) -> dict:
+    """Record the current instrument version as the one the BF must be compared with.
+
+    Only for a BF whose raw data stays valid under the new version (changes limited to
+    summaries/evaluation, or steps re-measured with --resume). Logged in the manifest."""
+    path = out_dir / "manifest.json"
+    man = json.loads(path.read_text())
+    if man.get("campaign") != "BF":
+        raise SystemExit("freeze só se aplica a uma campanha BF")
+    inst = instrument_hashes()
+    man.setdefault("instrumento_historico", []).append(
+        {"em": utc_now(), "motivo": reason, "total": inst["total"],
+         "anterior": (man.get("instrumento_final") or man.get("instrumento") or {}).get("total")})
+    man["instrumento_final"] = inst
+    path.write_text(json.dumps(man, indent=1, ensure_ascii=False))
+    return inst
 
 
 def _dir_hash(d: Path) -> str:
@@ -337,6 +366,9 @@ def main() -> int:
     p.add_argument("dir")
     p.add_argument("--resummarise", action="store_true",
                    help="recalcular os resumos dos estratos de upload a partir de raw/ (sem medir)")
+    p = sub.add_parser("freeze", help="registar a versão atual do instrumento numa BF")
+    p.add_argument("dir")
+    p.add_argument("--motivo", required=True)
     p = sub.add_parser("compare")
     p.add_argument("bf")
     p.add_argument("mf")
@@ -380,6 +412,10 @@ def main() -> int:
         if args.resummarise:
             resummarise(Path(args.dir))
         print(report.write_report(Path(args.dir)).read_text())
+        return 0
+    if args.cmd == "freeze":
+        inst = freeze(Path(args.dir), args.motivo)
+        log(f"instrumento congelado na BF: {inst['total'][:12]}")
         return 0
     if args.cmd == "compare":
         print(report.compare(Path(args.bf), Path(args.mf)))

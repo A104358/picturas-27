@@ -23,11 +23,11 @@ fica ≥60 GiB, por aumentar se o inventário exigir, e **U25 passa a G**. A val
 
 | Elemento | Estado e fonte | Consequência para a avaliação |
 |----------|----------------|------------------------------|
-| Máquina e administrador | Escolha individual do utilizador em 18/11: esta máquina / Luís, LOCAL-HOST-01 / ADM-01 | Anfitrião escolhido; não atribuir decisão aos restantes elementos |
-| Dados existentes | Preservar `picturas` e `picturas-quality-20261114`, decisão anterior mantida | Não usar esses volumes como fixtures, migrar ou apagar dados por este plano |
-| Instalação de ensaio | **Proposta EVAL-I1:** projeto novo `picturas-eval-20261118`, apenas fixtures | Não criado; nome efetivo, configuração resolvida, volumes, redes, mounts e portas por verificar |
+| Máquina e administrador | **Atualizado em 20/11:** Mac (Apple M4 Pro) de um único elemento da equipa, que recolhe a BF e a MF. A escolha de 18/11 (esta máquina / Luís, LOCAL-HOST-01 / ADM-01) passou a exploratória (EXP) | BF e MF no mesmo host; medições noutros computadores não se juntam às oficiais |
+| Dados existentes | **Atualizado em 21/11:** no host oficial, o projeto antigo `picturas` (volumes da Fase 1) foi apagado por decisão do utilizador. `picturas-quality-20261114` não existe nesse host | O `med.py` só opera em `picturas-nfr` / `picturas-nfr-<sufixo>` criados por ele; nunca apaga volumes de outra instalação |
+| Instalação de ensaio | **Atualizado em 21/11:** projeto isolado `picturas-nfr` criado pelo `med.py` (proposta inicial EVAL-I1: `picturas-eval-20261118`) | Portas +20000, limites de 2 CPU / 2 GiB nos serviços medidos; ver [plano de medição](planoMedicao.md) |
 | Segurança | Escolhas individuais D3/D4/D7, WS/PKI/ACL/SESS/JWT/LINK preservadas nos contratos | Critérios já validados não voltam a ficar por escolher; implementação e resultados são outra coisa |
-| Uploads | UP-C1/C2/C3 A individualmente selecionadas: adaptador multipart seguro, quota só no Apply, staging controlado; UP-C4–C9 propostas | Fechar estado/token/TTL/retry/commit/hash/probe/cleanup no ciclo de vida; nenhum mecanismo comprovado por documentação |
+| Uploads | UP-C1/C2/C3 A individualmente selecionadas: adaptador multipart seguro, quota só no Apply, staging controlado; UP-C4–C9 A selecionadas em 21/11 | Fechar estado/token/TTL/retry/commit/hash/probe/cleanup no ciclo de vida; nenhum mecanismo comprovado por documentação |
 | Limites/metas de engenharia | Critérios enumerados em EVAL-M1 individualmente validados; restantes valores mantêm estado anterior | Calibrar antes de BF e congelar a configuração física sem escolher alvos depois de observar MF |
 | Recuperação anónima real | Existência de associação independente desconhecida | Usar casos sintéticos; recuperação das duas identidades reais continua pendente |
 | Baseline formal BF e medição final MF | Não executadas nesta preparação | B14/B16 são pilotos históricos; metadados do host não são uma baseline da aplicação |

@@ -100,6 +100,9 @@ confirmados pelo estado ou pelos bytes antes e depois, e não apenas pelo códig
   efeito observado.
 - **Inconclusivo**: 5xx, timeout ou serviço ausente. **Não conta como proteção** (QS-01).
   Uma campanha com casos inconclusivos não cumpre a métrica.
+- **Cobertura.** Uma matriz sem tentativas ou sem controlos legítimos positivos é
+  INCONCLUSIVA, nunca "0 admitidos". Na comparação, o número de tentativas da MF tem de
+  ser igual ao da BF.
 
 **Por que mínimo = alvo = 0.** Uma admissão indevida é uma fuga de dados ou uma
 alteração não autorizada; não existe uma quantidade aceitável. O que distingue um bom
@@ -282,7 +285,8 @@ na MF.
 - **Mínimo / alvo:** 100% / 100% (P). Exceção declarada: a política ACL-C1 (só o dono
   elimina o projeto) altera de propósito um comportamento da base. O caso "editor
   elimina o projeto" passa de permitido a recusado e é justificado como objeto da
-  melhoria.
+  melhoria. Na BF é só registado (a base permite-o); na MF é **condição da S05**: se o
+  editor ainda conseguir eliminar o projeto, ou se o caso não correr, a S05 não cumpre.
 
 ### S21 — Guarda: sobrecarga de latência
 
@@ -541,12 +545,12 @@ reiniciado e também aquecido. Todas as falhas ficam no denominador.
 |-----|--------|
 | S06 | Provavelmente já passa na base (G01 → 401). Mantida como teste, não como métrica. |
 | S07, S22–S24, U14, U16, U21, U23, U26 | Medem mecanismos que não existem na base (NA), por isso não demonstram melhoria. Ficam como testes de verificação se o mecanismo for implementado. |
-| S08 | Testa a robustez do mTLS. Fica de fora a menos que o mTLS entre no âmbito; o efeito na rede interna já é medido em S02. |
+| S08 | O mTLS **está no âmbito** (D4, WS-C1 A e decisões PKI). Não é métrica de melhoria porque não existe na base (NA), mas os testes de conformidade do mTLS (certificado de outro serviço recusado, cadeia válida não basta, identidade por par/operação) são **obrigatórios** e entram na evidência da MF. O efeito na rede interna é medido em S02. |
 | S11 | Coberta por S04 (entradas) e S12 (eventos depois do limite). |
-| S13 | É uma política (ACL-C1); verificada nos controlos de S05. |
-| S19, S20 | Segredos no Git e retirada da CA: relevantes, mas fora da autorização e com custo alto para o prazo. |
+| S13 | É uma política (ACL-C1); verificada na S05: na MF, se um editor ainda eliminar o projeto, a S05 não cumpre. |
+| S19, S20 | Segredos no Git (S19) e retirada da confiança na CA (S20). Não são métricas de melhoria da autorização. A retirada por substituição da CA **está decidida** (PKI-C2 B, PKI-C3 A) e o seu teste de conformidade (CA antiga recusada em ligações novas, ligações antigas invalidadas) é **obrigatório**. Só sai do âmbito com uma decisão explícita da equipa, registada. |
 | U02, U05, U06, U07 | Diagnóstico: retenção, inclinação, CPU e amplificação de rede são reportados se forem recolhidos, sem gate. |
-| U22, U24 | Dependem do ciclo de vida (UP-C4–C9) ainda não escolhido; U24 é verificada como controlo de S05 (a quota só é debitada no Apply). |
+| U22, U24 | Dependem do ciclo de vida do upload (UP-C4–C9 A, selecionado a 21/11), que não existe na base (NA). Ficam como testes de verificação da implementação; U24 é verificada como controlo de S05 (a quota só é debitada no Apply). |
 
 ## Referências
 

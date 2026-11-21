@@ -44,10 +44,21 @@ Depois da refatoração, no **mesmo computador**:
 
 Medições de outros elementos da equipa usam `--campaign EXP` e nunca entram no `compare`.
 
+O `compare` só classifica se a MF tiver o mesmo host, limites, corpus, critérios, casos
+e **versão do instrumento** que a BF; caso contrário todas as métricas ficam
+`COMPARACAO_INVALIDA`. **Não alterar `med.py`, `medlib/`, `criteria.yaml` nem
+`cases/` entre a BF e a MF.** Se uma alteração for inevitável e não invalidar os dados da
+BF, registá-la com:
+
+```bash
+.venv/bin/python med.py freeze results/BF-... --motivo "o que mudou e porquê"
+```
+
 ## Opções úteis
 
 - `--suite security|upload` corre só um RNF; `--metrics S12,U20` corre métricas soltas.
 - `--resume results/<dir>` acrescenta métricas a uma campanha já iniciada.
+- `report results/<dir> --resummarise` refaz os resumos dos estratos a partir de `raw/`, sem medir.
 - `--quick`: 1 repetição e só 10 MiB, para verificar o instrumento (não é BF nem MF).
 
 ## Limpeza
@@ -57,7 +68,8 @@ Medições de outros elementos da equipa usam `--campaign EXP` e nunca entram no
 .venv/bin/python med.py stack purge --corpus   # também o corpus (só depois de existir uma MF)
 ```
 
-**Nunca** usar `docker system prune` e afins: apagam também a instalação `picturas` desta máquina.
+**Nunca** usar `docker system prune` e afins: apagam também outras instalações Docker desta máquina.
+O `med.py` só aceita projetos `picturas-nfr[-<sufixo>]` e só apaga volumes de projetos que ele próprio criou.
 
 ## Na MF
 

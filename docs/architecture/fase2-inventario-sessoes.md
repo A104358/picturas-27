@@ -5,6 +5,12 @@
 de contas/projetos recolhidos numa máquina. Browsers e restantes computadores por levantar.
 Entrega de referência: 27/11/2026.
 
+> **Atualização de 21/11 (D-15):** não há clientes nem dados reais; a entrega parte de
+> um reset geral. O inventário, a recuperação das identidades anónimas existentes e a
+> transição do segredo sobre dados reais ficam sem efeito. A ferramenta de reemissão
+> assistida mantém-se para anónimos que expirem no futuro. Ver
+> [refactor-handoff.md, §2.6](../refactor-handoff.md).
+
 ## Âmbito confirmado e limites da informação
 
 Em 2026-11-16T18:25:38Z foi registada a informação do utilizador:

@@ -35,6 +35,12 @@ de admissão. Esses detalhes foram selecionados em 21/11 (UP-C4–C9 A) no
 
 ### Porquê UP-C1 A e o que exige
 
+> **Atualização de 21/11 (D-01, D-02, D-06):** o frontend passa ao fluxo novo; o
+> adaptador do POST antigo leva o corpo **em fluxo até ao staging** e usa o mesmo motor
+> de validação e commit (sem spool integral na projects); as métricas oficiais de upload
+> continuam a ser medidas pelo POST antigo, comparáveis com a BF, e o fluxo novo é
+> provado à parte. Ver [refactor-handoff.md, §2.6](../refactor-handoff.md).
+
 O [frontend atual](../../frontend/lib/projects.ts) envia multipart para
 `POST /projects/:user/:project/video`, espera sucesso e atualiza a versão a partir
 de `X-Project-Version`. O [gateway](../../apiGateway/routes/projects.js) usa multer

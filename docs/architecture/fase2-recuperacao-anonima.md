@@ -6,6 +6,12 @@ implementada, recuperação executada, nova validação coletiva ou autorizaçã
 alterar dados. Mantêm-se JWT HS256 de sete dias absolutos, ausência de refresh e
 as restantes [escolhas de sessões/identidade](fase2-sessoes-identidade-partilhas-ws.md).
 
+> **Atualização de 21/11 (D-15):** não há clientes nem dados reais; a entrega parte de
+> um reset geral. O inventário, a recuperação das identidades anónimas existentes e a
+> transição do segredo sobre dados reais ficam sem efeito. A ferramenta de reemissão
+> assistida mantém-se para anónimos que expirem no futuro. Ver
+> [refactor-handoff.md, §2.6](../refactor-handoff.md).
+
 ## Informação fornecida agora e consequência
 
 O utilizador respondeu em 17/11: **ainda não sabe se existe registo independente

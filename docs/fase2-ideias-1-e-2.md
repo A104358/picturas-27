@@ -587,6 +587,11 @@ A especificação de métricas, mínimos/metas e os números já extraídos est�
 concluída depois de corrigir as asserções e preencher os gates obrigatórios. Não iniciar
 refactoring da aplicação enquanto essas condições e a revisão de requisitos estiverem abertas.
 
+> **Atualização de 21/11 (D-11):** a BF formal foi medida e todas as decisões estão
+> escolhidas. A implementação foi autorizada pelo utilizador e segue o
+> [plano de refatoração](refactor-plano.md); as condições ainda em falta (piloto PKI,
+> corpus WS, inventário) são passos desse plano. Ver [refactor-handoff.md, §2.6](refactor-handoff.md).
+
 ### Estado das escolhas e questões que faltam fechar
 
 | ID | Estado comunicado nos documentos | O que falta para ficar implementável e avaliável |
@@ -829,6 +834,9 @@ O utilizador confirmou **B/A/A** em 2026-11-16T20:33:46Z. O
 [contrato de critérios operacionais](architecture/fase2-criterios-operacionais-seguranca.md)
 regista a matriz atual/alvo, critérios, manifesto do piloto, esforço e recuo.
 
+- **Atualização de 21/11 (D-09):** o marco de 23/11 às 18:00 deixa de ser uma data fixa.
+  O piloto corre assim que a PKI, os canais e o script de isolamento estiverem feitos,
+  sempre antes da MF. Ver [refactor-handoff.md, §2.6](refactor-handoff.md).
 - **PKI-C4 B:** isolamento ≤30 s/meta ≤10 s desde o comando administrativo até
   corte demonstrado de novas ligações, persistentes, acessos internos e consumidores
   RabbitMQ. Falha é isolamento incompleto; continuar sem reiniciar relógio.
@@ -887,6 +895,10 @@ testes destrutivos sobre os dois conjuntos de volumes preservados de Luís.
 Prova: S01/S02/S05/S13/F04/F06. Testes de política/UI ainda não executados.
 
 **D5 — Loopback para portas internas, mantendo uma rede.**
+
+> **Atualização de 21/11 (D-05):** na implementação, as portas internas deixam de ser
+> publicadas (só o nginx 8080), o que cumpre o alvo da S18; o loopback era o mínimo.
+> Ver [refactor-handoff.md, §2.6](refactor-handoff.md).
 Reduz exposição à LAN e preserva depuração local; é a escolha comunicada. A alternativa de
 não publicar as portas e separar redes reduz também alcance lateral. Foi adiada no documento
 por custo de mapear dependências, não por irrelevância. O risco residual é explícito: um

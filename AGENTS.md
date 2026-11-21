@@ -3,6 +3,13 @@
 Guidance for AI coding agents (and humans) working on this repository. `README.md` is the
 user-facing documentation; this file is the short version an agent needs before changing code.
 
+## Phase 2 refactoring in progress
+
+Before changing code, read [`docs/refactor-handoff.md`](docs/refactor-handoff.md) (current
+state, owners, where work stopped) and [`docs/refactor-plano.md`](docs/refactor-plano.md)
+(blocks, rules, acceptance). Update the handoff before stopping. Do not commit; do not change
+`evaluation/med.py`, `evaluation/medlib/`, `criteria.yaml` or `cases/` (frozen measurement instrument) unless the plan (§6) allows it.
+
 ## What the app is
 
 PictuRAS is a web editor for images and videos, built as Docker Compose microservices. Users

@@ -1,0 +1,15 @@
+name: picturas-spike
+services:
+  projects_mongoDB:
+    image: mongo@sha256:4be76f674fc4b27859816811b8baa3c51830eb1dbf4ca81a51e26b79edd662ef
+    command: ["mongod", "--tlsMode", "requireTLS", "--tlsCertificateKeyFile", "/pki/mongo.pem", "--tlsCAFile", "/pki/ca.crt", "--tlsAllowConnectionsWithoutCertificates"]
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: rootadmin
+      MONGO_INITDB_ROOT_PASSWORD: rootadmin-pw-0123456789
+    volumes: ["./pki:/pki:ro", "./init.js:/docker-entrypoint-initdb.d/init.js:ro", "mongo_data:/data/db"]
+  t:
+    image: picturas-spike-py
+    command: ["sleep", "infinity"]
+    volumes: ["./pki:/pki:ro", "./:/w:ro"]
+volumes:
+  mongo_data: {}

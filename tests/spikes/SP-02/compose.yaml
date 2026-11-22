@@ -1,0 +1,22 @@
+name: picturas-spike
+services:
+  seaweedfs:
+    image: chrislusf/seaweedfs@sha256:ce9e796f1fe6f06968f4c04bdaf8f678dad9c8acdfef3d244133d71bfa6bf882
+    command: >
+      server -dir=/data -ip=seaweedfs -s3 -s3.port=9000
+      -s3.cert.file=/pki/seaweedfs.crt -s3.key.file=/pki/seaweedfs.key
+      -s3.config=/etc/seaweedfs/s3.json
+      -s3.encryptVolumeData -master.volumeSizeLimitMB=1024
+    environment:
+      WEED_S3_SSE_KEK_PASSPHRASE: spike-kek-passphrase
+    volumes:
+      - ./pki:/pki:ro
+      - ./s3.json:/etc/seaweedfs/s3.json:ro
+      - ./security.toml:/etc/seaweedfs/security.toml:ro
+      - sw_data:/data
+  t:
+    image: picturas-spike-py
+    command: ["sleep", "infinity"]
+    volumes: ["./pki:/pki:ro", "./:/w:ro"]
+volumes:
+  sw_data: {}

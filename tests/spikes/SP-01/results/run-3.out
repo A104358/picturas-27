@@ -1,0 +1,14 @@
+## D1' mapped
+deny-403 -> {"error": 403} code=403 t=10.011879 up=20971520
+deny-409 -> {"error": 409} code=409 t=10.008857 up=20971520
+deny-411 -> {"error": 411} code=411 t=10.013728 up=20971520
+deny-503 -> {"error": 503} code=503 t=10.008121 up=20971520
+## D1' mapped-return
+deny-403 -> {"error":"forbidden"} code=403 t=0.033212 up=65335
+deny-409 -> {"error":"conflict"} code=409 t=0.032209 up=65335
+deny-411 -> {"error":"length required"} code=411 t=0.033750 up=65335
+deny-503 -> {"error":"unavailable"} code=503 t=0.033652 up=65335
+## D3' unbuffered /uploads/ at 3 s
+  spool_fds=0
+## D3' buffered control at 3 s
+  spool_fds=0

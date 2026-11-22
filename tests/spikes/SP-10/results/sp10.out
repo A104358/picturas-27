@@ -1,0 +1,8 @@
+  mTLS expand_ai_tool -> outpaint: HTTP 200 image/png 155 bytes
+  plain http: ConnectionError: ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))
+  https, no client cert: SSLError: HTTPSConnectionPool(host='generative-mock', port=7860): Max retries exceeded with url: /outpaint (Caused by SSLError(SSL
+  https, client cert from other CA: SSLError: HTTPSConnectionPool(host='generative-mock', port=7860): Max retries exceeded with url: /outpaint (Caused by SSLError(SSL
+  https, valid installation cert CN=projects (not allowed): HTTP 403 text/html; charset=utf-8 213 bytes
+  server checked against other CA: SSLError: HTTPSConnectionPool(host='generative-mock', port=7860): Max retries exceeded with url: /outpaint (Caused by SSLError(SSL
+  server by IP (name not in SAN): SSLError: HTTPSConnectionPool(host='172.19.0.2', port=7860): Max retries exceeded with url: /outpaint (Caused by SSLError(SSLCertV
+  verify=False is the forbidden pattern (control): HTTP 200 image/png 155 bytes

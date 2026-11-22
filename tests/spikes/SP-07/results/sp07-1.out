@@ -1,0 +1,27 @@
+DENY   plaintext AMQP 5672: AMQPConnectionError 
+DENY   plaintext AMQP to TLS port 5671: IncompatibleProtocolError StreamLostError: ('Transport indicated EOF',)
+DENY   TLS wrong CA: SSLCertVerificationError [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain (_ssl
+DENY   TLS by IP (name not in SAN): SSLCertVerificationError [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: IP address mismatch, certificate is not valid for 
+DENY   TLS user/password (Git default): ProbableAuthenticationError ConnectionClosedByBroker: (403) 'ACCESS_REFUSED - Login was refused using authentication mechanism PLAIN. For 
+DENY   TLS guest/guest: ProbableAuthenticationError ConnectionClosedByBroker: (403) 'ACCESS_REFUSED - Login was refused using authentication mechanism PLAIN. For 
+ALLOW  worker connect TLS
+ALLOW  worker passive declare own queue: 0
+ALLOW  worker active declare own queue (durable, same args): brightness_queue
+ALLOW  worker basic_get own queue
+DENY   worker exchange_declare picturas (active, as Tools/utils does): ChannelClosedByBroker (403, "ACCESS_REFUSED - configure access to exchange 'picturas' in vhost '/' refused for user 'brightness_tool
+ALLOW  worker exchange_declare picturas (passive): <METHOD(['channel_number=1', 'frame_type=1', 'method=<Exchan
+DENY   R3 worker get ws_queue: ChannelClosedByBroker (403, "ACCESS_REFUSED - read access to queue 'ws_queue' in vhost '/' refused for user 'brightness_tool'")
+DENY   R4 worker declare+delete canary: ChannelClosedByBroker (403, "ACCESS_REFUSED - configure access to queue 'med_canary_x' in vhost '/' refused for user 'brightness_too
+DENY   worker delete exchange picturas: ChannelClosedByBroker (403, "ACCESS_REFUSED - configure access to exchange 'picturas' in vhost '/' refused for user 'brightness_tool
+ALLOW  worker delete own queue: <METHOD(['channel_number=1', 'frame_type=1', "method=<Queue.
+ALLOW  worker publish picturas -> project_queue (legit reply): confirmed
+ALLOW  worker publish picturas -> video_queue (other principal's queue): confirmed
+ALLOW  worker publish picturas -> ws_queue: confirmed
+DENY   worker publish default exchange -> ws_queue: ChannelClosedByBroker (403, "ACCESS_REFUSED - write access to exchange 'amq.default' in vhost '/' refused for user 'brightness_tool'
+ALLOW  worker publish picturas_topic -> project_queue (topic perm ok): confirmed
+DENY   worker publish picturas_topic -> video_queue (topic perm denies): ChannelClosedByBroker (403, "ACCESS_REFUSED - write access to topic 'video_queue' in exchange 'picturas_topic' in vhost '/' refused 
+queue depths (admin): {'project_queue': 2, 'video_queue': 1, 'ws_queue': 1}
+R5 worker mgmt API https: HTTP 401 (57 bytes)
+admin mgmt API https: HTTP 200 (3648 bytes)
+mgmt API plaintext 15672: ConnectionError
+prometheus 15692 (no auth): HTTP 200 (214182 bytes)

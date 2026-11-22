@@ -1,0 +1,9 @@
+PUT 200 1582 ms
+COPY 354 ms
+run 1: base 136 | PUT peak 573 (delta 437) | before copy 548 | COPY peak 658 (delta vs base 522) MiB
+PUT 200 1623 ms
+COPY 486 ms
+run 2: base 121 | PUT peak 604 (delta 483) | before copy 587 | COPY peak 724 (delta vs base 603) MiB
+PUT 200 1671 ms
+COPY 6206 ms
+run 3: base 136 | PUT peak 564 (delta 428) | before copy 562 | COPY peak 642 (delta vs base 506) MiB

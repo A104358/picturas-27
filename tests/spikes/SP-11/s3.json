@@ -1,0 +1,12 @@
+{
+  "identities": [
+    {"name": "admin", "credentials": [{"accessKey": "spikeadmin", "secretKey": "spikeadmin-secret-0123456789"}],
+     "actions": ["Admin", "Read", "Write", "List", "Tagging"]},
+    {"name": "img_storage", "credentials": [{"accessKey": "imgstorage", "secretKey": "imgstorage-secret-0123456789"}],
+     "actions": ["Read:picturas", "Write:picturas", "List:picturas", "Tagging:picturas"]},
+    {"name": "uploader", "credentials": [{"accessKey": "uploader", "secretKey": "uploader-secret-0123456789"}],
+     "actions": ["Write:picturas/staging/*"]},
+    {"name": "reader_src", "credentials": [{"accessKey": "readersrc", "secretKey": "readersrc-secret-0123456789"}],
+     "actions": ["Read:picturas/users/*"]}
+  ]
+}

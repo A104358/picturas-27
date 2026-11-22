@@ -160,7 +160,8 @@ afetado é revisto antes de começar.
    - as credenciais S3 por principal.
 4. **`.gitignore` e `.dockerignore` defensivos** nos 7 contextos Node/frontend e nos
    Python. Hoje os serviços leem certificados do checkout (`certs/`); a passagem para os
-   mounts externos não pode partir o arranque. As chaves antigas já versionadas (6) e os segredos escritos no Compose
+   mounts externos não pode partir o arranque. Inclui as chaves `certs/selfsigned.key`
+   (montada no nginx) e `frontend/certs/selfsigned.key`, ambas versionadas. As chaves antigas já versionadas (6) e os segredos escritos no Compose
    (`admin123`, `user/password`, `lisan_al_gaib`…) saem dos ficheiros versionados.
 
    Nota: retirar do Git não apaga o histórico. Isso fica declarado como limitação S19
@@ -188,7 +189,10 @@ afetado é revisto antes de começar.
      usado só pela operação (`ops/`) e pelas verificações do `med.py` na MF;
 2. **RabbitMQ:**
    - um utilizador por principal (`projects`, `ws_gateway` e cada um dos 16 workers);
-   - permissões só nas filas e exchange de cada um (`configure/write/read`);
+   - permissões só nas filas e exchange de cada um (`configure/write/read`); o exchange
+     `picturas` passa de `direct` a `topic`, com as mesmas routing keys, e cada principal
+     recebe permissões de tópico só nas suas routing keys (`set_topic_permissions`); os
+     clientes declaram o exchange de forma passiva (D-18);
    - o utilizador `user/password` deixa de existir;
    - o `definitions.json` deixa de levar palavras-passe (passam a ser criadas no init a
      partir dos segredos);
@@ -203,6 +207,11 @@ afetado é revisto antes de começar.
    - credencial de administrador fora do repositório;
    - HTTPS no S3 (9000) e no filer (8888), e TLS nos componentes internos conforme
      SP-11;
+   - o master, o volume e o filer escutam **só em loopback** (estão no mesmo processo
+     `weed server`); da rede ficam só o S3 (9000) e o gRPC do S3 (19000, mTLS). O TLS e
+     o mTLS internos mantêm-se como defesa em profundidade (D-19);
+   - **retirar a rota `/s3-console/` do nginx**, que hoje publica o filer sem
+     autenticação e dá acesso a todos os ficheiros (encontrado no SP-11);
    - o nginx `/s3/` com `limit_except GET HEAD` e `proxy_ssl_verify on`.
 4. **Volumes partilhados** (`image_data`, `whisper_models`): são acesso a
    ficheiros, não canais TLS. Montar cada um só nos serviços que o usam, em leitura
@@ -222,6 +231,9 @@ afetado é revisto antes de começar.
 - controlos legítimos a 100%, incluindo o backup e o restauro de uma fixture;
 - `/s3/` público: GET, HEAD e Range com URL assinado válido funcionam; URL expirado,
   PUT, POST e DELETE são recusados (ideia 2, U4);
+- `/s3-console/` deixou de existir; o filer, o master e o volume não respondem a partir
+  da rede Docker;
+- um worker não consegue publicar na routing key de outro (403);
 - a pipeline de imagem e de vídeo funciona (S05, F02).
 
 ### B3 — Superfície exposta e supervisão
@@ -410,7 +422,9 @@ U08, U09, U15, U16, U17, U18, U19, U20, U25.
      SP-03;
    - `ffprobe` sobre o candidato, por URL interno gerado pelo servidor (sem redirects e
      sem nenhum URL ou host vindo do cliente; S24), com TLS validado e bytes e tempo
-     limitados (UP-C8 A: 15 s incluindo a fila, até 2×F+16 MiB);
+     limitados (UP-C8 A: 15 s incluindo a fila, até 2×F+16 MiB). O `ffprobe` não tem
+     limite de bytes, por isso lê de um **relé em loopback dentro da `projects`**, que
+     reencaminha para o SeaweedFS por HTTPS validado e corta ao atingir o limite (D-17);
    - validação das regras de `projects/utils/video.js`; se falhar, apaga os objetos da
      tentativa e responde 400 como hoje;
    - commit condicional no documento do projeto (barreira, `expectedVersion`,
@@ -481,15 +495,12 @@ U08, U09, U15, U16, U17, U18, U19, U20, U25.
    Decisão D-02: o ficheiro vai **em fluxo até ao staging**, e o adaptador usa o mesmo
    motor do fluxo novo. Não há spool integral na `projects`.
 
-   Decisão D-14, que depende do SP-03:
-   - se o CopyObject de 500 MiB couber na U09 (<3 s, contando também o `ffprobe` e o
-     commit), o adaptador segue a UP-C6 à letra (staging → candidato);
-   - se não couber, o adaptador escreve **diretamente numa chave de candidato nova e
-     única**, que o cliente nunca pode escrever (é isso que a UP-C6 protege), e o resto
-     do motor é igual.
-
-   O resultado e a escolha ficam no `docs/refactor-spikes.md` e no documento de
-   passagem.
+   Decisão D-14, resolvida pela D-16 depois do SP-03: o adaptador escreve
+   **diretamente numa chave de candidato nova e única**, que o cliente nunca pode
+   escrever (é isso que a UP-C6 protege); o resto do motor é igual. O CopyObject chegou a
+   6,2 s e somava ~100 MiB à U04. Os volumes do SeaweedFS são pré-criados no arranque
+   (por exemplo `volume.grow`), para evitar a pausa de ~6 s ao criar volumes, que também
+   afeta o PUT do fluxo novo; o efeito mede-se no B6.
 9. **Imagens:** mantêm o caminho atual, com `limits.fileSize` (ideia 8).
 10. **Memória do SeaweedFS (D-10):** spike curto com `GOMEMLIMIT`/`GOGC` no contentor
    `seaweedfs`, medido com o passo U04 do `med.py` em `EXP`. Se reduzir sem erros,
@@ -908,6 +919,7 @@ ou se a entrega de 27/11 estiver em risco.
 | D-13 | Dar ao `med.py` opções de TLS para os canais de dados (por omissão = BF)? | Encontrado na verificação de 21/11: sem isto a MF parte (U04, S03, S17) ou mede o TLS em vez das credenciais (S16, S17) | **Sim**, com `freeze` e registo (§6, ponto 4) |
 | D-14 | No adaptador, copiar o staging para o candidato (UP-C6) ou escrever direto no candidato? | A cópia de 500 MiB entra na U09 (<3 s) | **Decide o SP-03:** se a cópia couber, UP-C6 à letra; senão, escrita direta numa chave de candidato única, sem acesso de escrita do cliente |
 | D-15 | Há clientes ou dados reais a preservar? | Várias decisões (SESS-C1, inventário, UP-C3) previam migrar sessões, anónimos e media existentes | **Não: reset geral.** Caem o inventário, a transição sobre dados reais, a recuperação dos anónimos antigos e as migrações. **Mantém-se** a ferramenta de reemissão assistida (emissor e `/session-recovery`), para anónimos que expirem no futuro (SESS-C1 A) |
+| D-16 a D-19 | Surgidas no B0 (spikes SP-03, SP-05, SP-07 e SP-11) | Ver o [documento de passagem, §5](refactor-handoff.md) | D-16: escrita direta no candidato + volumes pré-criados; D-17: relé de contagem em loopback para o `ffprobe`; D-18: exchange `topic` com permissões por routing key; D-19: componentes internos do SeaweedFS só em loopback e `/s3-console/` retirado |
 
 ## 9. Alternativas rejeitadas (não implementar)
 

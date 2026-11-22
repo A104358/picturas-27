@@ -1,0 +1,7 @@
+uploaded
+COPY 6333 ms
+run 1 (seaweedfs restarted): anon before 137 MiB, max 561 MiB, delta 424 MiB
+COPY 613 ms
+run 2 (seaweedfs restarted): anon before 144 MiB, max 654 MiB, delta 510 MiB
+COPY 606 ms
+run 3 (seaweedfs restarted): anon before 136 MiB, max 602 MiB, delta 466 MiB

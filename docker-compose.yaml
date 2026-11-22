@@ -37,7 +37,7 @@ services:
   #     - logstash
 
   nginx:
-    image: nginx:latest
+    image: nginx@sha256:84f7876d21d154885f99554d7ae325d8c2213f9169726ea7ab60642f2573a787
     ports:
       - "8080:443"
     networks:
@@ -466,7 +466,7 @@ services:
       - GEN_EXPAND_URL=http://generative-mock:7860
       
   watermark_tool_ms:
-    image: prcsousa/picturas-watermark-tool-ms:latest
+    image: prcsousa/picturas-watermark-tool-ms@sha256:534007b3904257e877f6246578a3df65e1875b477b92d9627b29e35e60c35835
     restart: always
     environment:
       - RABBITMQ_REQUESTS_QUEUE_NAME=watermark_queue

@@ -1,0 +1,7 @@
+## D3' unbuffered /uploads/ at 3 s
+  spool_fds=0
+## D3' buffered control at 3 s
+  /var/cache/nginx/client_temp/0000000007 (deleted) size=6611801
+  spool_fds=1
+## D3' chunked unbuffered at 3 s
+  spool_fds=0

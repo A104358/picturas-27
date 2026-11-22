@@ -1,0 +1,4 @@
+DENY  git_default admin/admin123 list_buckets InvalidAccessKeyId 403
+DENY  git_default admin/admin123 list picturas InvalidAccessKeyId 403
+ALLOW img_storage list_buckets ['picturas']
+ALLOW img_storage list picturas 2

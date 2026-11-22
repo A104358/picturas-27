@@ -1,0 +1,9 @@
+## 3 probe each port from another container
+  port 9333 unreachable ConnectionRefusedError
+  port 19333 unreachable ConnectionRefusedError
+  port 8080 unreachable ConnectionRefusedError
+  port 18080 unreachable ConnectionRefusedError
+  port 8888 unreachable ConnectionRefusedError
+  port 18888 unreachable ConnectionRefusedError
+  port 9000 REACHABLE
+  port 19000 REACHABLE

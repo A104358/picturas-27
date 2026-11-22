@@ -21,13 +21,13 @@ estamos**.
 
 | Campo | Valor |
 |-------|-------|
-| Bloco em curso | — (ainda não começou; o primeiro é o **B0**) |
+| Bloco em curso | B0 concluído; nenhum bloco começado depois dele |
 | Passo do bloco | — |
-| Estado deixado | Fase 0 concluída: plano verificado até uma ronda completa sem falhas (ver a cronologia na §2.4); dúvidas D-01 a D-15 respondidas |
-| **Próximo passo exato** | Fazer commit do plano e deste documento no `main` (a fase 0 está concluída). Criar o branch `fase2-refactor` a partir daí e começar o B0: o spike SP-01 (`auth_request` e `proxy_request_buffering off` na imagem nginx) |
-| Coisas meio feitas | Nenhuma. Pré-verificação do SP-01 (21/11): a imagem nginx da BF (`nginx@sha256:84f7876d21d1…`, nginx 1.31.9) foi compilada com `--with-http_auth_request_module` e `--with-http_ssl_module`. Falta o ensaio funcional (`auth_request`, `proxy_request_buffering off`, `proxy_ssl_verify`) |
-| Testes a falhar neste momento | Nenhum conhecido |
-| Último commit com o trabalho | — |
+| Estado deixado | B0 feito no branch `fase2-refactor` (ainda sem commit): SP-01 a SP-11 registados em [`refactor-spikes.md`](refactor-spikes.md), imagens fixadas às da BF, `tests/conformance/` criado, F01 registado. Abertas as dúvidas **D-16 a D-19** (§5), que bloqueiam pontos do B2 e do B6 |
+| **Próximo passo exato** | 1) Uma pessoa revê e faz commit do B0 no `fase2-refactor` (ficheiros na entrada da §4). 2) Começar o **B1** (PKI e segredos); o B3 pode avançar em paralelo. As dúvidas D-16 a D-19 estão resolvidas (§2.6, decisões 17 a 20) e o plano foi atualizado (B1, B2, B6) |
+| Coisas meio feitas | Nenhuma. As notas dos spikes para cada bloco estão em `refactor-spikes.md` (secções "Notas para o Bx") |
+| Testes a falhar neste momento | Nenhum no ambiente do produto (F01: 8/8 Node, 74/74 vídeo nas imagens). No host, o `Tools/video` dá 68/74 porque o ffmpeg do Homebrew não tem `libass` (ambiente, não código) |
+| Último commit com o trabalho | — (B0 por commitar) |
 | Atualizado em | 2026-11-21 |
 
 ## 2. Contexto comum (o que já está decidido)
@@ -177,6 +177,11 @@ decidiu (pessoa ou "equipa").
 | 13 | 21/11 | D-13: o `med.py` ganha opções de TLS por variável de ambiente para S3, AMQP, gestão do RabbitMQ e Mongo (por omissão = BF), com `freeze` e registo; faz-se no B2 | Sem isto a MF parte (U04, S03, S17) ou mede o TLS em vez das credenciais (S16, S17) | Utilizador |
 | 14 | 21/11 | D-14: no adaptador do POST antigo, decide o SP-03. Se o CopyObject de 500 MiB couber na U09, staging → candidato (UP-C6 à letra); senão, escrita direta numa chave de candidato nova e única, que o cliente nunca pode escrever | A cópia entra no tempo da U09 (<3 s) | Utilizador |
 | 15 | 21/11 | D-15: não há clientes reais; reset geral. Caem o inventário de sessões (D-08 sem efeito), a transição do segredo sobre dados reais, a recuperação dos anónimos antigos e as migrações de media e links. Mantém-se a ferramenta de reemissão assistida (emissor e `/session-recovery`) para anónimos que expirem no futuro | Indicação do utilizador; a SESS-C1 A cobre também a expiração futura | Utilizador |
+| 16 | 21/11 | B0, execução: as imagens fixam-se com tag e digest (`node:26.13.1-trixie@sha256:e18c…`, `nginx@sha256:84f7…`, `…watermark…@sha256:5340…`); o `node:18` do `wsGateway`/`frontend` fica igual (é o mesmo 18.20.8 da BF e a linha terminou); os harness dos spikes ficam em `tests/spikes/SP-xx/`; a F01 corre nas imagens do produto (`tests/conformance/run-f01.sh`), porque o ffmpeg do host pode não ter `libass` | Comparabilidade BF/MF e repetibilidade dos ensaios, dentro do que o plano (B0) pede | Agente (sessão B0), dentro do plano; a confirmar no commit |
+| 17 | 22/11 | D-16: no adaptador, escrita direta numa chave de candidato nova e única, que o cliente nunca pode escrever (alternativa prevista no D-14); e volumes do SeaweedFS pré-criados no arranque, para evitar a pausa de ~6 s que também afeta o PUT | O CopyObject de 500 MiB chegou a 6,2 s (U09 falha) e soma ~100 MiB à U04 (SP-03) | Utilizador |
+| 18 | 22/11 | D-17: o `ffprobe` lê por um relé em loopback dentro da `projects`, que reencaminha para o SeaweedFS por HTTPS validado e corta ao atingir 2×F+16 MiB | O `ffprobe` não tem limite de bytes, só de tempo (SP-05); o relé não é um salto de rede | Utilizador |
+| 19 | 22/11 | D-18: o exchange `picturas` passa de `direct` a `topic`, com as mesmas routing keys e permissões por routing key para cada principal; clientes com declarações passivas; o watermark muda só por variável | Com `direct`, a permissão de escrita vale para o exchange inteiro (SP-07); com `topic`, o destino não autorizado dá 403 | Utilizador |
+| 20 | 22/11 | D-19: o master, o volume e o filer do SeaweedFS ficam só em loopback; da rede ficam o S3 (9000) e o gRPC do S3 com mTLS; o TLS/mTLS internos mantêm-se. A rota `/s3-console/` do nginx (filer sem autenticação) é retirada | O HTTPS interno do SeaweedFS aceita qualquer certificado da CA (SP-11), contra o D4; o filer publicado em `/s3-console/` dá acesso a todos os ficheiros | Utilizador |
 
 ## 3. Estado dos blocos
 
@@ -189,19 +194,19 @@ dependências estiverem `FEITO`.
 
 | Bloco | Depende de | Estado | Verificação (link para o resultado) | Notas |
 |-------|-----------|--------|-------------------------------------|-------|
-| B0 — Spikes e preparação | — | POR FAZER | — | Resultados em `docs/refactor-spikes.md` |
-| B1 — PKI e segredos | B0 | POR FAZER | — | |
-| B2 — Mongo/RabbitMQ/S3 | B1 | POR FAZER | — | Inclui as opções de TLS no `med.py` (§2.6, decisão 13) |
+| B0 — Spikes e preparação | — | FEITO | [`refactor-spikes.md`](refactor-spikes.md); bruto em `tests/spikes/SP-xx/results/`; F01 em `tests/conformance/results/2026-11-21/` | 11 spikes: 6 suportados, 5 suportados com limitações (D-16 a D-19) |
+| B1 — PKI e segredos | B0 | POR FAZER | — | Pode começar. Retirar também `frontend/certs/selfsigned.key` do Git (SP-09) |
+| B2 — Mongo/RabbitMQ/S3 | B1 | POR FAZER | — | Inclui as opções de TLS no `med.py` (§2.6, decisão 13). **O RabbitMQ espera pela D-18 e o SeaweedFS pela D-19.** Notas do SP-02, SP-06, SP-07, SP-08 e SP-11 |
 | B3 — Portas e supervisão | — | POR FAZER | — | Retirar todas as portas internas; `node` + `healthcheck` (§2.6, decisões 4 e 5) |
 | B4 — Identidade e autorização HTTP | B1 | POR FAZER | — | Precisa do par RS256 e do segredo HS256 novo; começa pela matriz de rotas (`docs/refactor-matriz-rotas.md`) |
-| B5 — mTLS e TLS por salto | B1 | POR FAZER | — | |
-| B6 — Upload: motor e adaptador | B0, B4, B5 | POR FAZER | — | A escrita do adaptador (cópia ou direta) depende do SP-03 (§2.6, decisão 14) |
-| B7 — Upload: fluxo novo | B6 | POR FAZER | — | Inclui o frontend (§2.6, decisão 1) |
+| B5 — mTLS e TLS por salto | B1 | POR FAZER | — | `proxy_ssl_session_reuse off` (SP-09); servidor HTTPS próprio do Next (SP-09); Flask/`requests` com mTLS (SP-10) |
+| B6 — Upload: motor e adaptador | B0, B4, B5 | POR FAZER | — | A escrita do adaptador (cópia ou direta) ficou na **D-16**, e o limite de leitura do `ffprobe` na **D-17**. Notas do SP-01, SP-03 e SP-05 |
+| B7 — Upload: fluxo novo | B6 | POR FAZER | — | Inclui o frontend (§2.6, decisão 1). Configuração do `auth_request` (SP-01, notas 1–4) e do `Host` assinado (SP-04) |
 | B8 — WebSocket | B4, B5 | POR FAZER | — | Inclui o formato do join no `med.py` (§2.6, decisão 3) |
 | B9 — Sessões e recuperação | B4, B8 | POR FAZER | — | Sem migração (reset, §2.6, decisão 15); mantém a ferramenta de reemissão assistida |
 | B10 — Operação da PKI | B1, B2, B5 | POR FAZER | — | O piloto corre assim que estiver pronto (§2.6, decisão 9) |
 | B11 — Reconciliação (OPS-C1) | B2, B10 | POR FAZER | — | Usa o isolamento do B10 |
-| §5 — Testes de conformidade | cresce com cada bloco | POR FAZER | — | `tests/conformance/` |
+| §5 — Testes de conformidade | cresce com cada bloco | EM CURSO | `tests/conformance/results/2026-11-21/F01-202134.txt` | `tests/conformance/` criado (README + `run-f01.sh`); F01 registado |
 | B12 — Verificação final e MF | B0–B11 | POR FAZER | — | |
 
 ## 4. Diário (só se acrescenta; nunca se apaga)
@@ -219,18 +224,28 @@ Uma entrada por sessão, no fim da lista, ao parar.
 - Dúvidas novas: <número na §5, ou "nenhuma">
 ```
 
-_(sem entradas)_
+### 2026-11-21 20:30 — B0 — FEITO (dúvidas D-16 a D-19 abertas)
+- Feito: branch `fase2-refactor` criado a partir do `main` (`4cacb55`). Spikes SP-01 a SP-11, com harness e bruto em `tests/spikes/SP-01..SP-11/`, e resultados em `docs/refactor-spikes.md`. Imagens fixadas às da BF em `docker-compose.yaml` (nginx, watermark) e no `FROM` de `users/`, `apiGateway/`, `subscriptions/`, `projects/` e `imageStorageService/` (os dois últimos usam `from` em minúsculas; mantidos o estilo e o CRLF). Criado `tests/conformance/` (`README.md`, `run-f01.sh`) e registada a F01. Link para os spikes acrescentado ao índice `docs/README.md`.
+- Verificado: cada spike no projeto Compose `picturas-spike` (já desmontado, sem volumes restantes). `docker compose -p picturas-dev build` dos 5 serviços Node com a base fixada: passou. `tests/conformance/run-f01.sh picturas-nfr`: Node 8/8 e vídeo 74/74 (`tests/conformance/results/2026-11-21/F01-202134.txt`). Nenhuma alteração ao `picturas-nfr` (só se correram contentores descartáveis a partir das suas imagens) nem a `evaluation/`.
+- Parei em: bloco concluído.
+- Próximo passo: o da §1 (commit do B0, respostas D-16 a D-19, começar o B1).
+- Cuidado: (1) As variáveis `AWS_*` no `seaweedfs` criam um admin S3 (SP-02). (2) O `management.tcp.port = 0` do RabbitMQ abre a API em HTTP numa porta aleatória (SP-07). (3) O `rabbitmqctl` como root antes do arranque parte o broker (cookie). (4) O `ffprobe` e o `mongodump` escrevem URLs/URIs com segredos nos erros. (5) `proxy_ssl_session_reuse` tem de estar `off` (SP-09). (6) A `location = /_auth` do nginx precisa do mesmo `client_max_body_size` do upload (SP-01). (7) Num bind mount de um só ficheiro, um editor que substitui o inode deixa o contentor com a versão antiga. (8) Os harness usam PKIs descartáveis geradas por script; não há chaves no Git (`tests/spikes/.gitignore`).
+- Decisões novas: 16.
+- Dúvidas novas: D-16, D-17, D-18, D-19.
 
 ## 5. Dúvidas surgidas durante a implementação
 
 As dúvidas D-01 a D-15 estão no [plano, §8](refactor-plano.md#8-dúvidas-para-resolver-em-conjunto).
-As que surgirem a implementar ficam aqui, a partir de D-16. Uma dúvida por resolver que
+As que surgirem a implementar ficam aqui, a partir de D-16 (a próxima é a D-20). Uma dúvida por resolver que
 impeça avançar põe o bloco em `BLOQUEADO`. Quando for resolvida, a resposta passa
 para a §2.6 (e para o plano, se mudar um bloco).
 
 | # | Data | Bloco | Dúvida | Estado | Decisão |
 |---|------|-------|--------|--------|---------|
-| — | — | — | — | — | — |
+| D-16 | 21/11 | B6 (D-14) | **Escrita do adaptador: copiar staging → candidato ou escrever direto no candidato?** O D-14 manda decidir pelo SP-03, "se o CopyObject de 500 MiB couber na U09". Resultado (SP-03, configuração da MF): 330–613 ms em 10 de 12 cópias (cabe no mínimo <3000 ms, mas gasta até 61% do alvo <1000 ms); **6206 e 6333 ms** em 2 de 12, quando o SeaweedFS cria volumes novos (aí a U09 falha); a cópia junta **+78 a +120 MiB** ao pico de memória do SeaweedFS na janela da U04. **A:** cópia (UP-C6 à letra), aceitando estes valores. **B:** escrita direta numa chave de candidato nova e única, que o cliente nunca pode escrever (a alternativa já prevista no D-14). **Recomendo B:** tira 0,3–6 s da U09 e cerca de 100 MiB da U04. Pergunta ligada: **pré-criar volumes do SeaweedFS no arranque** (por exemplo `volume.grow`) para evitar a pausa de cerca de 6 s, que também atinge o PUT direto? Recomendo que sim, medido no B6 | Resolvida (22/11) | Escrita direta numa chave de candidato nova e única (B) + volumes do SeaweedFS pré-criados no arranque, medido no B6 (§2.6, decisão 17) |
+| D-17 | 21/11 | B6 (UP-C8) | **Como impor o limite de leitura do `ffprobe` (UP-C8: até 2×F+16 MiB)?** O SP-05 mostra que o `ffprobe` lê só 0,4–0,7 MB num ficheiro de 500 MiB, mas não tem nenhuma opção de bytes totais: só o tempo fica imposto (`rw_timeout`, `timeout`). **A:** relé de contagem dentro da `projects`, só em loopback: o `ffprobe` lê de `127.0.0.1`, e a `projects` reencaminha para o SeaweedFS por HTTPS validado e corta ao atingir o limite. Não é um salto de rede, por isso não viola a regra 7. **B:** sem limite de bytes imposto, só os tempos (15 s no total, `rw_timeout`), e declarar a lacuna com as leituras medidas. **C:** protocolo `subfile` do ffmpeg para restringir as leituras a `[0, F)`: limita cada leitura ao objeto, mas não o total. **Recomendo A** | Resolvida (22/11) | Relé de contagem em loopback dentro da `projects` (A) (§2.6, decisão 18) |
+| D-18 | 21/11 | B2 (opção A) | **Como limitar a publicação de cada principal às suas filas?** O critério operacional exige "publicar … apenas nas filas/exchange do principal". O SP-07 mostra que, com o exchange `picturas` do tipo `direct`, a permissão `write` vale para o exchange inteiro: um worker publica em `video_queue` e `ws_queue`. **A:** passar o `picturas` a `topic`, com as mesmas routing keys (sem curingas, o comportamento é igual ao `direct`), e `set_topic_permissions` por principal (provado: o destino não autorizado dá 403). Os clientes passam a declarações passivas. O watermark só muda por variável de ambiente (SP-08). **B:** manter o `direct` e declarar a lacuna. **Recomendo A** | Resolvida (22/11) | Exchange `picturas` passa a `topic` com permissões por routing key (A) (§2.6, decisão 19) |
+| D-19 | 21/11 | B2 (PKI-C5, D4) | **Como proteger os componentes internos do SeaweedFS?** O SP-11 mostra que o HTTPS do master, do volume e do filer exige certificado de cliente mas aceita **qualquer certificado da CA da instalação**: o `[https.*]` não tem lista de CN. Com o certificado do `img_storage`, a API do filer dá acesso a todos os ficheiros por fora das identidades S3. Isto contradiz o D4 ("CA válida não basta"). **A:** ligar o master, o volume e o filer só a loopback (`-ip=localhost -ip.bind=127.0.0.1 -s3.ip.bind=0.0.0.0`; estão no mesmo processo `weed server`), mantendo o TLS/mTLS internos como defesa em profundidade. Da rede ficam só a 9000 (S3) e a 19000 (gRPC do S3, mTLS com CN=seaweedfs); o S3 funciona por inteiro (provado). **B:** CA própria para os componentes do SeaweedFS (afasta-se da CA única do PKI-C1). **C:** manter na rede e declarar a lacuna. **Recomendo A** | Resolvida (22/11) | Master, volume e filer só em loopback (A); TLS/mTLS internos mantidos (§2.6, decisão 20) |
 
 ## 6. Como retomar
 
@@ -254,7 +269,7 @@ para a §2.6 (e para o plano, se mudar um bloco).
 
 | Item | Valor / comando |
 |------|-----------------|
-| Branch | Só `fase2-refactor`, criado a partir de `main` depois da BF. **Nunca abrir um PR para o `main` do upstream (prcsousa)** (§2.6, decisão 12) |
+| Branch | Só `fase2-refactor`, criado a partir de `main` depois da BF e publicado no `origin` (`A104358/picturas-27`). Noutro computador: `git fetch origin && git switch fase2-refactor`. O `main` só recebe o trabalho depois da MF. **Nunca abrir um PR para o repositório upstream (`picturas-um/picturas-27`)** (§2.6, decisão 12) |
 | Stack de desenvolvimento | Projeto Compose `picturas-dev` (ou outro nome); o `med.py` não corre aqui |
 | Stack de verificação (`med.py` EXP) | `MED_COMPOSE_PROJECT=picturas-nfr-exp` no `evaluation/.env.med` (o `med.py` só aceita `picturas-nfr[-sufixo]`) |
 | Stack da MF oficial | `picturas-nfr`, só para a MF, no Mac da BF |

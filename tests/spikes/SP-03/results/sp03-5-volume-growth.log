@@ -1,0 +1,43 @@
+I1121 19:33:50.386818 master_grpc_server_volume.go:143 volume grow &{Option:{"replication":{},"ttl":{"Count":0,"Unit":0},"version":3} Count:0 Force:false Reason:grpc assign}
+I1121 19:33:50.412351 volume_growth.go:384 Created Volume 15 on topo:DefaultDataCenter:DefaultRack:seaweedfs:8080
+I1121 19:33:50.415555 volume_growth.go:384 Created Volume 16 on topo:DefaultDataCenter:DefaultRack:seaweedfs:8080
+I1121 19:33:50.416970 volume_growth.go:384 Created Volume 17 on topo:DefaultDataCenter:DefaultRack:seaweedfs:8080
+I1121 19:33:50.418741 volume_growth.go:384 Created Volume 18 on topo:DefaultDataCenter:DefaultRack:seaweedfs:8080
+I1121 19:33:50.420298 volume_growth.go:384 Created Volume 19 on topo:DefaultDataCenter:DefaultRack:seaweedfs:8080
+I1121 19:33:50.421605 volume_growth.go:384 Created Volume 20 on topo:DefaultDataCenter:DefaultRack:seaweedfs:8080
+I1121 19:33:50.422879 volume_growth.go:384 Created Volume 21 on topo:DefaultDataCenter:DefaultRack:seaweedfs:8080
+I1121 19:34:31.786114 filer.go:498 Gracefully stopping gRPC server
+I1121 19:35:02.339583 filer.go:498 Gracefully stopping gRPC server
+I1121 19:35:31.449296 filer.go:498 Gracefully stopping gRPC server
+I1121 19:36:36.488922 filer.go:498 Gracefully stopping gRPC server
+I1121 19:37:00.943309 volume_layout.go:1064 Volume 12 becomes crowded
+I1121 19:37:01.251881 volume_layout.go:1064 Volume 10 becomes crowded
+I1121 19:37:01.517715 volume_layout.go:1064 Volume 13 becomes crowded
+I1121 19:37:01.622877 volume_layout.go:1064 Volume 14 becomes crowded
+I1121 19:37:01.795591 volume_layout.go:1064 Volume 9 becomes crowded
+I1121 19:37:11.137043 volume_layout.go:1064 Volume 8 becomes crowded
+I1121 19:37:11.187568 volume_layout.go:1064 Volume 11 becomes crowded
+I1121 19:37:21.964556 filer.go:498 Gracefully stopping gRPC server
+I1121 19:37:40.069803 volume_layout.go:1064 Volume 14 becomes crowded
+I1121 19:37:40.069816 volume_layout.go:1064 Volume 11 becomes crowded
+I1121 19:37:40.069817 volume_layout.go:1064 Volume 12 becomes crowded
+I1121 19:37:40.069819 volume_layout.go:1064 Volume 9 becomes crowded
+I1121 19:37:40.069821 volume_layout.go:1064 Volume 13 becomes crowded
+I1121 19:37:40.069825 volume_layout.go:1064 Volume 8 becomes crowded
+I1121 19:37:40.069827 volume_layout.go:1064 Volume 10 becomes crowded
+I1121 19:37:46.288737 master_grpc_server_volume.go:143 volume grow &{Option:{"collection":"picturas","replication":{},"ttl":{"Count":0,"Unit":0},"version":3} Count:0 Force:false Reason:grpc assign}
+I1121 19:37:46.293185 volume_growth.go:384 Created Volume 22 on topo:DefaultDataCenter:DefaultRack:seaweedfs:8080
+I1121 19:37:46.294500 volume_growth.go:384 Created Volume 23 on topo:DefaultDataCenter:DefaultRack:seaweedfs:8080
+I1121 19:37:46.295684 volume_growth.go:384 Created Volume 24 on topo:DefaultDataCenter:DefaultRack:seaweedfs:8080
+I1121 19:37:46.297016 volume_growth.go:384 Created Volume 25 on topo:DefaultDataCenter:DefaultRack:seaweedfs:8080
+I1121 19:37:46.298273 volume_growth.go:384 Created Volume 26 on topo:DefaultDataCenter:DefaultRack:seaweedfs:8080
+I1121 19:37:46.299355 volume_growth.go:384 Created Volume 27 on topo:DefaultDataCenter:DefaultRack:seaweedfs:8080
+I1121 19:37:46.300575 volume_growth.go:384 Created Volume 28 on topo:DefaultDataCenter:DefaultRack:seaweedfs:8080
+I1121 19:38:06.894724 filer.go:498 Gracefully stopping gRPC server
+I1121 19:38:25.029010 volume_layout.go:1064 Volume 10 becomes crowded
+I1121 19:38:25.029061 volume_layout.go:1064 Volume 9 becomes crowded
+I1121 19:38:25.029069 volume_layout.go:1064 Volume 8 becomes crowded
+I1121 19:38:25.029079 volume_layout.go:1064 Volume 11 becomes crowded
+I1121 19:38:25.029084 volume_layout.go:1064 Volume 14 becomes crowded
+I1121 19:38:25.029089 volume_layout.go:1064 Volume 12 becomes crowded
+I1121 19:38:25.029092 volume_layout.go:1064 Volume 13 becomes crowded

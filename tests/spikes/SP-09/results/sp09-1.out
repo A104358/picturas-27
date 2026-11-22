@@ -1,0 +1,21 @@
+## 1 page / through nginx (verified TLS + client cert)
+  200 9590 bytes 0.044279s
+## 2 static asset /_next/static/chunks/webpack-1f3e85f08fb8e1fe.js
+  200 3414 bytes
+## 3 other route /login
+  200
+## 4 nginx without client cert
+  200
+## 5 nginx expects another name (api_gateway)
+  502
+## 6 direct from another container
+  plain http: 000
+fail rc=52
+  https, no client cert: 000
+fail rc=56
+  https, client cert from other CA (CN=nginx): 000
+fail rc=56
+  https, valid client cert but CN=frontend (not an allowed peer): 000
+fail rc=56
+## 7 latency: 20 x GET / through nginx
+  median 0.006150s max 0.007860s

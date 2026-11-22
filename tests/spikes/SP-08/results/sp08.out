@@ -1,0 +1,17 @@
+## 1 no CA configured (must refuse to start, no plaintext fallback)
+  state: exited exit=1
+    raise RuntimeError("RABBITMQ_TLS_CA_FILE is required (AMQPS only)")
+RuntimeError: RABBITMQ_TLS_CA_FILE is required (AMQPS only)
+## 2 wrong CA
+  state: exited exit=1
+    raise self._reap_last_connection_workflow_error(error)
+ssl.SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain (_ssl.c:1018)
+## 3 wrong server name
+  state: exited exit=1
+    raise self._reap_last_connection_workflow_error(error)
+ssl.SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is not valid for 'projects'. (_ssl.c:1018)
+## 4 installation CA, process one request end-to-end
+  state: running exit=0
+  result on project_queue: {"messageId":"completion-spike-wm-1","correlationId":"spike-wm-1","timestamp":"2026-11-21T20:06:29.461338","metadata":{"processingTime":0.007033586502075195,"microservice":"picturas-watermark-tool-ms"},"status":"success"
+2026-11-21 20:06:29,461 [INFO] Processed request 'spike-wm-1' (took 0.007 s)
+2026-11-21 20:06:29,461 [INFO] Published result of 'spike-wm-1' to 'project_queue'

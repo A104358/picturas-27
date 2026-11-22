@@ -1,0 +1,39 @@
+## 1 listening TCP ports in the seaweedfs container
+  8080   all-interfaces
+  8888   all-interfaces
+  8888   loopback
+  9000   all-interfaces
+  9000   loopback
+  9333   all-interfaces
+  9333   loopback
+  18080  all-interfaces
+  18888  all-interfaces
+  18888  loopback
+  19000  all-interfaces
+  19000  loopback
+  19333  all-interfaces
+  19333  loopback
+  43091  docker dns
+## 2 S3 still works end-to-end (put/get/copy/presigned) with gRPC mTLS
+DENY   git_default list_buckets  [InvalidAccessKeyId 403]
+ALLOW  img_storage put users/u/projects/p/src/a.png
+ALLOW  img_storage get
+ALLOW  img_storage copy src->out
+DENY   img_storage get other/x  [AccessDenied 403]
+DENY   img_storage put other/y  [AccessDenied 403]
+DENY   img_storage put_bucket_policy  [AccessDenied 403]
+DENY   img_storage put_bucket_acl public-read  [AccessDenied 403]
+presigned GET (img_storage) -> 200
+presigned PUT staging (uploader) -> 200
+presigned PUT outside staging (uploader) -> 403
+## 3 probe each port from another container
+  port 9333   plain-http=400   tls-without-client-cert=client-cert-required   https-with-img_storage-cert=200
+  port 19333  plain-http=000   tls-without-client-cert=client-cert-required   https-with-img_storage-cert=000
+  port 8080   plain-http=400   tls-without-client-cert=client-cert-required   https-with-img_storage-cert=400
+  port 18080  plain-http=000   tls-without-client-cert=tls-ok-no-cert         https-with-img_storage-cert=000
+  port 8888   plain-http=400   tls-without-client-cert=client-cert-required   https-with-img_storage-cert=200
+  port 18888  plain-http=000   tls-without-client-cert=client-cert-required   https-with-img_storage-cert=000
+  port 9000   plain-http=400   tls-without-client-cert=tls-ok-no-cert         https-with-img_storage-cert=403
+  port 19000  plain-http=000   tls-without-client-cert=tls-ok-no-cert         https-with-img_storage-cert=000
+## 4 gRPC as a client: weed shell from another container (master gRPC 19333)
+  client cert seaweedfs    -> 

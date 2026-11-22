@@ -1,0 +1,56 @@
+## pad_500MiB_H.mp4 run 1
+rc=0 ms=291 rx_bytes=684256
+"codec_name": "aac "codec_name": "h264 "duration": "10.000000 "format_name": "mov "height": 720 "width": 1280 
+## pad_500MiB_H.mp4 run 2
+rc=0 ms=187 rx_bytes=379930
+"codec_name": "aac "codec_name": "h264 "duration": "10.000000 "format_name": "mov "height": 720 "width": 1280 
+## pad_500MiB_H.mp4 run 3
+rc=0 ms=185 rx_bytes=686914
+"codec_name": "aac "codec_name": "h264 "duration": "10.000000 "format_name": "mov "height": 720 "width": 1280 
+## pad_500MiB_T.mp4 run 1
+rc=0 ms=234 rx_bytes=399437
+"codec_name": "aac "codec_name": "h264 "duration": "10.000000 "format_name": "mov "height": 720 "width": 1280 
+## pad_500MiB_T.mp4 run 2
+rc=0 ms=241 rx_bytes=397839
+"codec_name": "aac "codec_name": "h264 "duration": "10.000000 "format_name": "mov "height": 720 "width": 1280 
+## pad_500MiB_T.mp4 run 3
+rc=0 ms=247 rx_bytes=584203
+"codec_name": "aac "codec_name": "h264 "duration": "10.000000 "format_name": "mov "height": 720 "width": 1280 
+## sample_6s.mov run 1
+rc=0 ms=137 rx_bytes=134107
+"codec_name": "aac "codec_name": "h264 "duration": "6.000000 "format_name": "mov "height": 480 "width": 640 
+## sample_6s.mov run 2
+rc=0 ms=136 rx_bytes=134043
+"codec_name": "aac "codec_name": "h264 "duration": "6.000000 "format_name": "mov "height": 480 "width": 640 
+## sample_6s.mov run 3
+rc=0 ms=141 rx_bytes=133911
+"codec_name": "aac "codec_name": "h264 "duration": "6.000000 "format_name": "mov "height": 480 "width": 640 
+## wrong CA
+rc=1 ms=47 rx_bytes=1846
+[tls @ 0xaaaac5692100] Peer certificate failed verification
+https://seaweedfs:9000/picturas/users/u/projects/p/src/pad_500MiB_T.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=<redacted>&X-Amz-Date=20261121T194233Z&X-Amz-Expires=300&X-Amz-SignedHeader
+## tls_verify on, verifyhost=projects (name mismatch)
+rc=1 ms=51 rx_bytes=1846
+[tls @ 0xaaab0ef0d1b0] The certificate's owner does not match hostname projects
+https://seaweedfs:9000/picturas/users/u/projects/p/src/pad_500MiB_T.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=<redacted>&X-Amz-Date=20261121T194233Z&X-Amz-Expires=30
+## plain http URL (protocol whitelist https only)
+rc=1 ms=50 rx_bytes=86
+[http @ 0xaaaad88c74b0] Protocol 'http' not on whitelist 'https,tls,tcp'!
+http://seaweedfs:9000/picturas/users/u/projects/p/src/pad_500MiB_T.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=<redacted>&X-Amz-Date=20261121T194233Z&X-Amz-Expires=300&X-Amz
+## redirect (max_redirects 0)
+rc=1 ms=86 rx_bytes=2716
+https://seaweedfs-redirect:9443/redirect: Input/output error
+
+## redirect with ffmpeg default (max_redirects 8, for contrast)
+rc=1 ms=132 rx_bytes=5541
+https://seaweedfs-redirect:9443/redirect: Server returned 403 Forbidden (access denied)
+
+## stalled server (rw_timeout 5 s)
+rc=1 ms=5349 rx_bytes=3574
+[tls @ 0xaaaaba662620] Error in the pull function.
+[tls @ 0xaaaaba662620] IO error: Connection timed out
+https://seaweedfs-redirect:9443/stall: Connection timed out
+
+## expired/forged URL
+rc=1 ms=144 rx_bytes=2939
+https://seaweedfs:9000/picturas/users/u/projects/p/src/pad_500MiB_T.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=<redacted>&X-Amz-Date=20261121T194233Z&X-Amz-Expires=300&X-Amz-SignedHeaders=host&X-Amz-Signature=<redacted>

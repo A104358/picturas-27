@@ -1,0 +1,9 @@
+signed headers: ['content-length;host']
+presigned v4 CL=1000, exact 1000 -> 200 1000
+presigned v4 CL=1000, 2000 bytes -> 403 absent(404)
+presigned v4 CL=1000, 500 bytes -> 403 absent(404)
+presigned v4 CL=1000, chunked body (no CL header) -> HTTP/1.1 403 Forbidden absent(404)
+presigned v4 without CL: signed ['host'] ; 2000 bytes -> 200
+presigned v4 expired -> 403 absent(404)
+presigned v4 key tampered -> 403 absent(404)
+presigned PUT used as DELETE -> 403

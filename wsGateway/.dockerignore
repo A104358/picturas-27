@@ -1,1 +1,16 @@
-node_modules
+# Build context guard (Fase 2, B1): secrets, keys, certificates and local state never enter an image.
+.git
+**/node_modules
+**/.venv
+**/__pycache__
+**/.env
+**/.env.*
+!**/.env.example
+**/*.key
+**/*.pem
+**/*.p12
+**/*.pfx
+**/*.crt
+**/certs
+**/secrets
+**/backups

@@ -9,8 +9,8 @@ const auth = require("../auth/auth");
 const User = require("../controllers/user");   
 
 // lê as chaves/certificados locais (estes ficheiros EXISTEM no api-gateway-ms)
-const key = fs.readFileSync(__dirname + "/../certs/selfsigned.key");
-const cert = fs.readFileSync(__dirname + "/../certs/selfsigned.crt");
+const key = fs.readFileSync(process.env.TLS_KEY_FILE || "/run/secrets/pki/service.key");
+const cert = fs.readFileSync(process.env.TLS_CERT_FILE || "/run/secrets/pki/service.crt");
 
 // agente HTTPS com cert + key
 const httpsAgent = new https.Agent({

@@ -1,0 +1,12 @@
+# tests/conformance/mtls-pki/s19-git-grep.sh — 2026-11-22T03:40:41Z
+checked 56 current secrets
+## formerly committed secrets (information; not valid any more)
+  lisan_al_gaib                            README.md ops/secrets.sh 
+  admin123                                 README.md ops/secrets.sh rabbitMQ/Dockerfile tests/conformance/results/2026-11-22/B1-old-credentials.txt 
+  card_secret_key                          none outside docs/evaluation/tests
+  uma-frase-secreta-bem-grande-ou-64-hex   none outside docs/evaluation/tests
+  picturas-kek-passphrase-change-me        none outside docs/evaluation/tests
+  RABBITMQ_DEFAULT_PASS: "password"        none outside docs/evaluation/tests
+  "password": "password"                   none outside docs/evaluation/tests
+S19 git grep: passed (no current secret in the repository)
+exit: 0

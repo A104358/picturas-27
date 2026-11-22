@@ -20,8 +20,8 @@ app.set("port", port);
  * Create HTTP server.
  */
 
-const key = fs.readFileSync(__dirname + "/../certs/selfsigned.key");
-const cert = fs.readFileSync(__dirname + "/../certs/selfsigned.crt");
+const key = fs.readFileSync(process.env.TLS_KEY_FILE || "/run/secrets/pki/service.key");
+const cert = fs.readFileSync(process.env.TLS_CERT_FILE || "/run/secrets/pki/service.crt");
 const options = { key: key, cert: cert };
 
 var server = https.createServer(options, app);

@@ -44,8 +44,7 @@ services:
       - elk
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./certs/selfsigned.crt:/etc/nginx/certs/selfsigned.crt:ro
-      - ./certs/selfsigned.key:/etc/nginx/certs/selfsigned.key:ro
+      - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/pki/services/nginx:/etc/nginx/pki:ro
     depends_on:
       - api_gateway
       - ws_gateway
@@ -63,14 +62,9 @@ services:
     ports:
       - "9000:9000"
       - "9090:8888"
-    environment:
-      # Admin credentials. SeaweedFS reads these when no -s3.config file is given.
-      AWS_ACCESS_KEY_ID: ${S3_ACCESS_KEY:-admin}
-      AWS_SECRET_ACCESS_KEY: ${S3_SECRET_KEY:-admin123}
-      # Passphrase protecting the key-encryption-key used for encryption at rest.
-      WEED_S3_SSE_KEK_PASSPHRASE: ${S3_KEK_PASSPHRASE:-picturas-kek-passphrase-change-me}
     volumes:
       - seaweedfs_data:/data
+    env_file: ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/env/seaweedfs.env
     networks:
       - elk
 
@@ -83,9 +77,8 @@ services:
       - "11000:11000"
     environment:
       S3_ENDPOINT: "seaweedfs:9000"
-      S3_ACCESS_KEY: ${S3_ACCESS_KEY:-admin}
-      S3_SECRET_KEY: ${S3_SECRET_KEY:-admin123}
       FRONTEND_URL: "https://localhost:8080"
+    env_file: ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/env/img_storage.env
     networks:
       - elk
 
@@ -96,11 +89,9 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
-    environment:
-      RABBITMQ_DEFAULT_USER: "user"
-      RABBITMQ_DEFAULT_PASS: "password"
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
+      - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/rabbitmq/definitions.json:/etc/rabbitmq/definitions.json:ro
     healthcheck:
       test: ["CMD-SHELL", "rabbitmqctl status"]
       interval: 30s
@@ -138,17 +129,17 @@ services:
     environment:
       RABBITMQ_HOST: rabbitmq
       RABBITMQ_PORT: 5672
-      RABBITMQ_USER: user
-      RABBITMQ_PASS: password
       # Per-profile video limits
       VIDEO_FREE_MAX_DURATION_S: 60
       VIDEO_FREE_MAX_SIZE_MB: 100
       VIDEO_PREMIUM_MAX_DURATION_S: 600
       VIDEO_PREMIUM_MAX_SIZE_MB: 1024
+    env_file: ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/env/projects.env
     networks:
       - elk
     volumes:
       - image_data:/app/images
+      - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/pki/services/projects:/run/secrets/pki:ro
 
   users_mongoDB:
     image: mongo:4.4
@@ -175,13 +166,13 @@ services:
     restart: on-failure
     environment:
       - FREE_DAILY_OP=5
-      - JWT_SECRET_KEY=lisan_al_gaib
-      - FIELD_ENCRYPTION_KEY=uma-frase-secreta-bem-grande-ou-64-hex
+    env_file: ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/env/users.env
     networks:
       - elk
     volumes:
       - ./users:/app
       - /app/node_modules
+      - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/pki/services/users:/run/secrets/pki:ro
 
   subscriptions_mongoDB:
     image: mongo:4.4
@@ -204,13 +195,13 @@ services:
     ports:
       - "11001:11001"
     restart: on-failure
-    environment:
-      - SECRET_KEY=card_secret_key
+    env_file: ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/env/subscriptions.env
     networks:
       - elk
     volumes:
       - ./subscriptions:/app
       - /app/node_modules
+      - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/pki/services/subscriptions:/run/secrets/pki:ro
 
   api_gateway:
     build: ./apiGateway
@@ -218,19 +209,20 @@ services:
       - projects
       - users
     restart: on-failure
-    environment:
-      - JWT_SECRET_KEY=lisan_al_gaib
+    env_file: ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/env/api_gateway.env
     networks:
       - elk
     volumes:
       - ./apiGateway:/app
       - /app/node_modules
+      - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/pki/services/api_gateway:/run/secrets/pki:ro
 
   bg_remove_ai_tool:
     build:
       context: ./Tools
       dockerfile: bg_remove_ai/Dockerfile
     restart: on-failure
+    env_file: ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/env/bg_remove_ai_tool.env
     networks:
       - elk
     depends_on:
@@ -244,6 +236,7 @@ services:
       context: ./Tools
       dockerfile: binarization/Dockerfile
     restart: on-failure
+    env_file: ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/env/binarization_tool.env
     networks:
       - elk
     depends_on:
@@ -263,6 +256,7 @@ services:
       WHISPER_MODEL: small
       WHISPER_CACHE_DIR: /models/whisper
       WHISPER_CPU_THREADS: 2
+    env_file: ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/env/video_tool.env
     networks:
       - elk
     depends_on:
@@ -277,6 +271,7 @@ services:
       context: ./Tools
       dockerfile: border/Dockerfile
     restart: on-failure
+    env_file: ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/env/border_tool.env
     networks:
       - elk
     depends_on:
@@ -290,6 +285,7 @@ services:
       context: ./Tools
       dockerfile: brightness/Dockerfile
     restart: on-failure
+    env_file: ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/env/brightness_tool.env
     networks:
       - elk
     depends_on:
@@ -303,6 +299,7 @@ services:
       context: ./Tools
       dockerfile: contrast/Dockerfile
     restart: on-failure
+    env_file: ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/env/contrast_tool.env
     networks:
       - elk
     depends_on:
@@ -316,6 +313,7 @@ services:
       context: ./Tools
       dockerfile: cut/Dockerfile
     restart: on-failure
+    env_file: ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/env/cut_tool.env
     networks:
       - elk
     depends_on:
@@ -328,6 +326,7 @@ services:
     build:
       context: ./Tools
       dockerfile: cut_ai/Dockerfile
+    env_file: ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/env/cut_ai_tool.env
     networks:
       - elk
     depends_on:
@@ -341,6 +340,7 @@ services:
     build: 
       context: ./Tools
       dockerfile: people_ai/Dockerfile
+    env_file: ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/env/people_ai_tool.env
     networks:
       - elk
     depends_on:
@@ -354,6 +354,7 @@ services:
     build: 
       context: ./Tools
       dockerfile: obj_ai/Dockerfile
+    env_file: ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/env/obj_ai_tool.env
     networks:
       - elk
     depends_on:
@@ -368,6 +369,7 @@ services:
       context: ./Tools
       dockerfile: resize/Dockerfile
     restart: on-failure
+    env_file: ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/env/resize_tool.env
     networks:
       - elk
     depends_on:
@@ -381,6 +383,7 @@ services:
       context: ./Tools
       dockerfile: rotate/Dockerfile
     restart: on-failure
+    env_file: ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/env/rotate_tool.env
     networks:
       - elk
     depends_on:
@@ -394,6 +397,7 @@ services:
       context: ./Tools
       dockerfile: saturation/Dockerfile
     restart: on-failure
+    env_file: ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/env/saturation_tool.env
     networks:
       - elk
     depends_on:
@@ -406,6 +410,7 @@ services:
     build:
       context: ./Tools
       dockerfile: text_ai/Dockerfile
+    env_file: ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/env/text_ai_tool.env
     networks:
       - elk
     depends_on:
@@ -419,6 +424,7 @@ services:
     build:
       context: ./Tools
       dockerfile: upgrade_ai/Dockerfile
+    env_file: ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/env/upgrade_ai_tool.env
     networks:
       - elk
     depends_on:
@@ -448,6 +454,7 @@ services:
     build:
       context: ./Tools
       dockerfile: expand_ai/Dockerfile
+    env_file: ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/env/expand_ai_tool.env
     networks:
       - elk
     depends_on:
@@ -461,8 +468,6 @@ services:
     environment:
       - RABBITMQ_HOST=rabbitmq
       - RABBITMQ_PORT=5672
-      - RABBITMQ_USER=user
-      - RABBITMQ_PASS=password
       - GEN_EXPAND_URL=http://generative-mock:7860
       
   watermark_tool_ms:
@@ -470,12 +475,11 @@ services:
     restart: always
     environment:
       - RABBITMQ_REQUESTS_QUEUE_NAME=watermark_queue
-      - RABBITMQ_USER=user
-      - RABBITMQ_PASS=password
       - RABBITMQ_HOST=rabbitmq
       - PICTURAS_LOG_LEVEL=INFO  # change / remove in production
       - RABBITMQ_RESULTS_EXCHANGE=picturas
       - RABBITMQ_RESULTS_ROUTING_KEY=project_queue
+    env_file: ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/env/watermark_tool_ms.env
     networks:
       - elk
     volumes:
@@ -497,6 +501,7 @@ services:
   ws_gateway:
     build: ./wsGateway
     restart: on-failure
+    env_file: ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/env/ws_gateway.env
     networks:
       - elk
     ports:
@@ -507,9 +512,6 @@ services:
     environment:
       - RABBITMQ_HOST=rabbitmq
       - RABBITMQ_PORT=5672
-      - RABBITMQ_USER=user
-      - RABBITMQ_PASS=password
-      - JWT_SECRET_KEY=lisan_al_gaib
 
   mongo-backup:
     image: mongo:4.4

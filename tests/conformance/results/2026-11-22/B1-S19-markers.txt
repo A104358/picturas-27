@@ -1,0 +1,42 @@
+# tests/conformance/mtls-pki/s19-markers.sh picturas-dev — 2026-11-22
+# S19 markers (S19-MARKER-3e256f294f7cd9e5): 44 files in 11 locations
+## (a) Git ignores every marker
+ok   all 44 markers ignored
+## (b) markers are absent from each build context (.dockerignore)
+ok   apiGateway
+ok   users
+ok   subscriptions
+ok   projects
+ok   imageStorageService
+ok   wsGateway
+ok   frontend
+ok   Tools
+ok   generative-mock
+ok   rabbitMQ
+## (c) markers are absent from the images built by 'picturas-dev'
+ok   picturas-dev-api_gateway
+ok   picturas-dev-bg_remove_ai_tool
+ok   picturas-dev-binarization_tool
+ok   picturas-dev-border_tool
+ok   picturas-dev-brightness_tool
+ok   picturas-dev-contrast_tool
+ok   picturas-dev-cut_ai_tool
+ok   picturas-dev-cut_tool
+ok   picturas-dev-expand_ai_tool
+ok   picturas-dev-frontend
+ok   picturas-dev-generative-mock
+ok   picturas-dev-img_storage
+ok   picturas-dev-obj_ai_tool
+ok   picturas-dev-people_ai_tool
+ok   picturas-dev-projects
+ok   picturas-dev-rabbitmq
+ok   picturas-dev-resize_tool
+ok   picturas-dev-rotate_tool
+ok   picturas-dev-saturation_tool
+ok   picturas-dev-subscriptions
+ok   picturas-dev-text_ai_tool
+ok   picturas-dev-upgrade_ai_tool
+ok   picturas-dev-users
+ok   picturas-dev-video_tool
+ok   picturas-dev-ws_gateway
+S19 markers: passed

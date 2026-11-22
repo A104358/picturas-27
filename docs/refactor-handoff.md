@@ -21,14 +21,14 @@ estamos**.
 
 | Campo | Valor |
 |-------|-------|
-| Bloco em curso | B0 concluído; nenhum bloco começado depois dele |
+| Bloco em curso | B1 concluído (sem commit); o próximo é o B2 (dúvidas D-16 a D-19 já respondidas) ou o B3/B4 em paralelo |
 | Passo do bloco | — |
-| Estado deixado | B0 feito no branch `fase2-refactor` (ainda sem commit): SP-01 a SP-11 registados em [`refactor-spikes.md`](refactor-spikes.md), imagens fixadas às da BF, `tests/conformance/` criado, F01 registado. Abertas as dúvidas **D-16 a D-19** (§5), que bloqueiam pontos do B2 e do B6 |
-| **Próximo passo exato** | 1) Uma pessoa revê e faz commit do B0 no `fase2-refactor` (ficheiros na entrada da §4). 2) Começar o **B1** (PKI e segredos); o B3 pode avançar em paralelo. As dúvidas D-16 a D-19 estão resolvidas (§2.6, decisões 17 a 20) e o plano foi atualizado (B1, B2, B6) |
-| Coisas meio feitas | Nenhuma. As notas dos spikes para cada bloco estão em `refactor-spikes.md` (secções "Notas para o Bx") |
-| Testes a falhar neste momento | Nenhum no ambiente do produto (F01: 8/8 Node, 74/74 vídeo nas imagens). No host, o `Tools/video` dá 68/74 porque o ffmpeg do Homebrew não tem `libass` (ambiente, não código) |
-| Último commit com o trabalho | — (B0 por commitar) |
-| Atualizado em | 2026-11-21 |
+| Estado deixado | B1 feito no `fase2-refactor`, por commitar: `ops/pki.sh` e `ops/secrets.sh`, segredos fora do compose e do código, as 6 chaves versionadas retiradas, `.gitignore`/`.dockerignore` defensivos, S19 com marcadores. Critérios de aceitação passados numa stack `picturas-dev` (bruto em `tests/conformance/results/2026-11-22/`). **Verificação `med.py` EXP feita a 22/11:** S05 `--quick` = 100% (`CUMPRE_ALVO`) na `picturas-nfr-exp` (a `picturas-nfr` da BF foi desmontada; a BF está nos ficheiros de resultados). As decisões 21 e 22 (§2.6) aguardam confirmação do utilizador |
+| **Próximo passo exato** | 1) O utilizador confirma (ou não) as decisões 21 e 22 da §2.6. 2) Commit do B1. 3) Começar o **B2** (depende do B1; decisões 17 a 20 já tomadas); o B3 e o B4 podem avançar em paralelo. Cada pessoa precisa do seu `PICTURAS_SECRETS_DIR` (`ops/secrets.sh init`, `ops/pki.sh init`) e, para o `med.py`, do `.env.med` com `MED_COMPOSE_PROJECT=picturas-nfr-exp` e a saída de `ops/secrets.sh med-env` |
+| Coisas meio feitas | Nenhuma no código. Interinos do B1 que o B2 substitui (§2.6, decisão 21): o SeaweedFS ainda recebe o admin pelas variáveis `AWS_*`, o `img_storage` usa esse admin e todos os clientes do broker usam o admin `picturas_admin`. As credenciais por principal já estão geradas em `values/` |
+| Testes a falhar neste momento | Nenhum: F01 8/8 Node e 74/74 vídeo nas imagens novas (`F01-033956.txt`); smoke B1 12/12; S19 (marcadores e `git grep`) passou |
+| Último commit com o trabalho | `02623a4` (B0); B1 por commitar |
+| Atualizado em | 2026-11-22 |
 
 ## 2. Contexto comum (o que já está decidido)
 
@@ -182,6 +182,8 @@ decidiu (pessoa ou "equipa").
 | 18 | 22/11 | D-17: o `ffprobe` lê por um relé em loopback dentro da `projects`, que reencaminha para o SeaweedFS por HTTPS validado e corta ao atingir 2×F+16 MiB | O `ffprobe` não tem limite de bytes, só de tempo (SP-05); o relé não é um salto de rede | Utilizador |
 | 19 | 22/11 | D-18: o exchange `picturas` passa de `direct` a `topic`, com as mesmas routing keys e permissões por routing key para cada principal; clientes com declarações passivas; o watermark muda só por variável | Com `direct`, a permissão de escrita vale para o exchange inteiro (SP-07); com `topic`, o destino não autorizado dá 403 | Utilizador |
 | 20 | 22/11 | D-19: o master, o volume e o filer do SeaweedFS ficam só em loopback; da rede ficam o S3 (9000) e o gRPC do S3 com mTLS; o TLS/mTLS internos mantêm-se. A rota `/s3-console/` do nginx (filer sem autenticação) é retirada | O HTTPS interno do SeaweedFS aceita qualquer certificado da CA (SP-11), contra o D4; o filer publicado em `/s3-console/` dá acesso a todos os ficheiros | Utilizador |
+| 21 | 22/11 | B1, execução: os segredos escalares chegam a cada serviço por `env_file: $PICTURAS_SECRETS_DIR/env/<serviço>.env` (gerado por `ops/secrets.sh render`, só com o que esse serviço usa) e as chaves/certificados por diretório montado só para leitura (`/run/secrets/pki`, nginx em `/etc/nginx/pki`). Os utilizadores do broker vão para um `definitions.json` gerado (topologia do repositório + `password_hash`), porque o RabbitMQ ignora `RABBITMQ_DEFAULT_USER` quando importa definições (provado). **Interinos até ao B2:** um admin S3 (SeaweedFS por `AWS_*`, usado pelo `img_storage`) e um admin do broker partilhado pelos clientes; o B2 passa a uma credencial por principal (já geradas) | Retirar os segredos do Git sem mudar o código dos serviços que leem variáveis de ambiente; o B2 já prevê o privilégio mínimo | Agente (sessão B1), dentro do plano; a confirmar no commit |
+| 22 | 22/11 | B1, execução: CA e certificados ECDSA P-256 (CA 365 d, serviço 30 d, renovação a 7 d), SAN = nome Docker do serviço (nginx também `localhost`/`127.0.0.1`), EKU por papel; par RS256 de 3072 bits; sem valores por omissão com credenciais no código (`Tools/utils/env.py`, `imageStorageService/services/s3Client.js`), e o `IMG_STORAGE_URL` do `env.py`, que lia `RABBITMQ_PASSWORD`, passa a ler `IMG_STORAGE_URL` | Os spikes provaram ECDSA em todos os clientes (Node, pika, Mongo, Go, nginx); um valor por omissão com credencial é um segredo publicado | Agente (sessão B1), dentro do plano; a confirmar no commit |
 
 ## 3. Estado dos blocos
 
@@ -195,10 +197,10 @@ dependências estiverem `FEITO`.
 | Bloco | Depende de | Estado | Verificação (link para o resultado) | Notas |
 |-------|-----------|--------|-------------------------------------|-------|
 | B0 — Spikes e preparação | — | FEITO | [`refactor-spikes.md`](refactor-spikes.md); bruto em `tests/spikes/SP-xx/results/`; F01 em `tests/conformance/results/2026-11-21/` | 11 spikes: 6 suportados, 5 suportados com limitações (D-16 a D-19) |
-| B1 — PKI e segredos | B0 | POR FAZER | — | Pode começar. Retirar também `frontend/certs/selfsigned.key` do Git (SP-09) |
-| B2 — Mongo/RabbitMQ/S3 | B1 | POR FAZER | — | Inclui as opções de TLS no `med.py` (§2.6, decisão 13). **O RabbitMQ espera pela D-18 e o SeaweedFS pela D-19.** Notas do SP-02, SP-06, SP-07, SP-08 e SP-11 |
+| B1 — PKI e segredos | B0 | FEITO | `tests/conformance/results/2026-11-22/` (`B1-pki-secrets-check`, `B1-S19-git-grep`, `B1-S19-markers`, `B1-smoke`, `B1-old-credentials`, `F01-033956`) | Critérios passados na `picturas-dev`. Pendente: `med.py` EXP S05 `--quick` (a `picturas-nfr` está montada). S19: o histórico Git mantém as chaves antigas (limitação declarada, não reescrita) |
+| B2 — Mongo/RabbitMQ/S3 | B1 | POR FAZER | — | Inclui as opções de TLS no `med.py` (§2.6, decisão 13). Decisões 17–20 (D-16 a D-19) já tomadas. Substitui os interinos do B1 (decisão 21): `s3.json` por principal em vez de `AWS_*`, um utilizador do broker por principal no `definitions.json` gerado por `ops/secrets.sh render`. Notas do SP-02, SP-06, SP-07, SP-08 e SP-11 |
 | B3 — Portas e supervisão | — | POR FAZER | — | Retirar todas as portas internas; `node` + `healthcheck` (§2.6, decisões 4 e 5) |
-| B4 — Identidade e autorização HTTP | B1 | POR FAZER | — | Precisa do par RS256 e do segredo HS256 novo; começa pela matriz de rotas (`docs/refactor-matriz-rotas.md`) |
+| B4 — Identidade e autorização HTTP | B1 | POR FAZER | — | O par RS256 e o segredo HS256 já existem (`jwt/`, `values/jwt_hs256`); falta montar a chave privada só no gateway e a pública nos verificadores. Começa pela matriz de rotas (`docs/refactor-matriz-rotas.md`) |
 | B5 — mTLS e TLS por salto | B1 | POR FAZER | — | `proxy_ssl_session_reuse off` (SP-09); servidor HTTPS próprio do Next (SP-09); Flask/`requests` com mTLS (SP-10) |
 | B6 — Upload: motor e adaptador | B0, B4, B5 | POR FAZER | — | A escrita do adaptador (cópia ou direta) ficou na **D-16**, e o limite de leitura do `ffprobe` na **D-17**. Notas do SP-01, SP-03 e SP-05 |
 | B7 — Upload: fluxo novo | B6 | POR FAZER | — | Inclui o frontend (§2.6, decisão 1). Configuração do `auth_request` (SP-01, notas 1–4) e do `Host` assinado (SP-04) |
@@ -206,7 +208,7 @@ dependências estiverem `FEITO`.
 | B9 — Sessões e recuperação | B4, B8 | POR FAZER | — | Sem migração (reset, §2.6, decisão 15); mantém a ferramenta de reemissão assistida |
 | B10 — Operação da PKI | B1, B2, B5 | POR FAZER | — | O piloto corre assim que estiver pronto (§2.6, decisão 9) |
 | B11 — Reconciliação (OPS-C1) | B2, B10 | POR FAZER | — | Usa o isolamento do B10 |
-| §5 — Testes de conformidade | cresce com cada bloco | EM CURSO | `tests/conformance/results/2026-11-21/F01-202134.txt` | `tests/conformance/` criado (README + `run-f01.sh`); F01 registado |
+| §5 — Testes de conformidade | cresce com cada bloco | EM CURSO | `tests/conformance/results/2026-11-21/F01-202134.txt`, `…/2026-11-22/` | F01 registado; grupo `mtls-pki/` com `s19-markers.sh`, `s19-git-grep.sh` e `b1-smoke.py` |
 | B12 — Verificação final e MF | B0–B11 | POR FAZER | — | |
 
 ## 4. Diário (só se acrescenta; nunca se apaga)
@@ -232,6 +234,15 @@ Uma entrada por sessão, no fim da lista, ao parar.
 - Cuidado: (1) As variáveis `AWS_*` no `seaweedfs` criam um admin S3 (SP-02). (2) O `management.tcp.port = 0` do RabbitMQ abre a API em HTTP numa porta aleatória (SP-07). (3) O `rabbitmqctl` como root antes do arranque parte o broker (cookie). (4) O `ffprobe` e o `mongodump` escrevem URLs/URIs com segredos nos erros. (5) `proxy_ssl_session_reuse` tem de estar `off` (SP-09). (6) A `location = /_auth` do nginx precisa do mesmo `client_max_body_size` do upload (SP-01). (7) Num bind mount de um só ficheiro, um editor que substitui o inode deixa o contentor com a versão antiga. (8) Os harness usam PKIs descartáveis geradas por script; não há chaves no Git (`tests/spikes/.gitignore`).
 - Decisões novas: 16.
 - Dúvidas novas: D-16, D-17, D-18, D-19.
+
+### 2026-11-22 04:00 — B1 — FEITO (falta a verificação `med.py` EXP)
+- Feito: `ops/pki.sh` (`init`/`issue`/`renew`/`check`/`list`, registo `pki/registry.tsv`) e `ops/secrets.sh` (`init`/`render`/`check`/`med-env`). `docker-compose.yaml`: sem segredos escritos; `env_file` por serviço; certificados montados de `$PICTURAS_SECRETS_DIR`; `definitions.json` do broker gerado. Código: os 9 ficheiros que liam `certs/selfsigned.*` (`projects/bin/www`, `projects/routes/projects.js`, `projects/utils/imageStorage.js`, `projects/utils/httpsAgent.js`, `users/bin/www`, `users/routes/users.js`, `subscriptions/bin/www`, `apiGateway/routes/projects.js`, `apiGateway/routes/subscriptions.js`) leem `/run/secrets/pki/service.{key,crt}`; `nginx/nginx.conf` usa `/etc/nginx/pki`; sem valores por omissão com credenciais (`Tools/utils/env.py`, `imageStorageService/services/s3Client.js`). Retiradas as 6 chaves versionadas e os certificados que as acompanhavam (`certs/`, `apiGateway/`, `frontend/`, `projects/`, `subscriptions/`, `users/`). `rabbitMQ/definitions.json` sem utilizadores (CRLF mantido). `.gitignore` e 10 `.dockerignore` defensivos. Testes em `tests/conformance/mtls-pki/`. Atualizados `README.md`, `AGENTS.md` e `.env.example`.
+- Verificado: `ops/pki.sh` com casos negativos (diretório dentro do repositório, `init` repetido, certificado expirado, de outra CA, CA a menos de 30 dias): todos recusados. Os 4 critérios do B1: `ops/pki.sh check` passou; `s19-git-grep.sh` sem nenhum dos 56 segredos atuais (com controlo negativo); `s19-markers.sh picturas-dev` com 44 marcadores ignorados, 10 contextos limpos (com controlo negativo) e 25 imagens limpas; stack `picturas-dev` a arrancar com os segredos montados (32 contentores, smoke 12/12: sessão, upload, URL assinado, pipeline pelo broker; token assinado com `lisan_al_gaib` recusado). Na rede Docker, `user/password`, `guest/guest` e `admin/admin123` recusados. F01 8/8 e 74/74. Nenhum segredo nos resultados.
+- Parei em: bloco concluído, exceto a verificação `med.py` EXP S05 `--quick`. A `picturas-nfr` está montada (marcador `evaluation/.run/stack.json`), e montar a `picturas-nfr-exp` exige `med.py stack down` nela: decisão de quem faz as medições.
+- Próximo passo: o da §1.
+- Cuidado: (1) Sem `PICTURAS_SECRETS_DIR` exportado, o `docker compose` recusa arrancar (é intencional). (2) Nesta máquina, a porta 9090 do host está ocupada por outro processo; a verificação usou um override (no scratchpad) que retira as portas internas, que é o alvo do B3. (3) O `ops/pki.sh check` não corre sozinho no arranque: corre-se antes do `up` (o README e o AGENTS.md mostram a ordem); a guarda em funcionamento é do B5. (4) Para a verificação usei um diretório de segredos descartável no scratchpad; cada pessoa cria o seu. (5) `scale_queue` sem consumidor é igual na BF (não há worker `scale`). (6) Correção ao diário do B0: o `.venv/` já estava no `.gitignore`; o `Tools/video/.venv` não ia aparecer no Git.
+- Decisões novas: 21, 22.
+- Dúvidas novas: nenhuma.
 
 ## 5. Dúvidas surgidas durante a implementação
 
@@ -264,6 +275,44 @@ para a §2.6 (e para o plano, se mudar um bloco).
    > não as reabras sem perguntar. Respeita as regras do plano (§1). Não faças commits.
    > Antes de parar, atualiza a §1 e a §3, acrescenta uma entrada à §4 e regista na §2.6
    > as decisões novas.
+
+### 6.1 Passar o trabalho a outra pessoa (por exemplo, quando acabam os tokens)
+
+**Quem para:**
+
+1. Se a sessão ainda responde, pedir ao agente: *"Vamos parar. Atualiza o handoff
+   (§1, §3, entrada na §4 e decisões na §2.6) com o estado exato, incluindo o que
+   ficou a meio."*
+2. Se a sessão acabou de repente, sem atualizar o handoff: escrever à mão na §1 pelo
+   menos o bloco, o que se estava a fazer e que o estado ficou **por confirmar**.
+3. Guardar tudo e publicar, mesmo que fique a meio:
+   ```bash
+   git add -A && git status        # confirmar que não entra nenhum segredo nem .env
+   git commit -m "[Bx] WIP: <o que ficou a meio>"
+   git push
+   ```
+
+**Quem retoma (noutro computador):**
+
+1. A primeira vez:
+   ```bash
+   git clone https://github.com/A104358/picturas-27.git && cd picturas-27
+   git switch fase2-refactor
+   cd evaluation && python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
+   cp .env.med.example .env.med    # pôr MED_COMPOSE_PROJECT=picturas-nfr-exp
+   .venv/bin/python med.py corpus  # vídeos de teste (vários GB, fora do Git)
+   cd ..
+   ```
+   Depois do B1: gerar os segredos e certificados da sua própria instalação (§7,
+   "Segredos"). As chaves nunca se copiam de outro computador.
+2. Sempre:
+   ```bash
+   git switch fase2-refactor && git pull
+   ```
+3. Abrir uma sessão nova do agente com o pedido do ponto 5 acima. Se a última entrada
+   do diário disser "por confirmar" ou o commit for `WIP`, acrescentar ao pedido:
+   *"A sessão anterior parou de repente. Antes de continuar, compara o handoff com o
+   `git log` e o `git diff` do último commit, corrige a §1 e só depois avança."*
 
 ## 7. Ambiente
 

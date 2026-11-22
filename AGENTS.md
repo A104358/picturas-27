@@ -82,6 +82,9 @@ Behind the gateway:
 ## Running and testing
 
 ```bash
+export PICTURAS_SECRETS_DIR=<dir outside the repo>   # required: compose refuses to start without it
+ops/secrets.sh init && ops/pki.sh init       # once per machine: secrets, local CA, service certificates
+ops/pki.sh check                             # before starting; `ops/pki.sh renew` at 7 days left
 docker compose up -d --build                 # first build: 15-30 min, ~15 GB disk, 8+ GB RAM
 docker compose up -d --build <service>       # rebuild one service after a change
 docker compose restart nginx                 # after rebuilding the frontend (avoids 502)
@@ -121,10 +124,14 @@ cd Tools/video && python3 -m venv .venv && .venv/bin/pip install -r requirements
 
 ## Known pitfalls
 
-- `JWT_SECRET_KEY` must be the same in `users`, `api_gateway` and `ws_gateway`.
+- Secrets and keys never live in the checkout: `ops/secrets.sh` renders one
+  `$PICTURAS_SECRETS_DIR/env/<service>.env` per service (loaded with `env_file`) and `ops/pki.sh`
+  issues `pki/services/<svc>/service.{key,crt}`, mounted read-only at `/run/secrets/pki` (nginx:
+  `/etc/nginx/pki`). The broker users are rendered into `rabbitmq/definitions.json`, because the
+  broker skips `RABBITMQ_DEFAULT_USER` when it imports definitions.
 - Keep `NEXT_PUBLIC_API_BASE_URL` relative (`/api-gateway/`) and do not remap port 8080.
-- Internal service-to-service TLS certificates are expired and not validated
-  (`rejectUnauthorized: false`); several secrets are committed. Known issues, not patterns.
+- Internal service-to-service TLS is not validated yet (`rejectUnauthorized: false`); Phase 2
+  block B5 fixes it. Known issue, not a pattern.
 - RabbitMQ consumers must survive broker restarts.
 - The image tools auto-acknowledge messages and swap `messageId`/`correlationId` in their error
   replies, so their errors do not reach the user.

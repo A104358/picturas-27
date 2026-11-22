@@ -25,11 +25,11 @@
 #paisagem[
 #tab([Matriz de efeitos das decisões],
   tabela(
-    colunas: (1.8cm, 2.6cm, 3.4cm, 2.4cm, 2.4cm, 3.6cm, 1fr),
-    tamanho: 8.5pt,
+    colunas: (1.6cm, 2.7cm, 3.2cm, 2.4cm, 3cm, 3.5cm, 1fr),
+    tamanho: 8pt,
     [Decisão], [Desempenho], [Disponibilidade / Fiabilidade], [Segurança], [Usabilidade], [Manutenibilidade / Testabilidade], [Justificação],
-    [DA-1], [↓ possível pelo _overhead_ de identidade/TLS/consultas], [↓ novas entradas em falha/rotação; integridade de acesso ↑], [↑ esperado], [= capacidade; ↓ intervenção/reconexão se mal tratada], [↓ gestão de _trust_/pares; ↑ contratos/_probes_ verificáveis], [TLS/_queries_/_leases_ têm custo; não autorizar em falha protege o domínio, mas reduz disponibilidade. Controlos positivos impedem «melhorar» segurança desligando operações. EV-44; H-14/H-17/H-18],
-    [DA-2], [↑ esperado em eficiência de memória; ↓ possível no comportamento temporal por I\/O adicional], [↑ esperado por menor pressão; ↓ se estados/cópias não forem reconciliados], [↑ esperado por _auth_ antes do corpo; ↓ se o isolamento _pending_/capacidades S3 falhar], [= capacidade; ↑ aceitação esperada; ↓ erros mal explicados], [↓ dois transportes/estados; ↑ domínio/_commit_ comuns e _probes_], [Deslocar bytes/cálculo não os elimina; adaptar com limites pode preservar a API, mas exige validar ambos os percursos e as guardas. EV-42/EV-44; H-15–H-18],
+    [DA-1], [↓ possível pelo custo de identidade, TLS e consultas], [↓ disponibilidade por novas dependências; ↑ integridade de acesso], [↑ autorização ponta a ponta], [#sym.eq capacidade funcional; ↓ possível na reconexão], [↓ gestão inicial de confiança e pares; ↑ contratos e _probes_ verificáveis], [Mitigar TLS, consultas e falhas por testes de timeout, renovação e reconciliação; não autorizar em falha protege o domínio. EV-44; H-14/H-17/H-18],
+    [DA-2], [↑ eficiência de memória; ↓ possível na latência por I/O adicional], [↑ menor pressão de recursos; ↓ risco se estados/cópias não forem reconciliados], [↑ autenticação antes do corpo; ↓ risco se o _pending_ ou o S3 falhar], [#sym.eq capacidade funcional; ↑ aceitação e ↓ possíveis por erros mal explicados], [↓ dois transportes e estados; ↑ domínio e _commit_ comuns], [Mitigar I/O, estados e discrepâncias com limites reais, testes dos dois percursos e guardas U09/U25/U15/U17/U10. EV-42/EV-44; H-15–H-18],
   ),
 )
 ]

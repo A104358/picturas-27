@@ -113,10 +113,7 @@
   set heading(numbering: "1.")
 
   show heading: set block(above: 2em, below: 1em)
-  show heading.where(level: 1): it => {
-    context if quebra-capitulo.get() { pagebreak(weak: true) }
-    text(size: 18pt, it)
-  }
+  show heading.where(level: 1): set text(size: 18pt)
   show heading.where(level: 2): it => text(size: 14pt, it)
   show heading.where(level: 3): it => text(size: 12pt, it)
 

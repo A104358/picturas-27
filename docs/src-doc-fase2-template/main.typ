@@ -40,26 +40,39 @@
 #counter(page).update(1)
 
 // Parte I — Enquadramento
+#pagebreak(weak: true)
 #include "capitulos/01-introducao.typ"
 
 // Parte II — Diagnóstico arquitetural (Exercício 6, Bloco 1)
+#pagebreak(weak: true)
 #include "capitulos/02-ambito-arquitetura.typ"
+#pagebreak(weak: true)
 #include "capitulos/03-padroes-atuais.typ"
+#pagebreak(weak: true)
 #include "capitulos/04-alternativas-matriz.typ"
 
 // Parte III — Qualidade e candidatos a RNF (Exercício 6, Bloco 2)
+#pagebreak(weak: true)
 #include "capitulos/05-tradeoffs-cenarios.typ"
+#pagebreak(weak: true)
 #include "capitulos/06-candidatos-rnf.typ"
 
 // Parte IV — Táticas, decisões arquiteturais, medição e resultados (Exercício 7 e implementação)
+#pagebreak(weak: true)
 #include "capitulos/07-cenarios-taticas.typ"
+#pagebreak(weak: true)
 #include "capitulos/08-decisoes-arquiteturais.typ"
+#pagebreak(weak: true)
 #include "capitulos/09-vista-antes-depois.typ"
+#pagebreak(weak: true)
 #include "capitulos/10-tradeoffs-medicao.typ"
 
 // Parte V — Síntese
+#pagebreak(weak: true)
 #include "capitulos/11-conclusoes.typ"
+#pagebreak(weak: true)
 #include "capitulos/12-agentes-ia.typ"
 
 // Anexos
+#pagebreak(weak: true)
 #include "capitulos/99-anexos.typ"

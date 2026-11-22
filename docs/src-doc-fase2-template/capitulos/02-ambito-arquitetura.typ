@@ -17,11 +17,26 @@
 
 == Preparação e ambiente
 
+#orientacao[
+  Registem como a solução foi lançada, para que outra pessoa a consiga repetir e obtenha o mesmo resultado. Indiquem
+  sempre o _commit_ de partida (o mesmo em todos os capítulos), os comandos exatos e o ambiente de execução. Se algum
+  passo falhou ou exigiu um ajuste, escrevam-no: é informação útil para quem repetir o processo.
+
+  A descrição do processamento em lote que se segue à tabela deve ser escrita pela equipa, com palavras próprias, e
+  mostrar que perceberam o fluxo completo, do _Apply_ ao resultado, para imagens e vídeos.
+]
+
 #tab([Preparação e ambiente],
   tabela-campos(
     [Commit de partida], [`052310226c51fa57a17101c7bd1ad795674aac95` (`0523102`)],
-    [Comando(s) de arranque], [`docker compose up -d --build` na raiz; acesso em `https://localhost:8080` aceitando o certificado local. Após reconstruir o frontend: `docker compose restart nginx`. Não usar `down -v` em instalações com dados a preservar. (EV-09, EV-33)],
-    [Ambiente (SO, CPU, RAM, versões de Docker e Compose)], [Ubuntu 22.04.5 LTS; kernel Linux 6.8.0-138-generic, x86_64; Intel Core i7-13700H, 14 núcleos e 20 CPU lógicos; RAM de 15 GiB e _swap_ de 2 GiB; Docker 29.9.2, _build_ `a82e528`; Docker Compose v5.6.1. (EV-28)],
+    [Comando(s) de arranque], [
+      - _Aplicação base:_ `docker compose up -d --build` na raiz; acesso em `https://localhost:8080` aceitando o certificado local. Após reconstruir o frontend: `docker compose restart nginx`. Não usar `down -v` em instalações com dados a preservar. (EV-09, EV-33)
+      - _Instrumento formal de avaliação:_ `python3 evaluation/med.py --campaign BF-...` executado sobre a _stack_ isolada `picturas-nfr` (`docker compose -p picturas-nfr -f docker-compose.yaml up -d --build`), garantindo ausência de interferência com volumes ou portas da instalação de desenvolvimento.
+    ],
+    [Ambientes de execução], [
+      - _Ambiente de diagnóstico exploratório inicial (EV-28):_ Ubuntu 22.04.5 LTS; kernel Linux 6.8.0-138-generic, x86_64; Intel Core i7-13700H (14 núcleos, 20 vCPU); 15 GiB RAM e 2 GiB _swap_; Docker 29.9.2, _build_ `a82e528`; Docker Compose v5.6.1.
+      - _Ambiente da baseline formal (BF) e avaliação comparativa (MF):_ Host dedicado Apple M4 Pro (12 CPU, 7,7 GiB de RAM atribuídos ao Docker Desktop, Linux VM); Docker Desktop com engine Docker 27.x e Compose v2.x. Campanha oficial `BF-20261121T013224Z` recolhida a 21/11/2026 sobre o _commit_ `d6b4497d116fe2ec265040084f6ec126cb84ad49` (código de aplicação estritamente idêntico a `0523102`).
+    ],
   ),
 )
 
@@ -30,6 +45,12 @@
 O comando _Apply_ envia `POST /api-gateway/projects/:user/:project/process`, com JWT e versão do projeto, pelo nginx e API Gateway (EV-07, EV-08). O serviço `projects` valida a sequência do projeto e reserva em `users` as operações necessárias (EV-14, EV-25). De seguida, descarrega os originais do S3 para o volume `image_data` e regista todos os registos `Process` do lote antes de publicar os primeiros pedidos (EV-14). Para cada *imagem*, envia a primeira ferramenta para a fila `<tool>_queue`; cada resposta em `project_queue` faz `projects` avançar para a etapa seguinte (EV-15). Para cada item com `media_type: "video"`, publica um único pedido em `video_queue` com o _pipeline_ completo aplicável àquele vídeo (EV-10, EV-12, EV-14). O worker de vídeo processa todos os estágios internamente e emite percentagens para `ws_queue`; o `wsGateway` entrega o evento `video-progress` ao cliente por Socket.IO (EV-16, EV-22). Por fim, `projects` persiste as saídas em S3, cria registos `Result` e publica a conclusão; os URLs e o ZIP usam os resultados do token confirmado, incluindo os fotogramas individuais quando há extração (EV-21, EV-28). O sistema distingue os dois tipos de _media_ desde o _upload_ (endpoints `/img` e `/video` separados com validação por `ffprobe`) até ao despacho (granularidade por etapa para imagens; mensagem única por vídeo) e à resposta (fotogramas extraídos mantêm referência ao `img_id` do vídeo de origem).
 
 == Fontes consultadas
+
+#orientacao[
+  Listem os documentos e o código que sustentam a análise, com a versão ou a data de cada um (_commit_, número de versão,
+  data de acesso) e para que foram usados. Isto permite ao leitor perceber de onde vêm as afirmações e detetar
+  fontes desatualizadas. Incluam os documentos de apoio da unidade curricular que influenciaram a análise.
+]
 
 #tab([Fontes consultadas],
   tabela(
@@ -43,6 +64,8 @@ O comando _Apply_ envia `POST /api-gateway/projects/:user/:project/process`, com
     [HTML de apoio — padrões arquiteturais], [Sem versão/data explícita], [Distinção dos três níveis (global, vídeo, interior); sete famílias de padrões; enquadramento de ALT-1/ALT-2.],
     [Diretrizes da Fase 2], [Versão 1, 2026-11-04; 3 pp.], [Preservação funcional, dois RNF distintos, ISO/IEC 25010:2011, _baseline_ e avaliação reprodutível.],
     [Código e configuração da aplicação], [Commit `484be13`], [nginx, gateways, `projects`, `users`, `subscriptions`, armazenamento, ferramentas PIL/IA, worker de vídeo, filas, Compose, testes e backups.],
+    [Instrumento e critérios de avaliação (`evaluation/med.py`, `criteria.yaml`)], [Versão congelada `638516104ae9`, novembro 2026], [Instrumento automatizado de medição de RNF, critérios de aprovação/reprovação e registo de resultados brutos.],
+    [Métricas e plano de medição (`docs/metricas.md`, `planoMedicao.md`)], [Novembro 2026], [Catálogo das 21 métricas selecionadas, protocolo de execução da baseline formal (BF) e campanha `BF-20261121T013224Z`.],
     [Hohpe & Woolf — Pipes and Filters e Competing Consumers], [Catálogo EIP; consulta 2026-11-09], [Fundamentação das alternativas ALT-1 e ALT-2.],
     [RabbitMQ — Consumer Acknowledgements], [Documentação oficial; consulta 2026-11-09], [Distinção entre confirmação de consumo, confirmação de publicação e reentrega.],
     [ISO/IEC 25010:2011], [Edição 2011; consulta 2026-11-09], [Modelo de oito características; classificação de RNF e atributos de qualidade.],
@@ -52,11 +75,16 @@ O comando _Apply_ envia `POST /api-gateway/projects/:user/:project/process`, com
 == Vista da arquitetura global
 
 #orientacao[
-  *Nota:* a vista de arquitetura global existe em formato SVG/PlantUML no repositório, em `docs/exercises/06-architectural-patterns/diagrams/`. Incluir a imagem compilada em `images/arquitetura_global.png` antes da entrega final.
+  A vista mostra o *padrão global* da solução (serviços, filas, armazenamento, fronteiras) com o *caminho do vídeo
+  destacado*, de modo a que se veja onde o vídeo segue o resto do sistema e onde se afasta dele.
+
+  Usem a notação e a ferramenta que preferirem (C4 de contentores, componentes UML, PlantUML, Mermaid, draw.io), mas
+  incluam sempre uma *legenda* e indiquem a ferramenta. O diagrama tem de ser legível no documento impresso e
+  consistente com o que foi observado na solução em execução, não apenas com a documentação.
 ]
 
-#figure(kind: image,
-  figura-pendente[vista da arquitetura global com o caminho do vídeo destacado — fonte: `diagrams/arquitetura_global_plantuml.svg` (EV-06)],
+#figure(
+  image("../images/arquitetura_global.png", width: 100%),
   caption: [Vista da arquitetura global com o caminho do vídeo destacado],
 )
 
@@ -74,9 +102,25 @@ O comando _Apply_ envia `POST /api-gateway/projects/:user/:project/process`, com
   ),
 )
 
+*Análise da vista da arquitetura global:*
+
+A arquitetura global do PictuRAS (Figura 1) organiza-se através de um estilo de microserviços orientados a eventos e comunicação REST, coordenados de forma centralizada pelo serviço `projects` (EV-03, EV-07–EV-10, EV-35). Os pedidos externos dos clientes entram exclusivamente pela porta HTTPS 8080 através do _reverse proxy_ nginx, sendo o tráfego HTTP de API reencaminhado para o `apiGateway` (Express com validação de JWT) e as comunicações bidirecionais persistentes para o `wsGateway` (Socket.IO).
+
+Os dados de negócio distribuem-se por bases de dados MongoDB isoladas por domínio funcional (`users_db`, `projects_db` e `subscriptions_db`), assegurando o padrão _Database-per-Service_. O armazenamento binário de originais, resultados e imagens temporárias de pré-visualização é assegurado pelo SeaweedFS (compatível com a API S3), acedido através da fachada `imageStorageService`.
+
+O transporte de trabalho computacional assenta num _broker_ RabbitMQ durável com _exchange_ direto `picturas`. A vista arquitetural destaca uma bifurcação estrutural clara entre os dois tipos de _media_:
+- *Caminho global de imagens (setas cinzentas):* Cada uma das 16 ferramentas de processamento de imagem opera como um microserviço autónomo em Python/PIL ou modelos de inteligência artificial, consumindo pedidos individuais passo a passo da respetiva fila `<tool>_queue` com confirmação automática de consumo (_auto-ack_) e acedendo ao volume de trabalho partilhado `image_data`.
+- *Caminho de vídeo (setas laranja e worker realçado):* O processamento de vídeo diverge radicalmente do padrão de passos distribuídos. Todo o processamento de vídeo está concentrado num único contentor monolítico (`video_tool`), que consome pedidos na fila `video_queue`. Ao contrário das imagens, o worker de vídeo recebe o _pipeline_ completo numa única mensagem, executa internamente todas as etapas de descodificação, efeitos matriciais e recodificação em FFmpeg/PIL, e emite eventos de progresso contínuo para a fila `ws_queue`, consumida pelo `wsGateway` para notificação ao cliente.
+
+*Ressalvas técnicas observadas no diagrama:* A «entrada única» através do nginx representa o percurso aplicacional nominal, mas não constitui uma fronteira de segurança exclusiva na solução de base, uma vez que a configuração do `docker-compose.yaml` expõe diretamente portas de serviços internos e bases de dados no _host_ (EV-24, EV-33). Adicionalmente, o volume partilhado `image_data` é montado em simultâneo pelo orquestrador e pelos trabalhadores, impondo acoplamento de sistema de ficheiros local.
+
 == Sequência de um pedido completo
 
 #orientacao[
+  Descrevam, passo a passo, o que acontece num pedido completo para um projeto com vídeos: carregamento → definição do
+  _pipeline_ → _Apply_ → progresso → resultado. O diagrama de sequência mostra a ordem das interações; a tabela
+  identifica, para cada passo, quem fala com quem e através de que mensagem, _endpoint_ ou fila.
+
   *O que é uma evidência (`EV-nn`).* Uma evidência é a referência *verificável* que sustenta uma afirmação sobre o
   sistema atual. Deve permitir que outra pessoa, no _commit_ de partida, confirme o que afirmam sem ter de adivinhar.
   Pode ser:
@@ -92,8 +136,10 @@ O comando _Apply_ envia `POST /api-gateway/projects/:user/:project/process`, com
   *hipótese* (`H-nn`) e indiquem como a confirmar ou refutar.
 ]
 
-#figure(kind: image,
-  figura-pendente[diagrama de sequência do processamento em lote de um projeto com vídeos — fonte: `diagrams/sequencia_processamento.svg`],
+O catálogo completo de todas as evidências (`EV-01` a `EV-49`) e hipóteses (`H-01` a `H-18`), com a localização detalhada no repositório e o respetivo facto ou inferência técnica, encontra-se consolidado no Anexo A.3 para consulta e rastreabilidade sistemática.
+
+#figure(
+  image("../images/sequencia_processamento.png", width: 95%),
   caption: [Sequência do processamento em lote de um projeto com vídeos],
 )
 

@@ -44,6 +44,12 @@ Ambas as melhorias incidem sobre a extensão de vídeo enquadrada no padrão glo
 
 == Exercícios e versões usadas
 
+#orientacao[
+  Indiquem, para cada exercício, a versão do enunciado e do _template_ que usaram, e a versão do vosso documento que
+  serviu de entrada ao exercício seguinte (Bloco 1 → Bloco 2 → Exercício 7). Isto garante que quem avalia consegue
+  perceber a que regras o trabalho respondeu, caso os enunciados tenham sido atualizados durante a fase.
+]
+
 #tab([Exercícios que alimentam este relatório],
   tabela(
     colunas: (3.6cm, 2.2cm, 2cm, 2cm, 1fr),

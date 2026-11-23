@@ -10,13 +10,20 @@ const key = fs.readFileSync(process.env.TLS_KEY_FILE || "/run/secrets/pki/servic
 const cert = fs.readFileSync(process.env.TLS_CERT_FILE || "/run/secrets/pki/service.crt");
 
 const httpsAgent = new https.Agent({
-  rejectUnauthorized: false, // (NOTE: this will disable client verification)
+  ca: fs.readFileSync("/run/secrets/pki/ca.crt"),
   cert: cert,
   key: key,
 });
 
 const subscriptionsURL = "https://subscriptions:11001/";
 const usersURL = "https://users:10001/";
+
+// Keep the service's refusal codes (4xx); anything else stays a generic 500.
+function upstreamError(res, err, fallback) {
+  const status = err.response?.status;
+  if (status >= 400 && status < 500) return res.status(status).jsonp(err.response.data);
+  return res.status(500).jsonp(fallback);
+}
 
 /*
 Subscription structure
@@ -58,7 +65,7 @@ router.get("/:user", function (req, res, next) {
             httpsAgent: httpsAgent,
         })
         .then((resp) => res.status(201).jsonp(resp.data))
-        .catch((err) => res.status(500).jsonp("Error getting subsbcription"));
+        .catch((err) => upstreamError(res, err, "Error getting subsbcription"));
 });
 
 /**
@@ -71,7 +78,7 @@ router.get("/:user/status", function (req, res, next) {
             httpsAgent: httpsAgent,
         })
         .then((resp) => res.status(201).jsonp(resp.data))
-        .catch((err) => res.status(500).jsonp("Error getting subsbcription status"));
+        .catch((err) => upstreamError(res, err, "Error getting subsbcription status"));
 });
 
 /**
@@ -87,7 +94,7 @@ router.get("/:user/card", function (req, res, next) {
             httpsAgent: httpsAgent,
         })
         .then((resp) => res.status(200).jsonp(removeUncessaryInformationCard(resp.data)))
-        .catch((err) => res.status(500).jsonp("Error getting subsbcription card"));
+        .catch((err) => upstreamError(res, err, "Error getting subsbcription card"));
 });
 
 /**
@@ -114,6 +121,9 @@ router.get("/:user/card", function (req, res, next) {
 **/
 
 router.post("/", async function (req, res, next) {
+    if (String(req.body?.subscription?.user_id) !== req.authUserId) {
+      return res.status(403).jsonp({ error: "Subscription owner mismatch" });
+    }
     try {
       // Step 1: Create the subscription
       const subscriptionResponse = await axios.post(subscriptionsURL, req.body, {
@@ -165,7 +175,7 @@ router.put("/:user", function (req, res, next) {
             httpsAgent: httpsAgent,
         })
         .then((resp) => res.status(200).jsonp(resp.data))
-        .catch((err) => res.status(500).jsonp("Error updating subsbcription"));
+        .catch((err) => upstreamError(res, err, "Error updating subsbcription"));
 });
 
 
@@ -205,6 +215,8 @@ router.put("/:user/cancel", async function (req, res, next) {
       }
     } catch (subscriptionError) {
       // Handle error during subscription cancellation
+      const status = subscriptionError.response?.status;
+      if (status >= 400 && status < 500) return res.status(status).jsonp(subscriptionError.response.data);
       return res.status(500).jsonp({
         error: "Failed to cancel the subscription.",
         details: subscriptionError.response?.data || subscriptionError.message,
@@ -218,7 +230,7 @@ router.put("/:user/card", function (req, res, next) {
         httpsAgent: httpsAgent,
     })
     .then((resp) => res.status(200).jsonp(removeUncessaryInformationCard(resp.data)))
-    .catch((err) => res.status(500).jsonp("Error updating subsbcription card"));
+    .catch((err) => upstreamError(res, err, "Error updating subsbcription card"));
 });
 
 module.exports = router;

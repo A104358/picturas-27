@@ -4,6 +4,8 @@ var cors = require("cors"); // Import cors
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
+var auth = require("./auth/auth");
+var { requestContext } = require("./auth/internal");
 var projectsRouter = require("./routes/projects");
 var usersRouter = require("./routes/users");
 var subscriptionsRouter = require("./routes/subscriptions");
@@ -16,10 +18,12 @@ app.use(cors());
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "jade");
 
-app.use(logger("dev"));
+app.use(logger(":method :status :response-time ms"));
+app.use(auth.authorize);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(requestContext);
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/projects", projectsRouter);

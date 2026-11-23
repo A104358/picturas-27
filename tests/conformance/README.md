@@ -36,3 +36,29 @@ a saída.
 - Os resultados não guardam segredos: JWT, URLs assinados, tokens de upload, `shareId`s,
   chaves ou palavras-passe ficam redigidos.
 - Um 5xx ou um timeout nunca contam como recusa.
+
+## B4 — identidade e autorização HTTP
+
+Os ficheiros do B4 ficam na raiz desta pasta (`b4-*.py`, com `b4_common.py` partilhado),
+em vez de `identity/` e `policy/`, porque partilham fixtures e cobrem os dois grupos.
+
+| Ficheiro | Prova |
+|----------|-------|
+| `b4-route-matrix.py` | Estático: cada declaração de rota/verbo tem uma linha em `docs/refactor-matriz-rotas.md`, com verbo e caminho iguais. `--fix` atualiza os números de linha depois de mexer no código |
+| `b4-identity.py` | S06 (sessão HS256: alg, segredo, typ, iss, aud, exp, 7 dias, sub), S07 (identidade RS256: peer mTLS, alg, chave, iss, typ, kid, exp ≤30 s, método, rota, share, aud de outro serviço, sujeito) e D7 |
+| `b4-routes.py` | Cada linha `B4-Rnnn` da matriz: chamador legítimo aceite e recusas; S13 (ACL-C1, links sem `expiresAt`, revogação), S14, S15, presets e F05 |
+| `b4-functional.py` | Cenário curto de fumo (dono, partilha, D7, perfil, subscrição, serviços diretos) |
+
+```bash
+export PICTURAS_SECRETS_DIR=…   # a mesma instalação da stack
+python3 tests/conformance/b4-route-matrix.py
+python3 tests/conformance/b4-identity.py
+python3 tests/conformance/b4-routes.py
+```
+
+Precisam de `requests`, `urllib3`, `PyJWT` e `cryptography`. O harness é de confiança: lê a
+CA, os certificados de serviço e, para forjar identidades, o segredo HS256 e a chave RS256
+do gateway; nunca os imprime. As chamadas diretas aos serviços usam as portas ainda
+publicadas no host (`B4_PORT_*`); depois do B3, correm a partir de um contentor na rede da
+stack. "Autorizado" num controlo positivo quer dizer: resposta de domínio, nem 401/403 nem
+5xx.

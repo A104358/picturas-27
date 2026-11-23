@@ -4,11 +4,15 @@ const Project = require("../controllers/project");
 async function checkSharePermission(req, res, next) {
   const shareId = req.query.share;
 
-  if (!shareId) return next(); // acesso normal (dono / rotas sem share)
+  if (!shareId) {
+    if (String(req.internalIdentity?.sub) !== String(req.params.user || req.params.owner)) {
+      return res.status(403).jsonp("Project owner mismatch");
+    }
+    return next();
+  }
 
   //  share link exige autenticação
-  const auth = req.headers.authorization;
-  if (!auth || !auth.startsWith("Bearer ")) {
+  if (!req.internalIdentity?.sub) {
     return res.status(401).jsonp("Authentication required for share links");
   }
 

@@ -3,6 +3,7 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
+var { requireInternalIdentity } = require("./utils/internalIdentity");
 const mongoose = require("mongoose");
 
 const { router: projectsRouter, process_msg } = require("./routes/projects");
@@ -26,7 +27,8 @@ var app = express();
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "jade");
 
-app.use(logger("dev"));
+app.use(logger(":method :status :response-time ms"));
+app.use(requireInternalIdentity);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());

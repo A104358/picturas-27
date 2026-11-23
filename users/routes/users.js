@@ -14,7 +14,7 @@ const cert = fs.readFileSync(process.env.TLS_CERT_FILE || "/run/secrets/pki/serv
 
 // agente HTTPS com cert + key
 const httpsAgent = new https.Agent({
-  rejectUnauthorized: false,
+  ca: fs.readFileSync("/run/secrets/pki/ca.crt"),
   cert,
   key,
 });
@@ -23,7 +23,7 @@ const httpsAgent = new https.Agent({
 const usersURL = "https://users:10001/";
 
 // URL interna do microserviço de projects
-const projects_ms = "https://projects:10002/projects/";
+const projects_ms = "https://projects:9001/";
 
 const max_free_daily_op = process.env.FREE_DAILY_OP || 5;
 
@@ -175,6 +175,9 @@ router.get("/:user/process/:advanced_tools", async function (req, res, next) {
 
 // Create a new user
 router.post("/", function (req, res, next) {
+  if (req.body.type && !["free", "anonymous"].includes(req.body.type)) {
+    return res.status(403).jsonp("Account type not allowed at registration.");
+  }
   const user = {
     name: req.body.name || undefined,
     email: req.body.email || undefined,
@@ -190,11 +193,6 @@ router.post("/", function (req, res, next) {
     user.password = req.body.password;
   }
 
-  console.log("---- USERS-MS: REGISTER REQUEST ----");
-  console.log("BODY:", req.body);
-  console.log("USER OBJECT BEFORE SAVE:", user);
-  console.log("User object to persist:", user);
-
   User.create(user)
     .then((createdUser) => {
       const userResponse = removeSensitiveInfo(createdUser);
@@ -205,13 +203,7 @@ router.post("/", function (req, res, next) {
         jwt: auth.get_jwt(createdUser),
       });
     })
-    .catch((err) => {
-      console.error("USERS-MS ERROR CREATING USER:");
-      console.error(err);              // stack completo
-      console.error(err.message);
-      console.error(err?.errors);      // mongoose validation errors
-      console.error(err?.response?.data);
-
+    .catch(() => {
       res.status(702).jsonp("Error creating a new user.");
     });
 });
@@ -238,11 +230,19 @@ router.post("/:email/login", function (req, res, next) {
 
 // Update user info
 router.put("/:user", function (req, res, next) {
+  const identity = req.internalIdentity;
+  const subscriptionStart = identity?.originMethod === "POST" &&
+    ["/subscriptions", "/subscriptions/"].includes(identity.originPath) && req.body.type === "premium";
+  const subscriptionCancel = identity?.originMethod === "PUT" &&
+    identity.originPath === `/subscriptions/${req.params.user}/cancel` && req.body.type === "free";
+  if (req.body.type !== undefined && !subscriptionStart && !subscriptionCancel) {
+    return res.status(403).jsonp("Account type can only change through subscription");
+  }
   User.getOne(req.params.user)
     .then((user) => {
       user.name = req.body.name || user.name;
       user.email = req.body.email || user.email;
-      user.type = req.body.type || user.type;
+      if (subscriptionStart || subscriptionCancel) user.type = req.body.type;
 
       if (req.body.password != null) {
         user.password = req.body.password || user.password;
@@ -369,30 +369,17 @@ router.delete("/:user", async function (req, res, next) {
   const userId = req.params.user;
 
   try {
-    // Garantir que o user do token é o mesmo
-    // Se o API Gateway já valida isto, podes confiar nele.
-    if (!req.headers.authorization) {
-      return res.status(401).jsonp("Missing Authorization header");
+    if (req.internalIdentity?.sub !== userId) {
+      return res.status(403).jsonp("Account mismatch");
     }
 
-    const authHeader = req.headers.authorization;
-
-    // 1) Apagar projetos do utilizador no projects-ms
+    // Remove this account's projects before deleting the account.
     try {
       await axios.delete(projects_ms + userId, {
         httpsAgent,
-        headers: {
-          Authorization: authHeader,
-        },
       });
-    } catch (err) {
-      console.error(
-        "Error deleting user's projects:",
-        err.response?.status,
-        err.response?.data
-      );
-      // Se for para falhar logo: return res.status(502).jsonp("Error deleting user's projects");
-      // Aqui estou a continuar mesmo que dê erro, para não bloquear o delete de conta.
+    } catch (_) {
+      return res.status(502).jsonp("Error deleting user's projects");
     }
 
     // 2) Apagar o próprio utilizador

@@ -5,7 +5,7 @@ const key = fs.readFileSync(process.env.TLS_KEY_FILE || "/run/secrets/pki/servic
 const cert = fs.readFileSync(process.env.TLS_CERT_FILE || "/run/secrets/pki/service.crt");
 
 const httpsAgent = new https.Agent({
-  rejectUnauthorized: false,
+  ca: fs.readFileSync("/run/secrets/pki/ca.crt"),
   cert,
   key,
 });

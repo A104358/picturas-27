@@ -50,7 +50,7 @@ put() { # <name> <generator...>: create values/<name> only if it does not exist
 val() { [ -s "$VALUES/$1" ] || die "missing value: $1 (run: ops/secrets.sh init)"; cat "$VALUES/$1"; }
 
 all_values() {
-  echo jwt_hs256 field_encryption_key subscriptions_card_key s3_kek rabbit_admin
+  echo jwt_hs256 jwt_issuer jwt_audience field_encryption_key subscriptions_card_key s3_kek rabbit_admin
   local p; for p in $S3_PRINCIPALS; do echo "s3_${p}_access s3_${p}_secret"; done
   for p in $RABBIT_PRINCIPALS; do echo "rabbit_$p"; done
   for p in $MONGO_INSTANCES; do echo "mongo_${p}_admin mongo_${p}_service mongo_${p}_backup"; done
@@ -60,6 +60,8 @@ cmd_init() {
   mkdir -p "$VALUES" "$ENV_DIR" "$JWT"; chmod 700 "$ROOT" "$VALUES" "$ENV_DIR" "$JWT"
   CREATED=0
   put jwt_hs256 hex 32             # HS256 user-session secret, 256 bits (D3, JWT-C1 A)
+  put jwt_issuer hex 16
+  put jwt_audience hex 16
   put field_encryption_key hex 32  # users: field encryption at rest
   put subscriptions_card_key hex 32       # subscriptions: card data encryption
   put s3_kek hex 32                # SeaweedFS key-encryption passphrase
@@ -90,11 +92,11 @@ cmd_render() {
   write_env seaweedfs "WEED_S3_SSE_KEK_PASSPHRASE=$(val s3_kek)"
   write_env img_storage "S3_ACCESS_KEY=$(val s3_img_storage_access)" "S3_SECRET_KEY=$(val s3_img_storage_secret)"
   write_env rabbitmq "RABBITMQ_NODENAME=rabbit@localhost" "ERL_EPMD_ADDRESS=127.0.0.1"
-  write_env projects "RABBITMQ_USER=projects" "RABBITMQ_PASS=$(val rabbit_projects)"
-  write_env ws_gateway "RABBITMQ_USER=ws_gateway" "RABBITMQ_PASS=$(val rabbit_ws_gateway)" "JWT_SECRET_KEY=$jwt"
-  write_env users "JWT_SECRET_KEY=$jwt" "FIELD_ENCRYPTION_KEY=$(val field_encryption_key)"
-  write_env api_gateway "JWT_SECRET_KEY=$jwt"
-  write_env subscriptions "SECRET_KEY=$(val subscriptions_card_key)"
+  write_env projects "RABBITMQ_USER=projects" "RABBITMQ_PASS=$(val rabbit_projects)" "JWT_ISSUER=$(val jwt_issuer)"
+  write_env ws_gateway "RABBITMQ_USER=ws_gateway" "RABBITMQ_PASS=$(val rabbit_ws_gateway)" "JWT_SECRET_KEY=$jwt" "JWT_ISSUER=$(val jwt_issuer)" "JWT_AUDIENCE=$(val jwt_audience)"
+  write_env users "JWT_SECRET_KEY=$jwt" "JWT_ISSUER=$(val jwt_issuer)" "JWT_AUDIENCE=$(val jwt_audience)" "FIELD_ENCRYPTION_KEY=$(val field_encryption_key)"
+  write_env api_gateway "JWT_SECRET_KEY=$jwt" "JWT_ISSUER=$(val jwt_issuer)" "JWT_AUDIENCE=$(val jwt_audience)"
+  write_env subscriptions "SECRET_KEY=$(val subscriptions_card_key)" "JWT_ISSUER=$(val jwt_issuer)"
   write_env watermark_tool_ms "RABBITMQ_USER=watermark_tool_ms" "RABBITMQ_PASS=$(val rabbit_watermark_tool_ms)"
   for w in $PY_WORKERS; do write_env "$w" "RABBITMQ_USERNAME=$w" "RABBITMQ_PASSWORD=$(val "rabbit_$w")" "RABBITMQ_PORT=5671"; done
   render_mongo
@@ -264,6 +266,7 @@ cmd_med_render() {
     echo 'MED_BASE_URL=https://localhost:28080'
     echo "MED_CACERT=$ROOT/pki/services/nginx/ca.crt"
     echo 'MED_S3_SCHEME=https'
+    echo 'MED_SVC_SCHEME_IMG_STORAGE=https'
     echo "MED_S3_CA_FILE=$ROOT/pki/services/seaweedfs/ca.crt"
     echo 'MED_AMQP_PORT=5671'
     echo "MED_AMQP_CA_FILE=$ROOT/pki/services/rabbitmq/ca.crt"

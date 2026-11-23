@@ -4,13 +4,23 @@ var router = express.Router();
 const axios = require("axios");
 
 const https = require("https");
+const fs = require("fs");
 const auth = require("../auth/auth");
 
 const httpsAgent = new https.Agent({
-  rejectUnauthorized: false,
+  ca: fs.readFileSync("/run/secrets/pki/ca.crt"),
+  cert: fs.readFileSync("/run/secrets/pki/service.crt"),
+  key: fs.readFileSync("/run/secrets/pki/service.key"),
 });
 
 const usersURL = "https://users:10001/";
+
+// Keep the service's refusal codes (4xx); anything else stays a generic 500.
+function upstreamError(res, err, fallback) {
+  const status = err.response?.status;
+  if (status >= 400 && status < 500) return res.status(status).jsonp(err.response.data);
+  return res.status(500).jsonp(fallback);
+}
 
 /*
 User structure
@@ -43,7 +53,7 @@ router.get("/validate/:user", function (req, res, next) {
       headers: { Authorization: req.headers["authorization"] },
     })
     .then((resp) => res.status(200).jsonp(resp.data))
-    .catch((err) => res.status(500).jsonp("Error validating JWT token"));
+    .catch((err) => upstreamError(res, err, "Error validating JWT token"));
 });
 
 /**
@@ -55,7 +65,7 @@ router.get("/:user", function (req, res, next) {
   axios
     .get(usersURL + `${req.params.user}`, { httpsAgent: httpsAgent })
     .then((resp) => res.status(200).jsonp(resp.data))
-    .catch((err) => res.status(500).jsonp("Error getting user"));
+    .catch((err) => upstreamError(res, err, "Error getting user"));
 });
 
 /**
@@ -68,13 +78,6 @@ router.post("/", function (req, res, next) {
     .post(usersURL, req.body, { httpsAgent })
     .then((resp) => res.status(201).jsonp(resp.data))
     .catch((err) => {
-      console.error("GATEWAY REGISTER ERROR FULL OBJECT:");
-      console.error(err);                // <-- log total
-      console.error("GATEWAY REGISTER ERROR RESPONSE:");
-      console.error(err.response?.data); // <-- resposta do users-ms
-      console.error("GATEWAY REGISTER ERROR STATUS:");
-      console.error(err.response?.status);
-
       if (err.response) {
         // devolve o status e body reais do microserviço de users
         return res.status(err.response.status).jsonp(err.response.data);
@@ -114,7 +117,8 @@ router.put("/:user", auth.checkToken, function (req, res, next) {
   axios
     .put(usersURL + `${req.params.user}`, req.body, { httpsAgent: httpsAgent })
     .then((_) => res.sendStatus(204))
-    .catch((err) => res.status(500).jsonp("Error updating user's information"));
+    .catch((err) => res.status(err.response?.status ?? 500)
+      .jsonp(err.response?.data ?? "Error updating user's information"));
 });
 
 /**

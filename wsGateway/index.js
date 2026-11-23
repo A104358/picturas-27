@@ -19,7 +19,21 @@ io.on("connection", (socket) => {
 
     const token = socket.handshake.auth.token;
     if (token != null) {
-        jwt.verify(token, process.env.JWT_SECRET_KEY, (e, payload) => {
+        // Same session rules as the gateway: HS256 only, installation iss/aud, no clock tolerance.
+        jwt.verify(token, process.env.JWT_SECRET_KEY, {
+            complete: true,
+            algorithms: ["HS256"],
+            issuer: process.env.JWT_ISSUER,
+            audience: process.env.JWT_AUDIENCE,
+            clockTolerance: 0,
+            maxAge: 7 * 24 * 60 * 60,
+        }, (e, verified) => {
+            if (!e && (verified.header.typ !== "picturas-session+jwt" ||
+                    typeof verified.payload.sub !== "string" ||
+                    verified.payload.id !== verified.payload.sub)) {
+                e = new Error("Invalid session");
+            }
+            const payload = verified?.payload;
             if (e) {
                 socket.emit('authError', e);
                 return;

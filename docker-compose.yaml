@@ -106,7 +106,7 @@ services:
     networks:
       - elk
     volumes:
-      - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/pki/services/img_storage/ca.crt:/run/secrets/pki/ca.crt:ro
+      - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/pki/services/img_storage:/run/secrets/pki:ro
 
   rabbitmq:
     build:
@@ -162,6 +162,7 @@ services:
       - "9002:9001"
     restart: on-failure
     environment:
+      INTERNAL_SERVICE_NAME: projects
       RABBITMQ_HOST: rabbitmq
       RABBITMQ_PORT: 5671
       # Per-profile video limits
@@ -175,6 +176,7 @@ services:
     volumes:
       - image_data:/app/images
       - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/pki/services/projects:/run/secrets/pki:ro
+      - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/jwt/rs256-public.pem:/run/secrets/jwt/rs256-public.pem:ro
 
   users_mongoDB:
     image: mongo:4.4
@@ -207,6 +209,7 @@ services:
       - "10001:10001"
     restart: on-failure
     environment:
+      - INTERNAL_SERVICE_NAME=users
       - FREE_DAILY_OP=5
     env_file: ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/env/users.env
     networks:
@@ -215,6 +218,7 @@ services:
       - ./users:/app
       - /app/node_modules
       - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/pki/services/users:/run/secrets/pki:ro
+      - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/jwt/rs256-public.pem:/run/secrets/jwt/rs256-public.pem:ro
 
   subscriptions_mongoDB:
     image: mongo:4.4
@@ -247,6 +251,8 @@ services:
     ports:
       - "11001:11001"
     restart: on-failure
+    environment:
+      INTERNAL_SERVICE_NAME: subscriptions
     env_file: ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/env/subscriptions.env
     networks:
       - elk
@@ -254,6 +260,7 @@ services:
       - ./subscriptions:/app
       - /app/node_modules
       - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/pki/services/subscriptions:/run/secrets/pki:ro
+      - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/jwt/rs256-public.pem:/run/secrets/jwt/rs256-public.pem:ro
 
   api_gateway:
     build: ./apiGateway
@@ -268,6 +275,7 @@ services:
       - ./apiGateway:/app
       - /app/node_modules
       - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/pki/services/api_gateway:/run/secrets/pki:ro
+      - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/jwt/rs256-private.pem:/run/secrets/jwt/rs256-private.pem:ro
 
   bg_remove_ai_tool:
     build:

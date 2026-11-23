@@ -30,7 +30,6 @@ const Project = require("../controllers/project");
 const Process = require("../controllers/process");
 const Result = require("../controllers/result");
 const Preview = require("../controllers/preview");
-const jwt = require("jsonwebtoken");
 const { getCallerId } = require("../utils/caller");
 const { ensureEditorSlot, releaseEditorSlot } = require("../utils/presence");
 const { extractImageFeatures } = require("../utils/imageFeatures");
@@ -818,7 +817,7 @@ router.delete("/:user/:project/share/:shareId", requireOwner, enforcePresenceLim
 // ================== FIM SHARING ==================
 
 // Get list of all projects from a user
-router.get("/:user", (req, res, next) => {
+router.get("/:user", requireOwner, (req, res, next) => {
   Project.getAll(req.params.user)
     .then((projects) => {
       const ans = [];
@@ -845,12 +844,6 @@ router.get("/:user/:project", checkSharePermission, async (req, res, next) => {
     if (canEdit) {
       const ownerId = req.params.user;
       const projectId = req.params.project;
-      console.log("[GET /:user/:project headers]", {
-        hasAuth: !!req.headers.authorization,
-        authStart: req.headers.authorization?.slice(0, 20),
-        caller: getCallerId(req),
-      });
-
       const callerId = getCallerId(req);
       if (!callerId) {
         return res.status(401).jsonp("Authentication required");
@@ -1070,7 +1063,7 @@ router.get("/:user/:project/advanced_tools", checkSharePermission, (req, res, ne
 });
 
 // Create new project
-router.post("/:user", (req, res, next) => {
+router.post("/:user", requireOwner, (req, res, next) => {
   const project = {
     name: req.body.name,
     user_id: req.params.user,
@@ -1527,13 +1520,6 @@ router.post("/:user/:project/process", checkSharePermission, requireEditPermissi
   const ownerId = req.params.user;
   const runnerUserId = getCallerId(req); // <-- agora pode vir do body
   
-  console.log("[CALLER]", {
-  userParam: req.params.user,
-  forwarded: req.headers["x-caller-id"],
-  hasAuth: !!req.headers["authorization"],
-  caller: getCallerId(req),
-});
-
   Project.getOne(ownerId, req.params.project)
     .then(async (project) => {
       try {
@@ -1920,7 +1906,7 @@ router.put(
 );
 
 // Delete a project
-router.delete( "/:user/:project", checkSharePermission, requireEditPermission, enforcePresenceLimit, requireProjectVersion, async (req, res) => {
+router.delete( "/:user/:project", requireOwner, checkSharePermission, enforcePresenceLimit, requireProjectVersion, async (req, res) => {
 
     const ok = await Project.deleteIfVersion(req.params.user, req.params.project, req.expectedVersion);
     if (!ok) {
@@ -2667,7 +2653,8 @@ router.delete(
 router.post("/:owner/:project/presence", async (req, res) => {
   const ownerId = req.params.owner;
   const projectId = req.params.project;
-  const callerId = req.headers["x-caller-id"] || ownerId;
+  const callerId = getCallerId(req);
+  if (callerId !== ownerId) return res.status(403).jsonp("Project owner mismatch");
 
   const result = await ensureEditorSlot({ ownerId, projectId, callerId });
 
@@ -2686,7 +2673,8 @@ router.post("/:owner/:project/presence", async (req, res) => {
 router.delete("/:owner/:project/presence", async (req, res) => {
   const ownerId = req.params.owner;
   const projectId = req.params.project;
-  const callerId = req.headers["x-caller-id"] || ownerId;
+  const callerId = getCallerId(req);
+  if (callerId !== ownerId) return res.status(403).jsonp("Project owner mismatch");
 
   await releaseEditorSlot({ ownerId, projectId, callerId });
   return res.sendStatus(204);

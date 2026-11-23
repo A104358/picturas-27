@@ -19,6 +19,6 @@
   [v1.2], [2026-11-18], [Cenários de qualidade e candidatos a RNF (Exercício 6, Bloco 2); táticas e decisões arquiteturais (Exercício 7); _commit_ `405b6c0`], [#preencher[…]],
   [v1.3], [2026-11-20], [Revisão documental: QS-07 complementar, _trade-offs_ e diagramas; métricas selecionadas; _commits_ `6e8506a` e `ac62111`], [#preencher[…]],
   [v1.4], [2026-11-21], [_Baseline_ formal (BF) medida; transposição para o _template_ do relatório; _commits_ `d6b4497`, `cff05ea` e `32ba511`], [#preencher[…]],
-  [v1.5], [2026-11-23], [Capítulos 1 a 10 revistos; alinhamento com as decisões de 21/11 e o estado da implementação (B0 e B1, EV-50/EV-51); anexos A.1 e A.2], [#preencher[…]],
+  [v1.5], [2026-11-23], [Capítulos 1 a 10 revistos; alinhamento com as decisões de 21/11 e o estado da implementação (B0 e B1, EV-50/EV-51); anexos A.1 e A.2; _commits_ `854439e` a `03ba0f2`], [#preencher[…]],
   [v2.0], [2026-11-27], [#preencher[Versão entregue da Fase 2: resultados da MF, conclusões e utilização de IA]], [#preencher[…]],
 )

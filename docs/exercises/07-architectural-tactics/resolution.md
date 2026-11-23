@@ -8,7 +8,7 @@ Monsanto; PG63941 — Diogo Alexandre Gomes Silva; PG63522 — José Miguel da S
 **Commit de partida:** `484be13b4c8e96c70e7e694a2c368d5601749438`, igual ao Bloco 1;
 base oficial `0523102`. **Checkout inicial consultado:** `1d7103b`; revisão sobre `405b6c0`, sem
 alterações de aplicação no âmbito de EV-49.\
-**Data da análise:** 2026-11-18; revisão documental em 2026-11-20, Europe/Lisbon. **Versão deste documento:** 1.1.\
+**Data da análise:** 2026-11-18; revisão documental em 2026-11-20; vista antes revista em 2026-11-23, Europe/Lisbon. **Versão deste documento:** 1.2.\
 **Versões usadas:** enunciado 3.0 e template 3.0, de 2026-11-17.  
 **Entradas:** Bloco 1, resolução 1.3; Bloco 2, resolução 1.1 baseada no material 1.1.
 
@@ -118,28 +118,47 @@ audit trail consultável pelo utilizador. (EV-39; H-17)
 ### Antes — realização de aplicação observada
 
 ```mermaid
-flowchart LR
-    B["Browser: projeto e pipeline"] -->|HTTPS| N["nginx"]
-    N -->|multipart| G["API gateway: buffer integral e JWT"]
-    G -->|HTTPS sem validar servidor| P["projects: buffer, probe e hash"]
-    P -->|HTTP multipart| S["Storage: buffer integral"]
-    S --> O[("SeaweedFS S3")]
-    N --> W["WS gateway: join sem autorização de projeto"]
-    W -->|eventos| B
-    P --> U["users: perfil e quota Apply"]
-    P -->|pedidos de processamento| Q["RabbitMQ e workers imagem/vídeo"]
-    Q -->|project_queue: resultados| P
-    Q -->|ws_queue: eventos| W
-    classDef weak fill:#fff0ee,stroke:#b3312d,color:#111;
-    class G,P,S,W weak;
+flowchart TB
+    B["Browser<br/>projeto e pipeline"] <-->|"HTTPS / WSS :8080"| N["nginx: TLS público<br/>buffering; pode usar disco"]
+    N -->|"HTTP /api-gateway/"| G["api_gateway<br/>buffer integral antes do JWT<br/>TLS sem validar servidor"]
+    G -->|"HTTPS: JWT e X-Caller-Id"| P["projects: orquestrador<br/>buffer, ffprobe em disco<br/>hash síncrono"]
+    P -->|"HTTP multipart"| S["img_storage<br/>buffer integral<br/>rotas sem autenticação"]
+    S -->|"HTTP S3"| O[("SeaweedFS S3<br/>originais e derivados")]
+    N -->|"HTTP /s3/"| O
+    G -->|"HTTPS"| U["users<br/>perfis, presets e quota"]
+    G -->|"HTTPS"| SU["subscriptions<br/>planos e pagamentos simulados"]
+    P -->|"HTTPS não validado"| U
+    N <-->|"HTTP /socket.io<br/>ligações e eventos"| W["ws_gateway<br/>JWT opcional; join livre<br/>sem revalidar nem cortar ao expirar"]
+    P -->|"pedidos e eventos"| Q["RabbitMQ<br/>exchange direto picturas"]
+    Q -->|"filas de imagem / video_queue"| T["Workers imagem/vídeo<br/>imagem: etapa por mensagem<br/>vídeo: pipeline por mensagem"]
+    T -->|"resultados e progresso"| Q
+    Q -->|"project_queue"| P
+    Q -->|"ws_queue"| W
+    classDef weak fill:#fff0ee,stroke:#b3312d,color:#111,stroke-width:2px;
+    class N,G,P,S,W weak;
 ```
 
-[Fonte editável](diagrams/before.mmd). Vista parcial das interações relevantes;
-mantém-se a [vista global do Bloco 1](../06-architectural-patterns/diagrams/arquitetura_global_plantuml.svg)
-para os restantes serviços/volume. Vermelho identifica fragilidades de código,
-sem afirmar falha de cada pedido. ws_queue entrega eventos ao WS;
-project_queue entrega resultados ao orquestrador. As setas de resposta ao browser
-são lógicas: o proxy nginx permanece no percurso físico público.
+[Fonte editável](diagrams/before.mmd), [configuração de renderização](diagrams/before-render.json)
+e [revisão de 23/11](evidence/before-view-review-2026-11-23.md). A vista representa
+a base `0523102`, não o desenho mTLS nem um bloco já implementado. O layout vertical
+permite ler a imagem no relatório. Vermelho assinala fragilidades dos percursos
+mostrados; não significa que cada pedido falha.
+
+O upload multipart passa integralmente pelos três Node; no gateway o buffer é
+preenchido antes de verificar o JWT. O nginx pode usar temporários, e a projects
+cria um temporário para o ffprobe e calcula o hash antes da resposta. HTTPS interno
+sem validar servidor continua cifrado, mas não verifica o certificado remoto.
+O acesso público aos objetos usa `/s3/` pelo nginx, separado do upload via API.
+
+O RabbitMQ e os workers são componentes distintos. A projects publica pedidos nas
+filas das ferramentas/`video_queue` e eventos em `ws_queue`; os workers respondem
+em `project_queue`, e o worker de vídeo também publica progresso em `ws_queue`.
+Só `project_queue` alimenta o orquestrador; `ws_queue` alimenta o WS. Ligações e
+eventos Socket.IO atravessam o nginx nos dois sentidos. Não existe consulta
+WS → projects, autenticação mTLS ou revalidação de salas nesta base.
+
+É uma vista parcial: frontend, MongoDB/backup, volumes e canais IA não estão
+representados; ver a [vista global do Bloco 1](../06-architectural-patterns/diagrams/arquitetura_global_plantuml.svg).
 EV-07–EV-12/EV-22/EV-24/EV-40/EV-46/EV-49.
 
 ### Depois — desenho selecionado, ainda não implementado

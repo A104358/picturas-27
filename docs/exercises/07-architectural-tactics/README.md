@@ -15,12 +15,31 @@ they do not select UP-C4–C9 or authorize application changes.
 |----------|---------|
 | [Assignment HTML](sources/RAS-exercicio_7_taticas_SWdesign_PT.html) | Original version 3.0, including the minimum tactics catalog in Annex A. |
 | [Original Markdown template](sources/RAS-exercicio_7_taticas_SWdesign_template_PT.md) | Version 3.0, preserved unfilled as supplied; completed work is resolution.md. |
-| [Resolution](resolution.md) | Revision 1.1: canonical primary scenarios plus the QS-07 complement, 13 candidate tactics, two decisions, trade-offs, measurement/regression plans and AI record. |
+| [Resolution](resolution.md) | Revision 1.2: corrected before view, canonical primary scenarios plus the QS-07 complement, 13 candidate tactics, two decisions, trade-offs, measurement/regression plans and AI record. |
 | [Before diagram source](diagrams/before.mmd) | Mermaid source of the observed application view, embedded in the resolution. |
+| [Before rendering configuration](diagrams/before-render.json) | ELK layout and typography used to regenerate the report's vista_antes.png. |
+| [Before-view review — November 23](evidence/before-view-review-2026-11-23.md) | Source checks for protocols, upload buffers, service routes and broker/event paths; rendered PNG inspected. |
 | [After diagram source](diagrams/after.mmd) | Mermaid source of selected design versus still-open mechanisms; not deployed behavior. |
 | [Input hashes and source comparison](../06-architectural-patterns/evidence/continuation-sources-2026-11-18.json) | Proves preservation of the four supplied files and records the static application diff scope. |
 | [Documentary verification — November 18](evidence/verification-2026-11-18.md) | Historical ID/scenario/template/source/reference checks; no runtime tests or rendered-diagram claim. |
 | [Review verification — November 20](evidence/verification-2026-11-20.md) | Scenario split, effect interpretation and event-routing corrections; current static checks and remaining academic/runtime validation. |
+
+## Regenerate the before image
+
+From the repository root, with Mermaid CLI 11.17.1 and its browser installed:
+
+```bash
+npx --yes --package @mermaid-js/mermaid-cli@11.17.1 mmdc \
+  -i docs/exercises/07-architectural-tactics/diagrams/before.mmd \
+  -c docs/exercises/07-architectural-tactics/diagrams/before-render.json \
+  -o docs/src-doc-fase2-template/images/vista_antes.png \
+  -b white -w 1800 -H 1800 -s 2
+```
+
+The inline before diagram and the report image share this source. The view is
+partial and represents the application base `0523102`, not the selected refactoring.
+The November 23 review checks the rendered PNG; older verification records retain
+their historical scope. No full Typst compilation is claimed by that review.
 
 ## Material actually available
 

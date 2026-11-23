@@ -1,14 +1,18 @@
-flowchart LR
-    B["Browser: projeto e pipeline"] -->|HTTPS| N["nginx"]
-    N -->|multipart| G["API gateway: buffer integral e JWT"]
-    G -->|HTTPS sem validar servidor| P["projects: buffer, probe e hash"]
-    P -->|HTTP multipart| S["Storage: buffer integral"]
-    S --> O[("SeaweedFS S3")]
-    N --> W["WS gateway: join sem autorização de projeto"]
-    W -->|eventos| B
-    P --> U["users: perfil e quota Apply"]
-    P -->|pedidos de processamento| Q["RabbitMQ e workers imagem/vídeo"]
-    Q -->|project_queue: resultados| P
-    Q -->|ws_queue: eventos| W
-    classDef weak fill:#fff0ee,stroke:#b3312d,color:#111;
-    class G,P,S,W weak;
+flowchart TB
+    B["Browser<br/>projeto e pipeline"] <-->|"HTTPS / WSS :8080"| N["nginx: TLS público<br/>buffering; pode usar disco"]
+    N -->|"HTTP /api-gateway/"| G["api_gateway<br/>buffer integral antes do JWT<br/>TLS sem validar servidor"]
+    G -->|"HTTPS: JWT e X-Caller-Id"| P["projects: orquestrador<br/>buffer, ffprobe em disco<br/>hash síncrono"]
+    P -->|"HTTP multipart"| S["img_storage<br/>buffer integral<br/>rotas sem autenticação"]
+    S -->|"HTTP S3"| O[("SeaweedFS S3<br/>originais e derivados")]
+    N -->|"HTTP /s3/"| O
+    G -->|"HTTPS"| U["users<br/>perfis, presets e quota"]
+    G -->|"HTTPS"| SU["subscriptions<br/>planos e pagamentos simulados"]
+    P -->|"HTTPS não validado"| U
+    N <-->|"HTTP /socket.io<br/>ligações e eventos"| W["ws_gateway<br/>JWT opcional; join livre<br/>sem revalidar nem cortar ao expirar"]
+    P -->|"pedidos e eventos"| Q["RabbitMQ<br/>exchange direto picturas"]
+    Q -->|"filas de imagem / video_queue"| T["Workers imagem/vídeo<br/>imagem: etapa por mensagem<br/>vídeo: pipeline por mensagem"]
+    T -->|"resultados e progresso"| Q
+    Q -->|"project_queue"| P
+    Q -->|"ws_queue"| W
+    classDef weak fill:#fff0ee,stroke:#b3312d,color:#111,stroke-width:2px;
+    class N,G,P,S,W weak;

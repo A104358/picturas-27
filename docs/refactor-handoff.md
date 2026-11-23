@@ -23,12 +23,12 @@ estamos**.
 |-------|-------|
 | Bloco em curso | — (ainda não começou; o primeiro é o **B0**) |
 | Passo do bloco | — |
-| Estado deixado | Fase 0 concluída: plano verificado até uma ronda completa sem falhas (ver a cronologia na §2.4); dúvidas D-01 a D-15 respondidas |
+| Estado deixado | Fase 0 concluída: plano verificado até uma ronda completa sem falhas (ver a cronologia na §2.4); dúvidas D-01 a D-15 respondidas. Revisão documental de 23/11 concluída: vista antes corrigida e renderizada, fonte/resolução/legenda sincronizadas; implementação não iniciada |
 | **Próximo passo exato** | Fazer commit do plano e deste documento no `main` (a fase 0 está concluída). Criar o branch `fase2-refactor` a partir daí e começar o B0: o spike SP-01 (`auth_request` e `proxy_request_buffering off` na imagem nginx) |
 | Coisas meio feitas | Nenhuma. Pré-verificação do SP-01 (21/11): a imagem nginx da BF (`nginx@sha256:84f7876d21d1…`, nginx 1.31.9) foi compilada com `--with-http_auth_request_module` e `--with-http_ssl_module`. Falta o ensaio funcional (`auth_request`, `proxy_request_buffering off`, `proxy_ssl_verify`) |
 | Testes a falhar neste momento | Nenhum conhecido |
 | Último commit com o trabalho | — |
-| Atualizado em | 2026-11-21 |
+| Atualizado em | 2026-11-23 |
 
 ## 2. Contexto comum (o que já está decidido)
 
@@ -204,6 +204,10 @@ dependências estiverem `FEITO`.
 | §5 — Testes de conformidade | cresce com cada bloco | POR FAZER | — | `tests/conformance/` |
 | B12 — Verificação final e MF | B0–B11 | POR FAZER | — | |
 
+**Revisão documental de 23/11:** vista antes corrigida, renderizada e inspecionada;
+[registo](exercises/07-architectural-tactics/evidence/before-view-review-2026-11-23.md).
+Não altera o estado dos blocos, as decisões ou o instrumento congelado.
+
 ## 4. Diário (só se acrescenta; nunca se apaga)
 
 Uma entrada por sessão, no fim da lista, ao parar.
@@ -219,7 +223,25 @@ Uma entrada por sessão, no fim da lista, ao parar.
 - Dúvidas novas: <número na §5, ou "nenhuma">
 ```
 
-_(sem entradas)_
+### 2026-11-23 18:40 UTC — Documentação — vista antes corrigida
+
+- Feito: revisão de `vista_antes.png` contra nginx, gateways, projects, storage,
+  workers/filas, decisões e plano. Separados broker/workers, repostos os produtores
+  de eventos, APIs users/subscriptions e caminho público S3; explicitados buffering,
+  protocolos e JWT opcional/ausência de permanência WS. Fonte Mermaid, bloco inline,
+  PNG e legenda do capítulo 9 sincronizados; configuração/comando reproduzíveis.
+- Verificado: renderização Mermaid CLI 11.17.1 e inspeção visual; igualdade da fonte
+  inline, configuração e PNG; hashes, referências e `git diff --check`. Aplicação
+  igual à base no âmbito comparado e instrumento congelado sem alterações.
+  [Resultado](exercises/07-architectural-tactics/evidence/before-view-review-2026-11-23.md).
+- Parei em: revisão documental concluída; alterações por commit pela pessoa
+  responsável. Sem compilação integral Typst (executável indisponível).
+- Próximo passo: mantém-se o da §1; começar pelo B0/SP-01 depois da preparação da
+  branch. Nenhum bloco de implementação foi iniciado nesta sessão.
+- Cuidado: a vista antes continua a representar `0523102`, não o desenho mTLS.
+  Sem serviços, volumes, medições BF/MF ou aplicação alterados; sem commit.
+- Decisões novas: nenhuma.
+- Dúvidas novas: nenhuma.
 
 ## 5. Dúvidas surgidas durante a implementação
 

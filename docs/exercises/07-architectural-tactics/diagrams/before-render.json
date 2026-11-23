@@ -1,0 +1,13 @@
+{
+  "layout": "elk",
+  "theme": "neutral",
+  "flowchart": {
+    "nodeSpacing": 35,
+    "rankSpacing": 55,
+    "curve": "linear"
+  },
+  "themeVariables": {
+    "fontFamily": "Arial, Helvetica, sans-serif",
+    "fontSize": "18px"
+  }
+}

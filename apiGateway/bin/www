@@ -6,9 +6,8 @@
 
 var app = require("../app");
 var debug = require("debug")("apigateway:server");
-// var https = require("https");
-var http = require("http");
-// const fs = require("fs");
+var https = require("https");
+var pki = require("../tls/pkiTls");
 
 /**
  * Get port from environment and store in Express.
@@ -18,15 +17,19 @@ var port = normalizePort(process.env.PORT || "8000");
 app.set("port", port);
 
 /**
- * Create HTTP server.
+ * Create HTTPS server (B5): mTLS with the installation CA, only nginx may call the
+ * gateway (TLS on the nginx -> api_gateway hop, D4).
  */
 
-// const key = fs.readFileSync(__dirname + '/../certs/selfsigned.key');
-// const cert = fs.readFileSync(__dirname + '/../certs/selfsigned.crt');
-// const options = { key: key, cert: cert };
-
-// var server = https.createServer(options, app);
-var server = http.createServer(app);
+var server = https.createServer(pki.serverOptions(), function (req, res) {
+  if (!pki.peerAllowed(req, ["nginx"])) {
+    res.statusCode = 403;
+    res.setHeader("Content-Type", "application/json");
+    return res.end(JSON.stringify("Client not authorized"));
+  }
+  app(req, res);
+});
+pki.guardValidity(() => server.close());
 
 /**
  * Listen on provided port, on all network interfaces.

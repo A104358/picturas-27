@@ -13,7 +13,7 @@ const s3 = new AWS.S3({
   s3ForcePathStyle: true,
   region: "us-east-1",
   httpOptions: {
-    agent: new https.Agent({ ca: fs.readFileSync("/run/secrets/pki/ca.crt"), rejectUnauthorized: true }),
+    agent: new https.Agent({ ca: fs.readFileSync("/run/secrets/pki/ca.crt"), rejectUnauthorized: true, maxCachedSessions: 0 }),
   },
 });
 

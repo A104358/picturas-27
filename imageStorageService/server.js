@@ -1,5 +1,4 @@
 const express = require("express");
-const fs = require("fs");
 const https = require("https");
 const uploadRoutes = require("./route/upload");
 const imageRoutes = require("./route/images");
@@ -8,9 +7,11 @@ const copyRoutes = require("./route/copy");
 
 const app = express();
 
+const pki = require("./tls/pkiTls");
+
+// Only the projects service may call img_storage (D4 matrix, S03).
 app.use((req, res, next) => {
-  const peer = req.client.authorized && req.socket.getPeerCertificate()?.subject?.CN;
-  if (peer !== "projects") return res.status(403).json({ error: "Client not authorized" });
+  if (!pki.peerAllowed(req, ["projects"])) return res.status(403).json({ error: "Client not authorized" });
   next();
 });
 
@@ -21,12 +22,7 @@ app.use("/copy", copyRoutes);
 
 const PORT = process.env.PORT || 11000;
 
-https.createServer({
-  key: fs.readFileSync("/run/secrets/pki/service.key"),
-  cert: fs.readFileSync("/run/secrets/pki/service.crt"),
-  ca: fs.readFileSync("/run/secrets/pki/ca.crt"),
-  requestCert: true,
-  rejectUnauthorized: true,
-}, app).listen(PORT, () => {
+const server = https.createServer(pki.serverOptions(), app).listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });
+pki.guardValidity(() => server.close());

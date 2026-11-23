@@ -7,11 +7,8 @@ const https = require("https");
 const fs = require("fs");
 const auth = require("../auth/auth");
 
-const httpsAgent = new https.Agent({
-  ca: fs.readFileSync("/run/secrets/pki/ca.crt"),
-  cert: fs.readFileSync("/run/secrets/pki/service.crt"),
-  key: fs.readFileSync("/run/secrets/pki/service.key"),
-});
+// Own certificate, installation CA, no cached TLS sessions (B5).
+const httpsAgent = require("../tls/pkiTls").clientAgent();
 
 const usersURL = "https://users:10001/";
 

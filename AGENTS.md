@@ -135,8 +135,10 @@ cd Tools/video && python3 -m venv .venv && .venv/bin/pip install -r requirements
   `/etc/nginx/pki`). The broker users are rendered into `rabbitmq/definitions.json`, because the
   broker skips `RABBITMQ_DEFAULT_USER` when it imports definitions.
 - Keep `NEXT_PUBLIC_API_BASE_URL` relative (`/api-gateway/`) and do not remap port 8080.
-- Internal service-to-service TLS is not validated yet (`rejectUnauthorized: false`); Phase 2
-  block B5 fixes it. Known issue, not a pattern.
+- Internal TLS is mutual and validated (B5): every Node service uses its `tls/pkiTls.js`
+  (identical copies; change all of them together) for its server, client agent, peer
+  allowlist and certificate validity guard. Never add `rejectUnauthorized: false`,
+  `verify=False` or session reuse; a new internal caller needs an entry in the D4 matrix.
 - RabbitMQ consumers must survive broker restarts.
 - The image tools auto-acknowledge messages and swap `messageId`/`correlationId` in their error
   replies, so their errors do not reach the user.

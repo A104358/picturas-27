@@ -2,15 +2,10 @@ const axios = require("axios");
 
 const fs = require("fs");
 
-const key = fs.readFileSync(process.env.TLS_KEY_FILE || "/run/secrets/pki/service.key");
-const cert = fs.readFileSync(process.env.TLS_CERT_FILE || "/run/secrets/pki/service.crt");
 
 const https = require("https");
-const httpsAgent = new https.Agent({
-  ca: fs.readFileSync("/run/secrets/pki/ca.crt"),
-  cert: cert,
-  key: key,
-});
+// Own certificate, installation CA, no cached TLS sessions (B5).
+const httpsAgent = require("../tls/pkiTls").clientAgent();
 
 const img_storage_ms = "https://img_storage:11000";
 

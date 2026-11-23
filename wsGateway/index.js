@@ -1,17 +1,20 @@
-const http = require("http");
+const https = require("https");
 const socketIo = require('socket.io');
 const jwt = require("jsonwebtoken");
+const pki = require("./tls/pkiTls");
 
 const { read_rabbit_msg } = require("./utils/rabbit_mq.js");
-const httpServer = http.createServer();
+// HTTPS with mTLS (B5): only nginx may reach the WebSocket gateway.
+const httpServer = https.createServer(pki.serverOptions());
 httpServer.listen(4000);
+pki.guardValidity(() => httpServer.close());
 
 const io = socketIo(httpServer, {
     cors: {
         origin: "*",
         methods: ["GET", "POST"],
     },
-    // options
+    allowRequest: (req, callback) => callback(null, pki.peerAllowed(req, ["nginx"])),
 });
 
 io.on("connection", (socket) => {

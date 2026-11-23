@@ -6,14 +6,9 @@ const axios = require("axios");
 const https = require("https");
 const fs = require("fs");
 
-const key = fs.readFileSync(process.env.TLS_KEY_FILE || "/run/secrets/pki/service.key");
-const cert = fs.readFileSync(process.env.TLS_CERT_FILE || "/run/secrets/pki/service.crt");
 
-const httpsAgent = new https.Agent({
-  ca: fs.readFileSync("/run/secrets/pki/ca.crt"),
-  cert: cert,
-  key: key,
-});
+// Own certificate, installation CA, no cached TLS sessions (B5).
+const httpsAgent = require("../tls/pkiTls").clientAgent();
 
 const subscriptionsURL = "https://subscriptions:11001/";
 const usersURL = "https://users:10001/";

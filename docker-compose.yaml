@@ -4,9 +4,9 @@ name: picturas
 
 # Supervision of the Node services (B3, D-04): they run `node` directly (no nodemon; see
 # docker-compose.dev.yaml for development), so a dead process exits and `restart` brings
-# it back. The healthcheck sends one request to the service itself: HTTPS with the
-# installation CA and the service's own client certificate where the server requires
-# one; any answer below 500 (an authorisation refusal included) means the process serves.
+# it back. The healthcheck sends one request to the service itself over HTTPS (B5), with
+# the installation CA, the expected server name and the service's own client certificate;
+# any answer below 500 (the peer allowlist's 403 included) means the process serves.
 # Arguments: <TLS server name> <port> <http|https> [path].
 x-node-health-js: &node-health-js >-
   const f=require('fs'),[,n,p,s,u]=process.argv,d='/run/secrets/pki/',
@@ -74,7 +74,7 @@ services:
       seaweedfs:
         condition: service_started
       frontend:
-        condition: service_started
+        condition: service_healthy
 
   # S3-compatible object storage.
   # Replaces MinIO, whose Docker images were withdrawn from Docker Hub and quay.io in 2026.
@@ -304,7 +304,7 @@ services:
     mem_limit: 2g
     healthcheck:
       <<: *node-health-timing
-      test: ["CMD", "node", "-e", *node-health-js, "api_gateway", "8000", "http"]
+      test: ["CMD", "node", "-e", *node-health-js, "api_gateway", "8000", "https"]
     env_file: ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/env/api_gateway.env
     networks:
       - elk
@@ -546,13 +546,20 @@ services:
 
   generative-mock:
     build: ./generative-mock
+    restart: on-failure
     networks:
       - elk
+    volumes:
+      - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/pki/services/generative-mock:/run/secrets/pki:ro
+    # HTTPS with the installation CA, the expected name and the service's own client
+    # certificate; the peer allowlist answers 403 to it, which proves the server serves.
     healthcheck:
       test:
         [
-          "CMD-SHELL",
-          "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:7860/sdapi/v1/samplers').read()\""
+          "CMD",
+          "python",
+          "-c",
+          "import ssl,sys,http.client as h;d='/run/secrets/pki/';c=ssl.create_default_context(cafile=d+'ca.crt');c.load_cert_chain(d+'service.crt',d+'service.key');x=h.HTTPSConnection('generative-mock',7860,context=c,timeout=3);x.request('GET','/sdapi/v1/samplers');sys.exit(0 if x.getresponse().status<500 else 1)"
         ]
       interval: 5s
       timeout: 3s
@@ -573,11 +580,11 @@ services:
     restart: on-failure
     volumes:
       - image_data:/app/images
-      - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/pki/services/rabbitmq/ca.crt:/run/secrets/pki/ca.crt:ro
+      - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/pki/services/expand_ai_tool:/run/secrets/pki:ro
     environment:
       - RABBITMQ_HOST=rabbitmq
       - RABBITMQ_PORT=5671
-      - GEN_EXPAND_URL=http://generative-mock:7860
+      - GEN_EXPAND_URL=https://generative-mock:7860
       
   watermark_tool_ms:
     build: ./Tools/watermark
@@ -603,10 +610,17 @@ services:
 
   frontend:
     build: ./frontend
+    init: true
+    restart: on-failure
     networks:
       - elk
     environment:
     - NEXT_PUBLIC_API_BASE_URL=/api-gateway/
+    volumes:
+      - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/pki/services/frontend:/run/secrets/pki:ro
+    healthcheck:
+      <<: *node-health-timing
+      test: ["CMD", "node", "-e", *node-health-js, "frontend", "3000", "https"]
 
   ws_gateway:
     build: ./wsGateway
@@ -616,7 +630,7 @@ services:
     mem_limit: 512m
     healthcheck:
       <<: *node-health-timing
-      test: ["CMD", "node", "-e", *node-health-js, "ws_gateway", "4000", "http", "/socket.io/"]
+      test: ["CMD", "node", "-e", *node-health-js, "ws_gateway", "4000", "https", "/socket.io/"]
     env_file: ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/env/ws_gateway.env
     networks:
       - elk
@@ -627,7 +641,7 @@ services:
       - RABBITMQ_HOST=rabbitmq
       - RABBITMQ_PORT=5671
     volumes:
-      - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/pki/services/rabbitmq/ca.crt:/run/secrets/pki/ca.crt:ro
+      - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/pki/services/ws_gateway:/run/secrets/pki:ro
 
   mongo-backup:
     image: mongo:4.4

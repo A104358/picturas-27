@@ -21,7 +21,7 @@ RENEW_DAYS=7
 # service | DNS/IP names (comma separated, the first is the Docker service name) | extended key usage
 SERVICES=(
   "nginx|nginx,localhost,IP:127.0.0.1|serverAuth,clientAuth"
-  "frontend|frontend|serverAuth"
+  "frontend|frontend|serverAuth,clientAuth"
   "api_gateway|api_gateway|serverAuth,clientAuth"
   "ws_gateway|ws_gateway|serverAuth,clientAuth"
   "projects|projects|serverAuth,clientAuth"
@@ -33,7 +33,7 @@ SERVICES=(
   "projects_mongoDB|projects_mongoDB|serverAuth"
   "users_mongoDB|users_mongoDB|serverAuth"
   "subscriptions_mongoDB|subscriptions_mongoDB|serverAuth"
-  "generative-mock|generative-mock|serverAuth"
+  "generative-mock|generative-mock|serverAuth,clientAuth"
   "expand_ai_tool|expand_ai_tool|clientAuth"
 )
 

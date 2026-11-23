@@ -20,16 +20,12 @@ app.set('port', port);
  * Create HTTP server.
  */
 
-const key = fs.readFileSync(process.env.TLS_KEY_FILE || "/run/secrets/pki/service.key");
-const cert = fs.readFileSync(process.env.TLS_CERT_FILE || "/run/secrets/pki/service.crt");
-const options = {
-  key, cert,
-  ca: fs.readFileSync("/run/secrets/pki/ca.crt"),
-  requestCert: true,
-  rejectUnauthorized: true,
-};
+// mTLS with the installation CA, no session resumption; the peer and operation
+// allowlist (D4 matrix) is applied per request by auth/internalIdentity.js (B4, B5).
+const pki = require("../tls/pkiTls");
 
-var server = https.createServer(options, app);
+var server = https.createServer(pki.serverOptions(), app);
+pki.guardValidity(() => server.close());
 
 /**
  * Listen on provided port, on all network interfaces.

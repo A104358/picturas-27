@@ -329,9 +329,14 @@ one `env/<service>.env` per service, which `docker-compose.yaml` loads with `env
 start. The secrets that used to be committed (`lisan_al_gaib`, `admin123`, `user/password`, the
 self-signed keys) are no longer accepted; they remain in the Git history, which is not rewritten.
 
-> ⚠️ **Internal TLS is not validated yet.** The service-to-service clients still use
-> `https.Agent({ rejectUnauthorized: false })`, so the certificate chain is never checked.
-> Phase 2 (block B5) replaces this with mutual TLS validated against the installation CA.
+**Internal TLS (Phase 2, B5).** Every hop is TLS validated against the installation CA:
+nginx → `frontend`/`api_gateway`/`ws_gateway` (nginx presents its own client certificate and
+checks the expected service name), and mutual TLS between services (`api_gateway` →
+`projects`/`users`/`subscriptions`, `projects` → `users`/`img_storage`, `users` → `projects`,
+`expand_ai` → `generative-mock`). Each server accepts only the peers and operations of the D4
+matrix (a certificate from the same CA is not enough), TLS sessions are never resumed, and a
+service stops when its own certificate expires (renew with `ops/pki.sh renew`). The Node
+services share `tls/pkiTls.js` (one identical copy per service).
 
 ---
 
@@ -354,7 +359,7 @@ from `$PICTURAS_SECRETS_DIR/env/<service>.env` (see [HTTPS and Certificates](#-h
 | `RABBITMQ_HOST` / `_PORT` / `_USER` / `_PASS` | `rabbitmq` / `5672` / ...     | tools, projects, ws    | Broker connection                            |
 | `FRONTEND_URL`                                | `https://localhost:8080`      | img_storage            | CORS / redirect origin                       |
 | `NEXT_PUBLIC_API_BASE_URL`                    | `/api-gateway/`               | frontend               | Relative API base (keep it relative!)        |
-| `GEN_EXPAND_URL`                              | `http://generative-mock:7860` | expand_ai              | Generative image API endpoint                |
+| `GEN_EXPAND_URL`                              | `https://generative-mock:7860` | expand_ai              | Generative image API endpoint                |
 | `VIDEO_FREE_MAX_DURATION_S` / `_MAX_SIZE_MB`  | `60` / `100`                  | projects               | Video upload limits for free accounts        |
 | `VIDEO_PREMIUM_MAX_DURATION_S` / `_SIZE_MB`   | `600` / `1024`                | projects               | Video upload limits for premium accounts     |
 | `VIDEO_PREVIEW_SECONDS`                       | `3`                           | video_tool             | Length of a video preview render             |

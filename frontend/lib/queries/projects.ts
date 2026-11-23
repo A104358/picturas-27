@@ -65,7 +65,6 @@ export const useGetSocket = (token: string) => {
       io("https://localhost:8080", {
         transports: ["websocket"],
         secure: true,
-        rejectUnauthorized: false,
         auth: { token },
       }),
     refetchOnWindowFocus: false,

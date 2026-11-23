@@ -83,3 +83,11 @@ continuam a correr no host, pela porta 8080.
 |----------|-------|
 | `users-quota.py` | Quota de uma conta free (`FREE_DAILY_OP` = 5): duas operações seguidas no mesmo dia aceites (o defeito 701 anterior ao B4), limite de 5 respeitado pelo `PUT` e pelo `GET` de reserva |
 | `diagnostics/f08-restart.py [projeto] [url]` | F08: mata o processo `node` de cada serviço Node (como um OOM) e mede o reinício, o healthcheck e o primeiro pedido servido pelo nginx. Mínimo ≤30 s, alvo ≤10 s. Corre no host (usa o `docker`) |
+
+## B5 — mTLS e TLS por salto (`mtls-pki/`)
+
+| Ficheiro | Onde corre | Prova |
+|----------|-----------|-------|
+| `mtls-pki/b5-mtls.py` | `in-network.sh` | S08 em cada servidor interno (sem certificado, outra CA, expirado, EKU só de servidor, plaintext); matriz D4 (cada certificado de serviço só aceite por quem o lista, 403 nos outros); S09 por par; sem retoma de sessão (com controlo positivo no nginx público); verificação estática do código e do nginx |
+| `mtls-pki/b5-guard.sh [projeto]` | host (`docker`) | Guarda de validade Node e Python com certificados descartáveis gerados dentro do contentor (expirado, ainda não válido, válido, expira em 12 s); identidade do servidor verificada pelos clientes (`projects`, `expand_ai`) |
+| `mtls-pki/b5-functional.py` | `in-network.sh` | wss pelo nginx com eventos de processamento; `expand_ai` generativo (outpainting por mTLS); eliminação de conta com limpeza dos projetos (`users` → `projects`) |

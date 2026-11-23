@@ -71,19 +71,14 @@ const { dispatchProcessBatch } = require("../utils/processBatch");
 const storage = multer.memoryStorage();
 var upload = multer({ storage: storage });
 
-const key = fs.readFileSync(process.env.TLS_KEY_FILE || "/run/secrets/pki/service.key");
-const cert = fs.readFileSync(process.env.TLS_CERT_FILE || "/run/secrets/pki/service.crt");
 
 const https = require("https");
-const httpsAgent = new https.Agent({
-  ca: fs.readFileSync("/run/secrets/pki/ca.crt"),
-  servername: "users",
-  cert: cert,
-  key: key,
-});
+// Own certificate, installation CA, no cached TLS sessions (B5).
+const httpsAgent = require("../tls/pkiTls").clientAgent();
 const s3Agent = new https.Agent({
   ca: fs.readFileSync("/run/secrets/pki/ca.crt"),
   servername: "seaweedfs",
+  maxCachedSessions: 0,
 });
 
 const users_ms = "https://users:10001/";

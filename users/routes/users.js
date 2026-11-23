@@ -9,15 +9,10 @@ const auth = require("../auth/auth");
 const User = require("../controllers/user");   
 
 // lê as chaves/certificados locais (estes ficheiros EXISTEM no api-gateway-ms)
-const key = fs.readFileSync(process.env.TLS_KEY_FILE || "/run/secrets/pki/service.key");
-const cert = fs.readFileSync(process.env.TLS_CERT_FILE || "/run/secrets/pki/service.crt");
 
 // agente HTTPS com cert + key
-const httpsAgent = new https.Agent({
-  ca: fs.readFileSync("/run/secrets/pki/ca.crt"),
-  cert,
-  key,
-});
+// Own certificate, installation CA, no cached TLS sessions (B5).
+const httpsAgent = require("../tls/pkiTls").clientAgent();
 
 // hostname interno do microserviço de users
 const usersURL = "https://users:10001/";

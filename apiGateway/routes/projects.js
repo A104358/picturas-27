@@ -11,14 +11,9 @@ const FormData = require("form-data");
 
 const auth = require("../auth/auth");
 
-const key = fs.readFileSync(process.env.TLS_KEY_FILE || "/run/secrets/pki/service.key");
-const cert = fs.readFileSync(process.env.TLS_CERT_FILE || "/run/secrets/pki/service.crt");
 
-const httpsAgent = new https.Agent({
-  ca: fs.readFileSync("/run/secrets/pki/ca.crt"),
-  cert: cert,
-  key: key,
-});
+// Own certificate, installation CA, no cached TLS sessions (B5).
+const httpsAgent = require("../tls/pkiTls").clientAgent();
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });

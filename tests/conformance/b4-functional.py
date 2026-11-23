@@ -11,7 +11,9 @@ from pathlib import Path
 
 import requests
 
-base = "https://localhost:8080/api-gateway/"
+from b4_common import endpoint
+
+base = os.environ.get("B4_BASE_URL", "https://localhost:8080").rstrip("/") + "/api-gateway/"
 ca = str(Path(os.environ["PICTURAS_SECRETS_DIR"]) / "pki/ca/ca.crt")
 http = requests.Session()
 http.trust_env = False
@@ -94,9 +96,8 @@ assert response.status_code == 200, ("cancel", response.status_code)
 assert call("GET", f"users/{guest}", guest_token).json()["type"] == "free"
 
 context = ssl.create_default_context(cafile=ca)
-for name, port in (("projects", 9002), ("users", 10001),
-                   ("subscriptions", 11001), ("img_storage", 11000)):
-    with socket.create_connection(("127.0.0.1", port), timeout=5) as raw:
+for name in ("projects", "users", "subscriptions", "img_storage"):
+    with socket.create_connection(endpoint(name), timeout=5) as raw:
         with context.wrap_socket(raw, server_hostname=name) as tls:
             try:
                 tls.sendall(b"GET / HTTP/1.1\r\nHost: " + name.encode() + b"\r\n\r\n")

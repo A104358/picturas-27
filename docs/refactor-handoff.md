@@ -21,13 +21,13 @@ estamos**.
 
 | Campo | Valor |
 |-------|-------|
-| Bloco em curso | **B4 — FEITO** (sem commit). B2 com commit `4653219`. Próximo bloco recomendado: B3 |
-| Passo do bloco | Todos os critérios de aceitação do B4 cumpridos |
-| Estado deixado | B4 no working tree, sem commit. `EXP --quick` na `picturas-nfr-exp`: S01 = 0/15, S02 = 0/20 (rede e host), S05 = 100% (`evaluation/results/EXP-20261123T184517Z/report.md`). Conformidade na dev (`tests/conformance/results/2026-11-23/B4-dev.txt`, F01 `F01-172145.txt`) e repetida na EXP depois da última alteração (`B4-exp.txt`): matriz 112/112, identidade 92/92, rotas 552/552. A `picturas-nfr-exp` ficou ativa; a `picturas-dev` está desmontada, com volumes preservados |
-| **Próximo passo exato** | Commit do B4 pelas pessoas (incluir `docs/refactor-matriz-rotas.md`, `tests/conformance/b4*`, `apiGateway/auth/internal.js`, `*/internalIdentity.js`, `subscriptions/auth/`). Depois B3: parar primeiro a `picturas-nfr-exp` com `docker compose down` **sem** `-v` (o `med.py stack down` usa `-v`) e começar pelo inventário de portas e healthchecks |
-| Coisas meio feitas | Nenhuma no B4. Fica por decidir onde corrigir o defeito da quota anterior ao B4 (`PUT /users/:user/process/:n` → 701 na 2.ª operação do dia; ver §4) |
-| Testes a falhar neste momento | Nenhum nos critérios do B4 |
-| Último commit com o trabalho | `4653219` (B2); B4 sem commit |
+| Bloco em curso | **B3 — FEITO** (sem commit), com a correção da quota. B4 com commit `56328df`. Próximo bloco: B5 |
+| Passo do bloco | Todos os critérios de aceitação do B3 cumpridos; parado para o commit do B3 antes do B5 |
+| Estado deixado | B3 no working tree, sem commit. Dev (`tests/conformance/results/2026-11-23/B3-dev.txt`): só o nginx publicado, 12 portas antigas fechadas, 6 serviços Node `healthy` com `node` sob `init`; quota 10/10; matriz 112/112; identidade 92/92; rotas 552/552; B4 funcional; smoke 12/12; F02; F08 6/6 (≤2,5 s); F01 Node e vídeo 74/74 (`F01-192508.txt`). `EXP --quick` na `picturas-nfr-exp`: S18 = 0 portas (CUMPRE_ALVO), S05 = 100% (`evaluation/results/EXP-20261123T193037Z/report.md`). A `picturas-nfr-exp` ficou ativa; a `picturas-dev` está desmontada, com volumes |
+| **Próximo passo exato** | Commit do B3 pelas pessoas (ficheiros: `docker-compose.yaml`, `docker-compose.dev.yaml`, `users/routes/users.js`, `docs/refactor-matriz-rotas.md`, `README.md`, `AGENTS.md`, `docs/refactor-handoff.md`, `tests/conformance/{README.md,b4_common.py,b4-functional.py,b4-routes.py,users-quota.py,in-network.sh,runner.Dockerfile,diagnostics/f08-restart.py}`, `tests/conformance/results/2026-11-23/{B3-dev.txt,quota-dev.txt,F01-192508.txt}`, `evaluation/results/EXP-20261123T193037Z/`). Depois B5: parar a `picturas-nfr-exp` com `docker compose -p picturas-nfr-exp down` **sem** `-v` (e `docker stop picturas-nfr-exp-medprobe`) e montar a `picturas-dev` |
+| Coisas meio feitas | Nenhuma |
+| Testes a falhar neste momento | Nenhum |
+| Último commit com o trabalho | `56328df` (B4); B3 sem commit |
 | Atualizado em | 2026-11-23 |
 
 ## 2. Contexto comum (o que já está decidido)
@@ -186,6 +186,8 @@ decidiu (pessoa ou "equipa").
 | 22 | 22/11 | B1, execução: CA e certificados ECDSA P-256 (CA 365 d, serviço 30 d, renovação a 7 d), SAN = nome Docker do serviço (nginx também `localhost`/`127.0.0.1`), EKU por papel; par RS256 de 3072 bits; sem valores por omissão com credenciais no código (`Tools/utils/env.py`, `imageStorageService/services/s3Client.js`), e o `IMG_STORAGE_URL` do `env.py`, que lia `RABBITMQ_PASSWORD`, passa a ler `IMG_STORAGE_URL` | Os spikes provaram ECDSA em todos os clientes (Node, pika, Mongo, Go, nginx); um valor por omissão com credencial é um segredo publicado | Agente (sessão B1), dentro do plano; a confirmar no commit |
 | 23 | 23/11 | D-20: criar o bucket `picturas` num job Compose de arranque único, idempotente; `img_storage` espera por `service_completed_successfully`. A credencial admin é montada só no job e não aparece em logs. O job apenas cria o bucket quando falta; não apaga nem altera outros objetos ou buckets | O `img_storage` precisa de privilégio mínimo sem `CreateBucket`, e o `med.py` monta a stack só com `docker compose up`, sem passo manual | Utilizador |
 | 24 | 23/11 | D-21: `limits.fileSize` das imagens no gateway = 25 MiB (variável `IMAGE_MAX_BYTES`), resposta 413 sem chegar à `projects` | O plano (B4, ideia 8) pede o limite sem fixar o valor; cobre fotografias de 24 MP em PNG e reduz o buffer do multer | Utilizador |
+| 25 | 23/11 | Defeito da quota: `PUT /users/:user/process/:n` deixa de chamar `operations.remove()` sobre o objeto `toJSON()` e filtra o registo do dia atual | Dava 701 na 2.ª operação do dia; corrigido antes do B3 | Utilizador |
+| 26 | 23/11 | B3, execução: os 6 serviços Node correm `node` com `init: true` (o `docker-init` reencaminha sinais e recolhe filhos, p. ex. o `ffprobe`), `restart: on-failure` e `healthcheck` (um pedido ao próprio serviço; HTTPS com a CA e o certificado do próprio serviço onde o servidor exige cliente; qualquer resposta <500, incluindo a recusa de autorização, conta como viva). `mem_limit`: `api_gateway`, `projects`, `img_storage` 2g (iguais aos do `med.py`), `users` e `ws_gateway` 512m, `subscriptions` 256m (uso em repouso 35–100 MiB). O nginx espera `api_gateway`/`ws_gateway` *healthy*, e o `api_gateway` espera `projects`/`users`/`subscriptions` *healthy*. O bind mount morto do `frontend` (`./frontend:/app`; a imagem serve `/usr/src/app`) foi retirado. Override `docker-compose.dev.yaml` com nodemon e bind mounts para `users`/`subscriptions`/`api_gateway`, sem portas | Plano B3 (D-04, D-05, ideia 2); o `med.py` lê só o `docker-compose.yaml` | Agente (sessão B3), dentro do plano; a confirmar no commit |
 
 ## 3. Estado dos blocos
 
@@ -200,9 +202,9 @@ dependências estiverem `FEITO`.
 |-------|-----------|--------|-------------------------------------|-------|
 | B0 — Spikes e preparação | — | FEITO | [`refactor-spikes.md`](refactor-spikes.md); bruto em `tests/spikes/SP-xx/results/`; F01 em `tests/conformance/results/2026-11-21/` | 11 spikes: 6 suportados, 5 suportados com limitações (D-16 a D-19) |
 | B1 — PKI e segredos | B0 | FEITO | `tests/conformance/results/2026-11-22/` (`B1-pki-secrets-check`, `B1-S19-git-grep`, `B1-S19-markers`, `B1-smoke`, `B1-old-credentials`, `F01-033956`); `med.py` EXP S05 `--quick` = 100% | Commit `1ab09fa`; S19: o histórico Git mantém as chaves antigas e as palavras-passe do spike SP-06 do commit B0 (contentores descartáveis), limitação declarada sem reescrever histórico |
-| B2 — Mongo/RabbitMQ/S3 | B1 | FEITO | `tests/conformance/results/2026-11-23/B2-dev.txt`; `F01-144716.txt`; `evaluation/results/EXP-20261123T152036Z/report.md` (S16); `EXP-20261123T145611Z/report.md` (S17/S05); BF `med.py freeze` `2dfe2a7ad06c` | D-20 implementada com job Compose idempotente; Mongo, broker, watermark, S3 TLS e D-13. Dev: backup/restauro, permissões, URLs assinados, S05/F02 e F01. EXP `--quick`: S16 0/24, família b `NAO_APLICAVEL`; S17 0/15; S05 100%. Sem commit |
-| B3 — Portas e supervisão | — | POR FAZER | — | Retirar todas as portas internas; `node` + `healthcheck` (§2.6, decisões 4 e 5) |
-| B4 — Identidade e autorização HTTP | B1 | FEITO | `tests/conformance/results/2026-11-23/B4-dev.txt`, `B4-exp.txt`, `F01-172145.txt`; `evaluation/results/EXP-20261123T184517Z/report.md` (S01 0/15, S02 0/20, S05 100%) | Matriz `docs/refactor-matriz-rotas.md` (112 rotas/verbo); sessão HS256 com typ/iss/aud; identidade RS256 gateway→destino com peer mTLS, rota, método, share, ≤30 s; D7; ACL-C1; D9; `img_storage` só aceita o certificado da `projects`; D-21 (25 MiB). Sem commit |
+| B2 — Mongo/RabbitMQ/S3 | B1 | FEITO | `tests/conformance/results/2026-11-23/B2-dev.txt`; `F01-144716.txt`; `evaluation/results/EXP-20261123T152036Z/report.md` (S16); `EXP-20261123T145611Z/report.md` (S17/S05); BF `med.py freeze` `2dfe2a7ad06c` | D-20 implementada com job Compose idempotente; Mongo, broker, watermark, S3 TLS e D-13. Dev: backup/restauro, permissões, URLs assinados, S05/F02 e F01. EXP `--quick`: S16 0/24, família b `NAO_APLICAVEL`; S17 0/15; S05 100%. Commit `4653219` |
+| B3 — Portas e supervisão | — | FEITO | `tests/conformance/results/2026-11-23/B3-dev.txt`, `quota-dev.txt`, `F01-192508.txt`; `evaluation/results/EXP-20261123T193037Z/report.md` (S18 = 0, S05 100%) | Só o nginx publicado (12 portas retiradas); `node` + `init` + `restart` + `healthcheck` + `mem_limit` (§2.6, decisão 26); F08 6/6 ≤2,5 s; override de desenvolvimento. Correção da quota incluída (decisão 25). Sem commit |
+| B4 — Identidade e autorização HTTP | B1 | FEITO | `tests/conformance/results/2026-11-23/B4-dev.txt`, `B4-exp.txt`, `F01-172145.txt`; `evaluation/results/EXP-20261123T184517Z/report.md` (S01 0/15, S02 0/20, S05 100%) | Matriz `docs/refactor-matriz-rotas.md` (112 rotas/verbo); sessão HS256 com typ/iss/aud; identidade RS256 gateway→destino com peer mTLS, rota, método, share, ≤30 s; D7; ACL-C1; D9; `img_storage` só aceita o certificado da `projects`; D-21 (25 MiB). Commit `56328df` |
 | B5 — mTLS e TLS por salto | B1 | POR FAZER | — | `proxy_ssl_session_reuse off` (SP-09); servidor HTTPS próprio do Next (SP-09); Flask/`requests` com mTLS (SP-10) |
 | B6 — Upload: motor e adaptador | B0, B4, B5 | POR FAZER | — | A escrita do adaptador (cópia ou direta) ficou na **D-16**, e o limite de leitura do `ffprobe` na **D-17**. Notas do SP-01, SP-03 e SP-05 |
 | B7 — Upload: fluxo novo | B6 | POR FAZER | — | Inclui o frontend (§2.6, decisão 1). Configuração do `auth_request` (SP-01, notas 1–4) e do `Host` assinado (SP-04) |
@@ -289,6 +291,15 @@ Uma entrada por sessão, no fim da lista, ao parar.
 - Próximo passo: o da §1.
 - Cuidado: o `B4-dev.txt` foi registado antes da troca 400 → 403 da G06 (esperava 400); o `B4-exp.txt` é o resultado com o código final. O defeito da quota (701) continua por decidir, tal como na entrada anterior.
 - Decisões novas: nenhuma (o 403 aplica o "não aceita" do plano, B4 ponto 5).
+- Dúvidas novas: nenhuma.
+
+### 2026-11-23 19:35 — B3 — FEITO (parado para o commit antes do B5)
+- Feito: **quota** — `users/routes/users.js` filtra o registo do dia em vez de `operations.remove()` (decisão 25); `tests/conformance/users-quota.py`. **B3** — inventário: 12 portas internas publicadas (S3 9000, `img_storage` 11000, AMQPS 5671, gestão 15671, Mongo 27017/27018/27019, `projects` 9002, `users` 10001, `subscriptions` 11001, `generative-mock` 7860, `ws_gateway` 4000) e healthchecks só no RabbitMQ, nos 3 Mongo e no `generative-mock`. `docker-compose.yaml`: retiradas as 12 portas (fica o nginx 8080); os 6 serviços Node com `command: node …`, `init`, `restart`, `healthcheck` partilhado (âncoras `x-node-health-*`) e `mem_limit`; dependências `service_healthy` (decisão 26). `docker-compose.dev.yaml` novo (nodemon + bind mounts). Testes: `in-network.sh` + `runner.Dockerfile` (testes na rede da stack), `b4_common.py`/`b4-functional.py` com `B4_DIRECT=network`, `diagnostics/f08-restart.py`. Matriz de rotas com os números de linha atualizados (`--fix`). `README.md`, `AGENTS.md` e README dos testes atualizados.
+- Verificado: a `picturas-nfr-exp` foi parada com `docker compose down` **sem** `-v` e a sonda parada. Na `picturas-dev` (`B3-dev.txt`): só `8080` publicado, as 12 portas antigas fechadas no host; os 6 serviços `healthy` com `node` sob `docker-init`; healthcheck com controlos negativos (porta errada, nome TLS errado, plaintext → falha); quota 10/10 (duas operações seguidas → 204/204; 5 no total; a 6.ª recusada por `PUT` 799 e por `GET` 701; restantes = 0); matriz 112/112, identidade 92/92, rotas 552/552, B4 funcional (todos na rede, `in-network.sh`); smoke 12/12; F02 imagem+vídeo; F08 6/6 dentro de 30 s e do alvo de 10 s (servido de novo em 0,4–0,7 s; `img_storage` *healthy* em 2,5 s); override dev com nodemon testado e reposto; F01 Node e vídeo 74/74. `med.py stack up` + `run --campaign EXP --quick --metrics S18,S05`: S18 `todas=0, loopback=0` CUMPRE_ALVO, S05 100% (`EXP-20261123T193037Z`). Varrimento: 41 valores de segredos e padrões JWT/assinaturas, zero ocorrências nos resultados.
+- Parei em: bloco concluído; parado a pedido para o commit do B3 antes do B5.
+- Próximo passo: o da §1.
+- Cuidado: (1) O Docker Compose não reinicia um contentor *unhealthy*: o reinício automático cobre o processo que morre (OOM, crash), não um processo vivo mas bloqueado; o healthcheck serve para as dependências e para a visibilidade. Limitação a declarar na F08. (2) O `comm` do processo principal do Node 26 é `MainThread`, não `node` (o `med.py` já trata os dois). (3) Os testes `data-channels/b2-*.py` que usavam as portas 9000/5671/27017–27019 do host já não correm assim; a evidência do B2 fica a dos resultados de 22–23/11 e a S16/S17 do `med.py` corre pela rede. (4) No B5 o `api_gateway` e o `ws_gateway` passam a HTTPS: mudar `http` → `https` nos seus healthchecks e montar a PKI do `ws_gateway`.
+- Decisões novas: 25, 26.
 - Dúvidas novas: nenhuma.
 
 ## 5. Dúvidas surgidas durante a implementação
@@ -384,8 +395,11 @@ para a §2.6 (e para o plano, se mudar um bloco).
 
 - **Depois de reconstruir o frontend, reinicia o nginx** (`docker compose restart nginx`);
   senão dá 502.
-- **Com `nodemon`, depois de um OOM o contentor fica "Up" mas a app está morta.**
-  Reinicia o serviço (até o B3 estar feito).
+- **Com `nodemon` (só no `docker-compose.dev.yaml`, desde o B3), depois de um OOM o
+  contentor fica "Up" mas a app está morta.** Reinicia o serviço. A configuração entregue
+  corre `node` e reinicia sozinha.
+- **Desde o B3 só o nginx tem porta no host.** Os testes com chamadas diretas aos serviços
+  correm com `tests/conformance/in-network.sh <projeto> <teste.py>`.
 - **O nginx fica com o IP antigo do upstream** depois de reiniciar um serviço Node.
   Reinicia também o nginx.
 - **`GET /:user/:project` ocupa um lugar de editor**, e um dono free só tem 2 lugares

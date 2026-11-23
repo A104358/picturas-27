@@ -337,8 +337,8 @@ for rid, method, path in (("B4-R091", "GET", f"/{oid}/type"), ("B4-R092", "GET",
     check(rid, "gateway with the holder's own identity", direct("users", method, path, peer="api_gateway",
                                                                 token=internal_token("users", method, path, oid)), 403)
     check(rid, "subscriptions certificate", direct("users", method, path, peer="subscriptions"), 403)
-    # Positive on a fresh account: a second quota write on the same day hits a pre-B4 bug (701,
-    # users/routes/users.js: operations.remove on a toJSON() object), recorded in the handoff.
+    # Positive on a fresh account, so earlier writes cannot exhaust the daily quota (the
+    # second-write 701 defect is fixed and covered by users-quota.py).
     fresh = register()["id"]
     check(rid, "projects service", direct("users", method, path.replace(oid, fresh), peer="projects"), authorised)
 family("B4-R093", "users", "POST", "/", body={"type": "anonymous"}, bound=False, public=True, positive=("direct", 201))

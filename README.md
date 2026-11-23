@@ -287,28 +287,15 @@ ports are published only for **development and debugging**.
 | `https://localhost:8080/`             | Frontend (Next.js)      |
 | `https://localhost:8080/api-gateway/` | REST API (API Gateway)  |
 | `https://localhost:8080/socket.io`    | WebSocket Gateway       |
-| `https://localhost:8080/s3/`          | Object storage (S3 API) |
-| `https://localhost:8080/s3-console/`  | SeaweedFS filer web UI  |
+| `https://localhost:8080/s3/`          | Object storage (S3 API, signed GET/HEAD only) |
 
 ### Published directly on the host
 
-| Port    | Service              | URL / Credentials                               |
-| ------- | -------------------- | ----------------------------------------------- |
-| `8080`  | Nginx (HTTPS)        | <https://localhost:8080>                        |
-| `9000`  | SeaweedFS S3 API     | <http://localhost:9000> — credentials in `$PICTURAS_SECRETS_DIR` |
-| `9090`  | SeaweedFS filer UI   | <http://localhost:9090>                         |
-| `11000` | Image Storage        | <http://localhost:11000>                        |
-| `15672` | RabbitMQ Management  | <http://localhost:15672> — credentials in `$PICTURAS_SECRETS_DIR` |
-| `5672`  | RabbitMQ AMQP        | broker endpoint used by the tools               |
-| `10001` | User Service         | <http://localhost:10001>                        |
-| `11001` | Subscription Service | <http://localhost:11001>                        |
-| `9002`  | Project Service      | <http://localhost:9002> (container port `9001`) |
-| `4000`  | WebSocket Gateway    | <http://localhost:4000>                         |
-| `7860`  | Generative mock API  | <http://localhost:7860> (used by `expand_ai`)   |
-| `27018` | MongoDB (projects)   | `mongodb://localhost:27018`                     |
-| `27019` | MongoDB (users)      | `mongodb://localhost:27019`                     |
+Only nginx publishes a port: `8080` (HTTPS). No internal service, database, broker or object
+store port is published (Phase 2, B3). Administration goes through `docker compose exec`
+(see [Inspecting data](#inspecting-data)).
 
-Make sure the ports above are free before starting; see [Troubleshooting](#-troubleshooting).
+Make sure port 8080 is free before starting; see [Troubleshooting](#-troubleshooting).
 
 ---
 
@@ -387,7 +374,7 @@ written to the host at `./backups/mongo` (git-ignored). `docker compose down -v`
 ### Scaling
 
 - Run more instances of a busy tool: `docker compose up -d --scale brightness_tool=3`
-- Watch queue depth in the RabbitMQ management UI (<http://localhost:15672>)
+- Watch queue depth with `docker compose exec rabbitmq rabbitmqctl list_queues`
 - Tune per-container CPU/memory limits in `docker-compose.yaml` to match your machine
 
 Containers are named `picturas-<service>-<n>` (from `name: picturas` in `docker-compose.yaml`),
@@ -499,9 +486,17 @@ docker compose ps                         # what is running, and is it healthy?
 
 ### Live code reloading
 
-`users`, `subscriptions`, `apiGateway` and `frontend` bind-mount their source directory into
-the container, so edits on the host are visible inside it. The Node services run under
-`nodemon` and reload automatically.
+The delivered `docker-compose.yaml` runs every Node service with `node` (under `init`), a
+`restart` policy, a `healthcheck` and a memory limit, so a crashed process is restarted.
+For development, the override `docker-compose.dev.yaml` bind-mounts the source of `users`,
+`subscriptions` and `apiGateway` and runs them under `nodemon`, which reloads on edits:
+
+```bash
+docker compose -f docker-compose.yaml -f docker-compose.dev.yaml up -d --build
+```
+
+Under `nodemon` a crashed app leaves the container "Up" with the service dead: restart it by
+hand (`docker compose restart <service>`).
 
 The **frontend image is built for production** (`bun run build` / `bun start`), so a source edit
 will **not** hot-reload. For frontend development either rebuild:
@@ -560,8 +555,8 @@ docker compose exec users_mongoDB mongo --port 27019
 docker compose exec projects_mongoDB mongo --port 27018
 ```
 
-Stored objects: <http://localhost:9090> (SeaweedFS filer UI).
-Queues and message rates: <http://localhost:15672> (`ops/secrets.sh med-env` prints the admin user).
+The MongoDB instances require TLS and authentication (credentials in `$PICTURAS_SECRETS_DIR`).
+Queues: `docker compose exec rabbitmq rabbitmqctl list_queues name messages consumers`.
 
 ---
 
@@ -604,7 +599,7 @@ There is a single `video_tool` with no replicas, so videos are processed one at 
 `docker compose logs -f video_tool` and the depth of `video_queue` in RabbitMQ.
 
 **`expand_ai` fails**
-It depends on `generative-mock` being healthy. Check <http://localhost:7860> and
+It depends on `generative-mock` being healthy. Check `docker compose ps generative-mock` and
 `docker compose logs generative-mock`.
 
 **Login works, then every request returns 401**

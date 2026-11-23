@@ -116,8 +116,8 @@ As exceções públicas são fechadas: registo, login, sessão anónima, valida�
 | B4-R094 | `POST /:email/login` | [users.js](../users/routes/users.js#L212) | Público via gateway | Users: exceção pública fechada; registo sem premium | Sem identidade interna nem posse central | B4-R094; S05; S14 |
 | B4-R095 | `PUT /:user` | [users.js](../users/routes/users.js#L232) | Titular via gateway; consulta de serviço só conforme D4 | Users: identidade RS256 ou par previsto; titular | Sem identidade interna nem posse central | B4-R095; S01/S02; S14; F04 |
 | B4-R096 | `PUT /:user/process/:advanced_tools` | [users.js](../users/routes/users.js#L267) | Serviço projects, quota do sujeito admitido | Users: só o par projects→users (identidade do gateway recusada), operação de quota e titular | Sem identidade interna nem posse central | B4-R096; S01/S02; S05 |
-| B4-R097 | `POST /:user/process/refund/:advanced_tools` | [users.js](../users/routes/users.js#L319) | Serviço projects, quota do sujeito admitido | Users: só o par projects→users (identidade do gateway recusada), operação de quota e titular | Sem identidade interna nem posse central | B4-R097; S01/S02; S05 |
-| B4-R098 | `DELETE /:user` | [users.js](../users/routes/users.js#L368) | Titular via gateway; consulta de serviço só conforme D4 | Users: identidade RS256 ou par previsto; titular | Sem identidade interna nem posse central | B4-R098; S01/S02; S14; F04 |
+| B4-R097 | `POST /:user/process/refund/:advanced_tools` | [users.js](../users/routes/users.js#L324) | Serviço projects, quota do sujeito admitido | Users: só o par projects→users (identidade do gateway recusada), operação de quota e titular | Sem identidade interna nem posse central | B4-R097; S01/S02; S05 |
+| B4-R098 | `DELETE /:user` | [users.js](../users/routes/users.js#L373) | Titular via gateway; consulta de serviço só conforme D4 | Users: identidade RS256 ou par previsto; titular | Sem identidade interna nem posse central | B4-R098; S01/S02; S14; F04 |
 
 ## subscriptions (10 rotas/verbo)
 

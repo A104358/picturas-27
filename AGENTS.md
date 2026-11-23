@@ -104,9 +104,14 @@ cd Tools/video && python3 -m venv .venv && .venv/bin/pip install -r requirements
 ```
 
 - Open `https://localhost:8080` (https, port 8080) and accept the self-signed certificate.
-- `users`, `subscriptions` and `apiGateway` bind-mount their source and reload with nodemon.
-  The frontend is a production build and Python tools have no bind mount: rebuild them.
-- RabbitMQ management: `http://localhost:15672` (`user` / `password`).
+- Only nginx publishes a port (8080). Internal services, databases, the broker and S3 have no
+  host port: administer them with `docker compose exec` (B3, D-05).
+- The Node services run `node` with `init`, `restart`, `healthcheck` and `mem_limit`. For live
+  reload, add `-f docker-compose.dev.yaml` (bind mounts + nodemon for `users`,
+  `subscriptions`, `apiGateway`; `med.py` never loads it). The frontend is a production
+  build and Python tools have no bind mount: rebuild them.
+- Conformance tests that call services directly run on the stack network:
+  `tests/conformance/in-network.sh <compose-project> <test.py>`.
 - Sample videos for manual tests: `samples/video/` (see its README).
 
 ## Conventions

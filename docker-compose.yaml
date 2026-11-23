@@ -2,6 +2,27 @@
 # directory this repository was cloned into. Override with `docker compose -p <name>`.
 name: picturas
 
+# Supervision of the Node services (B3, D-04): they run `node` directly (no nodemon; see
+# docker-compose.dev.yaml for development), so a dead process exits and `restart` brings
+# it back. The healthcheck sends one request to the service itself: HTTPS with the
+# installation CA and the service's own client certificate where the server requires
+# one; any answer below 500 (an authorisation refusal included) means the process serves.
+# Arguments: <TLS server name> <port> <http|https> [path].
+x-node-health-js: &node-health-js >-
+  const f=require('fs'),[,n,p,s,u]=process.argv,d='/run/secrets/pki/',
+  o={host:'127.0.0.1',port:+p,path:u||'/',timeout:4000};
+  if(s==='https')Object.assign(o,{servername:n,ca:f.readFileSync(d+'ca.crt'),
+  cert:f.readFileSync(d+'service.crt'),key:f.readFileSync(d+'service.key')});
+  require(s).get(o,r=>process.exit(r.statusCode<500?0:1))
+  .on('timeout',()=>process.exit(1)).on('error',()=>process.exit(1))
+
+x-node-health-timing: &node-health-timing
+  interval: 15s
+  timeout: 5s
+  retries: 3
+  start_period: 60s
+  start_interval: 2s
+
 services:
   # elasticsearch:
   #   image: docker.elastic.co/elasticsearch/elasticsearch:7.6.2
@@ -46,9 +67,14 @@ services:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/pki/services/nginx:/etc/nginx/pki:ro
     depends_on:
-      - api_gateway
-      - ws_gateway
-      - seaweedfs
+      api_gateway:
+        condition: service_healthy
+      ws_gateway:
+        condition: service_healthy
+      seaweedfs:
+        condition: service_started
+      frontend:
+        condition: service_started
 
   # S3-compatible object storage.
   # Replaces MinIO, whose Docker images were withdrawn from Docker Hub and quay.io in 2026.
@@ -64,8 +90,6 @@ services:
       -s3.port.iceberg=0 -s3.port.lance=0
       -s3.encryptVolumeData
       -master.volumeSizeLimitMB=1024
-    ports:
-      - "9000:9000"
     volumes:
       - seaweedfs_data:/data
       - ./seaweedfs/security.toml:/etc/seaweedfs/security.toml:ro
@@ -93,12 +117,16 @@ services:
 
   img_storage:
     build: ./imageStorageService
+    command: ["node", "./server.js"]
+    init: true
     restart: on-failure
+    mem_limit: 2g
+    healthcheck:
+      <<: *node-health-timing
+      test: ["CMD", "node", "-e", *node-health-js, "img_storage", "11000", "https"]
     depends_on:
       s3-bootstrap:
         condition: service_completed_successfully
-    ports:
-      - "11000:11000"
     environment:
       S3_ENDPOINT: "seaweedfs:9000"
       FRONTEND_URL: "https://localhost:8080"
@@ -113,9 +141,6 @@ services:
       context: ./rabbitMQ
     restart: on-failure
     env_file: ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/env/rabbitmq.env
-    ports:
-      - "5671:5671"
-      - "15671:15671"
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
       - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/rabbitmq/definitions.json:/etc/rabbitmq/definitions.json:ro
@@ -136,8 +161,6 @@ services:
     entrypoint: ["/bin/sh", "/usr/local/bin/mongo-tls-entrypoint.sh"]
     command: ["--port", "27018"]
     env_file: ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/env/projects_mongoDB.env
-    ports:
-      - "27018:27018"
     healthcheck:
       test: ["CMD", "mongo", "--host", "projects_mongoDB", "--port", "27018", "--tls", "--tlsCAFile", "/run/secrets/pki/ca.crt", "--eval", "db.adminCommand('ping')"]
       interval: 10s
@@ -153,13 +176,17 @@ services:
 
   projects:
     build: ./projects
+    command: ["node", "./bin/www"]
+    init: true
+    mem_limit: 2g
+    healthcheck:
+      <<: *node-health-timing
+      test: ["CMD", "node", "-e", *node-health-js, "projects", "9001", "https"]
     depends_on:
       rabbitmq:
         condition: service_healthy
       projects_mongoDB:
         condition: service_started
-    ports:
-      - "9002:9001"
     restart: on-failure
     environment:
       INTERNAL_SERVICE_NAME: projects
@@ -186,8 +213,6 @@ services:
     entrypoint: ["/bin/sh", "/usr/local/bin/mongo-tls-entrypoint.sh"]
     command: ["--port", "27019"]
     env_file: ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/env/users_mongoDB.env
-    ports:
-      - "27019:27019"
     healthcheck:
       test: ["CMD", "mongo", "--host", "users_mongoDB", "--port", "27019", "--tls", "--tlsCAFile", "/run/secrets/pki/ca.crt", "--eval", "db.adminCommand('ping')"]
       interval: 10s
@@ -203,11 +228,15 @@ services:
 
   users:
     build: ./users
+    command: ["node", "./bin/www"]
+    init: true
     depends_on:
       - users_mongoDB
-    ports:
-      - "10001:10001"
     restart: on-failure
+    mem_limit: 512m
+    healthcheck:
+      <<: *node-health-timing
+      test: ["CMD", "node", "-e", *node-health-js, "users", "10001", "https"]
     environment:
       - INTERNAL_SERVICE_NAME=users
       - FREE_DAILY_OP=5
@@ -215,8 +244,6 @@ services:
     networks:
       - elk
     volumes:
-      - ./users:/app
-      - /app/node_modules
       - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/pki/services/users:/run/secrets/pki:ro
       - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/jwt/rs256-public.pem:/run/secrets/jwt/rs256-public.pem:ro
 
@@ -228,8 +255,6 @@ services:
     entrypoint: ["/bin/sh", "/usr/local/bin/mongo-tls-entrypoint.sh"]
     command: ["--port", "27017"]
     env_file: ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/env/subscriptions_mongoDB.env
-    ports:
-      - "27017:27017"
     healthcheck:
       test: ["CMD", "mongo", "--host", "subscriptions_mongoDB", "--port", "27017", "--tls", "--tlsCAFile", "/run/secrets/pki/ca.crt", "--eval", "db.adminCommand('ping')"]
       interval: 10s
@@ -245,35 +270,45 @@ services:
 
   subscriptions:
     build: ./subscriptions
+    command: ["node", "./bin/www"]
+    init: true
     depends_on:
       - subscriptions_mongoDB
       - users
-    ports:
-      - "11001:11001"
     restart: on-failure
+    mem_limit: 256m
+    healthcheck:
+      <<: *node-health-timing
+      test: ["CMD", "node", "-e", *node-health-js, "subscriptions", "11001", "https"]
     environment:
       INTERNAL_SERVICE_NAME: subscriptions
     env_file: ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/env/subscriptions.env
     networks:
       - elk
     volumes:
-      - ./subscriptions:/app
-      - /app/node_modules
       - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/pki/services/subscriptions:/run/secrets/pki:ro
       - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/jwt/rs256-public.pem:/run/secrets/jwt/rs256-public.pem:ro
 
   api_gateway:
     build: ./apiGateway
+    command: ["node", "./bin/www"]
+    init: true
     depends_on:
-      - projects
-      - users
+      projects:
+        condition: service_healthy
+      users:
+        condition: service_healthy
+      subscriptions:
+        condition: service_healthy
     restart: on-failure
+    mem_limit: 2g
+    healthcheck:
+      <<: *node-health-timing
+      test: ["CMD", "node", "-e", *node-health-js, "api_gateway", "8000", "http"]
     env_file: ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/env/api_gateway.env
     networks:
       - elk
     volumes:
-      - ./apiGateway:/app
-      - /app/node_modules
       - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/pki/services/api_gateway:/run/secrets/pki:ro
       - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/jwt/rs256-private.pem:/run/secrets/jwt/rs256-private.pem:ro
 
@@ -511,8 +546,6 @@ services:
 
   generative-mock:
     build: ./generative-mock
-    ports:
-      - "7860:7860"
     networks:
       - elk
     healthcheck:
@@ -574,18 +607,19 @@ services:
       - elk
     environment:
     - NEXT_PUBLIC_API_BASE_URL=/api-gateway/
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
 
   ws_gateway:
     build: ./wsGateway
+    command: ["node", "index.js"]
+    init: true
     restart: on-failure
+    mem_limit: 512m
+    healthcheck:
+      <<: *node-health-timing
+      test: ["CMD", "node", "-e", *node-health-js, "ws_gateway", "4000", "http", "/socket.io/"]
     env_file: ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/env/ws_gateway.env
     networks:
       - elk
-    ports:
-      - "4000:4000"
     depends_on:
       rabbitmq:
         condition: service_healthy

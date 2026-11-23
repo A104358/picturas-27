@@ -5,9 +5,11 @@ forged or mismatched identities, the HS256 session secret and the RS256 gateway 
 $PICTURAS_SECRETS_DIR. Nothing read from there, and no JWT, share ID or signed URL, is
 ever printed; results carry only case IDs, labels and HTTP statuses.
 
-Direct service calls go to the ports still published on the host (127.0.0.1) with the
-Docker service name as TLS server name, so the service certificate is fully verified.
-After B3 removes those ports, run the same checks from a container on the stack network.
+Direct service calls verify the service certificate against the Docker service name.
+Since B3 only nginx publishes a port: run the tests with in-network.sh, which sets
+B4_DIRECT=network (service name and container port) and B4_BASE_URL=https://nginx.
+B4_DIRECT=host keeps the old behaviour (127.0.0.1 and B4_PORT_*) for a stack that
+still publishes the internal ports.
 """
 import json
 import os
@@ -26,12 +28,20 @@ import urllib3
 ROOT = Path(os.environ["PICTURAS_SECRETS_DIR"])
 CA = str(ROOT / "pki/ca/ca.crt")
 BASE = os.environ.get("B4_BASE_URL", "https://localhost:8080").rstrip("/") + "/api-gateway/"
+NETWORK = os.environ.get("B4_DIRECT", "host") == "network"
 PORTS = {
+    "projects": 9001, "users": 10001, "subscriptions": 11001, "img_storage": 11000,
+} if NETWORK else {
     "projects": int(os.environ.get("B4_PORT_PROJECTS", "9002")),
     "users": int(os.environ.get("B4_PORT_USERS", "10001")),
     "subscriptions": int(os.environ.get("B4_PORT_SUBSCRIPTIONS", "11001")),
     "img_storage": int(os.environ.get("B4_PORT_IMG_STORAGE", "11000")),
 }
+
+
+def endpoint(service):
+    """(host, port) to reach a service directly from where the tests run."""
+    return (service if NETWORK else "127.0.0.1"), PORTS[service]
 SESSION_TYP = "picturas-session+jwt"
 INTERNAL_TYP = "picturas-internal+jwt"
 TLS = "TLS"  # handshake refused: no HTTP exchange happened
@@ -230,7 +240,7 @@ def direct(service, method, path, *, peer=None, token=None, body=None, headers=N
     if peer:
         kw.update(cert_file=str(ROOT / f"pki/services/{peer}/service.crt"),
                   key_file=str(ROOT / f"pki/services/{peer}/service.key"))
-    pool = urllib3.HTTPSConnectionPool("127.0.0.1", PORTS[service], **kw)
+    pool = urllib3.HTTPSConnectionPool(*endpoint(service), **kw)
     hdr = dict(headers or {})
     if token:
         hdr["X-Internal-Identity"] = token

@@ -1,0 +1,12 @@
+# users-quota.py on picturas-dev (2026-11-23T19:18:54Z), commit 56328df + working tree
+PASS Q01 first PUT of the day: 204
+PASS Q02 second PUT of the same day (was 701): 204
+PASS Q03 remaining after two operations: 3
+PASS Q04 third and fourth via PUT 2: 204
+PASS Q05 fifth via GET reservation (projects path): 200
+PASS Q06 remaining after five operations: 0
+PASS Q07 sixth PUT refused at the limit: 799
+PASS Q08 sixth GET reservation refused at the limit: 701
+PASS Q09 limit unchanged after refusals: 0
+PASS Q10 zero-operation PUT still accepted at the limit: 204
+users quota: 10/10 checks passed

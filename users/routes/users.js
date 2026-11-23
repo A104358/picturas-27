@@ -297,7 +297,12 @@ router.put("/:user/process/:advanced_tools", function (req, res, next) {
         return;
       }
 
-      if (rem_prev_op) user.operations.remove(op);
+      // User.getOne returns a plain object (toJSON), so the array has no
+      // Mongoose remove(); drop today's entry by filtering on the day instead.
+      if (rem_prev_op)
+        user.operations = user.operations.filter(
+          (o) => o.day.getTime() !== process_date.getTime(),
+        );
 
       let new_op = {
         day: op.day,

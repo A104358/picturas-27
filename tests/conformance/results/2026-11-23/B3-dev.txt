@@ -1,0 +1,67 @@
+# B3 verification on picturas-dev — 2026-11-23T19:27:43Z
+commit: 56328df + uncommitted B3 changes (quota fix included)
+
+## published ports (docker ps, picturas-dev)
+picturas-dev-nginx-1 0.0.0.0:8080->443/tcp, [::]:8080->443/tcp
+
+## host reachability of the 12 former internal ports (expect closed)
+9000 closed
+11000 closed
+5671 closed
+15671 closed
+27018 closed
+9002 closed
+27019 closed
+10001 closed
+27017 closed
+11001 closed
+7860 closed
+4000 closed
+
+## Node services: health and main process
+api_gateway healthy restart=on-failure init=true mem=2147483648 |  /sbin/docker-init -- docker-entrypoint.sh node ./bin/www| node ./bin/www|
+projects healthy restart=on-failure init=true mem=2147483648 |  /sbin/docker-init -- docker-entrypoint.sh node ./bin/www| node ./bin/www|
+users healthy restart=on-failure init=true mem=536870912 |  /sbin/docker-init -- docker-entrypoint.sh node ./bin/www| node ./bin/www|
+subscriptions healthy restart=on-failure init=true mem=268435456 |  /sbin/docker-init -- docker-entrypoint.sh node ./bin/www| node ./bin/www|
+img_storage healthy restart=on-failure init=true mem=2147483648 |  /sbin/docker-init -- docker-entrypoint.sh node ./server.js| node ./server.js|
+ws_gateway healthy restart=on-failure init=true mem=536870912 |  /sbin/docker-init -- docker-entrypoint.sh node index.js| node index.js|
+
+## healthcheck negative controls (users container)
+wrong port -> exit 1
+wrong TLS name -> exit 1
+plaintext -> exit 1
+correct -> exit 0
+
+## python3 tests/conformance/b4-route-matrix.py
+B4 route matrix: 112 route/verb declarations covered, verbs and paths match
+
+## tests/conformance/in-network.sh picturas-dev users-quota.py
+users quota: 10/10 checks passed
+
+## tests/conformance/in-network.sh picturas-dev b4-identity.py
+B4 identity: 92/92 checks passed
+
+## tests/conformance/in-network.sh picturas-dev b4-routes.py
+B4 routes: 552/552 checks passed
+
+## tests/conformance/in-network.sh picturas-dev b4-functional.py
+B4: owner/share/D7, profile isolation, premium lifecycle and direct services passed
+
+## python3 tests/conformance/mtls-pki/b1-smoke.py (smoke, host via nginx 8080)
+B1 smoke: 12/12 passed
+
+## python3 tests/conformance/data-channels/b2-functional.py (F02, host via nginx 8080)
+B2 F02: image and video batch output; PNG changed; MP4/H.264/AAC, duration and brighter frame passed
+
+## python3 tests/conformance/diagnostics/f08-restart.py picturas-dev (F08)
+PASS api_gateway: restart 0.5s, healthy 2.5s, served 0.5s; recovery 0.5s (target met); restart count 0->1
+PASS users: restart 0.4s, healthy 2.5s, served 0.7s; recovery 0.7s (target met); restart count 0->1
+PASS projects: restart 0.4s, healthy 2.5s, served 0.7s; recovery 0.7s (target met); restart count 1->2
+PASS subscriptions: restart 0.4s, healthy 2.5s, served 0.4s; recovery 0.4s (target met); restart count 0->1
+PASS ws_gateway: restart 0.4s, healthy 2.4s, served 0.4s; recovery 0.4s (target met); restart count 2->3
+PASS img_storage: restart 0.4s, healthy 2.5s, served n/a; recovery 2.5s (target met); restart count 1->2
+F08: 6/6 services recovered within 30 s; 6 within the 10 s target
+
+## F01: tests/conformance/run-f01.sh picturas-dev -> F01-192508.txt (projects node --test exit 0; Tools/video 74 passed)
+
+## development override (docker-compose.dev.yaml), checked 2026-11-23: users/subscriptions/api_gateway ran nodemon with the source bind-mounted at /app and became healthy; then the delivered config was restored (node ./bin/www, healthy)

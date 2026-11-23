@@ -58,7 +58,28 @@ python3 tests/conformance/b4-routes.py
 
 Precisam de `requests`, `urllib3`, `PyJWT` e `cryptography`. O harness é de confiança: lê a
 CA, os certificados de serviço e, para forjar identidades, o segredo HS256 e a chave RS256
-do gateway; nunca os imprime. As chamadas diretas aos serviços usam as portas ainda
-publicadas no host (`B4_PORT_*`); depois do B3, correm a partir de um contentor na rede da
-stack. "Autorizado" num controlo positivo quer dizer: resposta de domínio, nem 401/403 nem
+do gateway; nunca os imprime. Desde o B3 só o nginx publica uma porta: os testes com
+chamadas diretas aos serviços correm a partir de um contentor na rede da stack (ver abaixo). "Autorizado" num controlo positivo quer dizer: resposta de domínio, nem 401/403 nem
 5xx.
+
+## Correr dentro da rede da stack (desde o B3)
+
+`in-network.sh` constrói uma imagem pequena (`runner.Dockerfile`: Python, `requests`,
+`urllib3`, `PyJWT`, `cryptography`, sem segredos) e corre o teste num contentor ligado à rede
+`<projeto>_elk`. Monta o repositório e `$PICTURAS_SECRETS_DIR` só para leitura, e define
+`B4_DIRECT=network` (nome do serviço e porta do contentor) e `B4_BASE_URL=https://nginx`.
+Recusa o projeto `picturas-nfr`.
+
+```bash
+tests/conformance/in-network.sh picturas-dev b4-routes.py
+```
+
+Os testes que só usam o nginx (`mtls-pki/b1-smoke.py`, `data-channels/b2-functional.py`)
+continuam a correr no host, pela porta 8080.
+
+## Quota diária e supervisão (B3)
+
+| Ficheiro | Prova |
+|----------|-------|
+| `users-quota.py` | Quota de uma conta free (`FREE_DAILY_OP` = 5): duas operações seguidas no mesmo dia aceites (o defeito 701 anterior ao B4), limite de 5 respeitado pelo `PUT` e pelo `GET` de reserva |
+| `diagnostics/f08-restart.py [projeto] [url]` | F08: mata o processo `node` de cada serviço Node (como um OOM) e mede o reinício, o healthcheck e o primeiro pedido servido pelo nginx. Mínimo ≤30 s, alvo ≤10 s. Corre no host (usa o `docker`) |

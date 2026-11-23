@@ -261,9 +261,6 @@ export default function Project({
 useEffect(() => {
   if (!socket.data) return;
 
-  // entrar na room do projeto
-  socket.data.emit("join-project", pid);
-
   const onProjectUpdated = (evt: { projectId: string; version?: number }) => {
     if (!evt || evt.projectId !== pid) return;
 
@@ -293,7 +290,6 @@ useEffect(() => {
 
   return () => {
     socket.data.off("project-updated", onProjectUpdated);
-    socket.data.emit("leave-project", pid);
   };
 }, [socket.data, pid, qc, session.user._id, session.token, ownerId, shareId, toast]);
 

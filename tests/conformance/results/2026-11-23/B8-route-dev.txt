@@ -1,0 +1,4 @@
+PASS WS-C1: other peer cannot delegate to the route
+PASS WS-T08: one primary read, independent owner/read/invalid decisions
+PASS WS-T02: database failure is unavailable for every member, never ownership or revocation confirmation
+PASS deleted project: denial requires a successful current read

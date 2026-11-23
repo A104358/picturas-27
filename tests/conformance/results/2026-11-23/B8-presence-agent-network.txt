@@ -1,0 +1,4 @@
+PASS presence mTLS: verified fresh GETs share one connection
+PASS presence D4: existing connection cannot expand service operations
+PASS presence client: wrong server name refused despite pooled connection
+PASS presence idle: connection closed before 5s; next request uses a full mTLS handshake without session resumption

@@ -224,7 +224,10 @@ os.replace(tmp, dst)
 PY
 }
 
-perm() { stat -f %Lp "$1" 2>/dev/null || stat -c %a "$1"; }
+perm() {
+  local mode
+  if mode=$(stat -f %Lp "$1" 2>/dev/null); then printf '%s\n' "$mode"; else stat -c %a "$1"; fi
+}
 
 cmd_check() {
   local fail=0 n f

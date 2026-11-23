@@ -418,4 +418,16 @@ for rid, method, path in (("B4-R109", "POST", f"/copy/{fake}/src/out/b4.png"), (
 check("B4-R035", "holder cancels (F05)", status("PUT", f"subscriptions/{oid}/cancel", O["token"], body={}), 200)
 check("F05", "profile returns to free", call("GET", f"users/{oid}", O["token"]).json().get("type"), "free")
 
+# B8 adds a distinct, read-only mTLS delegation surface (tested in depth by B8).
+ws_path = f"/internal/ws/projects/{P1}/authorize"
+ws_body = {"requestId": "b4-control", "evaluations": [
+    {"ref": "owner", "generation": 1, "sequence": 1, "sub": oid,
+     "exp": int(time.time()) + 60, "access": {"kind": "owner"}}]}
+check("B4-R113", "no client certificate", direct("projects", "POST", ws_path, body=ws_body), TLS)
+for peer in ("api_gateway", "users", "projects"):
+    check("B4-R113", f"{peer} cannot delegate WS identity",
+          direct("projects", "POST", ws_path, peer=peer, body=ws_body), 403)
+check("B4-R113", "ws_gateway admitted to read-only authorization endpoint",
+      direct("projects", "POST", ws_path, peer="ws_gateway", body=ws_body), 200)
+
 res.finish(matrix_ids() + ["S13", "S14", "S15", "F05"])

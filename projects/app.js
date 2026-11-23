@@ -28,6 +28,7 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "jade");
 
 app.use(logger(":method :status :response-time ms"));
+app.use("/internal/ws", require("./routes/wsAuth"));
 app.use(requireInternalIdentity);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

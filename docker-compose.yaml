@@ -143,8 +143,10 @@ services:
     env_file: ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/env/rabbitmq.env
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
-      - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/rabbitmq/definitions.json:/etc/rabbitmq/definitions.json:ro
+      - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/rabbitmq/definitions.json:/run/secrets/rabbitmq/definitions.json:ro
       - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/pki/services/rabbitmq:/run/secrets/pki:ro
+    tmpfs:
+      - /run/picturas-private
     healthcheck:
       test: ["CMD-SHELL", "rabbitmqctl status"]
       interval: 30s
@@ -168,11 +170,12 @@ services:
       retries: 5
     tmpfs:
       - /tmp
+      - /docker-entrypoint-initdb.d
     volumes:
       - project_data:/data/db
       - ./ops/mongo-tls-entrypoint.sh:/usr/local/bin/mongo-tls-entrypoint.sh:ro
       - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/pki/services/projects_mongoDB:/run/secrets/pki:ro
-      - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/mongo/projects/init.js:/docker-entrypoint-initdb.d/init.js:ro
+      - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/mongo/projects/init.js:/run/secrets/mongo/init.js:ro
 
   projects:
     build: ./projects
@@ -220,11 +223,12 @@ services:
       retries: 5
     tmpfs:
       - /tmp
+      - /docker-entrypoint-initdb.d
     volumes:
       - user_data:/data/db
       - ./ops/mongo-tls-entrypoint.sh:/usr/local/bin/mongo-tls-entrypoint.sh:ro
       - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/pki/services/users_mongoDB:/run/secrets/pki:ro
-      - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/mongo/users/init.js:/docker-entrypoint-initdb.d/init.js:ro
+      - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/mongo/users/init.js:/run/secrets/mongo/init.js:ro
 
   users:
     build: ./users
@@ -262,11 +266,12 @@ services:
       retries: 5
     tmpfs:
       - /tmp
+      - /docker-entrypoint-initdb.d
     volumes:
       - subscription_data:/data/db
       - ./ops/mongo-tls-entrypoint.sh:/usr/local/bin/mongo-tls-entrypoint.sh:ro
       - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/pki/services/subscriptions_mongoDB:/run/secrets/pki:ro
-      - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/mongo/subscriptions/init.js:/docker-entrypoint-initdb.d/init.js:ro
+      - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/mongo/subscriptions/init.js:/run/secrets/mongo/init.js:ro
 
   subscriptions:
     build: ./subscriptions

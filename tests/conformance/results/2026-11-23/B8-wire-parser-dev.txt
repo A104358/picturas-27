@@ -1,0 +1,1 @@
+PASS wire parser: exact handshake, +1, UTF-8 escapes/whitespace, no metadata serialization, no binary reconstruction queue

@@ -80,7 +80,8 @@ res.check("W1", "wss through nginx connects (websocket transport)", ws_ok, True)
 pid = api("POST", f"projects/{uid}", token, json={"name": "b5-functional"}).json()["_id"]
 version = lambda: str(api("GET", f"projects/{uid}/{pid}", token).json()["version"])  # noqa: E731
 if ws_ok:
-    sio.emit("join-project", pid)
+    joined = sio.call("join-project", {"projectId": pid, "access": {"kind": "owner"}}, timeout=3)
+    res.check("W1", "fresh owner authorization (B8 protocol)", joined.get("status"), "joined")
 source = png()
 r = api("POST", f"projects/{uid}/{pid}/img", token, files={"image": ("b5.png", source, "image/png")},
         headers={"X-Project-Version": version()})

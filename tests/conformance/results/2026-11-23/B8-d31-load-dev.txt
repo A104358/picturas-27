@@ -1,0 +1,4 @@
+{"case": "WS-N1", "projects": 10, "connections": 50, "contexts_before_revocation": 50, "preload_and_cut_seconds": 12.09, "join_max_ms": 36.04, "cut_last_event_max_ms": 945.94, "events_after_5s": 0, "nonrevoked_controls_complete": true}
+{"case": "WS-J1", "projects": 3, "connections": 510, "contexts_before_revocation": 510, "preload_and_cut_seconds": 32.72, "join_max_ms": 58.35, "cut_last_event_max_ms": 954.97, "events_after_5s": 0, "nonrevoked_controls_complete": true}
+{"case": "WS-P1", "projects": 40, "connections": 200, "contexts_before_revocation": 200, "preload_and_cut_seconds": 18.54, "join_max_ms": 40.86, "cut_last_event_max_ms": 910.97, "events_after_5s": 0, "nonrevoked_controls_complete": true}
+{"case": "WS-L1/L2", "connections_live": 512, "contexts_live": 4096, "excess_connection": "refused", "excess_context": "context_limit", "preload_seconds": 125.54, "join_max_ms": 165.67, "unintended_removals": 0}

@@ -174,6 +174,7 @@ function process_msg() {
     // variáveis “seguras” para usar no catch
     let runnerIdSafe = null;
     let ownerIdSafe = null;
+    let projectIdSafe = null;
 
     try {
       const msg_content = JSON.parse(msg.content.toString());
@@ -183,6 +184,7 @@ function process_msg() {
       if (!process) return;
 
       ownerIdSafe = process.user_id;
+      projectIdSafe = String(process.project_id);
       runnerIdSafe = process.runner_id || process.user_id;
 
        console.log(
@@ -210,7 +212,7 @@ function process_msg() {
       if (msg_content.status === "error") {
         console.log(JSON.stringify(msg_content));
         if (/preview/.test(msg_id)) {
-          send_msg_client_preview_error(`update-client-preview-${uuidv4()}`, timestamp, runnerId, msg_content.error.code, msg_content.error.msg)
+          send_msg_client_preview_error(`update-client-preview-${uuidv4()}`, timestamp, runnerId, msg_content.error.code, msg_content.error.msg, String(process.project_id))
         }
         
         else {
@@ -219,7 +221,8 @@ function process_msg() {
             timestamp,
             runnerId,   
             msg_content.error.code,
-            msg_content.error.msg
+            msg_content.error.msg,
+            String(process.project_id)
           );
         }
         return;
@@ -364,7 +367,8 @@ if (/preview/.test(msg_id) && isLast) {
       `update-client-preview-${uuidv4()}`,
       timestamp,
       runnerId,
-      JSON.stringify(urls)
+      JSON.stringify(urls),
+      String(process.project_id)
     );
   }
 }
@@ -477,7 +481,8 @@ if (/preview/.test(msg_id) && isLast) {
         send_msg_client(
           user_msg_id,
           timestamp,
-          runnerId
+          runnerId,
+          String(process.project_id)
         );
 
       if (chainEnd) return;
@@ -532,7 +537,8 @@ if (/preview/.test(msg_id) && isLast) {
         timestamp,
         target,
         "30000",
-        "An error happened while processing the project"
+        "An error happened while processing the project",
+        projectIdSafe
       );
       return;
     }
@@ -1161,7 +1167,8 @@ router.post("/:user/:project/preview/:img", checkSharePermission, requireEditPer
           `update-client-preview-${uuidv4()}`,
           new Date().toISOString(),
           runnerUserId,
-          JSON.stringify(urls)
+          JSON.stringify(urls),
+          req.params.project
         );
         return res.sendStatus(200);
       }

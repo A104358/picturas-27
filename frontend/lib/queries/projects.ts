@@ -6,7 +6,8 @@ import {
   ProjectImage,
   fetchProjectResults,
 } from "../projects";
-import io from "socket.io-client";
+import { useEffect } from "react";
+import { createProjectSocket, retainProjectSocket } from "../project-socket";
 import { listProjectShareLinks, fetchSharedProject } from "../projects";
 import type { ShareLink } from "../projects";
 import { resolveShareLink } from "../projects";
@@ -59,17 +60,18 @@ export const useGetProjectImages = (
 };
 
 export const useGetSocket = (token: string) => {
-  return useQuery({
+  const query = useQuery({
     queryKey: ["socket", token],
-    queryFn: () =>
-      io("https://localhost:8080", {
-        transports: ["websocket"],
-        secure: true,
-        auth: { token },
-      }),
+    queryFn: () => createProjectSocket(token),
+    enabled: !!token,
+    staleTime: Infinity,
     refetchOnWindowFocus: false,
     refetchOnMount: false,
   });
+  useEffect(() => {
+    if (query.data) return retainProjectSocket(query.data);
+  }, [query.data]);
+  return query;
 };
 
 export const useGetProjectResults = (

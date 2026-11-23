@@ -13,6 +13,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import platform
 import re
 import shutil
@@ -20,6 +21,7 @@ import subprocess
 import sys
 import time
 import traceback
+import weakref
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -155,6 +157,7 @@ def manifest(campaign: str, pre: dict) -> dict:
                           "rabbit_mgmt_ca": bool(SETTINGS.rabbit_mgmt_ca_file),
                           "mongo_ca": bool(SETTINGS.mongo_ca_file)},
         "compose_project": SETTINGS.project,
+        "ws_join_format": os.environ.get("MED_WS_JOIN_FORMAT", "legacy"),
         "preflight": pre,
     }
 
@@ -217,10 +220,66 @@ def _wanted(metrics: str | None, suite: str) -> list[str]:
     return out
 
 
+def configure_ws_protocol(security) -> None:
+    """D-03/B8: opt-in protocol adapter; the frozen legacy client stays unchanged.
+
+    Keep this adapter here: medlib, cases and criteria remain frozen. Shared
+    contexts come only from the fixture's successful share resolution, never
+    from discovering a link for an attacker or from labels such as 'reader'.
+    """
+    mode = os.environ.get("MED_WS_JOIN_FORMAT", "legacy")
+    if mode == "legacy":
+        return
+    if mode != "v2":
+        raise SystemExit("MED_WS_JOIN_FORMAT must be legacy or v2")
+    from medlib.api import API
+    from medlib.ws import WS
+
+    contexts = {}
+    clients = weakref.WeakSet()
+    share_resolve = API.share_resolve
+    create_project = API.create_project
+
+    class ProtocolWS(WS):
+        def connect(self, token):
+            self._protocol_token = token
+            clients.add(self)
+            return super().connect(token)
+
+        def join(self, project_id):
+            if self.sio.connected:
+                access = contexts.get((self._protocol_token, project_id), {"kind": "owner"})
+                try:
+                    self.sio.call("join-project", {"projectId": project_id, "access": access}, timeout=2)
+                except Exception:  # refusal/timeout never stands in for authorization
+                    pass
+
+    def resolve(self, acct, share_id):
+        response = share_resolve(self, acct, share_id)
+        if response.ok and isinstance(response.json, dict) and response.json.get("_id"):
+            contexts[(acct.jwt, str(response.json["_id"]))] = {"kind": "share", "shareId": share_id}
+        return response
+
+    def create(self, owner, *args, **kwargs):
+        project = create_project(self, owner, *args, **kwargs)
+        # D-29: S05 connects before creating its project. Present that owner
+        # context explicitly before operations produce protected personal events.
+        for client in list(clients):
+            if client.connected and client._protocol_token == owner.jwt:
+                client.join(project.id)
+        return project
+
+    API.share_resolve = resolve
+    API.create_project = create
+    security.WS = ProtocolWS
+
+
 def run(args: argparse.Namespace) -> int:
     from medlib import security
     from medlib.api import API
     from medlib.uploads import Uploader
+
+    configure_ws_protocol(security)
 
     pre = preflight(args.campaign)
     if not pre["ok"] and not args.force:

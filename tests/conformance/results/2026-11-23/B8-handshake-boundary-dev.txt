@@ -1,0 +1,62 @@
+PASS WS-T01 owner joins: joined
+{"case": "handshake-boundary", "bytes": 8191, "connected": true, "refusal": null, "error_kind": null, "connect_ms": 26.19}
+PASS WS-B1 handshake boundary 8191: True
+{"case": "handshake-boundary", "bytes": 8192, "connected": true, "refusal": null, "error_kind": null, "connect_ms": 40.32}
+PASS WS-B1 handshake boundary 8192: True
+{"case": "handshake-boundary", "bytes": 8193, "connected": false, "refusal": null, "error_kind": "ConnectionError", "connect_ms": 5032.29}
+PASS WS-B1 handshake boundary 8193: False
+{"case": "handshake-boundary", "bytes": 8191, "connected": true, "refusal": null, "error_kind": null, "connect_ms": 19.89}
+PASS WS-B1 handshake boundary 8191: True
+{"case": "handshake-boundary", "bytes": 8192, "connected": true, "refusal": null, "error_kind": null, "connect_ms": 29.12}
+PASS WS-B1 handshake boundary 8192: True
+{"case": "handshake-boundary", "bytes": 8193, "connected": false, "refusal": null, "error_kind": "ConnectionError", "connect_ms": 5033.08}
+PASS WS-B1 handshake boundary 8193: False
+{"case": "handshake-boundary", "bytes": 8191, "connected": true, "refusal": null, "error_kind": null, "connect_ms": 40.51}
+PASS WS-B1 handshake boundary 8191: True
+{"case": "handshake-boundary", "bytes": 8192, "connected": true, "refusal": null, "error_kind": null, "connect_ms": 38.53}
+PASS WS-B1 handshake boundary 8192: True
+{"case": "handshake-boundary", "bytes": 8193, "connected": false, "refusal": null, "error_kind": "ConnectionError", "connect_ms": 5028.64}
+PASS WS-B1 handshake boundary 8193: False
+{"case": "handshake-boundary", "bytes": 8191, "connected": true, "refusal": null, "error_kind": null, "connect_ms": 32.7}
+PASS WS-B1 handshake boundary 8191: True
+{"case": "handshake-boundary", "bytes": 8192, "connected": true, "refusal": null, "error_kind": null, "connect_ms": 32.39}
+PASS WS-B1 handshake boundary 8192: True
+{"case": "handshake-boundary", "bytes": 8193, "connected": false, "refusal": null, "error_kind": "ConnectionError", "connect_ms": 5018.08}
+PASS WS-B1 handshake boundary 8193: False
+{"case": "handshake-boundary", "bytes": 8191, "connected": true, "refusal": null, "error_kind": null, "connect_ms": 43.78}
+PASS WS-B1 handshake boundary 8191: True
+{"case": "handshake-boundary", "bytes": 8192, "connected": true, "refusal": null, "error_kind": null, "connect_ms": 37.04}
+PASS WS-B1 handshake boundary 8192: True
+{"case": "handshake-boundary", "bytes": 8193, "connected": false, "refusal": null, "error_kind": "ConnectionError", "connect_ms": 5023.97}
+PASS WS-B1 handshake boundary 8193: False
+{"case": "handshake-boundary", "bytes": 8191, "connected": true, "refusal": null, "error_kind": null, "connect_ms": 34.96}
+PASS WS-B1 handshake boundary 8191: True
+{"case": "handshake-boundary", "bytes": 8192, "connected": true, "refusal": null, "error_kind": null, "connect_ms": 48.67}
+PASS WS-B1 handshake boundary 8192: True
+{"case": "handshake-boundary", "bytes": 8193, "connected": false, "refusal": null, "error_kind": "ConnectionError", "connect_ms": 5031.26}
+PASS WS-B1 handshake boundary 8193: False
+{"case": "handshake-boundary", "bytes": 8191, "connected": true, "refusal": null, "error_kind": null, "connect_ms": 42.58}
+PASS WS-B1 handshake boundary 8191: True
+{"case": "handshake-boundary", "bytes": 8192, "connected": true, "refusal": null, "error_kind": null, "connect_ms": 31.95}
+PASS WS-B1 handshake boundary 8192: True
+{"case": "handshake-boundary", "bytes": 8193, "connected": false, "refusal": null, "error_kind": "ConnectionError", "connect_ms": 5030.1}
+PASS WS-B1 handshake boundary 8193: False
+{"case": "handshake-boundary", "bytes": 8191, "connected": true, "refusal": null, "error_kind": null, "connect_ms": 40.35}
+PASS WS-B1 handshake boundary 8191: True
+{"case": "handshake-boundary", "bytes": 8192, "connected": true, "refusal": null, "error_kind": null, "connect_ms": 34.08}
+PASS WS-B1 handshake boundary 8192: True
+{"case": "handshake-boundary", "bytes": 8193, "connected": false, "refusal": null, "error_kind": "ConnectionError", "connect_ms": 5025.6}
+PASS WS-B1 handshake boundary 8193: False
+{"case": "handshake-boundary", "bytes": 8191, "connected": false, "refusal": null, "error_kind": "ConnectionError", "connect_ms": 5025.42}
+FAIL WS-B1 handshake boundary 8191: False
+{"case": "handshake-boundary", "bytes": 8192, "connected": true, "refusal": null, "error_kind": null, "connect_ms": 39.73}
+PASS WS-B1 handshake boundary 8192: True
+{"case": "handshake-boundary", "bytes": 8193, "connected": false, "refusal": null, "error_kind": "ConnectionError", "connect_ms": 5019.72}
+PASS WS-B1 handshake boundary 8193: False
+{"case": "handshake-boundary", "bytes": 8191, "connected": true, "refusal": null, "error_kind": null, "connect_ms": 18.54}
+PASS WS-B1 handshake boundary 8191: True
+{"case": "handshake-boundary", "bytes": 8192, "connected": true, "refusal": null, "error_kind": null, "connect_ms": 24.64}
+PASS WS-B1 handshake boundary 8192: True
+{"case": "handshake-boundary", "bytes": 8193, "connected": false, "refusal": null, "error_kind": "ConnectionError", "connect_ms": 5023.92}
+PASS WS-B1 handshake boundary 8193: False
+B8 WebSocket: 30/31 checks passed

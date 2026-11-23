@@ -1,0 +1,84 @@
+{"workload":[5,5,5,5,5,5,5,5,5,5],"connections":50,"contexts":50,"buckets":50,"active":0,"pending":0,"peakActive":2,"peakPending":1,"reasons":{},"queueReasons":{},"timing":{"requests":218,"evaluations":350,"waitMaxMs":0,"httpMaxMs":0},"cadence":{"ticks":300,"tickGapMaxMs":25,"renewalGapMaxMs":1024}}
+{"workload":[500,5,5],"connections":510,"contexts":510,"buckets":510,"active":0,"pending":0,"peakActive":3,"peakPending":1,"reasons":{},"queueReasons":{},"timing":{"requests":1216,"evaluations":4870,"waitMaxMs":0,"httpMaxMs":0},"cadence":{"ticks":760,"tickGapMaxMs":25,"renewalGapMaxMs":1024}}
+{"workload":[5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5],"connections":200,"contexts":200,"buckets":200,"active":0,"pending":0,"peakActive":4,"peakPending":1,"reasons":{},"queueReasons":{},"timing":{"requests":1002,"evaluations":1573,"waitMaxMs":0,"httpMaxMs":0},"cadence":{"ticks":450,"tickGapMaxMs":25,"renewalGapMaxMs":1024}}
+{"workload":"512/4096","connections":511,"contexts":4088,"buckets":512,"active":0,"pending":0,"peakActive":4,"peakPending":4,"reasons":{"context_limit":1},"queueReasons":{},"timing":{"requests":33596,"evaluations":94276,"waitMaxMs":0,"httpMaxMs":0},"cadence":{"ticks":4096,"tickGapMaxMs":11,"renewalGapMaxMs":1001}}
+TAP version 13
+# Subtest: WS-T01: verified connection identity, fresh joins, canonical contexts and callbacks
+ok 1 - WS-T01: verified connection identity, fresh joins, canonical contexts and callbacks
+  ---
+  duration_ms: 4.458106
+  ...
+# Subtest: WS-T02/T03/T04/E1: outage denies fresh join; failures never renew; emission checks deadline without timers
+ok 2 - WS-T02/T03/T04/E1: outage denies fresh join; failures never renew; emission checks deadline without timers
+  ---
+  duration_ms: 1.341703
+  ...
+# Subtest: WS-T05/E1: leave, disconnect and rejoin invalidate delayed evaluations; replacements acknowledge
+ok 3 - WS-T05/E1: leave, disconnect and rejoin invalidate delayed evaluations; replacements acknowledge
+  ---
+  duration_ms: 1.657017
+  ...
+# Subtest: WS-T06: only presented paths survive individual denial; all denied removes room
+ok 4 - WS-T06: only presented paths survive individual denial; all denied removes room
+  ---
+  duration_ms: 0.853896
+  ...
+# Subtest: WS-T07: absolute JWT expiry gates every event and terminates connection
+ok 5 - WS-T07: absolute JWT expiry gates every event and terminates connection
+  ---
+  duration_ms: 0.385101
+  ...
+# Subtest: WS-T08: partial, duplicate, swapped, oversized and truncated responses grant nothing
+ok 6 - WS-T08: partial, duplicate, swapped, oversized and truncated responses grant nothing
+  ---
+  duration_ms: 1.274451
+  ...
+# Subtest: WS-T10: 4 active + 16 pending; 17th refused; replacement keeps deadline and acknowledges
+ok 7 - WS-T10: 4 active + 16 pending; 17th refused; replacement keeps deadline and acknowledges
+  ---
+  duration_ms: 1.32681
+  ...
+# Subtest: WS-B1: exact 4 KiB multibyte join and 64 KiB batch; +1 rejected explicitly
+ok 8 - WS-B1: exact 4 KiB multibyte join and 64 KiB batch; +1 rejected explicitly
+  ---
+  duration_ms: 1.483683
+  ...
+# Subtest: WS-N1/J1/P1: bounded scheduler renews normal, 500+5+5 and 40x5 workloads fairly
+ok 9 - WS-N1/J1/P1: bounded scheduler renews normal, 500+5+5 and 40x5 workloads fairly
+  ---
+  duration_ms: 220.495035
+  ...
+# Subtest: WS-L1/L2: live 512 connections/4096 contexts; controlled refusal at 513/4097 and cleanup
+ok 10 - WS-L1/L2: live 512 connections/4096 contexts; controlled refusal at 513/4097 and cleanup
+  ---
+  duration_ms: 1668.659499
+  ...
+# Subtest: WS-L3/R1: 32 rooms, 4 paths, per-subject bursts across reconnects, global burst and bucket retention
+ok 11 - WS-L3/R1: 32 rooms, 4 paths, per-subject bursts across reconnects, global burst and bucket retention
+  ---
+  duration_ms: 4.667431
+  ...
+# Subtest: WS-R1: global burst 200, subject-map cap 2048 and two-second retention
+ok 12 - WS-R1: global burst 200, subject-map cap 2048 and two-second retention
+  ---
+  duration_ms: 41.227144
+  ...
+# Subtest: WS-T04: positive result at/after total deadline never grants or renews
+ok 13 - WS-T04: positive result at/after total deadline never grants or renews
+  ---
+  duration_ms: 0.552731
+  ...
+# Subtest: WS-B1/T10: wide UTF-8 contexts split before 64 KiB even below 50 evaluations
+ok 14 - WS-B1/T10: wide UTF-8 contexts split before 64 KiB even below 50 evaluations
+  ---
+  duration_ms: 3.835748
+  ...
+1..14
+# tests 14
+# suites 0
+# pass 14
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1961.587265

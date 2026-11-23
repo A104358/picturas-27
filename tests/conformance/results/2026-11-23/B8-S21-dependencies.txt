@@ -1,0 +1,1 @@
+Base and B8 projects image: Node v26.13.1; axios 1.21.1; mongoose 8.24.11.

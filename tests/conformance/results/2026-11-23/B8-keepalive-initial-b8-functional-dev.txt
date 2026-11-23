@@ -1,0 +1,38 @@
+PASS WS-T01 owner joins: joined
+PASS WS-T01 reader joins without editing: joined
+PASS WS-T01 WS authorization does not mutate project version: 2
+PASS WS-T01 unrelated owner context denied: denied
+PASS WS-T01 unknown share denied: denied
+PASS S10 missing/invalid/expired/wrong-audience JWT refused: False
+PASS S10 missing/invalid/expired/wrong-audience JWT refused: False
+PASS S10 missing/invalid/expired/wrong-audience JWT refused: False
+PASS S10 missing/invalid/expired/wrong-audience JWT refused: False
+FAIL WS-B1 exact 8 KiB authenticated handshake accepted: False
+PASS WS-B1 8 KiB plus one handshake refused: False
+PASS WS-B1 exact 64 KiB incoming frame accepted: True
+PASS WS-B1 64 KiB plus one incoming frame closes transport: False
+PASS WS-T01 anonymous JWT with presented share allowed: joined
+PASS WS-T08 individual owner/outsider/read/invalid decisions: (200, ['allow', 'deny', 'allow', 'deny'])
+PASS WS-T09 other CA-valid service cannot delegate: 403
+PASS WS-T09 other CA-valid service cannot delegate: 403
+PASS WS-T09 other CA-valid service cannot delegate: 403
+PASS WS-T09 other CA-valid service cannot delegate: 403
+PASS WS-T09 no certificate cannot delegate: TLS
+PASS WS-T09 WS cannot use unrelated project operation: 403
+PASS WS-B1 51 evaluations rejected: 400
+PASS WS-B1 50 evaluations accepted without truncation: True
+PASS WS-B1 exact 64 KiB JSON body accepted: 200
+PASS WS-B1 64 KiB plus one JSON body rejected: 413
+PASS WS-B1 HTTP body above 64 KiB rejected: 413
+PASS WS-E1 authorized owner receives personal preview/progress: True
+PASS WS-E1 unjoined outsider gets no protected personal/project events: False
+PASS WS-T06 second presented path joins: joined
+PASS WS-T06 another presented path survives denial: True
+PASS WS-T03 revocation has no events after 5 seconds: False
+PASS WS-T03 observed last protected event within 2 second target: True
+PASS WS-T03 revoked link cannot rejoin: denied
+PASS WS-T05/E1 leave removes personal authorization: False
+PASS WS-T05 rejoin consults anew: joined
+PASS WS-T07 short-lived JWT joins: joined
+PASS WS-T07 JWT expiry terminates transport: False
+B8 WebSocket: 36/37 checks passed

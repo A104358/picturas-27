@@ -1,0 +1,9 @@
+{"metric": "S03", "campaign": "EXP", "case": "D06", "surface": "host", "rep": 1, "result": "RECUSADO_REDE", "reason": "ligação recusada / porta não publicada", "t_utc": "2026-11-23T22:34:02Z", "status": null}
+{"metric": "S03", "campaign": "EXP", "case": "D07", "surface": "host", "rep": 1, "result": "RECUSADO_REDE", "reason": "ligação recusada / porta não publicada", "t_utc": "2026-11-23T22:34:03Z", "status": null}
+{"metric": "S03", "campaign": "EXP", "case": "D15", "surface": "host", "rep": 1, "result": "RECUSADO_REDE", "reason": "ligação recusada / porta não publicada", "t_utc": "2026-11-23T22:34:04Z", "status": null}
+{"metric": "S03", "campaign": "EXP", "case": "D08", "surface": "host", "rep": 1, "result": "RECUSADO_REDE", "reason": "ligação recusada / porta não publicada", "t_utc": "2026-11-23T22:34:05Z", "status": null}
+{"metric": "S03", "campaign": "EXP", "case": "D06", "surface": "rede", "rep": 1, "result": "RECUSADO_TLS", "reason": "handshake TLS recusado", "t_utc": "2026-11-23T22:34:07Z", "status": null}
+{"metric": "S03", "campaign": "EXP", "case": "D07", "surface": "rede", "rep": 1, "result": "RECUSADO_TLS", "reason": "handshake TLS recusado", "t_utc": "2026-11-23T22:34:08Z", "status": null}
+{"metric": "S03", "campaign": "EXP", "case": "D15", "surface": "rede", "rep": 1, "result": "RECUSADO_TLS", "reason": "handshake TLS recusado", "t_utc": "2026-11-23T22:34:09Z", "status": null}
+{"metric": "S03", "campaign": "EXP", "case": "D08", "surface": "rede", "rep": 1, "result": "RECUSADO_TLS", "reason": "handshake TLS recusado", "t_utc": "2026-11-23T22:34:10Z", "status": null}
+{"metric": "S03", "campaign": "EXP", "control": "dono_descarrega_original", "rep": 1, "ok": true, "note": "", "t_utc": "2026-11-23T22:34:12Z"}

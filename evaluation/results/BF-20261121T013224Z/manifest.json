@@ -231,11 +231,17 @@
    "motivo": "D-13: opções TLS nos canais de dados; valores por omissão iguais à BF",
    "total": "2dfe2a7ad06c5de6fbc4a1de89f7e795ec9f2a1683a849540aa806630bb00c3a",
    "anterior": "638516104ae9c1bd6e0f80bf1e14f2b0b8d855b8c50ace98e9b4c3958a51445a"
+  },
+  {
+   "em": "2026-11-23T22:15:16Z",
+   "motivo": "B8 D-03 / D-29 (decisions 3 and 38): MED_WS_JOIN_FORMAT legacy unchanged by default; v2 presents explicit owner/share contexts including S05. Cases, criteria and medlib unchanged.",
+   "total": "12c60c7f7695461c3eeb43b55ded3e54e1816748a379e0d3aa6ec328f9127f56",
+   "anterior": "2dfe2a7ad06c5de6fbc4a1de89f7e795ec9f2a1683a849540aa806630bb00c3a"
   }
  ],
  "instrumento_final": {
   "ficheiros": {
-   "med.py": "42e8f8827b4c76ec120dbec4b467c519e36a7b67e9bdd694972ef4599262e5cb",
+   "med.py": "52dd5cab2bdfa2020494d24fb6d819fb86c904e529f4de77bcd57b1b6c04bde5",
    "criteria.yaml": "99f6facdf2c1da7791a48361281ec169e8e0c980f2455a0c1506f5b697f96a88",
    "cases/security.yaml": "e7daa0a3e80fbdf910416e7a08ea8ce17257ab102d7a7842b93c881c2f1ad5bd",
    "probe.Dockerfile": "6adebc5704b2003c6a75e540bed7782022ef5939837e5c93250c40cffc6073f1",
@@ -255,6 +261,6 @@
    "medlib/util.py": "da7f2ac7f46c2a2fa923766768b857eb5e7a70394cdc604f7b65d64050a4ad4c",
    "medlib/ws.py": "dde6bc170a914921650ab38d9127a5002ed5d2f82ae48c681bc329c9913deb9a"
   },
-  "total": "2dfe2a7ad06c5de6fbc4a1de89f7e795ec9f2a1683a849540aa806630bb00c3a"
+  "total": "12c60c7f7695461c3eeb43b55ded3e54e1816748a379e0d3aa6ec328f9127f56"
  }
 }

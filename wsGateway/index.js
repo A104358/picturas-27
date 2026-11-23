@@ -59,8 +59,6 @@ function process_msg() {
         const status = msg_content.status;
         const user = msg_content.user;
 
-        console.log('Received msg:', JSON.stringify(msg_content));
-
         // Video editing progress, as a percentage
         if (/update-client-video-progress/.test(msg_id)) {
             io.to(user).emit("video-progress", {

@@ -3,9 +3,9 @@ mongodump version: 100.10.0
 2026-11-21T19:44:47.023+0000	writing projects.project to archive '/tmp/p.gz'
 2026-11-21T19:44:47.025+0000	done dumping projects.project (2 documents)
 dump rc=0 size=378
-2026-11-21T19:45:17.029+0000	Failed: can't create session: failed to connect to mongodb://backup_ro:backup-ro-pw-<spike>@projects_mongoDB:27017/projects?authSource=projects: server selection error: server selection timeout, current topology: { Type: Single, Servers: [{ Addr: projects_mongodb:27017, Type: Unknown, Last error:  connection(projects_mongodb:27017[-61]) socket was unexpectedly closed: EOF: connection(projects_mongodb:27017[-61]) socket was unexpectedly closed: EOF }, ] }
+2026-11-21T19:45:17.029+0000	Failed: can't create session: failed to connect to mongodb://***@projects_mongoDB:27017/projects?authSource=projects: server selection error: server selection timeout, current topology: { Type: Single, Servers: [{ Addr: projects_mongodb:27017, Type: Unknown, Last error:  connection(projects_mongodb:27017[-61]) socket was unexpectedly closed: EOF: connection(projects_mongodb:27017[-61]) socket was unexpectedly closed: EOF }, ] }
 dump without TLS rc=0
-2026-11-21T19:45:47.043+0000	Failed: can't create session: failed to connect to mongodb://backup_ro:backup-ro-pw-<spike>@projects_mongoDB:27017/projects?authSource=projects&tls=true&tlsCAFile=/pki/otherca.crt: server selection error: server selection timeout, current topology: { Type: Single, Servers: [{ Addr: projects_mongodb:27017, Type: Unknown, Last error: tls: failed to verify certificate: x509: certificate signed by unknown authority }, ] }
+2026-11-21T19:45:47.043+0000	Failed: can't create session: failed to connect to mongodb://***@projects_mongoDB:27017/projects?authSource=projects&tls=true&tlsCAFile=/pki/otherca.crt: server selection error: server selection timeout, current topology: { Type: Single, Servers: [{ Addr: projects_mongodb:27017, Type: Unknown, Last error: tls: failed to verify certificate: x509: certificate signed by unknown authority }, ] }
 dump wrong CA rc=0
 2026-11-21T19:45:47.134+0000	2 document(s) restored successfully. 0 document(s) failed to restore.
 restore rc=0

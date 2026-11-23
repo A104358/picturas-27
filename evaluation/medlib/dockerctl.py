@@ -288,6 +288,12 @@ def start_probe() -> None:
     cert_dir = SETTINGS.client_cert_dir()
     if cert_dir:
         cmd += ["-v", f"{cert_dir}:/certs:ro"]
+    for channel in ("s3", "amqp", "rabbit_mgmt", "mongo"):
+        ca = getattr(SETTINGS, f"{channel}_ca_file")
+        if ca:
+            if not Path(ca).is_file():
+                raise SystemExit(f"Missing MED data-channel CA file for {channel}")
+            cmd += ["-v", f"{Path(ca).resolve()}:/med-certs/{channel}.crt:ro"]
     cmd += [SETTINGS.probe_image, "sleep", "infinity"]
     run(cmd)
 

@@ -1,7 +1,7 @@
 const s3 = require("./s3Client");
 const { BUCKET, objectKey } = require("./storage");
 
-// Presigned URL reachable only inside the Docker network (http://seaweedfs:9000/...),
+// Presigned URL reachable only inside the Docker network (https://seaweedfs:9000/...),
 // for services that download the image themselves.
 async function getInternalUrl(userId, projectId, stage, imageName) {
   const params = {
@@ -13,7 +13,7 @@ async function getInternalUrl(userId, projectId, stage, imageName) {
   try {
     return await s3.getSignedUrlPromise("getObject", params);
   } catch (error) {
-    console.error("Erro ao gerar URL presignada:", error.message);
+    console.error("Could not create the signed S3 URL");
     throw error;
   }
 }
@@ -22,7 +22,7 @@ async function getInternalUrl(userId, projectId, stage, imageName) {
 // browser can load it. The signature lives in the path and query, which are unchanged.
 async function getPublicUrl(userId, projectId, stage, imageName) {
   const url = await getInternalUrl(userId, projectId, stage, imageName);
-  const internal = `http://${process.env.S3_ENDPOINT || "seaweedfs:9000"}`;
+  const internal = `https://${process.env.S3_ENDPOINT || "seaweedfs:9000"}`;
   return url.replace(internal, process.env.FRONTEND_URL + "/s3");
 }
 

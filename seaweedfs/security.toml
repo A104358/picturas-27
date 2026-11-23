@@ -1,0 +1,47 @@
+[grpc]
+ca = "/run/secrets/pki/ca.crt"
+
+[grpc.master]
+cert = "/run/secrets/pki/service.crt"
+key = "/run/secrets/pki/service.key"
+allowed_commonNames = "seaweedfs"
+
+[grpc.volume]
+cert = "/run/secrets/pki/service.crt"
+key = "/run/secrets/pki/service.key"
+allowed_commonNames = "seaweedfs"
+
+[grpc.filer]
+cert = "/run/secrets/pki/service.crt"
+key = "/run/secrets/pki/service.key"
+allowed_commonNames = "seaweedfs"
+
+[grpc.s3]
+cert = "/run/secrets/pki/service.crt"
+key = "/run/secrets/pki/service.key"
+allowed_commonNames = "seaweedfs"
+
+[grpc.client]
+cert = "/run/secrets/pki/service.crt"
+key = "/run/secrets/pki/service.key"
+
+[https.client]
+enabled = true
+cert = "/run/secrets/pki/service.crt"
+key = "/run/secrets/pki/service.key"
+ca = "/run/secrets/pki/ca.crt"
+
+[https.volume]
+cert = "/run/secrets/pki/service.crt"
+key = "/run/secrets/pki/service.key"
+ca = "/run/secrets/pki/ca.crt"
+
+[https.master]
+cert = "/run/secrets/pki/service.crt"
+key = "/run/secrets/pki/service.key"
+ca = "/run/secrets/pki/ca.crt"
+
+[https.filer]
+cert = "/run/secrets/pki/service.crt"
+key = "/run/secrets/pki/service.key"
+ca = "/run/secrets/pki/ca.crt"

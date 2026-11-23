@@ -205,6 +205,9 @@ afetado é revisto antes de começar.
    - credenciais por principal: o `img_storage` lê e escreve só no bucket da
      aplicação, sem criar nem apagar buckets;
    - credencial de administrador fora do repositório;
+   - o bucket da aplicação é criado, se faltar, por um job Compose de arranque único,
+     idempotente, com a credencial admin montada só nele; `img_storage` espera por
+     `service_completed_successfully` e não tem permissão para criar buckets (D-20);
    - HTTPS no S3 (9000) e no filer (8888), e TLS nos componentes internos conforme
      SP-11;
    - o master, o volume e o filer escutam **só em loopback** (estão no mesmo processo
@@ -961,6 +964,7 @@ Os documentos de decisão exigem que estes pontos sejam ditos, e não escondidos
 |-------|--------|
 | Um administrador ou root do host comprometido fica fora do modelo de ameaça | D1 |
 | Os segredos e chaves antigos continuam no histórico do Git (retirá-los dos ficheiros não os apaga) | S19, guardas Git/build |
+| As palavras-passe fixas do spike SP-06 também ficam no histórico do commit B0; eram de contentores descartáveis, não da instalação | S19, guardas Git/build |
 | Um link de partilha divulgado continua válido até ser revogado | LINK-C1 A |
 | A identidade interna pode ser reutilizada pelo peer autorizado, no mesmo contexto, durante 30 s (não há uso único) | JWT-C1 A |
 | O logout e a mudança de password não invalidam um JWT já emitido até ao seu `exp` | SESS-C1 A |

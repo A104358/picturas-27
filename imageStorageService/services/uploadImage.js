@@ -20,7 +20,7 @@ async function uploadImage(userId, projectId, file, stage) {
     const data = await s3.upload(params).promise();
     return { imageKey, location: data.Location };
   } catch (error) {
-    console.error("Erro ao enviar imagem:", error.message);
+    console.error("S3 upload failed");
     throw error;
   }
 }

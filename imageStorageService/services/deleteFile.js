@@ -14,7 +14,7 @@ async function deleteFile(userId, projectId, stage, fileName) {
     console.log(`Arquivo '${params.Key}' deletado do bucket '${BUCKET}'.`);
     return { message: "Arquivo deletado com sucesso!", key };
   } catch (error) {
-    console.error("Erro ao deletar o arquivo:", error.message);
+    console.error("S3 delete failed");
     throw error;
   }
 }

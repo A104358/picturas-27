@@ -639,14 +639,23 @@ def SETTINGS_AUTHSOURCE() -> str:  # noqa: N802 - small accessor kept next to it
 
 
 def _mongo(surface: str, compose_svc: str, port: int, spec: dict) -> dict:
+    def uri_with_tls(uri: str) -> str:
+        if not SETTINGS.mongo_ca_file:
+            return uri
+        from urllib.parse import quote
+        sep = "&" if "?" in uri else "?"
+        return uri + sep + "tls=true&tlsCAFile=" + quote(SETTINGS.data_ca("mongo", surface))
+
     if surface == "host":
         hp = dockerctl.published_port(compose_svc, port)
         if hp is None:
             return {"ok": False, "error_kind": "refused", "note": "porta não publicada"}
-        spec = {**spec, "uri": spec["uri_fn"]("127.0.0.1", hp)}
+        host = compose_svc if SETTINGS.mongo_ca_file else "127.0.0.1"
+        spec = {**spec, "uri": uri_with_tls(spec["uri_fn"](host, hp))}
         spec.pop("uri_fn")
-        return actions.mongo(spec)
-    spec = {**spec, "uri": spec["uri_fn"](compose_svc, port)}
+        return actions.run_action({"action": "mongo", **spec,
+                                   "connect_host": compose_svc if SETTINGS.mongo_ca_file else None})
+    spec = {**spec, "uri": uri_with_tls(spec["uri_fn"](compose_svc, port))}
     spec.pop("uri_fn")
     return dockerctl.probe({"action": "mongo", **spec})
 
@@ -761,9 +770,16 @@ def run_s17(api: API, res: Results, campaign: str, reps: int) -> dict:
         if storage_cred is None and campaign != "MF":
             storage_cred = GIT_DEFAULT_S3
         for surface in ("rede", "host"):
-            amqp_ep = _endpoint(surface, "rabbitmq", 5672)
-            mgmt_ep = _endpoint(surface, "rabbitmq", 15672)
+            amqp_ep = _endpoint(surface, "rabbitmq", SETTINGS.amqp_port)
+            mgmt_ep = _endpoint(surface, "rabbitmq", SETTINGS.rabbit_mgmt_port)
             s3_ep = _endpoint(surface, "seaweedfs", 9000)
+            if surface == "host":
+                if amqp_ep and (SETTINGS.amqp_ca_file or SETTINGS.amqp_port != 5672):
+                    amqp_ep = ("rabbitmq", amqp_ep[1])
+                if mgmt_ep and SETTINGS.rabbit_mgmt_scheme == "https":
+                    mgmt_ep = ("rabbitmq", mgmt_ep[1])
+                if s3_ep and SETTINGS.s3_scheme == "https":
+                    s3_ep = ("seaweedfs", s3_ep[1])
 
             def amqp(case: str, cred, op: str, **kw) -> None:
                 if amqp_ep is None:
@@ -773,7 +789,12 @@ def run_s17(api: API, res: Results, campaign: str, reps: int) -> dict:
                     m.add(case, surface, rep, (INCONC, "credencial de serviço não configurada"))
                     return
                 r = _run(surface, {"action": "amqp", "host": amqp_ep[0], "port": amqp_ep[1], "user": cred[0],
-                                   "password": cred[1], "op": op, **kw})
+                                   "password": cred[1], "op": op,
+                                   "tls": SETTINGS.amqp_port != 5672 or bool(SETTINGS.amqp_ca_file),
+                                   "ca_file": SETTINGS.data_ca("amqp", surface),
+                                   "server_name": "rabbitmq" if surface == "host" else amqp_ep[0],
+                                   "connect_host": "rabbitmq" if surface == "host" and
+                                   amqp_ep[0] == "rabbitmq" else None, **kw})
                 m.add(case, surface, rep, _admitted(r), error_kind=r.get("error_kind"))
 
             def mgmt(case: str, cred) -> None:
@@ -783,7 +804,11 @@ def run_s17(api: API, res: Results, campaign: str, reps: int) -> dict:
                 if cred is None:
                     m.add(case, surface, rep, (INCONC, "credencial de serviço não configurada"))
                     return
-                r = _run(surface, {"action": "rabbit_mgmt", "url": f"http://{mgmt_ep[0]}:{mgmt_ep[1]}/api/overview",
+                r = _run(surface, {"action": "rabbit_mgmt", "url":
+                                   f"{SETTINGS.rabbit_mgmt_scheme}://{mgmt_ep[0]}:{mgmt_ep[1]}/api/overview",
+                                   "ca_file": SETTINGS.data_ca("rabbit_mgmt", surface),
+                                   "connect_host": "rabbitmq" if surface == "host" and
+                                   mgmt_ep[0] == "rabbitmq" else None,
                                    "user": cred[0], "password": cred[1]})
                 m.add(case, surface, rep, _admitted(r), status=r.get("status"), error_kind=r.get("error_kind"))
 
@@ -800,7 +825,10 @@ def run_s17(api: API, res: Results, campaign: str, reps: int) -> dict:
                 if cred is None:
                     m.add(case, surface, rep, (INCONC, "credencial de serviço não configurada"))
                     return {}
-                r = _run(surface, {"action": "s3", "endpoint": f"http://{s3_ep[0]}:{s3_ep[1]}", "access": cred[0],
+                r = _run(surface, {"action": "s3", "endpoint": SETTINGS.s3_endpoint(*s3_ep),
+                                   "ca_file": SETTINGS.data_ca("s3", surface), "access": cred[0],
+                                   "connect_host": "seaweedfs" if surface == "host" and
+                                   s3_ep[0] == "seaweedfs" else None,
                                    "secret": cred[1], "op": op, **kw})
                 m.add(case, surface, rep, _admitted(r), error_kind=r.get("error_kind"))
                 return r
@@ -810,7 +838,8 @@ def run_s17(api: API, res: Results, campaign: str, reps: int) -> dict:
             r = s3("B2", storage_cred, "create_bucket", bucket=canary)
             if r.get("ok"):
                 access, secret = SETTINGS.s3_admin()
-                dockerctl.probe({"action": "s3", "endpoint": "http://seaweedfs:9000", "access": access,
+                dockerctl.probe({"action": "s3", "endpoint": SETTINGS.s3_endpoint(),
+                                 "ca_file": SETTINGS.data_ca("s3"), "access": access,
                                  "secret": secret, "bucket": canary, "op": "delete_bucket"})
 
         # B3: anonymous read of an original through the public /s3/ path

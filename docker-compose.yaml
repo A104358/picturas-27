@@ -56,15 +56,38 @@ services:
     image: chrislusf/seaweedfs:4.47
     restart: on-failure
     command: >
-      server -dir=/data -s3 -s3.port=9000
+      server -dir=/data -ip=localhost -ip.bind=127.0.0.1
+      -s3 -s3.port=9000 -s3.ip.bind=0.0.0.0
+      -s3.cert.file=/run/secrets/pki/service.crt
+      -s3.key.file=/run/secrets/pki/service.key
+      -s3.config=/etc/seaweedfs/s3.json
+      -s3.port.iceberg=0 -s3.port.lance=0
       -s3.encryptVolumeData
       -master.volumeSizeLimitMB=1024
     ports:
       - "9000:9000"
-      - "9090:8888"
     volumes:
       - seaweedfs_data:/data
+      - ./seaweedfs/security.toml:/etc/seaweedfs/security.toml:ro
+      - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/s3/s3.json:/etc/seaweedfs/s3.json:ro
+      - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/pki/services/seaweedfs:/run/secrets/pki:ro
     env_file: ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/env/seaweedfs.env
+    networks:
+      - elk
+
+  s3-bootstrap:
+    build: ./imageStorageService
+    command: ["node", "services/bootstrapBucket.js"]
+    restart: "no"
+    depends_on:
+      seaweedfs:
+        condition: service_started
+    environment:
+      S3_ENDPOINT: "seaweedfs:9000"
+      S3_BUCKET: "picturas"
+    volumes:
+      - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/s3/bootstrap.json:/run/secrets/s3-bootstrap/credentials.json:ro
+      - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/pki/services/seaweedfs/ca.crt:/run/secrets/pki/ca.crt:ro
     networks:
       - elk
 
@@ -72,7 +95,8 @@ services:
     build: ./imageStorageService
     restart: on-failure
     depends_on:
-      - seaweedfs
+      s3-bootstrap:
+        condition: service_completed_successfully
     ports:
       - "11000:11000"
     environment:
@@ -81,17 +105,21 @@ services:
     env_file: ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/env/img_storage.env
     networks:
       - elk
+    volumes:
+      - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/pki/services/img_storage/ca.crt:/run/secrets/pki/ca.crt:ro
 
   rabbitmq:
     build:
       context: ./rabbitMQ
     restart: on-failure
+    env_file: ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/env/rabbitmq.env
     ports:
-      - "5672:5672"
-      - "15672:15672"
+      - "5671:5671"
+      - "15671:15671"
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
       - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/rabbitmq/definitions.json:/etc/rabbitmq/definitions.json:ro
+      - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/pki/services/rabbitmq:/run/secrets/pki:ro
     healthcheck:
       test: ["CMD-SHELL", "rabbitmqctl status"]
       interval: 30s
@@ -105,16 +133,23 @@ services:
     restart: on-failure
     networks:
       - elk
-    command: mongod --port 27018
+    entrypoint: ["/bin/sh", "/usr/local/bin/mongo-tls-entrypoint.sh"]
+    command: ["--port", "27018"]
+    env_file: ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/env/projects_mongoDB.env
     ports:
-        - '27018:27018'
+      - "27018:27018"
     healthcheck:
-      test: ["CMD", "mongo", "--host", "localhost", "--port", "27018", "--eval", "db.adminCommand('ping')"]
+      test: ["CMD", "mongo", "--host", "projects_mongoDB", "--port", "27018", "--tls", "--tlsCAFile", "/run/secrets/pki/ca.crt", "--eval", "db.adminCommand('ping')"]
       interval: 10s
       timeout: 5s
       retries: 5
+    tmpfs:
+      - /tmp
     volumes:
       - project_data:/data/db
+      - ./ops/mongo-tls-entrypoint.sh:/usr/local/bin/mongo-tls-entrypoint.sh:ro
+      - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/pki/services/projects_mongoDB:/run/secrets/pki:ro
+      - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/mongo/projects/init.js:/docker-entrypoint-initdb.d/init.js:ro
 
   projects:
     build: ./projects
@@ -128,7 +163,7 @@ services:
     restart: on-failure
     environment:
       RABBITMQ_HOST: rabbitmq
-      RABBITMQ_PORT: 5672
+      RABBITMQ_PORT: 5671
       # Per-profile video limits
       VIDEO_FREE_MAX_DURATION_S: 60
       VIDEO_FREE_MAX_SIZE_MB: 100
@@ -144,18 +179,25 @@ services:
   users_mongoDB:
     image: mongo:4.4
     restart: on-failure
-    command: mongod --port 27019
+    networks:
+      - elk
+    entrypoint: ["/bin/sh", "/usr/local/bin/mongo-tls-entrypoint.sh"]
+    command: ["--port", "27019"]
+    env_file: ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/env/users_mongoDB.env
     ports:
-        - '27019:27019'
+      - "27019:27019"
     healthcheck:
-      test: ["CMD", "mongo", "--host", "localhost", "--port", "27019", "--eval", "db.adminCommand('ping')"]
+      test: ["CMD", "mongo", "--host", "users_mongoDB", "--port", "27019", "--tls", "--tlsCAFile", "/run/secrets/pki/ca.crt", "--eval", "db.adminCommand('ping')"]
       interval: 10s
       timeout: 5s
       retries: 5
-    networks:
-      - elk
+    tmpfs:
+      - /tmp
     volumes:
       - user_data:/data/db
+      - ./ops/mongo-tls-entrypoint.sh:/usr/local/bin/mongo-tls-entrypoint.sh:ro
+      - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/pki/services/users_mongoDB:/run/secrets/pki:ro
+      - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/mongo/users/init.js:/docker-entrypoint-initdb.d/init.js:ro
 
   users:
     build: ./users
@@ -179,13 +221,23 @@ services:
     restart: on-failure
     networks:
       - elk
+    entrypoint: ["/bin/sh", "/usr/local/bin/mongo-tls-entrypoint.sh"]
+    command: ["--port", "27017"]
+    env_file: ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/env/subscriptions_mongoDB.env
+    ports:
+      - "27017:27017"
     healthcheck:
-      test: ["CMD", "mongo", "--host", "localhost", "--eval", "db.adminCommand('ping')"]
+      test: ["CMD", "mongo", "--host", "subscriptions_mongoDB", "--port", "27017", "--tls", "--tlsCAFile", "/run/secrets/pki/ca.crt", "--eval", "db.adminCommand('ping')"]
       interval: 10s
       timeout: 5s
       retries: 5
+    tmpfs:
+      - /tmp
     volumes:
       - subscription_data:/data/db
+      - ./ops/mongo-tls-entrypoint.sh:/usr/local/bin/mongo-tls-entrypoint.sh:ro
+      - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/pki/services/subscriptions_mongoDB:/run/secrets/pki:ro
+      - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/mongo/subscriptions/init.js:/docker-entrypoint-initdb.d/init.js:ro
 
   subscriptions:
     build: ./subscriptions
@@ -230,6 +282,7 @@ services:
         condition: service_healthy
     volumes:
       - image_data:/app/images
+      - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/pki/services/rabbitmq/ca.crt:/run/secrets/pki/ca.crt:ro
 
   binarization_tool:
     build:
@@ -244,6 +297,7 @@ services:
         condition: service_healthy
     volumes:
       - image_data:/app/images
+      - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/pki/services/rabbitmq/ca.crt:/run/secrets/pki/ca.crt:ro
 
   # Video worker (ffmpeg isolated in the container)
   video_tool:
@@ -264,6 +318,7 @@ services:
         condition: service_healthy
     volumes:
       - image_data:/app/images
+      - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/pki/services/rabbitmq/ca.crt:/run/secrets/pki/ca.crt:ro
       - whisper_models:/models/whisper
 
   border_tool:
@@ -279,6 +334,7 @@ services:
         condition: service_healthy
     volumes:
       - image_data:/app/images
+      - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/pki/services/rabbitmq/ca.crt:/run/secrets/pki/ca.crt:ro
 
   brightness_tool:
     build:
@@ -293,6 +349,7 @@ services:
         condition: service_healthy
     volumes:
       - image_data:/app/images
+      - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/pki/services/rabbitmq/ca.crt:/run/secrets/pki/ca.crt:ro
 
   contrast_tool:
     build:
@@ -307,6 +364,7 @@ services:
         condition: service_healthy
     volumes:
       - image_data:/app/images
+      - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/pki/services/rabbitmq/ca.crt:/run/secrets/pki/ca.crt:ro
 
   cut_tool:
     build:
@@ -321,6 +379,7 @@ services:
         condition: service_healthy
     volumes:
       - image_data:/app/images
+      - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/pki/services/rabbitmq/ca.crt:/run/secrets/pki/ca.crt:ro
 
   cut_ai_tool:
     build:
@@ -335,6 +394,7 @@ services:
     restart: on-failure
     volumes:
       - image_data:/app/images
+      - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/pki/services/rabbitmq/ca.crt:/run/secrets/pki/ca.crt:ro
 
   people_ai_tool:
     build: 
@@ -349,6 +409,7 @@ services:
     restart: on-failure
     volumes:
       - image_data:/app/images
+      - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/pki/services/rabbitmq/ca.crt:/run/secrets/pki/ca.crt:ro
 
   obj_ai_tool:
     build: 
@@ -363,6 +424,7 @@ services:
     restart: on-failure
     volumes:
       - image_data:/app/images
+      - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/pki/services/rabbitmq/ca.crt:/run/secrets/pki/ca.crt:ro
 
   resize_tool:
     build:
@@ -377,6 +439,7 @@ services:
         condition: service_healthy
     volumes:
       - image_data:/app/images
+      - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/pki/services/rabbitmq/ca.crt:/run/secrets/pki/ca.crt:ro
 
   rotate_tool:
     build:
@@ -391,6 +454,7 @@ services:
         condition: service_healthy
     volumes:
       - image_data:/app/images
+      - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/pki/services/rabbitmq/ca.crt:/run/secrets/pki/ca.crt:ro
 
   saturation_tool:
     build:
@@ -405,6 +469,7 @@ services:
         condition: service_healthy
     volumes:
       - image_data:/app/images
+      - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/pki/services/rabbitmq/ca.crt:/run/secrets/pki/ca.crt:ro
 
   text_ai_tool:
     build:
@@ -419,6 +484,7 @@ services:
     restart: on-failure
     volumes:
       - image_data:/app/images
+      - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/pki/services/rabbitmq/ca.crt:/run/secrets/pki/ca.crt:ro
 
   upgrade_ai_tool:
     build:
@@ -433,6 +499,7 @@ services:
     restart: on-failure
     volumes:
       - image_data:/app/images
+      - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/pki/services/rabbitmq/ca.crt:/run/secrets/pki/ca.crt:ro
 
   generative-mock:
     build: ./generative-mock
@@ -465,17 +532,21 @@ services:
     restart: on-failure
     volumes:
       - image_data:/app/images
+      - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/pki/services/rabbitmq/ca.crt:/run/secrets/pki/ca.crt:ro
     environment:
       - RABBITMQ_HOST=rabbitmq
-      - RABBITMQ_PORT=5672
+      - RABBITMQ_PORT=5671
       - GEN_EXPAND_URL=http://generative-mock:7860
       
   watermark_tool_ms:
-    image: prcsousa/picturas-watermark-tool-ms@sha256:534007b3904257e877f6246578a3df65e1875b477b92d9627b29e35e60c35835
+    build: ./Tools/watermark
     restart: always
     environment:
       - RABBITMQ_REQUESTS_QUEUE_NAME=watermark_queue
       - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_PORT=5671
+      - RABBITMQ_TLS_CA_FILE=/run/secrets/pki/ca.crt
+      - RABBITMQ_TLS_SERVER_NAME=rabbitmq
       - PICTURAS_LOG_LEVEL=INFO  # change / remove in production
       - RABBITMQ_RESULTS_EXCHANGE=picturas
       - RABBITMQ_RESULTS_ROUTING_KEY=project_queue
@@ -484,6 +555,7 @@ services:
       - elk
     volumes:
       - image_data:/images
+      - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/pki/services/rabbitmq/ca.crt:/run/secrets/pki/ca.crt:ro
     depends_on:
       rabbitmq:
         condition: service_healthy
@@ -511,7 +583,9 @@ services:
         condition: service_healthy
     environment:
       - RABBITMQ_HOST=rabbitmq
-      - RABBITMQ_PORT=5672
+      - RABBITMQ_PORT=5671
+    volumes:
+      - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/pki/services/rabbitmq/ca.crt:/run/secrets/pki/ca.crt:ro
 
   mongo-backup:
     image: mongo:4.4
@@ -522,10 +596,13 @@ services:
       - subscriptions_mongoDB
     volumes:
       - ./backups/mongo:/backups
+      - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/mongo-backup:/run/secrets/mongo-backup:ro
+      - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/pki/services/projects_mongoDB/ca.crt:/run/secrets/pki/ca.crt:ro
     networks:
       - elk
     command: >
       bash -c '
+        set -e;
         echo "[mongo-backup] container started";
         while true; do
           echo "[mongo-backup] starting daily backup...";
@@ -534,19 +611,28 @@ services:
           echo "[mongo-backup] timestamp = $${TS}";
 
           mongodump \
+            --config /run/secrets/mongo-backup/users.yaml \
             --host users_mongoDB \
             --port 27019 \
+            --username backup_ro --authenticationDatabase admin \
+            --ssl --sslCAFile /run/secrets/pki/ca.crt --db user \
             --archive=/backups/users-$${TS}.gz \
             --gzip;
 
           mongodump \
+            --config /run/secrets/mongo-backup/projects.yaml \
             --host projects_mongoDB \
             --port 27018 \
+            --username backup_ro --authenticationDatabase admin \
+            --ssl --sslCAFile /run/secrets/pki/ca.crt --db project \
             --archive=/backups/projects-$${TS}.gz \
             --gzip;
 
           mongodump \
+            --config /run/secrets/mongo-backup/subscriptions.yaml \
             --host subscriptions_mongoDB \
+            --username backup_ro --authenticationDatabase admin \
+            --ssl --sslCAFile /run/secrets/pki/ca.crt --db subscription \
             --archive=/backups/subscriptions-$${TS}.gz \
             --gzip;
 

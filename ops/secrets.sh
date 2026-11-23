@@ -5,6 +5,7 @@
 #   ops/secrets.sh render   rewrite env/<service>.env from the stored values
 #   ops/secrets.sh check    verify that every value and env file exists, with private permissions
 #   ops/secrets.sh med-env  print the MED_* admin credentials for evaluation/.env.med (verification stack)
+#   ops/secrets.sh med-render  render a private med.py EXP env file outside the checkout
 #
 # Layout:
 #   values/<name>              one secret per file (0600)
@@ -26,7 +27,7 @@ case "$ROOT/" in "$REPO/"*) die "PICTURAS_SECRETS_DIR must be outside the checko
 VALUES="$ROOT/values"; ENV_DIR="$ROOT/env"; JWT="$ROOT/jwt"
 umask 077
 
-# Principals with their own broker user (B2 creates them; until then they share the admin user).
+# Principals with their own broker user.
 RABBIT_PRINCIPALS="projects ws_gateway binarization_tool border_tool brightness_tool contrast_tool cut_tool
   resize_tool rotate_tool saturation_tool watermark_tool_ms bg_remove_ai_tool cut_ai_tool expand_ai_tool
   obj_ai_tool people_ai_tool text_ai_tool upgrade_ai_tool video_tool"
@@ -84,43 +85,135 @@ write_env() { # <service> <KEY=value lines...>
 
 cmd_render() {
   mkdir -p "$ENV_DIR"; chmod 700 "$ENV_DIR"
-  local jwt rabbit_user=picturas_admin rabbit_pw s3a s3s w
-  jwt=$(val jwt_hs256); rabbit_pw=$(val rabbit_admin)
-  s3a=$(val s3_admin_access); s3s=$(val s3_admin_secret)
-  # Interim until B2: the object store still takes its admin from the environment, img_storage
-  # uses that admin, and every broker client uses the broker admin. B2 replaces these with one
-  # credential per principal (the values are already generated above).
-  write_env seaweedfs "AWS_ACCESS_KEY_ID=$s3a" "AWS_SECRET_ACCESS_KEY=$s3s" "WEED_S3_SSE_KEK_PASSPHRASE=$(val s3_kek)"
-  write_env img_storage "S3_ACCESS_KEY=$s3a" "S3_SECRET_KEY=$s3s"
-  write_env rabbitmq "RABBITMQ_DEFAULT_USER=$rabbit_user" "RABBITMQ_DEFAULT_PASS=$rabbit_pw"
-  write_env projects "RABBITMQ_USER=$rabbit_user" "RABBITMQ_PASS=$rabbit_pw"
-  write_env ws_gateway "RABBITMQ_USER=$rabbit_user" "RABBITMQ_PASS=$rabbit_pw" "JWT_SECRET_KEY=$jwt"
+  local jwt w
+  jwt=$(val jwt_hs256)
+  write_env seaweedfs "WEED_S3_SSE_KEK_PASSPHRASE=$(val s3_kek)"
+  write_env img_storage "S3_ACCESS_KEY=$(val s3_img_storage_access)" "S3_SECRET_KEY=$(val s3_img_storage_secret)"
+  write_env rabbitmq "RABBITMQ_NODENAME=rabbit@localhost" "ERL_EPMD_ADDRESS=127.0.0.1"
+  write_env projects "RABBITMQ_USER=projects" "RABBITMQ_PASS=$(val rabbit_projects)"
+  write_env ws_gateway "RABBITMQ_USER=ws_gateway" "RABBITMQ_PASS=$(val rabbit_ws_gateway)" "JWT_SECRET_KEY=$jwt"
   write_env users "JWT_SECRET_KEY=$jwt" "FIELD_ENCRYPTION_KEY=$(val field_encryption_key)"
   write_env api_gateway "JWT_SECRET_KEY=$jwt"
   write_env subscriptions "SECRET_KEY=$(val subscriptions_card_key)"
-  write_env watermark_tool_ms "RABBITMQ_USER=$rabbit_user" "RABBITMQ_PASS=$rabbit_pw"
-  for w in $PY_WORKERS; do write_env "$w" "RABBITMQ_USERNAME=$rabbit_user" "RABBITMQ_PASSWORD=$rabbit_pw"; done
-  render_rabbit_definitions "$rabbit_user" "$rabbit_pw"
+  write_env watermark_tool_ms "RABBITMQ_USER=watermark_tool_ms" "RABBITMQ_PASS=$(val rabbit_watermark_tool_ms)"
+  for w in $PY_WORKERS; do write_env "$w" "RABBITMQ_USERNAME=$w" "RABBITMQ_PASSWORD=$(val "rabbit_$w")" "RABBITMQ_PORT=5671"; done
+  render_mongo
+  render_rabbit_definitions
+  render_s3_config
   echo "secrets: env files rendered in $ENV_DIR"
+}
+
+render_s3_config() {
+  mkdir -p "$ROOT/s3"; chmod 700 "$ROOT/s3"
+  python3 - "$VALUES" "$ROOT/s3/s3.json" <<'PY'
+import json, os, sys
+values, dst = sys.argv[1:]
+def secret(name):
+    with open(os.path.join(values, name), encoding="ascii") as f:
+        return f.read().strip()
+actions = {
+    "admin": ["Admin", "Read", "Write", "List", "Tagging"],
+    "img_storage": ["Read:picturas", "Write:picturas", "List:picturas", "Tagging:picturas"],
+    "upload": ["Write:picturas/staging/*"],
+}
+identities = []
+for name, allowed in actions.items():
+    identities.append({"name": name,
+                       "credentials": [{"accessKey": secret(f"s3_{name}_access"),
+                                        "secretKey": secret(f"s3_{name}_secret")}],
+                       "actions": allowed})
+tmp = dst + ".tmp"
+with open(tmp, "w", encoding="utf-8") as f:
+    json.dump({"identities": identities}, f, indent=2)
+os.chmod(tmp, 0o600)
+os.replace(tmp, dst)
+bootstrap = os.path.join(os.path.dirname(dst), "bootstrap.json")
+tmp = bootstrap + ".tmp"
+with open(tmp, "w", encoding="utf-8") as f:
+    json.dump({"accessKeyId": secret("s3_admin_access"),
+               "secretAccessKey": secret("s3_admin_secret")}, f)
+os.chmod(tmp, 0o600)
+os.replace(tmp, bootstrap)
+PY
+}
+
+render_mongo() {
+  local name db host port dir admin_pw service_pw backup_pw env_file init_file backup_file mongo_uri
+  mkdir -p "$ROOT/mongo" "$ROOT/mongo-backup"
+  chmod 700 "$ROOT/mongo" "$ROOT/mongo-backup"
+  for name in $MONGO_INSTANCES; do
+    case "$name" in
+      projects) db=project; host=projects_mongoDB; port=27018 ;;
+      users) db=user; host=users_mongoDB; port=27019 ;;
+      subscriptions) db=subscription; host=subscriptions_mongoDB; port=27017 ;;
+    esac
+    admin_pw=$(val "mongo_${name}_admin")
+    service_pw=$(val "mongo_${name}_service")
+    backup_pw=$(val "mongo_${name}_backup")
+    write_env "${name}_mongoDB" "MONGO_INITDB_ROOT_USERNAME=picturas_admin" "MONGO_INITDB_ROOT_PASSWORD=$admin_pw"
+    env_file="$ENV_DIR/$name.env"
+    mongo_uri="mongodb://"
+    mongo_uri+="${name}_svc:${service_pw}@${host}:${port}/${db}?authSource=admin&tls=true&tlsCAFile=/run/secrets/pki/ca.crt"
+    printf 'MONGO_URI=%s\n' "$mongo_uri" >> "$env_file"
+    dir="$ROOT/mongo/$name"
+    mkdir -p "$dir"; chmod 700 "$dir"
+    init_file="$dir/init.js"
+    printf 'const admin = db.getSiblingDB("admin");\nadmin.createUser({user:"%s_svc",pwd:"%s",roles:[{role:"readWrite",db:"%s"}]});\nadmin.createUser({user:"backup_ro",pwd:"%s",roles:[{role:"read",db:"%s"}]});\n' \
+      "$name" "$service_pw" "$db" "$backup_pw" "$db" > "$init_file.tmp"
+    mv "$init_file.tmp" "$init_file"; chmod 600 "$init_file"
+    backup_file="$ROOT/mongo-backup/$name.yaml"
+    printf 'password: %s\n' "$backup_pw" > "$backup_file.tmp"
+    mv "$backup_file.tmp" "$backup_file"; chmod 600 "$backup_file"
+  done
 }
 
 # The broker imports its definitions on boot, and then skips RABBITMQ_DEFAULT_USER. The users therefore
 # go into a rendered copy of rabbitMQ/definitions.json (topology from the repository, users from here),
 # stored as salted SHA-256 hashes; the plain passwords stay in values/.
-render_rabbit_definitions() { # <user> <password>
+render_rabbit_definitions() {
   mkdir -p "$ROOT/rabbitmq"; chmod 700 "$ROOT/rabbitmq"
-  RABBIT_USER=$1 RABBIT_PW=$2 python3 - "$REPO/rabbitMQ/definitions.json" "$ROOT/rabbitmq/definitions.json" <<'PY'
-import base64, hashlib, json, os, sys
+  python3 - "$REPO/rabbitMQ/definitions.json" "$ROOT/rabbitmq/definitions.json" "$VALUES" <<'PY'
+import base64, hashlib, json, os, re, sys
 def rabbit_hash(password):
     salt = os.urandom(4)
     return base64.b64encode(salt + hashlib.sha256(salt + password.encode()).digest()).decode()
-src, dst = sys.argv[1], sys.argv[2]
+src, dst, values = sys.argv[1:]
 with open(src, encoding="utf-8") as f:
     d = json.load(f)
-user = os.environ["RABBIT_USER"]
-d["users"] = [{"name": user, "password_hash": rabbit_hash(os.environ["RABBIT_PW"]),
-               "hashing_algorithm": "rabbit_password_hashing_sha256", "tags": "administrator"}]
-d["permissions"] = [{"user": user, "vhost": "/", "configure": ".*", "write": ".*", "read": ".*"}]
+workers = """binarization_tool border_tool brightness_tool contrast_tool cut_tool resize_tool rotate_tool
+saturation_tool watermark_tool_ms bg_remove_ai_tool cut_ai_tool expand_ai_tool obj_ai_tool
+people_ai_tool text_ai_tool upgrade_ai_tool video_tool""".split()
+principals = ["picturas_admin", "projects", "ws_gateway", *workers]
+def secret(name):
+    with open(os.path.join(values, name), encoding="ascii") as f:
+        return f.read().strip()
+def regex(keys):
+    return "^(?:" + "|".join(re.escape(k) for k in keys) + ")$" if keys else "^$"
+all_keys = [b["routing_key"] for b in d["bindings"] if b["source"] == "picturas"]
+d["users"] = []
+d["permissions"] = []
+d["topic_permissions"] = []
+for user in principals:
+    password = secret("rabbit_admin" if user == "picturas_admin" else "rabbit_" + user)
+    d["users"].append({"name": user, "password_hash": rabbit_hash(password),
+                       "hashing_algorithm": "rabbit_password_hashing_sha256",
+                       "tags": "administrator" if user == "picturas_admin" else ""})
+    if user == "picturas_admin":
+        configure, write, read, publish = ".*", ".*", ".*", ".*"
+    else:
+        queue = user.removesuffix("_tool_ms").removesuffix("_tool") + "_queue"
+        if user == "ws_gateway": queue = "ws_queue"
+        if user == "video_tool": queue = "video_queue"
+        if user == "projects": queue = "project_queue"
+        publish = regex(all_keys if user == "projects" else
+                        ["project_queue", "ws_queue"] if user == "video_tool" else
+                        ["project_queue"] if user != "ws_gateway" else [])
+        configure, write, read = "^$", "^picturas$" if user != "ws_gateway" else "^$", regex([queue])
+    d["permissions"].append({"user": user, "vhost": "/", "configure": configure,
+                             "write": write, "read": read})
+    if user != "ws_gateway":
+        d["topic_permissions"].append({"user": user, "vhost": "/", "exchange": "picturas",
+                                       "write": publish, "read": "^$"})
 tmp = dst + ".tmp"
 with open(tmp, "w", encoding="utf-8") as f:
     json.dump(d, f, indent=2)
@@ -140,11 +233,21 @@ cmd_check() {
   done
   for f in "$JWT/rs256-private.pem" "$JWT/rs256-public.pem"; do [ -s "$f" ] || { echo "FAIL missing $f"; fail=1; }; done
   [ ! -f "$JWT/rs256-private.pem" ] || [ "$(perm "$JWT/rs256-private.pem")" = 600 ] || { echo "FAIL rs256-private.pem: permissions are not 600"; fail=1; }
-  for n in seaweedfs img_storage rabbitmq projects ws_gateway users api_gateway subscriptions watermark_tool_ms $PY_WORKERS; do
+  for n in seaweedfs img_storage rabbitmq projects ws_gateway users api_gateway subscriptions watermark_tool_ms $PY_WORKERS projects_mongoDB users_mongoDB subscriptions_mongoDB; do
     f="$ENV_DIR/$n.env"
     if [ ! -s "$f" ]; then echo "FAIL missing env file: $n.env"; fail=1
     elif [ "$(perm "$f")" != 600 ]; then echo "FAIL $n.env: permissions are not 600"; fail=1; fi
   done
+  for n in $MONGO_INSTANCES; do
+    for f in "$ROOT/mongo/$n/init.js" "$ROOT/mongo-backup/$n.yaml"; do
+      if [ ! -s "$f" ]; then echo "FAIL missing Mongo configuration for $n"; fail=1
+      elif [ "$(perm "$f")" != 600 ]; then echo "FAIL Mongo configuration permissions for $n"; fail=1; fi
+    done
+  done
+  if [ ! -s "$ROOT/s3/s3.json" ]; then echo "FAIL missing S3 configuration"; fail=1
+  elif [ "$(perm "$ROOT/s3/s3.json")" != 600 ]; then echo "FAIL S3 configuration permissions"; fail=1; fi
+  if [ ! -s "$ROOT/s3/bootstrap.json" ]; then echo "FAIL missing S3 bootstrap credentials"; fail=1
+  elif [ "$(perm "$ROOT/s3/bootstrap.json")" != 600 ]; then echo "FAIL S3 bootstrap permissions"; fail=1; fi
   for f in "$ROOT" "$VALUES" "$ENV_DIR" "$JWT"; do [ "$(perm "$f")" = 700 ] || { echo "FAIL $f: permissions are not 700"; fail=1; }; done
   [ $fail -eq 0 ] && echo "secrets check: passed ($ROOT)" || { echo "secrets check: FAILED"; exit 1; }
 }
@@ -154,10 +257,41 @@ cmd_med_env() {
   echo "MED_RABBIT_ADMIN=picturas_admin:$(val rabbit_admin)"
 }
 
+cmd_med_render() {
+  local f="$ROOT/med-exp.env"
+  {
+    echo 'MED_COMPOSE_PROJECT=picturas-nfr-exp'
+    echo 'MED_BASE_URL=https://localhost:28080'
+    echo "MED_CACERT=$ROOT/pki/services/nginx/ca.crt"
+    echo 'MED_S3_SCHEME=https'
+    echo "MED_S3_CA_FILE=$ROOT/pki/services/seaweedfs/ca.crt"
+    echo 'MED_AMQP_PORT=5671'
+    echo "MED_AMQP_CA_FILE=$ROOT/pki/services/rabbitmq/ca.crt"
+    echo 'MED_RABBIT_MGMT_SCHEME=https'
+    echo 'MED_RABBIT_MGMT_PORT=15671'
+    echo "MED_RABBIT_MGMT_CA_FILE=$ROOT/pki/services/rabbitmq/ca.crt"
+    echo "MED_MONGO_TLS_CA_FILE=$ROOT/pki/services/projects_mongoDB/ca.crt"
+    echo "MED_ADMIN_MONGO_URI_PROJECTS=mongodb://picturas_admin:$(val mongo_projects_admin)@projects_mongoDB:27018/?authSource=admin&tls=true&tlsCAFile=/med-certs/mongo.crt"
+    echo "MED_ADMIN_MONGO_URI_USERS=mongodb://picturas_admin:$(val mongo_users_admin)@users_mongoDB:27019/?authSource=admin&tls=true&tlsCAFile=/med-certs/mongo.crt"
+    echo "MED_ADMIN_MONGO_URI_SUBSCRIPTIONS=mongodb://picturas_admin:$(val mongo_subscriptions_admin)@subscriptions_mongoDB:27017/?authSource=admin&tls=true&tlsCAFile=/med-certs/mongo.crt"
+    echo "MED_RABBIT_ADMIN=picturas_admin:$(val rabbit_admin)"
+    echo "MED_S3_ADMIN=$(val s3_admin_access):$(val s3_admin_secret)"
+    echo "MED_SVC_CRED_MONGO_PROJECTS=projects_svc:$(val mongo_projects_service)"
+    echo "MED_SVC_CRED_MONGO_USERS=users_svc:$(val mongo_users_service)"
+    echo "MED_SVC_CRED_MONGO_SUBSCRIPTIONS=subscriptions_svc:$(val mongo_subscriptions_service)"
+    echo "MED_SVC_CRED_RABBIT_BRIGHTNESS_TOOL=brightness_tool:$(val rabbit_brightness_tool)"
+    echo "MED_SVC_CRED_S3_IMG_STORAGE=$(val s3_img_storage_access):$(val s3_img_storage_secret)"
+  } > "$f.tmp"
+  chmod 600 "$f.tmp"
+  mv "$f.tmp" "$f"
+  echo 'secrets: med.py EXP environment rendered outside the checkout'
+}
+
 case "${1:-}" in
   init) cmd_init ;;
   render) cmd_render ;;
   check) cmd_check ;;
   med-env) cmd_med_env ;;
+  med-render) cmd_med_render ;;
   *) sed -n '2,8p' "$0" | sed 's/^# \{0,1\}//'; exit 2 ;;
 esac

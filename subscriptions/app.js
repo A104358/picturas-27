@@ -6,13 +6,13 @@ const mongoose = require('mongoose');
 
 var subscriptionsRouter = require('./routes/subscriptions');
 
-const mongoDB = 'mongodb://subscriptions_mongoDB/subscription';
+const mongoDB = process.env.MONGO_URI;
 
-mongoose.connect(mongoDB);
+mongoose.connect(mongoDB).catch(() => console.error('MongoDB connection failed'));
 
 const db = mongoose.connection;
 
-db.on('error', console.error.bind(console, 'Error connecting to MongoDB'));
+db.on('error', () => console.error('MongoDB connection error'));
 db.once('open', () => {
   console.log('MongoDB connection successful');
 });

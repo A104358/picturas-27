@@ -1,0 +1,18 @@
+B2 conformance on picturas-dev (2026-11-23)
+B2 Mongo: 3 instances require TLS and auth; service and backup roles scoped
+B2 broker: plaintext closed, old login denied, worker scope enforced, management admin only
+B2 S3: HTTPS verified, old login denied, img_storage cannot create buckets
+B2 signed URLs: GET, HEAD, Range passed; expired and unsafe methods denied; console 404
+B1 smoke: 12/12 passed
+B2 F02: image and video batch output; PNG changed; MP4/H.264/AAC, duration and brighter frame passed
+S3 bootstrap: fresh bucket created, rerun exited 0, fixture unchanged
+Nginx: request logs disabled; signed URL regression passed after recreation
+wsGateway: payload logging removed; no current secret values in final EXP container logs
+EXP quick (picturas-nfr-exp): S16 0/24 admitted after Git credential cleanup; S17 0/15 admitted, S05 100%
+EXP reports: S16 evaluation/results/EXP-20261123T152036Z/report.md; S17/S05 evaluation/results/EXP-20261123T145611Z/report.md
+S16: credenciais_git_encontradas=0; family b NAO_APLICAVEL (6 cases)
+Final EXP artifacts and container logs: no current secret value matches
+..                                                                       [100%]
+74 passed in 26.68s
+exit: 0
+saved: /Users/miguelsantos/Documents/GitHub/picturas-27F2/tests/conformance/results/2026-11-23/F01-144716.txt

@@ -9,13 +9,14 @@ var usersRouter = require("./routes/users");
 var presetsRouter = require("./routes/presets");
 
 // Run Docker
-const mongoDB = "mongodb://users_mongoDB:27019/user";
+const mongoDB = process.env.MONGO_URI;
 
-mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true })
+  .catch(() => console.error("MongoDB connection failed"));
 
 const db = mongoose.connection;
 
-db.on("error", console.error.bind(console, "Error connecting to Mongodb"));
+db.on("error", () => console.error("MongoDB connection error"));
 db.once("open", () => {
   console.log("Mongodb connection successful");
 });

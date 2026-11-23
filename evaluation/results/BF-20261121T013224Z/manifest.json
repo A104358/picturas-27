@@ -225,30 +225,36 @@
    "motivo": "Depois da BF de 21/11: resumos U09/U10 só com uploads aceites (nota 17); U04 medida de novo com o SeaweedFS reiniciado (nota 18); proteção, compare bloqueante, U20 com OOM, cobertura das matrizes e ACL-C1 na S05 (notas 19-22). Os dados brutos das outras métricas não mudam.",
    "total": "638516104ae9c1bd6e0f80bf1e14f2b0b8d855b8c50ace98e9b4c3958a51445a",
    "anterior": null
+  },
+  {
+   "em": "2026-11-22T04:21:31Z",
+   "motivo": "D-13: opções TLS nos canais de dados; valores por omissão iguais à BF",
+   "total": "2dfe2a7ad06c5de6fbc4a1de89f7e795ec9f2a1683a849540aa806630bb00c3a",
+   "anterior": "638516104ae9c1bd6e0f80bf1e14f2b0b8d855b8c50ace98e9b4c3958a51445a"
   }
  ],
  "instrumento_final": {
   "ficheiros": {
-   "med.py": "997cdeb315257def13854e8da501af424310810b9fa9da1a6cdc5c737b3d1ea2",
+   "med.py": "42e8f8827b4c76ec120dbec4b467c519e36a7b67e9bdd694972ef4599262e5cb",
    "criteria.yaml": "99f6facdf2c1da7791a48361281ec169e8e0c980f2455a0c1506f5b697f96a88",
    "cases/security.yaml": "e7daa0a3e80fbdf910416e7a08ea8ce17257ab102d7a7842b93c881c2f1ad5bd",
    "probe.Dockerfile": "6adebc5704b2003c6a75e540bed7782022ef5939837e5c93250c40cffc6073f1",
    "requirements.txt": "bdbedd671205746962c7d6d8b259221622fe4d892edc0f46b16bf692a737bd5f",
    "medlib/__init__.py": "d25e012528e9920c08d137130d1c6903a9fb74919a3564b225c726f8f094015f",
-   "medlib/actions.py": "270f385f102fde35569e47a6bf42e3ccf6f0369af012acb74d1bea154acb96a3",
-   "medlib/api.py": "88df29b4e5e88a9f857490836f5496a0ce74eb097855e3021aecb535e3374891",
-   "medlib/config.py": "826159277822d1724d310bf227aee43ca381046c1f29477a38c08b2c2a90b91c",
+   "medlib/actions.py": "1bef8b43fefe8d673a094ecaf5c75bdbb0dcfea35cf027af5bf8c6f5bb019163",
+   "medlib/api.py": "6f55fdb5c4b2d0b9ace9dff552d8033aab919259a3d2525a25d7c2f399b3b42e",
+   "medlib/config.py": "bf5ee97650b403e23a94d01ac46b11ea9e47e8bfff8480bcea5a23c5e2d5c891",
    "medlib/corpus.py": "678cf6e38855d30acf26d3bc525bd0e69a0879731784e3cbdacf952e6b13de56",
-   "medlib/dockerctl.py": "e8e5fa1dbc8da2e4c7ddc36100d7da8467b0ca6e276cda65c1b0c2dbc1b040f8",
+   "medlib/dockerctl.py": "ea54ccc24f0daad24f4555eaa97f29728f2ff34481167d7c7373ee3b90a7c0f0",
    "medlib/monitor.py": "0358ad3f73a4e50074bd2e6050d59abbe14ca34ebbe32184d39e32033c803732",
    "medlib/probe.py": "31ef9b90439557e76d34e4317b193bf2e1c1a6a4dac4ae50e94565a5a29812f5",
    "medlib/report.py": "9ddd10f17f28bb5424b1e56e4b5eeeb87e5c1b74b7eb235e6b1736e9643d7156",
-   "medlib/security.py": "87b473050ea93620d693d3bd451d340aff0a01a9a1241856049f25c6269876e9",
+   "medlib/security.py": "c9b5a3d283fe759d918dd7253eb37c8b59efe24b9a78a973a0f60087da070e18",
    "medlib/upload.py": "1d04393fa829955c869a4cddc2f675b40c544d7d6c441983f0ed236697d6f1a7",
    "medlib/uploads.py": "e3fcdd203d19858e14aae484fc5213005ada538c6772cef73259c03fda137308",
    "medlib/util.py": "da7f2ac7f46c2a2fa923766768b857eb5e7a70394cdc604f7b65d64050a4ad4c",
    "medlib/ws.py": "dde6bc170a914921650ab38d9127a5002ed5d2f82ae48c681bc329c9913deb9a"
   },
-  "total": "638516104ae9c1bd6e0f80bf1e14f2b0b8d855b8c50ace98e9b4c3958a51445a"
+  "total": "2dfe2a7ad06c5de6fbc4a1de89f7e795ec9f2a1683a849540aa806630bb00c3a"
  }
 }

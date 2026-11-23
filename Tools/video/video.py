@@ -15,8 +15,8 @@ import time
 import uuid
 
 import pika
+import ssl
 import pytz
-from pika.exchange_type import ExchangeType
 
 import utils.env as env
 from effects import UnsupportedEffect
@@ -46,18 +46,18 @@ class VideoWorker:
     def __init__(self):
         self._connection = self._connect()
         self._channel = self._connection.channel()
-        self._channel.exchange_declare(exchange=EXCHANGE,
-                                       exchange_type=ExchangeType.direct, durable=True)
-        self._channel.queue_declare(queue=VIDEO_QUEUE, durable=True)
-        self._channel.queue_bind(queue=VIDEO_QUEUE, exchange=EXCHANGE, routing_key=VIDEO_QUEUE)
+        self._channel.exchange_declare(exchange=EXCHANGE, passive=True)
+        self._channel.queue_declare(queue=VIDEO_QUEUE, passive=True)
         # one video at a time per replica; parallelism comes from replicas
         self._channel.basic_qos(prefetch_count=1)
 
     @staticmethod
     def _connect():
         credentials = pika.PlainCredentials(env.RABBITMQ_USERNAME, env.RABBITMQ_PASSWORD)
+        context = ssl.create_default_context(cafile="/run/secrets/pki/ca.crt")
         params = pika.ConnectionParameters(
             env.RABBITMQ_HOST, int(env.RABBITMQ_PORT), "/", credentials,
+            ssl_options=pika.SSLOptions(context, env.RABBITMQ_HOST),
             # processing a video blocks this thread for minutes; without a
             # heartbeat the broker does not drop the connection midway
             heartbeat=0,

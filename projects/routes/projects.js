@@ -77,9 +77,14 @@ const cert = fs.readFileSync(process.env.TLS_CERT_FILE || "/run/secrets/pki/serv
 
 const https = require("https");
 const httpsAgent = new https.Agent({
-  rejectUnauthorized: false, // (NOTE: this will disable client verification)
+  ca: fs.readFileSync("/run/secrets/pki/ca.crt"),
+  servername: "users",
   cert: cert,
   key: key,
+});
+const s3Agent = new https.Agent({
+  ca: fs.readFileSync("/run/secrets/pki/ca.crt"),
+  servername: "seaweedfs",
 });
 
 const users_ms = "https://users:10001/";
@@ -993,7 +998,7 @@ router.get("/:user/:project/process", checkSharePermission, (req, res, next) => 
         );
         const url = resp.data.url;
 
-        const file_resp = await axios.get(url, { responseType: "stream" });
+        const file_resp = await axios.get(url, { responseType: "stream", httpsAgent: s3Agent });
         const writer = fs.createWriteStream(res_path);
 
         // Use a Promise to handle the stream completion
@@ -1214,7 +1219,7 @@ router.post("/:user/:project/preview/:img", checkSharePermission, requireEditPer
       );
       const url = resp.data.url;
 
-      const img_resp = await axios.get(url, { responseType: "stream" });
+      const img_resp = await axios.get(url, { responseType: "stream", httpsAgent: s3Agent });
       const writer = fs.createWriteStream(og_img_uri);
 
       await new Promise((resolve, reject) => {
@@ -1611,7 +1616,7 @@ router.post("/:user/:project/process", checkSharePermission, requireEditPermissi
             );
             url = resp.data.url;
 
-            const img_resp = await axios.get(url, { responseType: "stream" });
+            const img_resp = await axios.get(url, { responseType: "stream", httpsAgent: s3Agent });
             const writer = fs.createWriteStream(img.og_uri);
 
             await new Promise((resolve, reject) => {
@@ -2567,7 +2572,7 @@ router.post(
       const resp = await get_image_internal_url(ownerId, req.params.project, "src", img.og_img_key);
       const url = resp.data.url;
 
-      const imgResp = await axios.get(url, { responseType: "arraybuffer" });
+      const imgResp = await axios.get(url, { responseType: "arraybuffer", httpsAgent: s3Agent });
       const buffer = Buffer.from(imgResp.data);
 
       // 3) extrair features

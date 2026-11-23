@@ -1,0 +1,11 @@
+B2 partial conformance (picturas-dev; bucket bootstrap pending D-20)
+B2 Mongo: 3 instances require TLS and auth; service and backup roles scoped
+B2 broker: plaintext closed, old login denied, worker scope enforced, management admin only
+B2 S3: HTTPS verified, old login denied, img_storage cannot create buckets
+Mongo backup: read-only mongodump and admin mongorestore of one fixture passed
+RabbitMQ: five principals reconnected after broker restart
+Watermark: one AMQPS request produced an output image
+Seaweed network: 9333/8080/8888 closed; 9000/19000 reachable
+nginx: /s3-console/ HTTP 404; /s3/ GET/HEAD without signature HTTP 403; PUT/POST/DELETE HTTP 403
+D-13 action probes: AMQPS, Rabbit management HTTPS, Mongo TLS and S3 HTTPS passed
+D-13 med.py freeze BF: 2dfe2a7ad06c

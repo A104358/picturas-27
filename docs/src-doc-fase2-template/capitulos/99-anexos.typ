@@ -12,22 +12,136 @@
   usados no relatório.
 ]
 
-#preencher[…]
+Os comandos estão em _shell_ POSIX (macOS ou Linux; no Windows, Git Bash ou WSL). Todos partem da raiz do
+repositório entregue.
+
+== Pré-requisitos
+
+#tabela-campos(
+  [Docker], [Docker Desktop ou Docker Engine com Compose v2; pelo menos 8 CPU e 8 GiB de RAM atribuídos ao Docker. A primeira construção ocupa cerca de 15 GiB de disco e demora 15 a 30 minutos.],
+  [Medição], [Python 3 com `venv`, `ffmpeg`/`ffprobe` no PATH e pelo menos 60 GiB livres (corpus de teste e imagens da _stack_ isolada).],
+  [Portas], [`8080` livre (entrada única por nginx). A _stack_ de medição usa a `28080`.],
+  [Dados de teste], [Vídeos de exemplo em `samples/video/` (com fala, sem fala, `.mov`, corrompido e acima do limite _free_), descritos no respetivo `README.md`.],
+)
+
+== Lançar a solução
+
+*Solução de base (BF, _commit_ `0523102`).* Não precisa de segredos externos:
+
+```bash
+git switch --detach 0523102
+docker compose up -d --build
+```
+
+*Solução refatorada (branch `fase2-refactor`).* Os segredos e os certificados deixaram de estar no repositório
+(DA-1, B1): cada instalação gera os seus, num diretório fora do repositório, que nunca se copia entre
+computadores.
+
+```bash
+git switch fase2-refactor
+export PICTURAS_SECRETS_DIR=$HOME/.picturas-secrets   # exportado em todas as shells usadas
+ops/secrets.sh init                                   # segredos por serviço
+ops/pki.sh init                                       # CA da instalação e certificado por serviço
+ops/pki.sh check && docker compose up -d --build
+```
+
+Sem `PICTURAS_SECRETS_DIR` exportado, o `docker compose` recusa arrancar (intencional). Em ambos os casos, a
+aplicação fica em `https://localhost:8080` (aceitar o certificado local). Depois de reconstruir o _frontend_,
+correr `docker compose restart nginx` para evitar um 502.
+
+*Projeto de teste.* Registar uma conta (ou usar o modo anónimo), criar um projeto, carregar imagens e vídeos de
+`samples/video/`, montar um _pipeline_ com efeitos comuns, `trim`/`speed`, legendas e extração de fotogramas, e
+aplicar. O progresso chega pelo WebSocket e os resultados descarregam-se em ZIP.
+
+== Testes de regressão e de conformidade
+
+```bash
+# Worker de vídeo no host (precisa de ffmpeg/ffprobe)
+cd Tools/video && python3 -m venv .venv && .venv/bin/pip install -r requirements-dev.txt
+.venv/bin/python -m pytest -q tests && cd ../..
+
+# Regressão F01 (testes Node e de vídeo) nas imagens do produto, numa stack já montada
+tests/conformance/run-f01.sh <projeto-compose>
+```
+
+Os testes de conformidade das decisões estão em `tests/conformance/<grupo>/` e guardam o resultado bruto em
+`tests/conformance/results/<AAAA-MM-DD>/`. Correm sempre contra uma _stack_ própria (`picturas-dev` ou
+`picturas-nfr-exp`) e só com _fixtures_.
+
+== Repetir as medições (BF e MF)
+
+O instrumento é `evaluation/med.py`, congelado na versão `638516104ae9`. Não se altera `med.py`, `medlib/`,
+`criteria.yaml` nem `cases/` entre a BF e a MF; uma alteração inevitável regista-se com `med.py freeze`. O
+`med.py` monta a sua própria _stack_ isolada (`picturas-nfr`), sem tocar nos volumes nem nas portas da
+instalação de desenvolvimento.
+
+```bash
+cd evaluation
+python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
+cp .env.med.example .env.med
+.venv/bin/python med.py preflight --campaign BF   # verifica Docker, CPU, RAM e disco
+.venv/bin/python med.py corpus                    # gera o corpus (~2,5 GiB, guardar até à MF)
+.venv/bin/python med.py stack up                  # build e arranque da stack isolada
+.venv/bin/python med.py run --campaign BF         # campanha completa (~2-3 h)
+.venv/bin/python med.py stack down
+```
+
+*Medição final (MF).* No *mesmo computador* da BF, com o código refatorado: preencher o `.env.med` com as
+credenciais de administração e por serviço geradas por `ops/secrets.sh med-env` (sem elas, esses casos ficam
+`INCONCLUSIVO`), e depois:
+
+```bash
+.venv/bin/python med.py stack up
+.venv/bin/python med.py run --campaign MF
+.venv/bin/python med.py compare results/BF-20261121T013224Z results/MF-<UTC>
+```
+
+O `compare` só classifica se o _host_, os limites, o corpus, os critérios, os casos e a versão do instrumento
+forem iguais aos da BF; caso contrário, todas as métricas ficam `COMPARACAO_INVALIDA`. Medições noutros
+computadores usam `--campaign EXP` (com `MED_COMPOSE_PROJECT=picturas-nfr-exp`) e nunca entram no `compare`.
+Cada campanha fica em `evaluation/results/<CAMPANHA>-<UTC>/`: `manifest.json` (commit, _host_, Docker, imagens,
+corpus), `raw/<métrica>.jsonl` (uma linha por tentativa, sem segredos), `summary.json` e `report.md`.
 
 = Glossário
 
 #tabela(
   colunas: (4cm, 1fr),
+  tamanho: 8.5pt,
   [Termo], [Definição],
-  [#preencher[e.g., Cenário de qualidade]], [#preencher[…]],
+  [_Apply_], [Comando que aplica o _pipeline_ do projeto a todos os _media_ (`POST …/process`); é aí que se cobra a quota de operações.],
+  [BF / MF / EXP], [Campanhas do `med.py`: _baseline_ formal (antes do _refactoring_), medição final (depois, no mesmo _host_) e medição experimental (outro computador ou verificação intermédia, fora da comparação).],
+  [Bloco (B0–B12)], [Unidade de implementação do plano de refatoração (`docs/refactor-plano.md`), com dependências e critério de aceitação próprios.],
+  [CAND-n], [Candidato a requisito não funcional (capítulo 6), derivado de um cenário de qualidade prioritário.],
+  [Candidato (_upload_)], [Objeto S3 imutável, numa chave nova e única que o cliente não pode escrever, sobre o qual se valida o ficheiro antes do _commit_ no projeto.],
+  [Cenário de qualidade (QS-nn)], [Especificação verificável de um atributo de qualidade com seis elementos: fonte, estímulo, artefacto, ambiente, resposta e medida da resposta.],
+  [Classe A / B / C], [Classificação das táticas: A, _refactoring_ puro; B, alteração visível que é o objeto da melhoria; C, funcionalidade nova, rejeitada nesta fase.],
+  [Corpus], [Conjunto fixo de ficheiros de teste (PAD e vídeos reais) gerado pelo `med.py` e reutilizado sem alterações na BF e na MF.],
+  [Corte (WS)], [Fim da receção de eventos protegidos de um projeto por uma ligação WebSocket depois de a autorização cessar; medido pela S12.],
+  [DA-n], [Decisão arquitetural registada ao estilo ADR (capítulo 8): contexto, tática, alternativas, consequências e desvios.],
+  [EV-nn / H-nn], [Evidência verificável (código, configuração, mensagem, medição ou documento) e hipótese ainda por confirmar; registo no Anexo A.3.],
+  [Guarda], [Métrica que não pode piorar além do mínimo aceitável (e.g., S05, U15); uma guarda que falhe invalida a melhoria.],
+  [JWT HS256 / RS256], [_Token_ de sessão do utilizador (assinatura simétrica) e identidade interna de curta duração emitida pelo _gateway_ (assinatura assimétrica, ≤30 s, com audiência e contexto).],
+  [_Loopback_], [Interface local (`127.0.0.1`): uma porta ligada só a ela não é alcançável a partir de outras máquinas nem de outros contentores.],
+  [`med.py`], [Instrumento automatizado de medição dos dois RNF (`evaluation/`); executa os casos, recolhe dados brutos e classifica-os face a `criteria.yaml`.],
+  [mTLS], [TLS mútuo: cliente e servidor apresentam certificados da CA da instalação; a autorização exige também a identidade específica do par e a operação permitida.],
+  [OOM], [_Out of memory_: o processo é terminado por exceder o limite de memória do contentor.],
+  [PKI / CA], [Infraestrutura de chaves da instalação: uma autoridade de certificação local (365 dias) e um certificado por serviço (30 dias), geridos por `ops/pki.sh`.],
+  [Principal (credencial)], [Identidade própria de cada serviço perante MongoDB, RabbitMQ e S3, com privilégio mínimo para as suas operações.],
+  [RSS], [_Resident set size_: memória física ocupada por um processo; base das métricas U01 e U04.],
+  [Sala (WS) / _join_], [Canal Socket.IO de um projeto; o _join_ é o pedido de entrada, autorizado pela `projects`.],
+  [_Spike_], [Ensaio curto e descartável (SP-01 a SP-11, bloco B0) para confirmar uma hipótese técnica antes de implementar.],
+  [_Spool_], [Escrita do corpo integral de um pedido em disco temporário antes de o processar (medido pela U08).],
+  [_Staging_], [Área controlada do S3 onde ficam os _bytes_ de uma tentativa de _upload_ até à validação; nunca visível como _media_ do projeto.],
+  [TAT-nn], [Tática arquitetural candidata (capítulo 7), ligada a um cenário e classificada A/B/C.],
+  [Tentativa de _upload_], [Registo, numa coleção própria, de um carregamento em curso (pedido, PUT, validação, confirmação), com prazos e limites.],
 )
 
 = Registo de Evidências e Hipóteses
 
-As evidências (`EV-01` a `EV-49`) e hipóteses (`H-01` a `H-18`) citadas ao longo deste relatório têm origem na análise de arquitetura, inspeção de código, dados de execução e literatura dos Exercícios 6 e 7. O catálogo seguinte identifica a sua localização exata e o facto factual ou previsão técnica que sustentam.
+As evidências (`EV-01` a `EV-51`) e hipóteses (`H-01` a `H-18`) citadas ao longo deste relatório têm origem na análise de arquitetura, inspeção de código, dados de execução e literatura dos Exercícios 6 e 7. O catálogo seguinte identifica a sua localização exata e o facto factual ou previsão técnica que sustentam.
 
 #paisagem[
-#tab([Registo de Evidências (EV-01 a EV-49)],
+#tab([Registo de Evidências (EV-01 a EV-51)],
   tabela(
     colunas: (1.8cm, 3.4cm, 6.2cm, 1fr),
     tamanho: 7.5pt,
@@ -81,6 +195,8 @@ As evidências (`EV-01` a `EV-49`) e hipóteses (`H-01` a `H-18`) citadas ao lon
     [EV-47], [Referências primárias complementares], [ISO 25010:2011; fichas/resumos SEI Deriving Architectural Tactics e Security and Survivability, consulta 18/11], [Edição ISO exigida e ligação entre cenários, táticas e decisões. Consultados os resumos oficiais, não o livro SAIP nem o texto integral desses relatórios; o catálogo concreto utilizado é o Anexo A de EV-39.],
     [EV-48], [Inventário dos materiais consultados], [Quatro novos ficheiros e `docs/lectures/`; índice Ex. 7], [Não foram fornecidos no workspace os slides 9 nem as quatro folhas `Apoio/Taticas` citadas no Ex. 7. Usa-se o Anexo A incluído no HTML 3.0 e as fontes disponíveis; não se simula leitura dos materiais ausentes.],
     [EV-49], [Revisão documental e releitura estática — 20/11/2026], [Verificação da revisão, checkout `405b6c0`; WS, caller e rotas], [QS-01 distingue tentativa de acesso de revogação, agora QS-07 complementar; corrigem-se o sentido dos efeitos e as filas dos diagramas. Diff da aplicação vazio desde o início do Bloco 1 no âmbito registado; originais e registo anterior preservados. Não prova implementação, testes, acordo adicional ou baseline.],
+    [EV-50], [Decisões antes de implementar — 21/11/2026], [`docs/refactor-handoff.md` §2.3 e §2.6; `docs/refactor-plano.md` §8; `docs/architecture/fase2-upload-ciclo-vida.md` (seleção de 21/11)], [UP-C4 a UP-C9 escolhidas (opção A em todas), dúvidas D-01 a D-15 respondidas e plano em blocos B0–B12. D-15: não há clientes reais e a entrega parte de um _reset_ geral, sem migração de sessões, contas ou _media_. Supera, neste ponto, o estado registado em EV-44.],
+    [EV-51], [Implementação — _spikes_ e B1, 21–22/11/2026], [Branch `fase2-refactor`, _commits_ `02623a4` (B0) e `1ab09fa` (B1); `docs/refactor-spikes.md`; `tests/spikes/SP-01..SP-11/results/`; `tests/conformance/results/2026-11-21/` e `2026-11-22/`], [11 _spikes_ (6 suportados, 5 com limitações, que originaram D-16 a D-19); PKI e segredos fora do Git; regressão F01 8/8 Node e 74/74 vídeo; `med.py` EXP S05 `--quick` = 100%. Não é a medição final (MF).],
   )
 )
 
@@ -104,7 +220,7 @@ As evidências (`EV-01` a `EV-49`) e hipóteses (`H-01` a `H-18`) citadas ao lon
     [H-13], [Os mecanismos herdados podem apoiar RNF de partilha, presets e IA, mas a inspeção estática e os testes de vídeo não demonstram os percentis, limites temporais, disponibilidade, retenção e invariantes sob concorrência exigidos nesses RNF.], [Ensaiar geração de links (99% $< 1$ s), sincronização entre dispositivos (≤5 s), presets (95% ≤2 s; 100 ciclos sem duplicação/perda), concorrência de edição/presença, retenção do assistente e carga/uptime de IA. Resolver o conflito 10 s/3 s de RNF54 antes de aceitar um limiar. Reutilizar corpus/ambiente fixos; não inventar novos alvos.], [Por confirmar],
     [H-14], [Autenticar/autorizar em cada fronteira e revalidar WS reduz os efeitos indevidos dos casos conhecidos, com custos de CPU/latência e indisponibilidade em falha.], [Repetir casos corrigidos com controlos positivos, TLS/peer/domínio e carga WS; medir corte e overhead sem apresentar erro 500 como segurança.], [Não demonstrada na solução proposta; escolhas individuais em EV-44],
     [H-15], [Novo percurso nginx/S3 e streaming limitado no adaptador reduzem a dependência RSS Node/tamanho, sem deslocar um custo inaceitável para nginx/S3/disco.], [BF/MF no mesmo host/budget/corpus, C=1/C=3, memória agregada, temporários, bytes/CPU e tempos até ready/hash/cleanup; comparar cada transporte.], [Por confirmar; EV-42 confirma o problema em alguns casos da base, não a melhoria],
-    [H-16], [Hash posterior pode reduzir t_ready, mas acrescenta atraso/leituras e exige cache/retoma coerentes.], [Medir t_ready/t_hash/t_complete, originais e previews antes/depois do hash; injetar falhas só em fixtures autorizadas.], [Proposta UP-C7 por selecionar; não é decisão nova deste exercício],
+    [H-16], [Hash posterior pode reduzir t_ready, mas acrescenta atraso/leituras e exige cache/retoma coerentes.], [Medir t_ready/t_hash/t_complete, originais e previews antes/depois do hash; injetar falhas só em fixtures autorizadas.], [UP-C7 A selecionada a 21/11 (EV-50); efeito por medir na MF],
     [H-17], [Adaptador, controlos de confiança e tentativas cabem no orçamento do host e no prazo académico sem reduzir cobertura.], [Calibrar por fase, inventariar disco/serviços e esforço da equipa; materializar instrumentos/corpus antes do congelamento.], [Por confirmar; 10 GiB/≥60 GiB são condições de planeamento, não capacidade],
     [H-18], [Benefícios conjuntos de segurança e upload mantêm U25 e os fluxos legítimos, apesar de mais TLS/queries/estados.], [Ensaios de coexistência/latência pareados e regressões de imagem/vídeo/partilha/quota/billing, conservando todos os erros.], [Por confirmar; U25 G selecionada, resultado NM],
   )

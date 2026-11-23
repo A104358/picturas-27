@@ -93,7 +93,7 @@
     [U19], [Principal], [Recurso gasto antes de recusar upload sem token], [+966 MiB gastos, 401 após 10,6 s (500 MiB recebidos)], [$<= 8$ MiB], [$<= 100$ ms pós-cabeçalhos], [#preencher[...]], [#preencher[...]],
     [U18], [Principal], [Recusa correta de uploads com parâmetros inválidos (%)], [15/21 (71%); casos I1 e I6 geram 502 + OOM], [100%], [100%], [#preencher[...]], [#preencher[...]],
     [U04], [Principal], [Memória adicional do nginx e SeaweedFS no upload (MiB)], [+0,4 / +619 MiB máx. (mediana +585 MiB)], [$+<= 128$ / $+<= 256$ MiB], [$+<= 64$ / $+<= 128$ MiB], [#preencher[...]], [#preencher[...]],
-    [U08], [Principal], [Disco temporário por componente e resíduos após envio], [500 MiB no nginx, 500 MiB no `projects`; 0 resíduos], [$<= C times (F + 16 "MiB")$; 0 resíduos], [$<= 16$ MiB/upload; 0 resíduos], [#preencher[...]], [#preencher[...]],
+    [U08], [Principal], [Disco temporário por componente e resíduos após envio], [500 MiB no nginx, 500 MiB no `projects`; 0 resíduos (cumpre o mínimo na BF)], [$<= C times (F + 16 "MiB")$; 0 resíduos], [$<= 16$ MiB/upload; 0 resíduos], [#preencher[...]], [#preencher[...]],
     [U09], [Guarda], [Tempo de aceitação após fim do envio do corpo (ms)], [14/20 falharam (500 MiB); aceites mediana 6171 ms], [$< 3000$ ms], [$< 1000$ ms], [#preencher[...]], [#preencher[...]],
     [U25], [Guarda], [Pedidos leves durante uploads concorrentes (erros / latência)], [6 erros (2 por par); gateway sofreu OOM nos 3 pares], [0 falhas; $<= 1,10 times "controlo"$], [$<= "controlo"$], [#preencher[...]], [#preencher[...]],
     [U15], [Guarda], [Integridade SHA-256 do ficheiro original armazenado (%)], [86/86 (100%)], [100%], [100%], [#preencher[...]], [#preencher[...]],

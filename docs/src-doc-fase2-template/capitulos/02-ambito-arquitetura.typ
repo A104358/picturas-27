@@ -35,7 +35,7 @@
     ],
     [Ambientes de execução], [
       - _Ambiente de diagnóstico exploratório inicial (EV-28):_ Ubuntu 22.04.5 LTS; kernel Linux 6.8.0-138-generic, x86_64; Intel Core i7-13700H (14 núcleos, 20 vCPU); 15 GiB RAM e 2 GiB _swap_; Docker 29.9.2, _build_ `a82e528`; Docker Compose v5.6.1.
-      - _Ambiente da baseline formal (BF) e avaliação comparativa (MF):_ Host dedicado Apple M4 Pro (12 CPU, 7,7 GiB de RAM atribuídos ao Docker Desktop, Linux VM); Docker Desktop com engine Docker 27.x e Compose v2.x. Campanha oficial `BF-20261121T013224Z` recolhida a 21/11/2026 sobre o _commit_ `d6b4497d116fe2ec265040084f6ec126cb84ad49` (código de aplicação estritamente idêntico a `0523102`).
+      - _Ambiente da baseline formal (BF) e avaliação comparativa (MF):_ Host dedicado Apple M4 Pro (macOS, Darwin 24.6.0, arm64), com 12 CPU e 7,7 GiB de RAM atribuídos ao Docker Desktop (VM Linux 6.10.14-linuxkit, cgroup v2); Docker Engine 28.5.1. Valores registados em `evaluation/results/BF-20261121T013224Z/manifest.json`. Campanha oficial `BF-20261121T013224Z` recolhida a 21/11/2026 sobre o _commit_ `d6b4497d116fe2ec265040084f6ec126cb84ad49` (código de aplicação estritamente idêntico a `0523102`).
     ],
   ),
 )
@@ -69,6 +69,8 @@ O comando _Apply_ envia `POST /api-gateway/projects/:user/:project/process`, com
     [Hohpe & Woolf — Pipes and Filters e Competing Consumers], [Catálogo EIP; consulta 2026-11-09], [Fundamentação das alternativas ALT-1 e ALT-2.],
     [RabbitMQ — Consumer Acknowledgements], [Documentação oficial; consulta 2026-11-09], [Distinção entre confirmação de consumo, confirmação de publicação e reentrega.],
     [ISO/IEC 25010:2011], [Edição 2011; consulta 2026-11-09], [Modelo de oito características; classificação de RNF e atributos de qualidade.],
+    [Enunciados e _templates_ dos Exercícios 6 e 7], [Ex. 6: 1.1, 2026-11-04; Ex. 7: 3.0, 2026-11-17], [Estrutura e regras dos capítulos 2 a 10; originais em `docs/exercises/*/sources/` (EV-02, EV-38, EV-39).],
+    [Plano e passagem de trabalho da refatoração (`docs/refactor-plano.md`, `docs/refactor-handoff.md`)], [2026-11-21/22], [Decisões fechadas antes de implementar, blocos B0–B12, estado da implementação e desvios (EV-50, EV-51).],
   ),
 )
 
@@ -136,7 +138,7 @@ O transporte de trabalho computacional assenta num _broker_ RabbitMQ durável co
   *hipótese* (`H-nn`) e indiquem como a confirmar ou refutar.
 ]
 
-O catálogo completo de todas as evidências (`EV-01` a `EV-49`) e hipóteses (`H-01` a `H-18`), com a localização detalhada no repositório e o respetivo facto ou inferência técnica, encontra-se consolidado no Anexo A.3 para consulta e rastreabilidade sistemática.
+O catálogo completo de todas as evidências (`EV-01` a `EV-51`) e hipóteses (`H-01` a `H-18`), com a localização detalhada no repositório e o respetivo facto ou inferência técnica, encontra-se consolidado no Anexo A.3 para consulta e rastreabilidade sistemática.
 
 #figure(
   image("../images/sequencia_processamento.png", width: 95%),

@@ -120,7 +120,7 @@
     tamanho: 8.5pt,
     [Recomendação], [Atributo(s)], [Padrão a que se refere], [Esforço], [Risco de regressão],
     [Realizar as fronteiras de identidade/autorizações e permanência WS já selecionadas, com controlos positivos e proteção das chaves], [Segurança, com guardas temporais/disponibilidade], [Global; vídeo herda APIs/eventos/_storage_], [Alto], [Alto — todos os callers legítimos precisam de ser preservados; H-14/H-17],
-    [Realizar o percurso nginx/S3 e adaptador limitado, preservando quota e _staging_ controlado], [Eficiência, segurança e fiabilidade], [Global/entrada do vídeo, sem distribuir _frames_], [Alto], [Alto — fechar UP-C4–C9 antes da aplicação; H-15–H-18],
+    [Realizar o percurso nginx/S3 e adaptador limitado, preservando quota e _staging_ controlado], [Eficiência, segurança e fiabilidade], [Global/entrada do vídeo, sem distribuir _frames_], [Alto], [Alto — UP-C4–C9 fechadas a 21/11 antes de implementar (EV-50); H-15–H-18],
     [Calibrar e congelar BF, corpus/instrumentos e critérios aplicáveis antes do _refactoring_], [Testabilidade e ambos os RNF], [Global e integração], [Médio], [Médio — preparação, não melhoria já medida; EV-45],
     [Manter ALT-1/ALT-2 como alternativas documentadas, sem as implantar nesta seleção], [Modularidade/capacidade], [Vídeo dentro do padrão global], [Alto/médio], [Alto/alto — estimativas herdadas; H-01–H-04/H-12],
   ),

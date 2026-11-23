@@ -16,8 +16,8 @@
 == Antes
 
 #figure(kind: image,
-  figura-pendente[vista arquitetural antes das decisões (`images/vista_antes.png`) — fonte: `diagrams/before.mmd`; EV-07–EV-12/EV-22/EV-24/EV-40/EV-46/EV-49],
-  caption: [Vista arquitetural antes das decisões DA-1 e DA-2],
+  image("../images/vista_antes.png", width: 100%),
+  caption: [Vista arquitetural antes das decisões DA-1 e DA-2 (Mermaid, `diagrams/before.mmd`; EV-07–EV-12, EV-22, EV-24, EV-40, EV-46, EV-49)],
 )
 
 Vista parcial das interações relevantes para as duas decisões. Mantém-se a vista global do Bloco 1 (`arquitetura_global_plantuml.svg`) para os restantes serviços/volume. Os elementos assinalados a vermelho têm fragilidades de código sem afirmar falha de cada pedido.
@@ -25,11 +25,11 @@ Vista parcial das interações relevantes para as duas decisões. Mantém-se a v
 == Depois
 
 #figure(kind: image,
-  figura-pendente[vista arquitetural depois das decisões, com os elementos alterados destacados (`images/vista_depois.png`) — fonte: `diagrams/after.mmd`; EV-44/EV-45; H-14–H-18],
-  caption: [Vista arquitetural depois das decisões DA-1 e DA-2],
+  image("../images/vista_depois.png", width: 100%),
+  caption: [Vista arquitetural depois das decisões DA-1 e DA-2 (Mermaid, `diagrams/after.mmd`; EV-44, EV-45, EV-50; H-14–H-18)],
 )
 
-A vista «depois» representa o *desenho selecionado*, ainda não implementado. Os elementos a verde são as realizações das táticas escolhidas, previstas mas não em execução. Os elementos a cinzento/tracejado são mecanismos não selecionados ou por concretizar (UP-C4–C9).
+A vista «depois» representa o *desenho selecionado*, ainda não implementado. Os elementos a verde são as realizações das táticas escolhidas, previstas mas não em execução. Os elementos a cinzento/tracejado são os mecanismos UP-C4–C9 (estado, tentativa, candidato, _hash_ e limpeza), selecionados a 21/11 (EV-50) e ainda por implementar.
 
 == Legenda e notas
 
@@ -39,7 +39,7 @@ A vista «depois» representa o *desenho selecionado*, ainda não implementado. 
     [Cor / estilo], [Significado],
     [Vermelho (vista antes)], [Fragilidade identificada: _buffer_ integral, TLS sem validação, WS sem autorização de projeto.],
     [Verde sólido (vista depois)], [Realização das táticas TAT-01–04 (fronteiras/WS) e TAT-08/09 (percurso de bytes/adaptador); *previsão*, não em execução.],
-    [Cinzento/tracejado (vista depois)], [UP-C4–C9: estado, _retry_, candidato, _hash_ e limpeza — propostos, não selecionados.],
+    [Cinzento/tracejado (vista depois)], [UP-C4–C9: estado, tentativa, candidato, _hash_ e limpeza — selecionados (opção A em todos), por implementar.],
     [`«tática: …»` (anotação)], [Indica qual tática introduz ou altera o elemento/interação representados.],
   ),
 )

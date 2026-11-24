@@ -269,3 +269,79 @@ real permanece um bloqueio por caso; não uma razão para inventar evidência ou
 dados. Nesta revisão foi concretizado o procedimento e registada a resposta do
 utilizador. Não foram lidos browsers/BD/volumes, emitidos tokens, alterada a aplicação
 ou criados casos preenchidos com IDs reais.
+
+## B9 — Ferramenta e percurso implementados (24/11/2026)
+
+A especificação acima conserva o contexto histórico; D-15 elimina a migração e o
+inventário de instalações antigas. Os comandos seguintes são a implementação para
+expirações futuras, ensaiada exclusivamente com fixtures. Não executam um reset.
+
+O emissor é `users/admin/sessionRecovery.js`, invocado por
+`ops/session-recovery.sh`. Não existe endpoint de emissão administrativa. O wrapper
+usa a imagem `users` do projeto indicado, na sua rede, com o `users.env` dessa
+instalação e a CA montada só para leitura; o HS256 permanece no domínio users.
+Apenas o diretório privado do caso recebe escrita. O operador associa explicitamente
+as referências de instalação/dataset ao projeto Compose; o issuer é comparado com
+o runtime. Conhecer um ID, um bearer antigo ou uma referência não constitui prova.
+
+1. Fora do checkout, criar um diretório 0700 do próprio operador e copiar o template
+   `docs/templates/anonymous-session-recovery-case.template.json` para um ficheiro
+   0600. Não usar symlinks, partilhar o diretório, ou pô-lo num build/contexto Git.
+   Registar a conta/dataset/perfil e a evidência independente efetiva. O template,
+   por si só, nunca é elegível.
+2. Inspecionar a conta sem emitir. Exemplo com referências fictícias:
+   `ops/session-recovery.sh picturas-dev inspect /private/case.json INSTALLATION DATASET`.
+   O comando devolve estado/existência/tipo e `account_fingerprint`, sem PII/bearer.
+   Conferir o resultado com a prova; guardar esse fingerprint no campo
+   `evidence.account_fingerprint`. Uma alteração posterior de conta/quota recusa a
+   emissão e exige nova conferência, em vez de atualizar o hash automaticamente.
+3. No registo privado, avançar `pending_evidence → evidence_verified → approved`
+   apenas com a prova, destino controlado e decisão administrativa datados. Definir
+   `template_only: false`, `evidence.existence_status: "verified"`, preencher todas
+   as bases/fontes e `approval.status: "approved"`. `target.issuer` tem de ser o da
+   instalação, `expected_subject_id` o da conta anónima e `required_account_type`
+   `anonymous`. Sem prova, manter pending/conflict e preservar os dados.
+4. Emitir uma vez:
+   `ops/session-recovery.sh picturas-dev issue /private/case.json INSTALLATION DATASET delivery.json`.
+   A saída é criada exclusivamente, 0600, no mesmo diretório, sem bearer no stdout.
+   O JWT normal é para o mesmo `_id/sub`, com sete dias absolutos desde a emissão.
+   O journal regista `issued_unconfirmed` duravelmente antes de assinar/gravar e
+   só depois `issued`. Um `.lock`, saída existente ou estado ambíguo impede retry
+   cego. `status` usa os mesmos argumentos, sem `delivery.json`, e indica se é
+   necessária reconciliação. Não remover locks/artefactos nem voltar a approved
+   antes de investigar uma interrupção; não há revogação individual/uso único.
+5. No perfil conferido, fechar outras tabs, sobretudo clientes antigos, e abrir
+   `https://localhost:8080/session-recovery`. A boundary não monta o bootstrap de
+   sessão nem sockets neste caminho. O browser tem de suportar Web Locks em origem
+   segura; um lock exclusivo abrange leitura/validação/confirmação. Os escritores
+   do cliente atualizado recusam operações enquanto ele estiver ocupado; um evento
+   de storage de um cliente antigo põe o importador em conflito. O operador continua
+   responsável por garantir que não há código antigo/tab concorrente.
+6. Introduzir as referências/ID do registo independente, confirmar o perfil e ler o
+   ficheiro local (JSON ≤16 KiB; token ≤8 KiB). Só a credencial segue para a validação
+   normal autenticada; o ID do token é candidato de encaminhamento. O servidor
+   verifica HS256/issuer/audience/typ/sub/iat/exp e a conta, e o importador exige a
+   mesma identidade anónima. Metadados do envelope não concedem autorização.
+   Registar `import_verified` depois da comparação com o caso. Confirmar importação
+   grava a sessão; outra identidade ou storage inválido gera conflito. Falha de rede
+   não faz logout; falha de escrita não cria outra conta. Não usar `useLogout`.
+7. Registar `imported` após a gravação, usar **Continue and reconnect** (novo documento,
+   caches/sockets anteriores descartados), conferir projetos/media/presets/quota e
+   autorização fresca por sala. Só então preencher checks/datas e `completed`.
+   As transições administrativas de conferência são registadas pelo operador no
+   caso privado; a app não recebe escrita nele. Remover cópias dispensáveis da
+   entrega reduz exposição, sem revogar um JWT copiado.
+
+### Runbook de futura troca do segredo
+
+Parar a admissão (nginx e clientes) na instalação afetada e preservar os dados.
+Fazer backup privado e renovar o segredo HS256 por processo administrativo local,
+renderizar os envs e recriar **todos** os verificadores/emissor antes de reabrir a
+admissão; nunca aceitar simultaneamente o antigo e o novo. Não correr `init` sobre
+uma instalação existente como substituto de um procedimento de rotação. Confirmar
+com fixtures que o bearer antigo é recusado por HTTP/WS e que o emissor novo
+funciona. Registados fazem login; anónimos seguem prova/aprovação/emissão/importação
+acima para o mesmo `_id`. Não criar contas, transferir projetos, limpar media ou
+reiniciar quotas. Logout e mudança de password não invalidam cópias do bearer
+até ao `exp`; a retirada do segredo invalida globalmente. Isto é runbook e ensaio
+com fixtures, não uma rotação de dados reais executada no B9.

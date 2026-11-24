@@ -2,15 +2,16 @@
 
 import { RegisterForm } from "@/components/authentication/register-form";
 import Image from "next/image";
-import { useEffect, useState, useLayoutEffect } from "react";
-import { useSession } from "@/providers/session-provider";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useEffect, useState, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 
 export default function Register() {
+  return <Suspense fallback={<p>Loading registration…</p>}><Registration /></Suspense>;
+}
+
+function Registration() {
   const [seed, setSeed] = useState<number | null>(null);
-  const session = useSession();
   const searchParams = useSearchParams();
-  const router = useRouter();
 
   // Se não vier nada, cai por defeito para o dashboard
   const next = searchParams.get("next") || "/dashboard";
@@ -19,12 +20,7 @@ export default function Register() {
     setSeed(Math.floor(Math.random() * 100));
   }, []);
 
-  useLayoutEffect(() => {
-    if (session.user.type !== "anonymous") {
-      // Depois de o user estar registado/logado, vai para o "next"
-      router.replace(next);
-    }
-  }, [session.user.type, next, router]);
+
 
   return (
     <div className="flex min-h-svh flex-col items-center justify-center bg-muted p-6 md:p-10">

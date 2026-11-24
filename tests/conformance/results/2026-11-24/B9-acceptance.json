@@ -1,0 +1,131 @@
+{
+  "block": "B9",
+  "status": "complete_awaiting_human_commit",
+  "criteria": {
+    "AR-01": [
+      "B9-issuer-unit.txt: evidence/template/approval gates"
+    ],
+    "AR-02": [
+      "B9-issuer-unit.txt: same identity/exclusive output",
+      "B9-browser-dev.txt: actual issuer/import/profile/quota/projects/media bytes"
+    ],
+    "AR-03": [
+      "B9-issuer-unit.txt: missing/registered/changed account and destination"
+    ],
+    "AR-04": [
+      "B9-issuer-unit.txt: concurrent lock, existing output, crash before/after output, durable ambiguity"
+    ],
+    "AR-05": [
+      "B9-client-unit.txt: trusted server result only",
+      "B9-functional-dev.txt: profile/signature/installation rejection",
+      "B9-browser-dev.txt: invalid candidate never persisted"
+    ],
+    "AR-06": [
+      "B9-session-profile.txt: absolute seven days and expiry equality",
+      "B9-browser-dev.txt: expiry between inspection and confirmation refused"
+    ],
+    "AR-07": [
+      "B9-client-unit.txt: exact byte limits and invalid schema",
+      "B9-browser-dev.txt: exact 16 KiB/+1 and MIME"
+    ],
+    "AR-08": [
+      "B9-client-unit.txt: failed storage preserves original",
+      "B9-browser-dev.txt: network and real storage refusal"
+    ],
+    "AR-09": [
+      "B9-browser-dev.txt: no bootstrap/register/old validation/socket on recovery mount",
+      "B9-mutations-unit.txt: empty query never registers"
+    ],
+    "AR-10": [
+      "B9-mutations-unit.txt: actual delayed hooks preserve newer session",
+      "B9-browser-dev.txt: second-tab lock, uncooperative storage change, different subject conflict"
+    ],
+    "AR-11": [
+      "B9-browser-dev.txt: fresh owner authorization over actual wss after import",
+      "B9-b8-functional-dev.txt: current room/personal-event authorizations, owner/read/edit/anonymous/denied"
+    ],
+    "AR-12": [
+      "B9-issuer-unit.txt: outside application, owner-only permissions, exclusive output",
+      "B9-browser-dev.txt: no bearer/HS256 in journal/status/stdout",
+      "B9-functional-dev.txt: no public issuer"
+    ],
+    "SEC-01": [
+      "B9-browser-dev.txt: explicit rejection choices, registration only after confirmation",
+      "B9-functional-dev.txt: registered reauthentication preserves identity/presets"
+    ],
+    "SEC-02": [
+      "B9-session-profile.txt: isolated verifier clock",
+      "B9-functional-dev.txt: password change, no refresh, WS expiry/future iat",
+      "B9-browser-dev.txt: network retry and explicit logout"
+    ],
+    "S06": [
+      "B9-functional-dev.txt",
+      "B9-session-profile.txt"
+    ],
+    "F06": [
+      "B9-browser-dev.txt: actual bytes/profile/quota/project equality",
+      "B9-functional-dev.txt: preserved registered presets/tools"
+    ]
+  },
+  "dev": {
+    "issuer_tests": 7,
+    "client_groups": 5,
+    "mutation_groups": 4,
+    "browser_checks": 35,
+    "functional_checks": 20,
+    "B4_identity": 92,
+    "B4_routes": 557,
+    "B5_mtls": 147,
+    "B5_functional": 10,
+    "B8_functional": 33,
+    "smoke": 12,
+    "F01_node": 8,
+    "F01_video": 74
+  },
+  "baseline": "evaluation/results/EXP-20261123T233259Z",
+  "limits": [
+    "Synthetic fixtures only; no real reset/migration/key rotation was executed.",
+    "Administrator independently verifies evidence, destination and private journal transitions.",
+    "Recovery requires Web Locks and closure of older tabs; an uncooperative storage change halts import.",
+    "Copied JWT remains valid after logout/password change until exp or global secret withdrawal.",
+    "Local quick EXP is a regression check; official BF/MF comparison remains B12 on the BF machine."
+  ],
+  "campaign": "evaluation/results/EXP-20261124T113928Z",
+  "metrics": {
+    "S01": "0/15",
+    "S02": "0/20",
+    "S04": "0/5",
+    "S05": "15/15",
+    "S21": {
+      "get_project": {
+        "median_ms": 21.227,
+        "delta_B8_ms": -2.633
+      },
+      "get_user": {
+        "median_ms": 13.237,
+        "delta_B8_ms": 2.699
+      },
+      "n_each": 20,
+      "errors": 0,
+      "local_guard_delta_ms": 5
+    }
+  },
+  "git": {
+    "source_head": "b0972280eff1d19f838e1430cb011f83efca4c01",
+    "required_pull": "git pull --rebase origin fase2-refactor",
+    "result": "Already up to date",
+    "conflicts": false,
+    "temporary_stash_restored": true,
+    "agent_commits": 0,
+    "agent_pushes": 0
+  },
+  "stacks": {
+    "picturas-dev": "down without -v",
+    "picturas-nfr-exp": "down without -v",
+    "probe": "removed",
+    "volumes": "preserved"
+  },
+  "frozen_instrument_changed": false,
+  "handoff_section_1_changed": false,
+  "private_marker_matches": 0
+}

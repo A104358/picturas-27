@@ -218,7 +218,7 @@ dependências estiverem `FEITO`.
 | B6 — Upload: motor e adaptador | B0, B4, B5 | POR FAZER | — | A escrita do adaptador (cópia ou direta) ficou na **D-16**, e o limite de leitura do `ffprobe` na **D-17**. Notas do SP-01, SP-03 e SP-05 |
 | B7 — Upload: fluxo novo | B6 | POR FAZER | — | Inclui o frontend (§2.6, decisão 1). Configuração do `auth_request` (SP-01, notas 1–4) e do `Host` assinado (SP-04) |
 | B8 — WebSocket | B4, B5 | FEITO | Conformidade em `tests/conformance/results/2026-11-23/` (`B8-*-dev.txt`); F01 8/8 e 74/74 (`F01-222151.txt`); EXP v2 `evaluation/results/EXP-20261123T233259Z/report.md` (S04 0/5, S12 998,1 ms, S05 100%, S21 −2,295 ms `get_project` / −4,702 ms `get_user`; S01/S02/S03/S16/S17/S18 sem regressão) | D-23/D-25/D-27/D-29/D-31 resolvidas (decisões 32/34/36/38/40). Sem portas abertas, mTLS ws_gateway→projects, autorização por lote e corte ≤1 s. Pronto para commit |
-| B9 — Sessões e recuperação | B4, B8 | POR FAZER | — | Sem migração (reset, §2.6, decisão 15); mantém a ferramenta de reemissão assistida |
+| B9 — Sessões e recuperação | B4, B8 | FEITO | `tests/conformance/results/2026-11-24/B9-acceptance.json` (AR-01–AR-12, SEC-01/02, S06/F06); `evaluation/results/EXP-20261124T113928Z/report.md` | Escolhas explícitas, emissor administrativo e importação assistida; D-15 sem migração. EXP S01/S02/S04 = 0, S05 100%; S21 Δ B8 −2,633/+2,699 ms (guarda +5 ms). Pull/rebase sem conflitos; pronto para commit humano |
 | B10 — Operação da PKI | B1, B2, B5 | POR FAZER | — | O piloto corre assim que estiver pronto (§2.6, decisão 9) |
 | B11 — Reconciliação (OPS-C1) | B2, B10 | POR FAZER | — | Usa o isolamento do B10 |
 | §5 — Testes de conformidade | cresce com cada bloco | EM CURSO | `tests/conformance/results/2026-11-21/F01-202134.txt`, `…/2026-11-22/` | F01 registado; grupo `mtls-pki/` com `s19-markers.sh`, `s19-git-grep.sh` e `b1-smoke.py` |
@@ -336,6 +336,27 @@ Uma entrada por sessão, no fim da lista, ao parar.
 - Cuidado: os segredos e certificados privados mantêm-se protegidos fora do repositório; `ops/secrets.sh check` e `ops/pki.sh check` passam.
 - Decisões novas: 32 (D-23), 34 (D-25), 36 (D-27), 38 (D-29), 40 (D-31), autorizadas pelo utilizador nesta sessão.
 - Dúvidas novas: D-23, D-25, D-27, D-29 e D-31 resolvidas.
+
+### 2026-11-24 — B9 — FEITO (sem commit)
+- Feito: B8 confirmado no commit `b097228`, árvore limpa; lidos B9 e contrato AR-01–AR-12/SEC-01/SEC-02. Implementação autorizada pelo utilizador após o commit do B8.
+- Parei em: implementação de sessões explícitas, emissor administrativo e importador isolado.
+- Próximo passo: concluir, verificar na dev e EXP S01/S02/S04/S05/S21; pull/rebase antes de entregar para commit.
+- Cuidado: sem migração/reset de dados existentes; só fixtures. §1 e zonas B6 preservadas. Sem commit/push pelo agente.
+- Decisões novas: nenhuma. Dúvidas novas: nenhuma.
+
+- Verificação dev concluída: emissor 7/7; cliente 5 grupos; hooks reais 4 grupos; perfil JWT com relógio isolado; rede B9 20/20; Chromium real 35 verificações (inclui AR-01–12 por combinação dos ensaios, S06/SEC-01/SEC-02/F06). Reemissão/importação conserva identidade/quota/projetos e bytes de media; login registado conserva presets. B4 identidade 92/92 e rotas 557/557; B5 mTLS 147/147 e funcional 10/10; WS 33/33; smoke 12/12; F01 8/8 + 74/74. Brutos em `tests/conformance/results/2026-11-24/`.
+- Ajuste encontrado pelo ensaio: `iat` futuro era aceite; users/api_gateway/ws_gateway passam a recusá-lo e a exigir `exp > iat`, coerentemente com o perfil de sessão. Não muda duração, issuer, audiência nem cria refresh. Emissor novo recusa casos dentro da aplicação/repositório; cópias `pkiTls.js` e zonas B6 intactas.
+- Próximo passo atualizado: desmontar dev sem `-v`, subir EXP e correr S01/S02/S04/S05/S21 em v2; comparar S21 com o B8 (`EXP-20261123T233259Z`), depois pull/rebase e entrega para commit. Instrumento congelado inalterado no B9. Sem dúvidas/decisões novas.
+
+- EXP B9 concluída: `evaluation/results/EXP-20261124T113928Z/report.md`, v2/quick. S01 0/15, S02 0/20, S04 0/5, todos com controlos positivos completos/zero inconclusivos; S05 15/15. S21 `get_project` 21,227 ms (−2,633 face ao B8) e `get_user` 13,237 ms (+2,699), 20 amostras cada/zero erros, ambos dentro da guarda local +5 ms. Base B8: 23,860/10,538 ms. Verificação oficial BF/MF continua no B12 na máquina BF.
+- Próxima ação: parar probe/EXP sem apagar volumes, verificar ausência de segredos no diff/artefactos, pull/rebase com stash temporário e entrega para commit. Não há decisões pendentes.
+
+- Fecho B9: `users/admin/sessionRecovery.js` + `ops/session-recovery.sh` implementam inspect/issue/status, caso fora da aplicação, prova/aprovação/fingerprint, bloqueio, saída exclusiva 0600 e intenção durável `issued_unconfirmed`; journal sem bearer. `/session-recovery` suspende bootstrap antes dos hooks, mantém candidato em memória, valida no servidor na leitura e novamente ao confirmar, recusa outra identidade e coordena escritores com Web Locks + comparação da sessão/generação. Login/registo são acessíveis sem bootstrap; rede/expiração/erro não criam outra identidade; logout só remove credencial local. Runbook de troca futura e fluxo administrativo no documento de recuperação; template só ganha fingerprint.
+- Verificação final: índice completo `tests/conformance/results/2026-11-24/B9-acceptance.json`; emissor 7/7, cliente 5 grupos, hooks 4 grupos, browser real 35/35 e rede B9 20/20. O browser confirmou autorização owner fresca por WSS após importar com sessão ausente e inválida. Conformidade B4/B5/B8, F01 e smoke passaram; os diagnósticos iniciais de harness e a falha inicial de iat futuro estão preservados e identificados no README dos testes.
+- Pull final obrigatório: `git pull --rebase origin fase2-refactor` → Already up to date; HEAD `b097228` antes/depois, sem conflitos. Stash temporário integralmente reposto e removido. Não houve alterações remotas para integrar nem resolução que exigisse repetir conformidade.
+- Estado ao parar: **bloco concluído, sem commit/push pelo agente**. Probe removido; dev e EXP desmontadas com Compose down **sem `-v`**, volumes preservados. `secrets check`/`pki check` passaram; scan dos valores privados sem correspondências no diff/artefactos; `.env.med` continua ignorado. `med.py`, `medlib/`, critérios e casos intactos no B9; §1, restantes linhas de blocos e zonas B6 preservadas.
+- Próximo passo exato: utilizador revê a lista `tests/conformance/results/2026-11-24/B9-files.txt`, faz commit e push no `fase2-refactor`. Nenhum bloco seguinte iniciado. Sem decisões ou dúvidas novas/pendentes do B9.
+- Limites declarados: fixtures apenas, sem reset/migração/rotação real; operador verifica prova e fecho de tabs antigas. Bearer copiado continua válido após logout/password até expiração/retirada global. Comparação oficial BF/MF fica para B12 na máquina BF; esta EXP quick é guarda local.
 
 ## 5. Dúvidas surgidas durante a implementação
 

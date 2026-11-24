@@ -1,0 +1,122 @@
+{
+ "updated_at": "2026-11-24T11:41:01Z",
+ "metrics": {
+  "S01": {
+   "tentativas": 15,
+   "admitidos": 0,
+   "recusados": 15,
+   "inconclusivos": 0,
+   "nao_aplicaveis": 0,
+   "por_resultado": {
+    "RECUSADO_DOMINIO": 15
+   },
+   "por_superficie": {
+    "publica": {
+     "tentativas": 15,
+     "admitidos": 0,
+     "inconclusivos": 0
+    }
+   },
+   "casos_admitidos": [],
+   "casos_inconclusivos": [],
+   "controlos_ok": 1,
+   "controlos_total": 1
+  },
+  "S02": {
+   "tentativas": 20,
+   "admitidos": 0,
+   "recusados": 20,
+   "inconclusivos": 0,
+   "nao_aplicaveis": 0,
+   "por_resultado": {
+    "RECUSADO_REDE": 10,
+    "RECUSADO_TLS": 10
+   },
+   "por_superficie": {
+    "host": {
+     "tentativas": 10,
+     "admitidos": 0,
+     "inconclusivos": 0
+    },
+    "rede": {
+     "tentativas": 10,
+     "admitidos": 0,
+     "inconclusivos": 0
+    }
+   },
+   "casos_admitidos": [],
+   "casos_inconclusivos": [],
+   "controlos_ok": 1,
+   "controlos_total": 1
+  },
+  "S04": {
+   "tentativas": 5,
+   "admitidos": 0,
+   "recusados": 5,
+   "inconclusivos": 0,
+   "nao_aplicaveis": 0,
+   "por_resultado": {
+    "RECUSADO_DOMINIO": 5
+   },
+   "por_superficie": {
+    "ws": {
+     "tentativas": 5,
+     "admitidos": 0,
+     "inconclusivos": 0
+    }
+   },
+   "casos_admitidos": [],
+   "casos_inconclusivos": [],
+   "controlos_ok": 5,
+   "controlos_total": 5
+  },
+  "S05": {
+   "total": 15,
+   "ok": 15,
+   "fracao": 1.0,
+   "falhas": [],
+   "politica_acl_editor_elimina": [
+    false
+   ]
+  },
+  "S21": {
+   "get_project": {
+    "mediana_ms": 21.227,
+    "max_ms": 42.772,
+    "min_ms": 14.069,
+    "erros": 0,
+    "n": 20
+   },
+   "get_user": {
+    "mediana_ms": 13.237,
+    "max_ms": 35.794,
+    "min_ms": 9.159,
+    "erros": 0,
+    "n": 20
+   }
+  }
+ },
+ "estados": {
+  "S01": "CUMPRE_ALVO",
+  "S02": "CUMPRE_ALVO",
+  "S03": "NAO_MEDIDA",
+  "S04": "CUMPRE_ALVO",
+  "S12": "NAO_MEDIDA",
+  "S16": "NAO_MEDIDA",
+  "S17": "NAO_MEDIDA",
+  "S18": "NAO_MEDIDA",
+  "S05": "CUMPRE_ALVO",
+  "S21": "COMPARATIVA",
+  "U01": "NAO_MEDIDA",
+  "U20": "NAO_MEDIDA",
+  "U19": "NAO_MEDIDA",
+  "U18": "NAO_MEDIDA",
+  "U04": "NAO_MEDIDA",
+  "U08": "NAO_MEDIDA",
+  "U09": "NAO_MEDIDA",
+  "U25": "NAO_MEDIDA",
+  "U15": "NAO_MEDIDA",
+  "U17": "NAO_MEDIDA",
+  "U10": "NAO_MEDIDA"
+ }
+}

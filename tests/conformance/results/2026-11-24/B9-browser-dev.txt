@@ -1,0 +1,36 @@
+PASS AR-02 actual users issuer creates private delivery for the existing account
+PASS AR-12 journal/status/stdout contain no bearer or HS256 secret
+PASS S06 actual emitted JWT validates for the same anonymous subject
+PASS AR-09 recovery mount has no registration, old validation or socket (absent)
+PASS AR-05 candidate remains in memory until explicit confirmation
+PASS AR-02/06 import preserves subject, server profile and original issuance expiry
+PASS AR-11 normal bootstrap resumes with the imported identity
+PASS AR-11 imported session obtains a fresh owner room authorization over wss
+PASS AR-09 recovery mount has no registration, old validation or socket (invalid)
+PASS AR-05 candidate remains in memory until explicit confirmation
+PASS AR-02/06 import preserves subject, server profile and original issuance expiry
+PASS AR-11 normal bootstrap resumes with the imported identity
+PASS AR-11 imported session obtains a fresh owner room authorization over wss
+PASS AR-07 real file +1 boundary is refused without writing
+PASS AR-07 exact 16 KiB file reaches server validation
+PASS AR-05/07 invalid candidate is refused without altering storage
+PASS AR-05/07 invalid candidate is refused without altering storage
+PASS AR-05/07 invalid candidate is refused without altering storage
+PASS AR-10 a second importer cannot obtain the same session lock
+PASS AR-10 uncooperative storage change invalidates pending validation
+PASS AR-10 another saved subject is never overwritten
+PASS AR-08 network failure before validation writes nothing
+PASS AR-08 storage refusal preserves the previous session
+PASS AR-06 expired candidate is revalidated and refused at confirmation
+PASS SEC-01 rejected stored session displays an explicit choice without replacement
+PASS SEC-01 sign-in remains reachable from a rejected session
+PASS SEC-02 ordinary bootstrap network failure preserves the saved identity
+PASS SEC-02 retry resumes the same identity without registration
+PASS SEC-01 rejection never registers automatically
+PASS SEC-01 new anonymous identity requires explicit action and registers once
+PASS SEC-02 explicit logout clears local bearer without anonymous registration
+PASS SEC-02 server copy remains valid after logout (declared limitation)
+PASS F06 recovery preserves quota and account profile
+PASS F06 recovery preserves project identities and owner access
+PASS F06 media references and actual bytes are preserved
+B9 browser: 35 checks passed

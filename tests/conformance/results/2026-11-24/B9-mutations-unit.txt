@@ -1,0 +1,4 @@
+PASS AR-10: delayed validation cannot replace or invalidate a newer saved session
+PASS AR-09/10: empty query never registers; an active recovery lock rejects registration before its request
+PASS SEC-01/02: rejected/network validation never logs out or creates an identity
+PASS SEC-02: voluntary logout removes only the local session, without registration

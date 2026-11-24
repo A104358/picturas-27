@@ -9,14 +9,22 @@ import {
   updateUser,
   updatePassword,
 } from "../session";
+import { saveSessionIfCurrent, signalSessionError, withSessionLock } from "../session-state";
+
+function replaceSession<T>(request: (input: T) => Promise<SessionData>): (input: T) => Promise<SessionData> {
+  return (input: T) => withSessionLock<SessionData>(async () => {
+    const expected = localStorage.getItem("session");
+    const session = await request(input);
+    saveSessionIfCurrent(session, expected);
+    return session;
+  });
+}
 
 export const useLogin = () => {
   const qc = useQueryClient();
-  return useMutation({
-    mutationFn: login,
+  return useMutation<SessionData, Error, Parameters<typeof login>[0]>({
+    mutationFn: replaceSession(login),
     onSuccess: (session) => {
-      localStorage.setItem("session", JSON.stringify(session));
-      window.dispatchEvent(new Event("session-updated")); 
 
       qc.invalidateQueries({ refetchType: "all", queryKey: ["session"] });
       qc.removeQueries({ queryKey: ["projects"] });
@@ -33,11 +41,9 @@ export const useLogin = () => {
 
 export const useRegister = () => {
   const qc = useQueryClient();
-  return useMutation({
-    mutationFn: register,
+  return useMutation<SessionData, Error, Parameters<typeof register>[0]>({
+    mutationFn: replaceSession(register),
     onSuccess: (session) => {
-      localStorage.setItem("session", JSON.stringify(session));
-      window.dispatchEvent(new Event("session-updated")); 
 
       qc.invalidateQueries({ refetchType: "all", queryKey: ["session"] });
       qc.removeQueries({ queryKey: ["projects"] });
@@ -55,14 +61,12 @@ export const useRegister = () => {
 };
 
 export const useLogout = () => {
-  const register = useRegister();
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async () => localStorage.removeItem("session"),
+    mutationFn: () => withSessionLock(async () => localStorage.removeItem("session")),
     onSuccess: () => {
       window.dispatchEvent(new Event("session-updated")); 
 
-      register.mutate({ type: "anonymous" });
       qc.removeQueries({ queryKey: ["projects"] });
       qc.removeQueries({ queryKey: ["project"] });
       qc.removeQueries({ queryKey: ["projectImages"] });
@@ -73,29 +77,24 @@ export const useLogout = () => {
 };
 
 export const useUpdateSession = () => {
-  const logout = useLogout();
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: validateSession,
+    mutationFn: (input: Parameters<typeof validateSession>[0]) => withSessionLock(async () => {
+      const expected = localStorage.getItem("session");
+      if (!expected || JSON.parse(expected).token !== input.token)
+        throw new Error("The session changed before validation.");
+      const resp = await validateSession(input);
+      saveSessionIfCurrent({ user: resp.user, token: resp.token }, expected);
+      return resp;
+    }),
     onSuccess: (resp) => {
-      // If the session is valid, update it with the received user data
-      const updatedSession = {
-        user: {
-          _id: resp.user._id,
-          name: resp.user.name,
-          email: resp.user.email,
-          type: resp.user.type,
-          operations: resp.user.operations,
-          remaining_operations: resp.user.remaining_operations,
-        },
-        token: resp.token,
-      } as SessionData;
-      localStorage.setItem("session", JSON.stringify(updatedSession));
       qc.invalidateQueries({ refetchType: "all", queryKey: ["session"] });
     },
-    onError: () => {
-      // If the session is invalid, logout and create an anonymous session
-      logout.mutate();
+    onError: (error, input) => {
+      try {
+        const raw = localStorage.getItem("session");
+        if (raw && JSON.parse(raw).token === input.token) signalSessionError(error);
+      } catch { /* Keep an unreadable or unavailable session for explicit review. */ }
     },
   });
 };
@@ -103,11 +102,11 @@ export const useUpdateSession = () => {
 export const useUpdateUserProfile = () => {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: updateUser,
-    onSuccess: (_, variables) => {
-      const session = JSON.parse(
-        localStorage.getItem("session")!,
-      ) as SessionData;
+    mutationFn: (variables: Parameters<typeof updateUser>[0]) => withSessionLock(async () => {
+      const expected = localStorage.getItem("session");
+      const session = expected ? JSON.parse(expected) as SessionData : null;
+      if (!session || session.token !== variables.token) throw new Error("The session changed.");
+      await updateUser(variables);
       const updatedSession = {
         user: {
           ...session.user,
@@ -116,7 +115,9 @@ export const useUpdateUserProfile = () => {
         },
         token: session.token,
       } as SessionData;
-      localStorage.setItem("session", JSON.stringify(updatedSession));
+      saveSessionIfCurrent(updatedSession, expected);
+    }),
+    onSuccess: () => {
       qc.invalidateQueries({ refetchType: "all", queryKey: ["session"] });
     },
   });
@@ -137,10 +138,15 @@ export const useDeleteAccount = (uid: string, token: string) => {
   const router = useRouter();
 
   return useMutation({
-    mutationFn: () => deleteAccount(uid, token),
+    mutationFn: () => withSessionLock(async () => {
+      const expected = localStorage.getItem("session");
+      if (!expected || JSON.parse(expected).token !== token) throw new Error("The session changed.");
+      await deleteAccount(uid, token);
+      if (localStorage.getItem("session") !== expected) throw new Error("The session changed.");
+      localStorage.removeItem("session");
+    }),
     onSuccess: () => {
       // limpar sessão local
-      localStorage.removeItem("session");
       window.dispatchEvent(new Event("session-updated"));
 
       // limpar cache relacionada

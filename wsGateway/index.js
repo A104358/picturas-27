@@ -31,7 +31,7 @@ io.use((socket, next) => {
     });
     if (header.typ !== "picturas-session+jwt" || typeof payload.sub !== "string" ||
         payload.id !== payload.sub || !Number.isInteger(payload.iat) || !Number.isInteger(payload.exp) ||
-        payload.exp <= payload.iat || payload.exp - payload.iat > 7 * 24 * 60 * 60) throw new Error("Invalid session");
+        payload.iat > Math.floor(Date.now() / 1000) || payload.exp <= payload.iat || payload.exp - payload.iat > 7 * 24 * 60 * 60) throw new Error("Invalid session");
     const limit = authorization.connect(socket, payload);
     if (limit) { status = "rate_limited"; authorization.count(limit); throw new Error("Connection limit"); }
     next();

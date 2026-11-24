@@ -17,7 +17,8 @@ function verifySession(header) {
   const { header: tokenHeader, payload } = verified;
   if (tokenHeader.typ !== SESSION_TYPE || typeof payload.sub !== "string" ||
       payload.id !== payload.sub || !Number.isInteger(payload.iat) ||
-      !Number.isInteger(payload.exp) || payload.exp - payload.iat > SESSION_SECONDS) {
+      !Number.isInteger(payload.exp) || payload.iat > Math.floor(Date.now() / 1000) ||
+      payload.exp <= payload.iat || payload.exp - payload.iat > SESSION_SECONDS) {
     throw new Error("Invalid session");
   }
   return payload;

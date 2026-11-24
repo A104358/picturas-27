@@ -280,6 +280,8 @@ family("B4-R061", "projects", "POST", f"/{oid}", positive=("via", "B4-R013"))
 family("B4-R062", "projects", "POST", f"{pb}/preview/{I1}", positive=("via", "B4-R014"))
 family("B4-R063", "projects", "POST", f"{pb}/img", positive=("via", "B4-R015"))
 family("B4-R064", "projects", "POST", f"{pb}/video", positive=("via", "B4-R016"))
+family("B4-R114", "projects", "POST", f"{pb}/video/preflight", positive=("via", "B4-R016"))
+family("B4-R115", "projects", "POST", f"{pb}/video/cancel", positive=("via", "B4-R016"))
 family("B4-R065", "projects", "POST", f"{pb}/tool", positive=("via", "B4-R017"))
 family("B4-R066", "projects", "POST", f"{pb}/reorder", positive=("via", "B4-R018"))
 family("B4-R067", "projects", "POST", f"{pb}/process", positive=("via", "B4-R019"))
@@ -413,6 +415,18 @@ for rid, method, path in (("B4-R109", "POST", f"/copy/{fake}/src/out/b4.png"), (
     for peer in ("api_gateway", "ws_gateway", "users"):
         check(rid, f"{peer} certificate", direct("img_storage", method, path, peer=peer), 403)
     check(rid, "projects certificate admitted (function proven by B4-R015/R019)", direct("img_storage", method, path, peer="projects"), peer_admitted)
+
+video_object = f"/video-objects/{oid}/{P1}/src/invalid.mp4"
+for rid, method, path in (("B4-R121", "GET", video_object.replace("/src/", "/staging/") + "/put-url"),
+                          ("B4-R116", "POST", video_object.replace("/src/", "/") + "/promote"),
+                          ("B4-R117", "PUT", video_object),
+                          ("B4-R118", "HEAD", video_object),
+                          ("B4-R119", "DELETE", video_object),
+                          ("B4-R120", "GET", video_object + "/url")):
+    check(rid, "no client certificate", direct("img_storage", method, path), TLS)
+    for peer in ("api_gateway", "ws_gateway", "users"):
+        check(rid, f"{peer} certificate", direct("img_storage", method, path, peer=peer), 403)
+    check(rid, "projects certificate admitted; invalid key rejected", direct("img_storage", method, path, peer="projects"), 400)
 
 # ======================================================================= F05 end: cancel -> free
 check("B4-R035", "holder cancels (F05)", status("PUT", f"subscriptions/{oid}/cancel", O["token"], body={}), 200)

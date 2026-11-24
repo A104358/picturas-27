@@ -1,0 +1,26 @@
+# B6 interrupted uploads and slots — picturas-dev, 2026-11-24T12:28:30Z
+## Before the fix (images built from the integrated tree before the parse/abort fix)
+PASS upload 1/1 premium 100 MiB T (HTTP 204 903 ms)
+PASS aborted upload 1 ended without a server answer (ConnectionError)
+PASS aborted upload 2 ended without a server answer (ConnectionError)
+PASS aborted upload 3 ended without a server answer (ConnectionError)
+PASS stalled upload 4 ended without a server answer (ConnectionError)
+PASS interrupted uploads published nothing
+FAIL 3 simultaneous uploads after the interruptions admitted (all slots free) (HTTP [204, 409, 429])
+slot refusals (429, retried): 0
+accepted 2 uploads; project media 89
+RESULT FAIL (1)
+Slot 3 held by cap-9f7db7-aborted-1 in 'receiving'; an earlier interrupted attempt (12:20:48Z) only freed its slot ~600 s later (storage PUT timeout)
+
+## After the fix (projects: parse failure destroys the file stream; api_gateway: client abort cancels the forwarded request)
+PASS upload 1/1 premium 100 MiB T (HTTP 204 1580 ms)
+PASS aborted upload 1 ended without a server answer (ConnectionError)
+PASS aborted upload 2 ended without a server answer (ConnectionError)
+PASS aborted upload 3 ended without a server answer (ConnectionError)
+PASS stalled upload 4 ended without a server answer (ConnectionError)
+PASS interrupted uploads published nothing
+PASS 3 simultaneous uploads after the interruptions admitted (all slots free) (HTTP [204, 409, 409])
+slot refusals (429, retried): 0
+accepted 2 uploads; project media 91
+RESULT PASS
+Attempts: aborted failed+cleaned in 0.3-0.4 s; stalled failed+cleaned at 30.4 s (idle limit); the leaked one failed on restart

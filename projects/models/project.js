@@ -10,7 +10,8 @@ const imgSchema = new mongoose.Schema({
   og_uri: { type: String, required: true },
   new_uri: { type: String, required: true },
   og_img_key: { type: String, required: true },
-  og_sha256: { type: String, required: true }, 
+  og_sha256: { type: String, required: function () { return this.media_type !== "video" || this.hash_state !== "ready_hash_pending"; } },
+  hash_state: { type: String, enum: ["ready_hash_pending", "ready"], default: "ready" },
   // A project media item can be an image or a video
   media_type: { type: String, enum: ["image", "video"], default: "image" },
   // video characteristics read on upload
@@ -36,6 +37,7 @@ const projectSchema = new mongoose.Schema({
   imgs: { type: [imgSchema], default: [] },
   tools: { type: [toolSchema], default: [] },
   version: { type: Number, default: 0 },
+  uploadBarrier: { type: Number, default: 0 },
   activeToken: { type: Number, default: 0 },
   resultsToken: { type: Number, default: 0 },
   cancelToken: { type: Number, default: 0 },

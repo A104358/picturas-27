@@ -1,0 +1,4 @@
+# F02 — 2026-11-24T18:14:20Z — commit cb1e028 + B6 working tree (final, as measured in EXP-20261124T162600Z)
+$ evaluation/.venv/bin/python tests/conformance/data-channels/b2-functional.py
+B2 F02: image and video batch output; PNG changed; MP4/H.264/AAC, duration and brighter frame passed
+exit=0

@@ -1,0 +1,2 @@
+10 MiB: HTTP 204, total 1676 ms, peak deltas api_gateway 2.4 MiB, projects 8.7 MiB, img_storage 20.1 MiB
+100 MiB: HTTP 204, total 2305 ms, peak deltas api_gateway 2.2 MiB, projects 2.8 MiB, img_storage 66.9 MiB

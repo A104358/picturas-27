@@ -1,0 +1,4 @@
+# b4-functional — 2026-11-24T16:22:08Z — commit cb1e028 + B6 working tree
+$ tests/conformance/in-network.sh picturas-dev b4-functional.py
+B4: owner/share/D7, profile isolation, premium lifecycle and direct services passed
+exit=0

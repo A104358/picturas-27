@@ -1,0 +1,55 @@
+# B6 capacity — picturas-dev, 2026-11-24T12:19:54Z
+## Before the fix (volume.max=8, scratch override), same stack
+FAIL upload 41/70 premium 100 MiB T (HTTP 501 1105 ms body="Error storing image")
+PASS storage failure is not a validation error (HTTP 501)
+slot refusals (429, retried): 4
+accepted 40 uploads; project media 53
+RESULT FAIL (1)
+(40 PASS upload lines omitted)
+SeaweedFS: No writable volumes and no free volumes left / create 7 volume, created 0
+After Node+nginx restart, still volume.max=8: HTTP 501, slots 3/3 free, failed attempts cleaned
+
+## After D-22 (volume.max=0): DataNode volume 14/375
+PASS upload 1/20 premium 100 MiB T (HTTP 204 2235 ms)
+PASS upload 2/20 premium 100 MiB T (HTTP 204 1138 ms)
+PASS upload 3/20 premium 100 MiB T (HTTP 204 1674 ms)
+PASS upload 4/20 premium 100 MiB T (HTTP 204 878 ms)
+PASS upload 5/20 premium 100 MiB T (HTTP 204 899 ms)
+PASS upload 6/20 premium 100 MiB T (HTTP 204 928 ms)
+PASS upload 7/20 premium 100 MiB T (HTTP 204 1010 ms)
+PASS upload 8/20 premium 100 MiB T (HTTP 204 890 ms)
+PASS upload 9/20 premium 100 MiB T (HTTP 204 1216 ms)
+PASS upload 10/20 premium 100 MiB T (HTTP 204 962 ms)
+PASS upload 11/20 premium 100 MiB T (HTTP 204 920 ms)
+PASS upload 12/20 premium 100 MiB T (HTTP 204 984 ms)
+PASS upload 13/20 premium 100 MiB T (HTTP 204 976 ms)
+PASS upload 14/20 premium 100 MiB T (HTTP 204 908 ms)
+PASS upload 15/20 premium 100 MiB T (HTTP 204 880 ms)
+PASS upload 16/20 premium 100 MiB T (HTTP 204 1258 ms)
+PASS upload 17/20 premium 100 MiB T (HTTP 204 1022 ms)
+PASS upload 18/20 premium 100 MiB T (HTTP 204 962 ms)
+PASS upload 19/20 premium 100 MiB T (HTTP 204 1128 ms)
+PASS upload 20/20 premium 100 MiB T (HTTP 204 997 ms)
+PASS interrupted upload aborted by the client (ConnectionError)
+PASS interrupted upload published nothing
+PASS upload after the interruption accepted (HTTP 204 964 ms)
+slot refusals (429, retried): 0
+accepted 21 uploads; project media 74
+RESULT PASS
+## Restart api_gateway projects img_storage users subscriptions ws_gateway nginx
+PASS upload 1/10 premium 100 MiB T (HTTP 204 1130 ms)
+PASS upload 2/10 premium 100 MiB T (HTTP 204 1051 ms)
+PASS upload 3/10 premium 100 MiB T (HTTP 204 1146 ms)
+PASS upload 4/10 premium 100 MiB T (HTTP 204 959 ms)
+PASS upload 5/10 premium 100 MiB T (HTTP 204 1246 ms)
+PASS upload 6/10 premium 100 MiB T (HTTP 204 879 ms)
+PASS upload 7/10 premium 100 MiB T (HTTP 204 917 ms)
+PASS upload 8/10 premium 100 MiB T (HTTP 204 1010 ms)
+PASS upload 9/10 premium 100 MiB T (HTTP 204 1028 ms)
+PASS upload 10/10 premium 100 MiB T (HTTP 204 996 ms)
+PASS interrupted upload aborted by the client (ConnectionError)
+PASS interrupted upload published nothing
+PASS upload after the interruption accepted (HTTP 204 864 ms)
+slot refusals (429, retried): 1
+accepted 11 uploads; project media 85
+RESULT PASS

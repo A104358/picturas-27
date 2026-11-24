@@ -1,0 +1,55 @@
+# b9-issuer — 2026-11-24T16:24:11Z — commit cb1e028 + B6 working tree
+$ env TMPDIR=/private/tmp/claude-501/-Users-miguelsantos-Documents-GitHub-picturas-27F2/1012a3c7-8272-4c99-bcc4-506e0d96edd4/scratchpad/b9tmp node tests/conformance/sessions/issuer.test.js
+TAP version 13
+# Subtest: AR-01 evidence/template/approval gates preserve case and issue nothing
+ok 1 - AR-01 evidence/template/approval gates preserve case and issue nothing
+  ---
+  duration_ms: 11.692875
+  type: 'test'
+  ...
+# Subtest: AR-02 same identity, private exclusive delivery and journal contains no token
+ok 2 - AR-02 same identity, private exclusive delivery and journal contains no token
+  ---
+  duration_ms: 34.795084
+  type: 'test'
+  ...
+# Subtest: AR-03 missing/registered/changed account and wrong destination fail before issuance
+ok 3 - AR-03 missing/registered/changed account and wrong destination fail before issuance
+  ---
+  duration_ms: 3.226125
+  type: 'test'
+  ...
+# Subtest: AR-04 existing output, concurrent lock and ambiguous crash are reconciliable
+ok 4 - AR-04 existing output, concurrent lock and ambiguous crash are reconciliable
+  ---
+  duration_ms: 9.524209
+  type: 'test'
+  ...
+# Subtest: AR-12 unsafe permissions, symlink and path traversal are refused
+ok 5 - AR-12 unsafe permissions, symlink and path traversal are refused
+  ---
+  duration_ms: 1.154042
+  type: 'test'
+  ...
+# Subtest: AR-04 real concurrent attempts serialize and post-output crash keeps durable ambiguity
+ok 6 - AR-04 real concurrent attempts serialize and post-output crash keeps durable ambiguity
+  ---
+  duration_ms: 39.580791
+  type: 'test'
+  ...
+# Subtest: AR-12 case storage in the application or repository is refused
+ok 7 - AR-12 case storage in the application or repository is refused
+  ---
+  duration_ms: 0.164708
+  type: 'test'
+  ...
+1..7
+# tests 7
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 107.862333
+exit=0

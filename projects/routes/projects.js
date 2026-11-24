@@ -69,7 +69,7 @@ const { persistFrameResults } = require("../utils/frameResults");
 const { dispatchProcessBatch } = require("../utils/processBatch");
 
 const storage = multer.memoryStorage();
-var upload = multer({ storage: storage });
+var upload = multer({ storage: storage, limits: { fileSize: 25 * 1024 * 1024, files: 1 } });
 
 
 const https = require("https");
@@ -1137,10 +1137,10 @@ router.post("/:user/:project/preview/:img", checkSharePermission, requireEditPer
       const cacheKey = makePreviewCacheKey(img.og_sha256, orderedTools);
 
       console.log(
-        `[T-03][PREVIEW] req user=${ownerId} project=${req.params.project} img=${req.params.img} key=${cacheKey.slice(0,8)} tools=${orderedTools.length}`
+        `[T-03][PREVIEW] req user=${ownerId} project=${req.params.project} img=${req.params.img} key=${(cacheKey || "").slice(0,8)} tools=${orderedTools.length}`
       );
 
-      const cached = await PreviewCache.getByKey(ownerId, cacheKey);
+      const cached = cacheKey ? await PreviewCache.getByKey(ownerId, cacheKey) : null;
       if (cached) {
         // gerar URLs atuais (assinadas) a partir das keys guardadas
         const urls = { imageUrl: "", textResults: [] };
@@ -1174,7 +1174,7 @@ router.post("/:user/:project/preview/:img", checkSharePermission, requireEditPer
       }
 
       console.log(
-        `[T-03][PREVIEW][MISS] key=${cacheKey.slice(0,8)} -> processing`
+        `[T-03][PREVIEW][MISS] key=${(cacheKey || "").slice(0,8)} -> processing`
       );
 
       const prev_preview = await Preview.getAll(
@@ -1385,12 +1385,6 @@ function addProjectMedia(kind) {
 router.post(
   "/:user/:project/img", checkSharePermission, requireEditPermission, enforcePresenceLimit, requireProjectVersion, upload.single("image"),
   addProjectMedia("image")
-);
-
-// Add new video to a project
-router.post(
-  "/:user/:project/video", checkSharePermission, requireEditPermission, enforcePresenceLimit, requireProjectVersion, upload.single("video"),
-  addProjectMedia("video")
 );
 
 // Add new tool to a project

@@ -73,13 +73,27 @@ module.exports.updateIfVersion = async (user_id, project_id, project, expectedVe
   const raw = project.toObject ? project.toObject() : project;
 
   // remove campos que não se quer "setar"
-  const { _id, user_id: _uid, version, __v, sharedLinks, ...rest } = raw;
+  const { _id, user_id: _uid, version, __v, sharedLinks, uploadBarrier, ...rest } = raw;
 
-  return await Project.findOneAndUpdate(
-    { user_id: user_id, _id: project_id, version: expectedVersion },
-    { $set: rest, $inc: { version: 1 } },
-    { new: true } // devolve documento já com versão incrementada
-  ).exec();
+  // The background video hash changes media without changing the public project
+  // version. Retry an internal race and carry its latest hash into the snapshot.
+  for (let retry = 0; retry < 5; retry++) {
+    const current = await Project.findOne({ user_id, _id: project_id, version: expectedVersion }).lean();
+    if (!current) return null;
+    const byId = new Map((current.imgs || []).map((img) => [String(img._id), img]));
+    const imgs = (rest.imgs || []).map((img) => {
+      const latest = byId.get(String(img._id));
+      if (!latest) return img;
+      return { ...img, og_sha256: latest.og_sha256, hash_state: latest.hash_state };
+    });
+    const updated = await Project.findOneAndUpdate(
+      { user_id, _id: project_id, version: expectedVersion, __v: current.__v },
+      { $set: { ...rest, imgs }, $inc: { version: 1, __v: 1 } },
+      { new: true }
+    ).exec();
+    if (updated) return updated;
+  }
+  return null;
 };
 
 module.exports.updateRaw = async (user_id, project_id, update) => {

@@ -164,7 +164,7 @@ perm() {
 }
 
 cmd_check() {
-  local fail=0 warn=0 s dir cert key mod_c mod_k entry eku subject
+  local fail=0 warn=0 s dir cert key mod_c mod_k entry expected_eku actual_eku usage label eku subject
   if [ ! -f "$CA_DIR/ca.crt" ]; then echo "FAIL CA missing ($CA_DIR/ca.crt)"; exit 1; fi
   if expires_within "$CA_DIR/ca.crt" 0; then echo "FAIL CA expired"; fail=1
   elif expires_within "$CA_DIR/ca.crt" $((CERT_DAYS * 86400)); then echo "WARN CA expires within $CERT_DAYS days: plan its replacement"; warn=1
@@ -182,6 +182,19 @@ cmd_check() {
     if ! openssl x509 -in "$cert" -noout -ext subjectAltName | grep -q "DNS:$s\(,\|$\)"; then
       echo "FAIL $s: SAN does not contain DNS:$s"; fail=1; continue
     fi
+    entry=$(service_entry "$s")
+    expected_eku=${entry##*|}
+    actual_eku=$(openssl x509 -in "$cert" -noout -ext extendedKeyUsage 2>/dev/null | tail -n +2)
+    IFS=, read -ra usages <<< "$expected_eku"
+    for usage in "${usages[@]}"; do
+      case "$usage" in
+        serverAuth) label="TLS Web Server Authentication" ;;
+        clientAuth) label="TLS Web Client Authentication" ;;
+      esac
+      if ! grep -Fq "$label" <<< "$actual_eku"; then
+        echo "WARN $s: missing EKU $usage (run: ops/pki.sh issue $s)"; warn=1
+      fi
+    done
     if [ "$(perm "$key")" != 600 ]; then echo "FAIL $s: key permissions are not 600"; fail=1; continue; fi
     subject=$(openssl x509 -in "$cert" -noout -subject -nameopt RFC2253 | sed 's/^subject=//')
     if ! printf '%s\n' "$subject" | grep -Eq "(^|,)CN=$s(,|$)"; then

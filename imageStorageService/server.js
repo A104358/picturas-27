@@ -4,6 +4,7 @@ const uploadRoutes = require("./route/upload");
 const imageRoutes = require("./route/images");
 const deleteRoutes = require("./route/delete");
 const copyRoutes = require("./route/copy"); 
+const videoObjects = require("./route/videoObjects");
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.use("/upload", uploadRoutes);
 app.use("/image", imageRoutes);
 app.use("/delete", deleteRoutes);
 app.use("/copy", copyRoutes); 
+app.use("/video-objects", videoObjects);
 
 const PORT = process.env.PORT || 11000;
 

@@ -81,6 +81,7 @@ services:
   # Replaces MinIO, whose Docker images were withdrawn from Docker Hub and quay.io in 2026.
   seaweedfs:
     image: chrislusf/seaweedfs:4.47
+    entrypoint: ["/bin/sh", "/usr/local/bin/seaweedfs-start.sh"]
     restart: on-failure
     command: >
       server -dir=/data -ip=localhost -ip.bind=127.0.0.1
@@ -91,8 +92,18 @@ services:
       -s3.port.iceberg=0 -s3.port.lance=0
       -s3.encryptVolumeData
       -master.volumeSizeLimitMB=1024
+      -volume.max=0
+    environment:
+      # U04 (D-24): collect garbage at 25% heap growth instead of 100%; no measured time cost.
+      GOGC: "25"
+    healthcheck:
+      test: ["CMD", "sh", "-c", "test -f /data/.picturas-volumes-ready"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
     volumes:
       - seaweedfs_data:/data
+      - ./ops/seaweedfs-start.sh:/usr/local/bin/seaweedfs-start.sh:ro
       - ./seaweedfs/security.toml:/etc/seaweedfs/security.toml:ro
       - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/s3/s3.json:/etc/seaweedfs/s3.json:ro
       - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/pki/services/seaweedfs:/run/secrets/pki:ro
@@ -106,7 +117,7 @@ services:
     restart: "no"
     depends_on:
       seaweedfs:
-        condition: service_started
+        condition: service_healthy
     environment:
       S3_ENDPOINT: "seaweedfs:9000"
       S3_BUCKET: "picturas"
@@ -118,7 +129,9 @@ services:
 
   img_storage:
     build: ./imageStorageService
-    command: ["node", "./server.js"]
+    # U01: small young generation (and, in img_storage, a collection every 16 MiB of
+    # multipart parts) so a freshly started process does not grow with the upload size.
+    command: ["node", "--max-semi-space-size=1", "--expose-gc", "./server.js"]
     init: true
     restart: on-failure
     mem_limit: 2g
@@ -180,7 +193,9 @@ services:
 
   projects:
     build: ./projects
-    command: ["node", "./bin/www"]
+    # U01: small young generation (and, in img_storage, a collection every 16 MiB of
+    # multipart parts) so a freshly started process does not grow with the upload size.
+    command: ["node", "--max-semi-space-size=1", "./bin/www"]
     init: true
     mem_limit: 2g
     healthcheck:
@@ -297,7 +312,9 @@ services:
 
   api_gateway:
     build: ./apiGateway
-    command: ["node", "./bin/www"]
+    # U01: small young generation (and, in img_storage, a collection every 16 MiB of
+    # multipart parts) so a freshly started process does not grow with the upload size.
+    command: ["node", "--max-semi-space-size=1", "./bin/www"]
     init: true
     depends_on:
       projects:

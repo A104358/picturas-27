@@ -1,0 +1,30 @@
+{"metric": "S04", "campaign": "EXP", "case": "W01", "surface": "ws", "rep": 1, "result": "RECUSADO_DOMINIO", "reason": "ligação WS recusada", "t_utc": "2026-11-24T16:26:18Z", "connected": false, "eventos": 0, "edicoes": 3, "controlo_dono": 3, "controlo_leitor": 3}
+{"metric": "S04", "campaign": "EXP", "control": "W01_dono_e_leitor_recebem", "rep": 1, "ok": true, "note": "", "t_utc": "2026-11-24T16:26:18Z"}
+{"metric": "S04", "campaign": "EXP", "case": "W02", "surface": "ws", "rep": 1, "result": "RECUSADO_DOMINIO", "reason": "sem eventos protegidos", "t_utc": "2026-11-24T16:26:23Z", "connected": true, "eventos": 0, "edicoes": 3, "controlo_dono": 3, "controlo_leitor": 3}
+{"metric": "S04", "campaign": "EXP", "control": "W02_dono_e_leitor_recebem", "rep": 1, "ok": true, "note": "", "t_utc": "2026-11-24T16:26:23Z"}
+{"metric": "S04", "campaign": "EXP", "case": "W03", "surface": "ws", "rep": 1, "result": "RECUSADO_DOMINIO", "reason": "ligação WS recusada", "t_utc": "2026-11-24T16:26:38Z", "connected": false, "eventos": 0, "edicoes": 3, "controlo_dono": 3, "controlo_leitor": 3}
+{"metric": "S04", "campaign": "EXP", "control": "W03_dono_e_leitor_recebem", "rep": 1, "ok": true, "note": "", "t_utc": "2026-11-24T16:26:38Z"}
+{"metric": "S04", "campaign": "EXP", "case": "W04", "surface": "ws", "rep": 1, "result": "RECUSADO_DOMINIO", "reason": "ligação WS recusada", "t_utc": "2026-11-24T16:26:54Z", "connected": false, "eventos": 0, "edicoes": 3, "controlo_dono": 3, "controlo_leitor": 3}
+{"metric": "S04", "campaign": "EXP", "control": "W04_dono_e_leitor_recebem", "rep": 1, "ok": true, "note": "", "t_utc": "2026-11-24T16:26:54Z"}
+{"metric": "S04", "campaign": "EXP", "case": "W05", "surface": "ws", "rep": 1, "result": "RECUSADO_DOMINIO", "reason": "sem eventos protegidos", "t_utc": "2026-11-24T16:27:04Z", "connected": true, "eventos": 0, "edicoes": 3, "controlo_dono": 3, "controlo_leitor": 3}
+{"metric": "S04", "campaign": "EXP", "control": "W05_dono_e_leitor_recebem", "rep": 1, "ok": true, "note": "", "t_utc": "2026-11-24T16:27:04Z"}
+{"metric": "S04", "campaign": "EXP", "case": "W01", "surface": "ws", "rep": 2, "result": "RECUSADO_DOMINIO", "reason": "ligação WS recusada", "t_utc": "2026-11-24T16:27:21Z", "connected": false, "eventos": 0, "edicoes": 3, "controlo_dono": 3, "controlo_leitor": 3}
+{"metric": "S04", "campaign": "EXP", "control": "W01_dono_e_leitor_recebem", "rep": 2, "ok": true, "note": "", "t_utc": "2026-11-24T16:27:21Z"}
+{"metric": "S04", "campaign": "EXP", "case": "W02", "surface": "ws", "rep": 2, "result": "RECUSADO_DOMINIO", "reason": "sem eventos protegidos", "t_utc": "2026-11-24T16:27:26Z", "connected": true, "eventos": 0, "edicoes": 3, "controlo_dono": 3, "controlo_leitor": 3}
+{"metric": "S04", "campaign": "EXP", "control": "W02_dono_e_leitor_recebem", "rep": 2, "ok": true, "note": "", "t_utc": "2026-11-24T16:27:26Z"}
+{"metric": "S04", "campaign": "EXP", "case": "W03", "surface": "ws", "rep": 2, "result": "RECUSADO_DOMINIO", "reason": "ligação WS recusada", "t_utc": "2026-11-24T16:27:42Z", "connected": false, "eventos": 0, "edicoes": 3, "controlo_dono": 3, "controlo_leitor": 3}
+{"metric": "S04", "campaign": "EXP", "control": "W03_dono_e_leitor_recebem", "rep": 2, "ok": true, "note": "", "t_utc": "2026-11-24T16:27:42Z"}
+{"metric": "S04", "campaign": "EXP", "case": "W04", "surface": "ws", "rep": 2, "result": "RECUSADO_DOMINIO", "reason": "ligação WS recusada", "t_utc": "2026-11-24T16:27:57Z", "connected": false, "eventos": 0, "edicoes": 3, "controlo_dono": 3, "controlo_leitor": 3}
+{"metric": "S04", "campaign": "EXP", "control": "W04_dono_e_leitor_recebem", "rep": 2, "ok": true, "note": "", "t_utc": "2026-11-24T16:27:57Z"}
+{"metric": "S04", "campaign": "EXP", "case": "W05", "surface": "ws", "rep": 2, "result": "RECUSADO_DOMINIO", "reason": "sem eventos protegidos", "t_utc": "2026-11-24T16:28:07Z", "connected": true, "eventos": 0, "edicoes": 3, "controlo_dono": 3, "controlo_leitor": 3}
+{"metric": "S04", "campaign": "EXP", "control": "W05_dono_e_leitor_recebem", "rep": 2, "ok": true, "note": "", "t_utc": "2026-11-24T16:28:07Z"}
+{"metric": "S04", "campaign": "EXP", "case": "W01", "surface": "ws", "rep": 3, "result": "RECUSADO_DOMINIO", "reason": "ligação WS recusada", "t_utc": "2026-11-24T16:28:24Z", "connected": false, "eventos": 0, "edicoes": 3, "controlo_dono": 3, "controlo_leitor": 3}
+{"metric": "S04", "campaign": "EXP", "control": "W01_dono_e_leitor_recebem", "rep": 3, "ok": true, "note": "", "t_utc": "2026-11-24T16:28:24Z"}
+{"metric": "S04", "campaign": "EXP", "case": "W02", "surface": "ws", "rep": 3, "result": "RECUSADO_DOMINIO", "reason": "sem eventos protegidos", "t_utc": "2026-11-24T16:28:30Z", "connected": true, "eventos": 0, "edicoes": 3, "controlo_dono": 3, "controlo_leitor": 3}
+{"metric": "S04", "campaign": "EXP", "control": "W02_dono_e_leitor_recebem", "rep": 3, "ok": true, "note": "", "t_utc": "2026-11-24T16:28:30Z"}
+{"metric": "S04", "campaign": "EXP", "case": "W03", "surface": "ws", "rep": 3, "result": "RECUSADO_DOMINIO", "reason": "ligação WS recusada", "t_utc": "2026-11-24T16:28:45Z", "connected": false, "eventos": 0, "edicoes": 3, "controlo_dono": 3, "controlo_leitor": 3}
+{"metric": "S04", "campaign": "EXP", "control": "W03_dono_e_leitor_recebem", "rep": 3, "ok": true, "note": "", "t_utc": "2026-11-24T16:28:45Z"}
+{"metric": "S04", "campaign": "EXP", "case": "W04", "surface": "ws", "rep": 3, "result": "RECUSADO_DOMINIO", "reason": "ligação WS recusada", "t_utc": "2026-11-24T16:29:00Z", "connected": false, "eventos": 0, "edicoes": 3, "controlo_dono": 3, "controlo_leitor": 3}
+{"metric": "S04", "campaign": "EXP", "control": "W04_dono_e_leitor_recebem", "rep": 3, "ok": true, "note": "", "t_utc": "2026-11-24T16:29:00Z"}
+{"metric": "S04", "campaign": "EXP", "case": "W05", "surface": "ws", "rep": 3, "result": "RECUSADO_DOMINIO", "reason": "sem eventos protegidos", "t_utc": "2026-11-24T16:29:10Z", "connected": true, "eventos": 0, "edicoes": 3, "controlo_dono": 3, "controlo_leitor": 3}
+{"metric": "S04", "campaign": "EXP", "control": "W05_dono_e_leitor_recebem", "rep": 3, "ok": true, "note": "", "t_utc": "2026-11-24T16:29:10Z"}

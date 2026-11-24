@@ -11,7 +11,7 @@ import sys
 
 REPO = Path(__file__).resolve().parents[2]
 MATRIX_PATH = REPO / "docs/refactor-matriz-rotas.md"
-ROUTES = re.compile(r"router\.(get|post|put|patch|delete)\s*\(\s*['\"]([^'\"]+)")
+ROUTES = re.compile(r"router\.(get|post|put|patch|delete|head)\s*\(\s*['\"]([^'\"]+)")
 ROW = re.compile(r"^\| (B4-R\d{3}) \| `(\w+) ([^`]+)` \| \[[^]]+\]\(\.\./([^#)]+)#L(\d+)\)")
 GLOBS = {
     "apiGateway": "routes/*.js",

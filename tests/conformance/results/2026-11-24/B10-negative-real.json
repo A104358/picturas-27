@@ -1,0 +1,39 @@
+[
+  {
+    "case": "actual local video work without Process defers planned cut",
+    "passed": true,
+    "participants_unchanged": true
+  },
+  {
+    "case": "participant with withdrawn PKI mount",
+    "command_refused": true,
+    "all_processes_stopped": true,
+    "admissions_closed": true,
+    "observed_at": "2026-11-24T18:48:30.763791+00:00"
+  },
+  {
+    "case": "expired current-CA participant certificate",
+    "command_refused": true,
+    "all_processes_stopped": true,
+    "admissions_closed": true,
+    "observed_at": "2026-11-24T18:48:31.599006+00:00"
+  },
+  {
+    "case": "wrong service identity from the current CA",
+    "command_refused": true,
+    "all_processes_stopped": true,
+    "admissions_closed": true,
+    "observed_at": "2026-11-24T18:48:32.424109+00:00"
+  },
+  {
+    "case": "participant restart fails after partial application",
+    "command_refused": true,
+    "all_processes_stopped": true,
+    "admissions_closed": true,
+    "observed_at": "2026-11-24T18:48:35.551251+00:00"
+  },
+  {
+    "case": "repaired current configuration passes; no old-CA rollback",
+    "passed": true
+  }
+]

@@ -192,7 +192,7 @@ same worker (`Tools/video/subtitles.py`, `Tools/video/frame_extraction.py`).
 | **Docker Compose** | v2 (`docker compose`)     | The old `docker-compose` (v1) hyphenated command is not used |
 | **RAM**            | 8 GB free (16 GB advised) | ~25 containers, several with AI models loaded                |
 | **Disk**           | ~15 GB free               | AI base images (PyTorch, OpenCV) are large                   |
-| **Browser**        | Any modern browser        | Must accept a self-signed certificate                        |
+| **Browser**        | Any modern browser        | Trust this installation's local CA in a dedicated profile   |
 
 On Docker Desktop, raise the memory limit in **Settings → Resources** if the AI tools get
 OOM-killed.
@@ -254,8 +254,8 @@ OOM-killed.
    👉 **<https://localhost:8080>** — note the **`https`** and the port **`8080`**.
 
    The certificate is issued by your installation CA (`$PICTURAS_SECRETS_DIR/pki/ca/ca.crt`).
-   Until you trust that CA in your browser it will warn you; accept the warning
-   (Chrome: _Advanced → Proceed to localhost (unsafe)_; Firefox: _Advanced → Accept the Risk_).
+   Import the verified CA into a dedicated browser profile before opening the site.
+   A trust, name or expiry warning must be corrected without bypassing it.
    See [HTTPS and Certificates](#-https-and-certificates) if the site does not load at all.
 
 5. **Stop the stack**
@@ -267,7 +267,7 @@ OOM-killed.
 
 ### First Steps
 
-1. Open <https://localhost:8080> and accept the certificate.
+1. Import this installation's CA into your browser profile, then open <https://localhost:8080>.
 2. Register an account, or use the anonymous mode.
 3. Create a project and upload an image or a video (samples in `samples/video/`).
 4. Build a pipeline with the toolbar (filters, geometry, AI tools) and run it.
@@ -309,14 +309,18 @@ has its **own local CA** and one certificate per service, created by `ops/pki.sh
 | --------------------------- | ------------------------------------------------------------------------------ |
 | `ops/pki.sh init`           | Creates the CA (365 days) and issues every service certificate (30 days)       |
 | `ops/pki.sh check`          | Verifies the CA and every certificate (chain, SAN, key match, expiry) — run it before starting |
-| `ops/pki.sh renew`          | Reissues the certificates with 7 days or less left; then restart those services |
-| `ops/pki.sh issue <svc>`    | Reissues one certificate now                                                   |
+| `ops/pki.sh renew --project picturas-dev` | Suspends admissions, drains work, renews due certificates under the same CA and recreates all participants; verifies before reopening |
+| `ops/pki.sh retire --project picturas-dev --mode compromise` | Isolates immediately, replaces the CA and all keys; remains isolated until reconciliation and trust controls pass |
+| `ops/pki.sh issue <svc>`    | Issues a certificate file; use only before deployment or within an isolated, reviewed procedure |
 | `ops/pki.sh list`           | Shows the current certificates; `pki/registry.tsv` logs every issue (no keys)  |
 
 There is no renewal daemon: the administrator runs `renew`. The CA key (`pki/ca/ca.key`) is never
 mounted in a container; each service mounts only its own `pki/services/<svc>/` read-only. The
 Nginx certificate covers `localhost` and `127.0.0.1`; import `pki/ca/ca.crt` into your browser to
-stop the warning.
+validate the server. Never bypass certificate warnings. Use a dedicated profile; after a CA
+withdrawal remove the old CA and import the verified new CA before reopening. See the
+[PKI operations runbook](docs/pki-operations.md) for draining, isolation, private manifests,
+browser checks and failure recovery.
 
 **Why HTTPS matters here:** the browser refuses to open a secure WebSocket (`wss://`) from a
 page served over plain HTTP, and several browser APIs used by the editor require a secure
@@ -335,7 +339,7 @@ checks the expected service name), and mutual TLS between services (`api_gateway
 `projects`/`users`/`subscriptions`, `projects` → `users`/`img_storage`, `users` → `projects`,
 `expand_ai` → `generative-mock`). Each server accepts only the peers and operations of the D4
 matrix (a certificate from the same CA is not enough), TLS sessions are never resumed, and a
-service stops when its own certificate expires (renew with `ops/pki.sh renew`). The Node
+service stops when its own certificate expires (renew with `ops/pki.sh renew --project picturas-dev`). The Node
 services share `tls/pkiTls.js` (one identical copy per service).
 
 ---
@@ -572,8 +576,9 @@ You are probably using `http://` instead of `https://`, or port `3000` instead o
 only correct address is <https://localhost:8080>.
 
 **"Your connection is not private" / `NET::ERR_CERT_AUTHORITY_INVALID`**
-Expected — the certificate is self-signed. Accept the warning once per browser profile. If
-Chrome refuses outright, type `thisisunsafe` with the warning page focused.
+Check that the certificate is issued by your installation's CA and covers `localhost`.
+Import the verified `pki/ca/ca.crt` into a dedicated browser profile. If trust, name or
+validity is wrong, stop and correct the installation; do not bypass the warning.
 
 **Uploads or live updates fail although the page loads**
 The browser blocks mixed content and insecure WebSockets. Make sure every request goes through

@@ -1,0 +1,45 @@
+{
+  "trial": "diagnostic-control-retry",
+  "first_reopen": "failed_isolated",
+  "cause": "Node TLS 1.3 old-client controls returned EOF/reset; probe required explicit SSL refusal",
+  "failed_controls": [
+    {
+      "channel": "frontend",
+      "case": "withdrawn client certificate rejected",
+      "observation": "unavailable"
+    },
+    {
+      "channel": "api_gateway",
+      "case": "withdrawn client certificate rejected",
+      "observation": "not_http"
+    },
+    {
+      "channel": "ws_gateway",
+      "case": "withdrawn client certificate rejected",
+      "observation": "unavailable"
+    },
+    {
+      "channel": "projects",
+      "case": "withdrawn client certificate rejected",
+      "observation": "not_http"
+    },
+    {
+      "channel": "users",
+      "case": "withdrawn client certificate rejected",
+      "observation": "not_http"
+    },
+    {
+      "channel": "subscriptions",
+      "case": "withdrawn client certificate rejected",
+      "observation": "not_http"
+    },
+    {
+      "channel": "img_storage",
+      "case": "withdrawn client certificate rejected",
+      "observation": "not_http"
+    }
+  ],
+  "correction": "Use TLS 1.2 on Node old-client checks, with positive current-client TLS 1.2 control; preserve TLS 1.3 for generative-mock",
+  "retry": "same operation, no new CA, no reset of isolation clock; full elapsed time in B10-diagnostic-control-retry.json",
+  "classification": "retained diagnostic; excluded from three comparable completed trials"
+}

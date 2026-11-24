@@ -1,0 +1,182 @@
+# Resultados EXP — 2026-11-24T19:02:01Z
+
+Commit `cb1e0289d3519c0f492f36b3a353246578110040` · host `13th Gen Intel(R) Core(TM) i7-13700H`
+
+## RNF 1 — Segurança
+
+| Métrica | Tipo | Mínimo | Alvo | Estado | Valor |
+|---|---|---|---|---|---|
+| S01 | principal | 0 | 0 | CUMPRE_ALVO | 0 admitidos em 15 tentativas |
+| S02 | principal | 0 | 0 | CUMPRE_ALVO | 0 admitidos em 20 tentativas |
+| S03 | principal | 0 | 0 | CUMPRE_ALVO | 0 admitidos em 8 tentativas |
+| S04 | principal | 0 | 0 | CUMPRE_ALVO | 0 admitidos em 5 tentativas |
+| S12 | principal | 5000 | 2000 | CUMPRE_ALVO | 1064 ms |
+| S16 | principal | 0 | 0 | CUMPRE_ALVO | 0 admitidos em 24 tentativas |
+| S17 | principal | 0 | 0 | CUMPRE_ALVO | 0 admitidos em 15 tentativas |
+| S18 | principal | todas=0 | todas=0, loopback=0 | CUMPRE_ALVO | nenhuma porta interna publicada |
+| S05 | guarda | 1.0 | 1.0 | CUMPRE_ALVO | 100% |
+| S21 | guarda | 10 | 5 | COMPARATIVA | avaliada em `compare` contra a BF |
+
+## RNF 2 — Eficiência no upload
+
+| Métrica | Tipo | Mínimo | Alvo | Estado | Valor |
+|---|---|---|---|---|---|
+| U01 | principal | 64 | 32 | NAO_MEDIDA |  |
+| U20 | principal | rondas_3de3=1, oom=0 | rondas_3de3=3, oom=0 | NAO_MEDIDA |  |
+| U19 | principal | status=[401, 403], gateway_delta_mib=8 | resposta_ms=100 | NAO_MEDIDA |  |
+| U18 | principal | 1.0 | 1.0 | NAO_MEDIDA |  |
+| U04 | principal | nginx=128, seaweedfs=256 | nginx=64, seaweedfs=128 | NAO_MEDIDA |  |
+| U08 | principal | pico=F+16MiB por componente, residuos=0 | pico_mib=16, residuos=0 | NAO_MEDIDA |  |
+| U09 | guarda | 3000 | 1000 | NAO_MEDIDA |  |
+| U25 | guarda | erros=0, razao=1.1 | erros=0, razao=1.0 | NAO_MEDIDA |  |
+| U15 | guarda | 1.0 | 1.0 | NAO_MEDIDA |  |
+| U17 | guarda | 1.0 | 1.0 | NAO_MEDIDA |  |
+| U10 | guarda | 1.1 | 1.0 | NAO_MEDIDA |  |
+
+[19:02:01] preflight projeto_isolado: OK - picturas-nfr-exp
+[19:02:01] preflight ca_s3: OK - CA disponível
+[19:02:01] preflight ca_amqp: OK - CA disponível
+[19:02:01] preflight ca_rabbit_mgmt: OK - CA disponível
+[19:02:01] preflight ca_mongo: OK - CA disponível
+[19:02:01] preflight esquemas_dados: OK - S3/RabbitMQ management
+[19:02:01] preflight disco_livre: OK - 72.9 GiB (mínimo 60)
+[19:02:01] preflight docker: OK - docker info
+[19:02:01] preflight docker_cpus: OK - 20 CPUs
+[19:02:01] preflight docker_mem: OK - 15.3 GiB
+[19:02:01] preflight ffmpeg: OK - ffmpeg/ffprobe no PATH
+[19:02:01] preflight arvore_limpa: AVISO - M Tools/utils/rabbit_mq.py
+ M Tools/video/video.py
+ M Tools/watermark/message_queue_setup.py
+ M apiGateway/tls/pkiTls.js
+ M docker-compose.yaml
+ M frontend/tls/pkiTls.js
+ M generative-mock/server_tls.py
+ M imageStorageService/tls/pkiTls.js
+ M nginx/nginx.conf
+ M projects/tls/pkiTls.js
+ M projects/ut
+[19:02:01] resultados em /home/luis/RAS/Projeto/picturas-27/evaluation/results/EXP-20261124T190201Z
+[19:02:01] === S18 ===
+[19:02:01] S18: todas=0 loopback=0
+[19:02:01] === S01 ===
+[19:02:03] S01 G01 [publica] rep1: RECUSADO_DOMINIO (HTTP 403, sem efeito)
+[19:02:03] S01 G02 [publica] rep1: RECUSADO_DOMINIO (HTTP 403, sem efeito)
+[19:02:03] S01 G03 [publica] rep1: RECUSADO_DOMINIO (HTTP 403, sem efeito)
+[19:02:03] S01 G04 [publica] rep1: RECUSADO_DOMINIO (HTTP 403, sem efeito)
+[19:02:03] S01 G10 [publica] rep1: RECUSADO_DOMINIO (HTTP 403, sem efeito)
+[19:02:03] S01 G11 [publica] rep1: RECUSADO_DOMINIO (HTTP 403, sem efeito)
+[19:02:03] S01 G14 [publica] rep1: RECUSADO_DOMINIO (HTTP 403, sem efeito)
+[19:02:03] S01 G15 [publica] rep1: RECUSADO_DOMINIO (HTTP 403, sem efeito)
+[19:02:03] S01 G05 [publica] rep1: RECUSADO_DOMINIO (HTTP 401, sem efeito)
+[19:02:03] S01 G06 [publica] rep1: RECUSADO_DOMINIO (HTTP 403, sem efeito)
+[19:02:04] S01 G07 [publica] rep1: RECUSADO_DOMINIO (HTTP 403, sem efeito)
+[19:02:04] S01 G08 [publica] rep1: RECUSADO_DOMINIO (HTTP 401, sem efeito)
+[19:02:04] S01 G09 [publica] rep1: RECUSADO_DOMINIO (HTTP 401, sem efeito)
+[19:02:04] S01 G12 [publica] rep1: RECUSADO_DOMINIO (HTTP 403, sem efeito)
+[19:02:04] S01 G13 [publica] rep1: RECUSADO_DOMINIO (HTTP 403, sem efeito)
+[19:02:04] === S02 ===
+[19:02:05] S02 D01 [host] rep1: RECUSADO_REDE (ligação recusada / porta não publicada)
+[19:02:05] S02 D02 [host] rep1: RECUSADO_REDE (ligação recusada / porta não publicada)
+[19:02:05] S02 D03 [host] rep1: RECUSADO_REDE (ligação recusada / porta não publicada)
+[19:02:05] S02 D04a [host] rep1: RECUSADO_REDE (ligação recusada / porta não publicada)
+[19:02:06] S02 D04b [host] rep1: RECUSADO_REDE (ligação recusada / porta não publicada)
+[19:02:06] S02 D05 [host] rep1: RECUSADO_REDE (ligação recusada / porta não publicada)
+[19:02:06] S02 D09 [host] rep1: RECUSADO_REDE (ligação recusada / porta não publicada)
+[19:02:06] S02 D13 [host] rep1: RECUSADO_REDE (ligação recusada / porta não publicada)
+[19:02:06] S02 D14 [host] rep1: RECUSADO_REDE (ligação recusada / porta não publicada)
+[19:02:06] S02 D06 [host] rep1: RECUSADO_REDE (ligação recusada / porta não publicada)
+[19:02:08] S02 D01 [rede] rep1: RECUSADO_TLS (handshake TLS recusado)
+[19:02:08] S02 D02 [rede] rep1: RECUSADO_TLS (handshake TLS recusado)
+[19:02:09] S02 D03 [rede] rep1: RECUSADO_TLS (handshake TLS recusado)
+[19:02:09] S02 D04a [rede] rep1: RECUSADO_TLS (handshake TLS recusado)
+[19:02:09] S02 D04b [rede] rep1: RECUSADO_TLS (handshake TLS recusado)
+[19:02:10] S02 D05 [rede] rep1: RECUSADO_TLS (handshake TLS recusado)
+[19:02:10] S02 D09 [rede] rep1: RECUSADO_TLS (handshake TLS recusado)
+[19:02:11] S02 D13 [rede] rep1: RECUSADO_TLS (handshake TLS recusado)
+[19:02:11] S02 D14 [rede] rep1: RECUSADO_TLS (handshake TLS recusado)
+[19:02:12] S02 D06 [rede] rep1: RECUSADO_TLS (handshake TLS recusado)
+[19:02:12] === S03 ===
+[19:02:13] S03 D06 [host] rep1: RECUSADO_REDE (ligação recusada / porta não publicada)
+[19:02:14] S03 D07 [host] rep1: RECUSADO_REDE (ligação recusada / porta não publicada)
+[19:02:14] S03 D15 [host] rep1: RECUSADO_REDE (ligação recusada / porta não publicada)
+[19:02:15] S03 D08 [host] rep1: RECUSADO_REDE (ligação recusada / porta não publicada)
+[19:02:17] S03 D06 [rede] rep1: RECUSADO_TLS (handshake TLS recusado)
+[19:02:18] S03 D07 [rede] rep1: RECUSADO_TLS (handshake TLS recusado)
+[19:02:19] S03 D15 [rede] rep1: RECUSADO_TLS (handshake TLS recusado)
+[19:02:19] S03 D08 [rede] rep1: RECUSADO_TLS (handshake TLS recusado)
+[19:02:21] === S04 ===
+[19:02:38] S04 W01 [ws] rep1: RECUSADO_DOMINIO (ligação WS recusada)
+[19:02:43] S04 W02 [ws] rep1: RECUSADO_DOMINIO (sem eventos protegidos)
+[19:02:59] S04 W03 [ws] rep1: RECUSADO_DOMINIO (ligação WS recusada)
+[19:03:14] S04 W04 [ws] rep1: RECUSADO_DOMINIO (ligação WS recusada)
+[19:03:23] S04 W05 [ws] rep1: RECUSADO_DOMINIO (sem eventos protegidos)
+[19:03:23] === S16 ===
+[19:03:25] S16 a:project [rede] rep1: RECUSADO_DOMINIO (credenciais recusadas)
+[19:03:25] S16 b:project [rede] rep1: NAO_APLICAVEL (nenhuma credencial Mongo encontrada no Git)
+[19:03:25] S16 a:user [rede] rep1: RECUSADO_DOMINIO (credenciais recusadas)
+[19:03:25] S16 b:user [rede] rep1: NAO_APLICAVEL (nenhuma credencial Mongo encontrada no Git)
+[19:03:26] S16 a:subscription [rede] rep1: RECUSADO_DOMINIO (credenciais recusadas)
+[19:03:26] S16 b:subscription [rede] rep1: NAO_APLICAVEL (nenhuma credencial Mongo encontrada no Git)
+[19:03:27] S16 c:projects->user [rede] rep1: RECUSADO_DOMINIO (credenciais recusadas)
+[19:03:27] S16 c:users->project [rede] rep1: RECUSADO_DOMINIO (credenciais recusadas)
+[19:03:28] S16 c:subscriptions->project [rede] rep1: RECUSADO_DOMINIO (credenciais recusadas)
+[19:03:29] S16 d1:projects [rede] rep1: RECUSADO_DOMINIO (credenciais recusadas)
+[19:03:30] S16 d2:projects [rede] rep1: RECUSADO_DOMINIO (só vê a sua BD)
+[19:03:30] S16 d1:users [rede] rep1: RECUSADO_DOMINIO (credenciais recusadas)
+[19:03:31] S16 d2:users [rede] rep1: RECUSADO_DOMINIO (só vê a sua BD)
+[19:03:32] S16 d1:subscriptions [rede] rep1: RECUSADO_DOMINIO (credenciais recusadas)
+[19:03:32] S16 d2:subscriptions [rede] rep1: RECUSADO_DOMINIO (só vê a sua BD)
+[19:03:32] S16 a:project [host] rep1: RECUSADO_REDE (ligação recusada / porta não publicada)
+[19:03:32] S16 b:project [host] rep1: NAO_APLICAVEL (nenhuma credencial Mongo encontrada no Git)
+[19:03:32] S16 a:user [host] rep1: RECUSADO_REDE (ligação recusada / porta não publicada)
+[19:03:32] S16 b:user [host] rep1: NAO_APLICAVEL (nenhuma credencial Mongo encontrada no Git)
+[19:03:33] S16 a:subscription [host] rep1: RECUSADO_REDE (ligação recusada / porta não publicada)
+[19:03:33] S16 b:subscription [host] rep1: NAO_APLICAVEL (nenhuma credencial Mongo encontrada no Git)
+[19:03:33] S16 c:projects->user [host] rep1: RECUSADO_REDE (ligação recusada / porta não publicada)
+[19:03:33] S16 c:users->project [host] rep1: RECUSADO_REDE (ligação recusada / porta não publicada)
+[19:03:33] S16 c:subscriptions->project [host] rep1: RECUSADO_REDE (ligação recusada / porta não publicada)
+[19:03:33] S16 d1:projects [host] rep1: RECUSADO_REDE (ligação recusada / porta não publicada)
+[19:03:33] S16 d2:projects [host] rep1: RECUSADO_REDE (ligação recusada / porta não publicada)
+[19:03:33] S16 d1:users [host] rep1: RECUSADO_REDE (ligação recusada / porta não publicada)
+[19:03:33] S16 d2:users [host] rep1: RECUSADO_REDE (ligação recusada / porta não publicada)
+[19:03:33] S16 d1:subscriptions [host] rep1: RECUSADO_REDE (ligação recusada / porta não publicada)
+[19:03:33] S16 d2:subscriptions [host] rep1: RECUSADO_REDE (ligação recusada / porta não publicada)
+[19:03:35] === S17 ===
+[19:03:35] S17 R1 [rede] rep1: RECUSADO_DOMINIO (recusado (ProbableAuthenticationError: Client was disconnected at a connection stage indicating a probable authentication error: ("ConnectionClosedByBroker: (403) 'ACCESS_REFUSED - Login was refused using authentication mechanism PLAIN. For details see the broker logfile.'",)))
+[19:03:36] S17 R2 [rede] rep1: RECUSADO_DOMINIO (recusado (401))
+[19:03:36] S17 R3 [rede] rep1: RECUSADO_DOMINIO (recusado (ChannelClosedByBroker: (403) "ACCESS_REFUSED - read access to queue 'ws_queue' in vhost '/' refused for user 'brightness_tool'"))
+[19:03:36] S17 R4 [rede] rep1: RECUSADO_DOMINIO (recusado (ChannelClosedByBroker: (403) "ACCESS_REFUSED - configure access to queue 'med_canary_990098f3' in vhost '/' refused for user 'brightness_tool'"))
+[19:03:36] S17 R5 [rede] rep1: RECUSADO_DOMINIO (recusado (401))
+[19:03:36] S17 B1 [rede] rep1: RECUSADO_DOMINIO (recusado (InvalidAccessKeyId))
+[19:03:37] S17 B2 [rede] rep1: RECUSADO_DOMINIO (recusado (AccessDenied))
+[19:03:37] S17 R1 [host] rep1: RECUSADO_REDE (porta não publicada)
+[19:03:37] S17 R2 [host] rep1: RECUSADO_REDE (porta não publicada)
+[19:03:37] S17 R3 [host] rep1: RECUSADO_REDE (porta não publicada)
+[19:03:37] S17 R4 [host] rep1: RECUSADO_REDE (porta não publicada)
+[19:03:37] S17 R5 [host] rep1: RECUSADO_REDE (porta não publicada)
+[19:03:37] S17 B1 [host] rep1: RECUSADO_REDE (porta não publicada)
+[19:03:37] S17 B2 [host] rep1: RECUSADO_REDE (porta não publicada)
+[19:03:39] S17 B3 [publica] rep1: RECUSADO_DOMINIO (HTTP 403, sem efeito)
+[19:03:39] === S12 ===
+[19:03:55] S12 rep1: upper=1064.4 censored=False after_limit=0 controls=True valid=True
+[19:03:55] === S05 ===
+[19:03:55] S05 rep1 L1_criar_projeto: OK 
+[19:03:55] S05 rep1 L2_upload_imagem: OK HTTP 204
+[19:03:55] S05 rep1 L3_upload_video: OK HTTP 204
+[19:03:55] S05 rep1 L12a_upload_nao_debita_quota: OK 5->5
+[19:03:55] S05 rep1 L4_adicionar_ferramenta: OK HTTP 201
+[19:04:02] S05 rep1 L5_aplicar_pipeline: OK HTTP 201, 2/2
+[19:04:02] S05 rep1 L6_descarregar_resultado: OK 
+[19:04:02] S05 rep1 L7_evento_process_update: OK 
+[19:04:02] S05 rep1 L12b_apply_debita_quota: OK 5->4
+[19:04:04] S05 rep1 L8_preview: OK HTTP 201
+[19:04:04] S05 rep1 L9_leitor_le: OK HTTP 200
+[19:04:04] S05 rep1 L10_editor_edita: OK HTTP 201
+[19:04:04] S05 rep1 L11_editor_remove_media: OK HTTP 204
+[19:04:04] S05 rep1 L13_subscricao_propria: OK HTTP 201
+[19:04:04] S05 rep1 L14_dono_elimina_projeto: OK HTTP 204
+[19:04:05] S05 rep1 P1_editor_elimina_projeto: FALHA HTTP 403; eliminado=False
+[19:04:05] === S21 ===
+[19:04:06] S21 get_project: mediana 15.647 ms
+[19:04:06] S21 get_user: mediana 12.118 ms
+[19:04:06] relatório: /home/luis/RAS/Projeto/picturas-27/evaluation/results/EXP-20261124T190201Z/report.md

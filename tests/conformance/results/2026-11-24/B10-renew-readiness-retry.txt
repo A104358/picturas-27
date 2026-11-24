@@ -1,0 +1,1 @@
+{"operation": "3749c0ff4ee54d15b43f8bdfb83b5cda", "phase": "reopened", "isolation_ms": 12273.729333, "isolation_target_met": true}

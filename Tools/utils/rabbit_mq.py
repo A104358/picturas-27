@@ -1,7 +1,11 @@
 import ssl
+import hashlib
+import json
+import os
 import time
 
 import pika
+from .work_state import active_work
 
 
 class Rabbit_MQ:
@@ -17,6 +21,10 @@ class Rabbit_MQ:
     def _connect(self):
         # A broken connection is replaced after a broker restart; TLS is mandatory.
         context = ssl.create_default_context(cafile="/run/secrets/pki/ca.crt")
+        loaded_cas = sorted(hashlib.sha256(c).hexdigest() for c in context.get_ca_certs(binary_form=True))
+        with open(f"/tmp/pki-loaded-{os.getpid()}.json", "w") as record:
+            json.dump({"pid": os.getpid(), "ca": loaded_cas[0], "trusted_cas": loaded_cas}, record)
+        os.chmod(f"/tmp/pki-loaded-{os.getpid()}.json", 0o600)
         params = pika.ConnectionParameters(
             self._host, self._port, "/", self._credentials,
             ssl_options=pika.SSLOptions(context, self._host),
@@ -35,11 +43,14 @@ class Rabbit_MQ:
         self._channel.basic_publish(exchange="picturas", routing_key=queue, body=msg)
 
     def read_rabbit_msg(self, queue, callback):
+        def observed_callback(*args):
+            with active_work():
+                return callback(*args)
         self._queue = queue
         while True:
             try:
                 self._channel.queue_declare(queue=queue, passive=True)
-                self._channel.basic_consume(queue=queue, on_message_callback=callback, auto_ack=True)
+                self._channel.basic_consume(queue=queue, on_message_callback=observed_callback, auto_ack=True)
                 self._channel.start_consuming()
             except (pika.exceptions.AMQPError, OSError):
                 time.sleep(3)

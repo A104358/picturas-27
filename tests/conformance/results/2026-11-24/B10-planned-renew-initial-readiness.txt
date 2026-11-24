@@ -1,0 +1,5 @@
+PASS pre-existing TLS session captured
+PASS pre-existing authenticated WS
+PASS buffered request body defers maintenance without killing participants
+PASS new admissions are suspended at nginx
+FAIL planned renewal: renewal_participant_loaded_material_unobserved

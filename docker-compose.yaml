@@ -66,6 +66,7 @@ services:
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/pki/services/nginx:/etc/nginx/pki:ro
+      - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/maintenance-gate:/run/picturas-maintenance:ro
     depends_on:
       api_gateway:
         condition: service_healthy

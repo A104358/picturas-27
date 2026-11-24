@@ -97,3 +97,7 @@ continuam a correr no host, pela porta 8080.
 Contrato, comandos, relógios, limites e corpus físico: [`websocket/README.md`](websocket/README.md). Inclui motor/fila com relógio isolado, sockets reais/mTLS, indisponibilidade/recuperação, cliente do frontend e cargas N1/J1/P1/L1/L2. O adaptador legacy/v2 da medição é provado separadamente, sem alterar `medlib/`, critérios ou casos.
 
 B9 session and assisted-recovery commands: [`sessions/README.md`](sessions/README.md).
+
+B10 applied PKI, pilot and fault-injection commands:
+[`pki-operations/README.md`](pki-operations/README.md). Public evidence uses an
+explicit allowlist; private installation material and browser profiles stay outside Git.

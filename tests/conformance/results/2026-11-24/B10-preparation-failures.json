@@ -1,0 +1,185 @@
+[
+  {
+    "name": "trial-1-preparation-1795544889673717892",
+    "error_type": "RuntimeError",
+    "control": "persistent_preconditions_failed",
+    "rows": {
+      "s3": {
+        "successes": 0,
+        "last_success_ns": null,
+        "first_cut_ns": 1795544859557621929,
+        "error_type": "AttributeError"
+      },
+      "https-public": {
+        "successes": 0,
+        "last_success_ns": null,
+        "first_cut_ns": 1795544859557714819,
+        "error_type": "AttributeError"
+      },
+      "http-internal": {
+        "successes": 0,
+        "last_success_ns": null,
+        "first_cut_ns": 1795544859557877091,
+        "error_type": "AttributeError"
+      },
+      "amqp": {
+        "successes": 159,
+        "last_success_ns": 1795544871556107877,
+        "first_cut_ns": null
+      },
+      "grpc": {
+        "successes": 141,
+        "last_success_ns": 1795544871514273189,
+        "first_cut_ns": null
+      },
+      "mongo": {
+        "successes": 159,
+        "last_success_ns": 1795544871570999397,
+        "first_cut_ns": null
+      },
+      "websocket": {
+        "successes": 1,
+        "last_success_ns": 1795544859582687961,
+        "first_cut_ns": null
+      }
+    }
+  },
+  {
+    "name": "trial-1-preparation-1795544858229355683",
+    "error_type": "RuntimeError",
+    "control": "persistent_preconditions_failed",
+    "rows": {
+      "https-public": {
+        "successes": 0,
+        "last_success_ns": null,
+        "first_cut_ns": 1795544827572422313,
+        "error_type": "AttributeError"
+      },
+      "http-internal": {
+        "successes": 0,
+        "last_success_ns": null,
+        "first_cut_ns": 1795544827572701649,
+        "error_type": "AttributeError"
+      },
+      "s3": {
+        "successes": 157,
+        "last_success_ns": 1795544839549792144,
+        "first_cut_ns": null
+      },
+      "amqp": {
+        "successes": 159,
+        "last_success_ns": 1795544839569321453,
+        "first_cut_ns": null
+      },
+      "grpc": {
+        "successes": 142,
+        "last_success_ns": 1795544839610725955,
+        "first_cut_ns": null
+      },
+      "websocket": {
+        "successes": 1,
+        "last_success_ns": 1795544827597851418,
+        "first_cut_ns": null
+      },
+      "mongo": {
+        "successes": 159,
+        "last_success_ns": 1795544839590744216,
+        "first_cut_ns": null
+      }
+    }
+  },
+  {
+    "name": "trial-1-preparation-1795544928642714177",
+    "error_type": "RuntimeError",
+    "control": "persistent_preconditions_failed",
+    "rows": {
+      "https-public": {
+        "successes": 0,
+        "last_success_ns": null,
+        "first_cut_ns": 1795544890990747948,
+        "error_type": "AttributeError",
+        "trace": [
+          {
+            "function": "repeat",
+            "line": 47
+          },
+          {
+            "function": "<lambda>",
+            "line": 132
+          },
+          {
+            "function": "http_setup",
+            "line": 63
+          }
+        ],
+        "attribute": "client"
+      },
+      "s3": {
+        "successes": 0,
+        "last_success_ns": null,
+        "first_cut_ns": 1795544890994933651,
+        "error_type": "AttributeError",
+        "trace": [
+          {
+            "function": "repeat",
+            "line": 47
+          },
+          {
+            "function": "<lambda>",
+            "line": 133
+          },
+          {
+            "function": "http_setup",
+            "line": 63
+          }
+        ],
+        "attribute": "client"
+      },
+      "http-internal": {
+        "successes": 0,
+        "last_success_ns": null,
+        "first_cut_ns": 1795544890995464286,
+        "error_type": "AttributeError",
+        "trace": [
+          {
+            "function": "repeat",
+            "line": 47
+          },
+          {
+            "function": "<lambda>",
+            "line": 131
+          },
+          {
+            "function": "http_setup",
+            "line": 63
+          }
+        ],
+        "attribute": "client"
+      },
+      "amqp": {
+        "successes": 159,
+        "last_success_ns": 1795544902989263302,
+        "first_cut_ns": null
+      },
+      "grpc": {
+        "successes": 142,
+        "last_success_ns": 1795544903028956859,
+        "first_cut_ns": null
+      },
+      "mongo": {
+        "successes": 159,
+        "last_success_ns": 1795544902991571040,
+        "first_cut_ns": null
+      },
+      "websocket": {
+        "successes": 1,
+        "last_success_ns": 1795544891017218725,
+        "first_cut_ns": null
+      }
+    }
+  },
+  {
+    "name": "trial-1-preparation-1795544824662103169",
+    "error_type": "RuntimeError"
+  }
+]

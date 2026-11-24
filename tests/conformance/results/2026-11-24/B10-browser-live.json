@@ -1,0 +1,18 @@
+{
+  "origin": "https://localhost:8080",
+  "new_ca": "c51110ee652b4c5b26156750a5f6c2cd1787142c4aa6826ae58d84f6f1443550",
+  "browser_version": "159.0",
+  "http_status": 200,
+  "application_visible": true,
+  "wss": true,
+  "fresh_owner_join": true,
+  "isolated_nss_profile": true,
+  "no_warning_override": true,
+  "screenshots_sha256": "4c1926098edf035ddfdbbb1aaad6fdea5edeffd50111db10366a0cb8fe832cde",
+  "visual_inspection": {
+    "performed_by": "Codex",
+    "application_screen_reviewed": true,
+    "human_user_confirmation": false,
+    "at": "2026-11-24T19:22:17.329609+00:00"
+  }
+}

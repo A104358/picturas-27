@@ -1,0 +1,260 @@
+{
+  "passed": true,
+  "rows": [
+    {
+      "channel": "seaweedfs loopback master-https",
+      "case": "current actual internal TLS listener",
+      "observation": {
+        "result": "http",
+        "peer": "abab94c611425bf073c4f474d354c7f3dc598ae6ff589d16f1c29d5b0df2d2ef",
+        "status": 200
+      },
+      "passed": true
+    },
+    {
+      "channel": "seaweedfs loopback master-https",
+      "case": "no client certificate refused",
+      "observation": {
+        "result": "tls_refused",
+        "reason": "TLSV13_ALERT_CERTIFICATE_REQUIRED"
+      },
+      "passed": true
+    },
+    {
+      "channel": "seaweedfs loopback master-https",
+      "case": "withdrawn server CA refused",
+      "observation": {
+        "result": "tls_refused",
+        "reason": 20
+      },
+      "passed": true
+    },
+    {
+      "channel": "seaweedfs loopback master-https",
+      "case": "withdrawn client certificate refused",
+      "observation": {
+        "result": "tls_refused",
+        "reason": "TLSV1_ALERT_UNKNOWN_CA"
+      },
+      "passed": true
+    },
+    {
+      "channel": "seaweedfs loopback volume-https",
+      "case": "current actual internal TLS listener",
+      "observation": {
+        "result": "http",
+        "peer": "abab94c611425bf073c4f474d354c7f3dc598ae6ff589d16f1c29d5b0df2d2ef",
+        "status": 400
+      },
+      "passed": true
+    },
+    {
+      "channel": "seaweedfs loopback volume-https",
+      "case": "no client certificate refused",
+      "observation": {
+        "result": "tls_refused",
+        "reason": "TLSV13_ALERT_CERTIFICATE_REQUIRED"
+      },
+      "passed": true
+    },
+    {
+      "channel": "seaweedfs loopback volume-https",
+      "case": "withdrawn server CA refused",
+      "observation": {
+        "result": "tls_refused",
+        "reason": 20
+      },
+      "passed": true
+    },
+    {
+      "channel": "seaweedfs loopback volume-https",
+      "case": "withdrawn client certificate refused",
+      "observation": {
+        "result": "tls_refused",
+        "reason": "TLSV1_ALERT_UNKNOWN_CA"
+      },
+      "passed": true
+    },
+    {
+      "channel": "seaweedfs loopback filer-https",
+      "case": "current actual internal TLS listener",
+      "observation": {
+        "result": "http",
+        "peer": "abab94c611425bf073c4f474d354c7f3dc598ae6ff589d16f1c29d5b0df2d2ef",
+        "status": 200
+      },
+      "passed": true
+    },
+    {
+      "channel": "seaweedfs loopback filer-https",
+      "case": "no client certificate refused",
+      "observation": {
+        "result": "tls_refused",
+        "reason": "TLSV13_ALERT_CERTIFICATE_REQUIRED"
+      },
+      "passed": true
+    },
+    {
+      "channel": "seaweedfs loopback filer-https",
+      "case": "withdrawn server CA refused",
+      "observation": {
+        "result": "tls_refused",
+        "reason": 20
+      },
+      "passed": true
+    },
+    {
+      "channel": "seaweedfs loopback filer-https",
+      "case": "withdrawn client certificate refused",
+      "observation": {
+        "result": "tls_refused",
+        "reason": "TLSV1_ALERT_UNKNOWN_CA"
+      },
+      "passed": true
+    },
+    {
+      "channel": "seaweedfs loopback master-grpc",
+      "case": "current actual internal TLS listener",
+      "observation": {
+        "result": "h2",
+        "peer": "abab94c611425bf073c4f474d354c7f3dc598ae6ff589d16f1c29d5b0df2d2ef"
+      },
+      "passed": true
+    },
+    {
+      "channel": "seaweedfs loopback master-grpc",
+      "case": "no client certificate refused",
+      "observation": {
+        "result": "tls_refused",
+        "reason": "TLSV13_ALERT_CERTIFICATE_REQUIRED"
+      },
+      "passed": true
+    },
+    {
+      "channel": "seaweedfs loopback master-grpc",
+      "case": "withdrawn server CA refused",
+      "observation": {
+        "result": "tls_refused",
+        "reason": 20
+      },
+      "passed": true
+    },
+    {
+      "channel": "seaweedfs loopback master-grpc",
+      "case": "withdrawn client certificate refused",
+      "observation": {
+        "result": "tls_refused",
+        "reason": "SSLV3_ALERT_BAD_CERTIFICATE"
+      },
+      "passed": true
+    },
+    {
+      "channel": "seaweedfs loopback volume-grpc",
+      "case": "current actual internal TLS listener",
+      "observation": {
+        "result": "h2",
+        "peer": "abab94c611425bf073c4f474d354c7f3dc598ae6ff589d16f1c29d5b0df2d2ef"
+      },
+      "passed": true
+    },
+    {
+      "channel": "seaweedfs loopback volume-grpc",
+      "case": "no client certificate refused",
+      "observation": {
+        "result": "tls_refused",
+        "reason": "TLSV13_ALERT_CERTIFICATE_REQUIRED"
+      },
+      "passed": true
+    },
+    {
+      "channel": "seaweedfs loopback volume-grpc",
+      "case": "withdrawn server CA refused",
+      "observation": {
+        "result": "tls_refused",
+        "reason": 20
+      },
+      "passed": true
+    },
+    {
+      "channel": "seaweedfs loopback volume-grpc",
+      "case": "withdrawn client certificate refused",
+      "observation": {
+        "result": "tls_refused",
+        "reason": "SSLV3_ALERT_BAD_CERTIFICATE"
+      },
+      "passed": true
+    },
+    {
+      "channel": "seaweedfs loopback filer-grpc",
+      "case": "current actual internal TLS listener",
+      "observation": {
+        "result": "h2",
+        "peer": "abab94c611425bf073c4f474d354c7f3dc598ae6ff589d16f1c29d5b0df2d2ef"
+      },
+      "passed": true
+    },
+    {
+      "channel": "seaweedfs loopback filer-grpc",
+      "case": "no client certificate refused",
+      "observation": {
+        "result": "tls_refused",
+        "reason": "TLSV13_ALERT_CERTIFICATE_REQUIRED"
+      },
+      "passed": true
+    },
+    {
+      "channel": "seaweedfs loopback filer-grpc",
+      "case": "withdrawn server CA refused",
+      "observation": {
+        "result": "tls_refused",
+        "reason": 20
+      },
+      "passed": true
+    },
+    {
+      "channel": "seaweedfs loopback filer-grpc",
+      "case": "withdrawn client certificate refused",
+      "observation": {
+        "result": "tls_refused",
+        "reason": "SSLV3_ALERT_BAD_CERTIFICATE"
+      },
+      "passed": true
+    },
+    {
+      "channel": "seaweedfs loopback s3-grpc",
+      "case": "current actual internal TLS listener",
+      "observation": {
+        "result": "h2",
+        "peer": "abab94c611425bf073c4f474d354c7f3dc598ae6ff589d16f1c29d5b0df2d2ef"
+      },
+      "passed": true
+    },
+    {
+      "channel": "seaweedfs loopback s3-grpc",
+      "case": "no client certificate refused",
+      "observation": {
+        "result": "tls_refused",
+        "reason": "TLSV13_ALERT_CERTIFICATE_REQUIRED"
+      },
+      "passed": true
+    },
+    {
+      "channel": "seaweedfs loopback s3-grpc",
+      "case": "withdrawn server CA refused",
+      "observation": {
+        "result": "tls_refused",
+        "reason": 20
+      },
+      "passed": true
+    },
+    {
+      "channel": "seaweedfs loopback s3-grpc",
+      "case": "withdrawn client certificate refused",
+      "observation": {
+        "result": "tls_refused",
+        "reason": "SSLV3_ALERT_BAD_CERTIFICATE"
+      },
+      "passed": true
+    }
+  ]
+}

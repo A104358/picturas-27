@@ -1,0 +1,327 @@
+[
+  {
+    "service": "api_gateway",
+    "record_count": 1,
+    "records": [
+      {
+        "pid": 7,
+        "ca": "c3139b59bc9abbcf25f2564c59f07557676efc89be125644b195609eecc95b34",
+        "trusted_cas": [
+          "c3139b59bc9abbcf25f2564c59f07557676efc89be125644b195609eecc95b34"
+        ],
+        "certificate": "ee42cc7735559954f21349f09ca43bb7a373d6340cc2dbd4dec62c7e6ddd836a"
+      }
+    ]
+  },
+  {
+    "service": "img_storage",
+    "record_count": 1,
+    "records": [
+      {
+        "pid": 7,
+        "ca": "c3139b59bc9abbcf25f2564c59f07557676efc89be125644b195609eecc95b34",
+        "trusted_cas": [
+          "c3139b59bc9abbcf25f2564c59f07557676efc89be125644b195609eecc95b34"
+        ],
+        "certificate": "444798fd18ae6563dc844e990bf48ab0ccc458481bfc92c960995ab19e415084"
+      }
+    ]
+  },
+  {
+    "service": "subscriptions",
+    "record_count": 1,
+    "records": [
+      {
+        "pid": 7,
+        "ca": "c3139b59bc9abbcf25f2564c59f07557676efc89be125644b195609eecc95b34",
+        "trusted_cas": [
+          "c3139b59bc9abbcf25f2564c59f07557676efc89be125644b195609eecc95b34"
+        ],
+        "certificate": "c8eba874f5ea51ac71eb873c17557f0c771ad9111cfbe7068a8e611353555ba7"
+      }
+    ]
+  },
+  {
+    "service": "video_tool",
+    "record_count": 1,
+    "records": [
+      {
+        "pid": 1,
+        "ca": "c3139b59bc9abbcf25f2564c59f07557676efc89be125644b195609eecc95b34",
+        "trusted_cas": [
+          "c3139b59bc9abbcf25f2564c59f07557676efc89be125644b195609eecc95b34"
+        ]
+      }
+    ]
+  },
+  {
+    "service": "obj_ai_tool",
+    "record_count": 1,
+    "records": [
+      {
+        "pid": 1,
+        "ca": "c3139b59bc9abbcf25f2564c59f07557676efc89be125644b195609eecc95b34",
+        "trusted_cas": [
+          "c3139b59bc9abbcf25f2564c59f07557676efc89be125644b195609eecc95b34"
+        ]
+      }
+    ]
+  },
+  {
+    "service": "expand_ai_tool",
+    "record_count": 1,
+    "records": [
+      {
+        "pid": 1,
+        "ca": "c3139b59bc9abbcf25f2564c59f07557676efc89be125644b195609eecc95b34",
+        "trusted_cas": [
+          "c3139b59bc9abbcf25f2564c59f07557676efc89be125644b195609eecc95b34"
+        ]
+      }
+    ]
+  },
+  {
+    "service": "border_tool",
+    "record_count": 1,
+    "records": [
+      {
+        "pid": 1,
+        "ca": "c3139b59bc9abbcf25f2564c59f07557676efc89be125644b195609eecc95b34",
+        "trusted_cas": [
+          "c3139b59bc9abbcf25f2564c59f07557676efc89be125644b195609eecc95b34"
+        ]
+      }
+    ]
+  },
+  {
+    "service": "ws_gateway",
+    "record_count": 1,
+    "records": [
+      {
+        "pid": 7,
+        "ca": "c3139b59bc9abbcf25f2564c59f07557676efc89be125644b195609eecc95b34",
+        "trusted_cas": [
+          "c3139b59bc9abbcf25f2564c59f07557676efc89be125644b195609eecc95b34"
+        ],
+        "certificate": "cf9b4e0416e2c4de80501e1333670c8ba94898eb861513c27c966e1e870b1988"
+      }
+    ]
+  },
+  {
+    "service": "rotate_tool",
+    "record_count": 1,
+    "records": [
+      {
+        "pid": 1,
+        "ca": "c3139b59bc9abbcf25f2564c59f07557676efc89be125644b195609eecc95b34",
+        "trusted_cas": [
+          "c3139b59bc9abbcf25f2564c59f07557676efc89be125644b195609eecc95b34"
+        ]
+      }
+    ]
+  },
+  {
+    "service": "resize_tool",
+    "record_count": 1,
+    "records": [
+      {
+        "pid": 1,
+        "ca": "c3139b59bc9abbcf25f2564c59f07557676efc89be125644b195609eecc95b34",
+        "trusted_cas": [
+          "c3139b59bc9abbcf25f2564c59f07557676efc89be125644b195609eecc95b34"
+        ]
+      }
+    ]
+  },
+  {
+    "service": "upgrade_ai_tool",
+    "record_count": 1,
+    "records": [
+      {
+        "pid": 1,
+        "ca": "c3139b59bc9abbcf25f2564c59f07557676efc89be125644b195609eecc95b34",
+        "trusted_cas": [
+          "c3139b59bc9abbcf25f2564c59f07557676efc89be125644b195609eecc95b34"
+        ]
+      }
+    ]
+  },
+  {
+    "service": "cut_ai_tool",
+    "record_count": 1,
+    "records": [
+      {
+        "pid": 1,
+        "ca": "c3139b59bc9abbcf25f2564c59f07557676efc89be125644b195609eecc95b34",
+        "trusted_cas": [
+          "c3139b59bc9abbcf25f2564c59f07557676efc89be125644b195609eecc95b34"
+        ]
+      }
+    ]
+  },
+  {
+    "service": "contrast_tool",
+    "record_count": 1,
+    "records": [
+      {
+        "pid": 1,
+        "ca": "c3139b59bc9abbcf25f2564c59f07557676efc89be125644b195609eecc95b34",
+        "trusted_cas": [
+          "c3139b59bc9abbcf25f2564c59f07557676efc89be125644b195609eecc95b34"
+        ]
+      }
+    ]
+  },
+  {
+    "service": "watermark_tool_ms",
+    "record_count": 1,
+    "records": [
+      {
+        "pid": 1,
+        "ca": "c3139b59bc9abbcf25f2564c59f07557676efc89be125644b195609eecc95b34",
+        "trusted_cas": [
+          "c3139b59bc9abbcf25f2564c59f07557676efc89be125644b195609eecc95b34"
+        ]
+      }
+    ]
+  },
+  {
+    "service": "text_ai_tool",
+    "record_count": 1,
+    "records": [
+      {
+        "pid": 1,
+        "ca": "c3139b59bc9abbcf25f2564c59f07557676efc89be125644b195609eecc95b34",
+        "trusted_cas": [
+          "c3139b59bc9abbcf25f2564c59f07557676efc89be125644b195609eecc95b34"
+        ]
+      }
+    ]
+  },
+  {
+    "service": "brightness_tool",
+    "record_count": 1,
+    "records": [
+      {
+        "pid": 1,
+        "ca": "c3139b59bc9abbcf25f2564c59f07557676efc89be125644b195609eecc95b34",
+        "trusted_cas": [
+          "c3139b59bc9abbcf25f2564c59f07557676efc89be125644b195609eecc95b34"
+        ]
+      }
+    ]
+  },
+  {
+    "service": "projects",
+    "record_count": 1,
+    "records": [
+      {
+        "pid": 7,
+        "ca": "c3139b59bc9abbcf25f2564c59f07557676efc89be125644b195609eecc95b34",
+        "trusted_cas": [
+          "c3139b59bc9abbcf25f2564c59f07557676efc89be125644b195609eecc95b34"
+        ],
+        "certificate": "b4fa7bc62c2d8e4aa23edae7cfcccb670f7bef7eebc401b720bfddf1058b3e41"
+      }
+    ]
+  },
+  {
+    "service": "bg_remove_ai_tool",
+    "record_count": 0,
+    "records": []
+  },
+  {
+    "service": "binarization_tool",
+    "record_count": 1,
+    "records": [
+      {
+        "pid": 1,
+        "ca": "c3139b59bc9abbcf25f2564c59f07557676efc89be125644b195609eecc95b34",
+        "trusted_cas": [
+          "c3139b59bc9abbcf25f2564c59f07557676efc89be125644b195609eecc95b34"
+        ]
+      }
+    ]
+  },
+  {
+    "service": "saturation_tool",
+    "record_count": 1,
+    "records": [
+      {
+        "pid": 1,
+        "ca": "c3139b59bc9abbcf25f2564c59f07557676efc89be125644b195609eecc95b34",
+        "trusted_cas": [
+          "c3139b59bc9abbcf25f2564c59f07557676efc89be125644b195609eecc95b34"
+        ]
+      }
+    ]
+  },
+  {
+    "service": "cut_tool",
+    "record_count": 1,
+    "records": [
+      {
+        "pid": 1,
+        "ca": "c3139b59bc9abbcf25f2564c59f07557676efc89be125644b195609eecc95b34",
+        "trusted_cas": [
+          "c3139b59bc9abbcf25f2564c59f07557676efc89be125644b195609eecc95b34"
+        ]
+      }
+    ]
+  },
+  {
+    "service": "people_ai_tool",
+    "record_count": 1,
+    "records": [
+      {
+        "pid": 1,
+        "ca": "c3139b59bc9abbcf25f2564c59f07557676efc89be125644b195609eecc95b34",
+        "trusted_cas": [
+          "c3139b59bc9abbcf25f2564c59f07557676efc89be125644b195609eecc95b34"
+        ]
+      }
+    ]
+  },
+  {
+    "service": "users",
+    "record_count": 1,
+    "records": [
+      {
+        "pid": 7,
+        "ca": "c3139b59bc9abbcf25f2564c59f07557676efc89be125644b195609eecc95b34",
+        "trusted_cas": [
+          "c3139b59bc9abbcf25f2564c59f07557676efc89be125644b195609eecc95b34"
+        ],
+        "certificate": "cfbe69d597e20f3cccb8f2febecd695f3dce8244af098a32e91ed87f54150c18"
+      }
+    ]
+  },
+  {
+    "service": "frontend",
+    "record_count": 1,
+    "records": [
+      {
+        "pid": 8,
+        "ca": "c3139b59bc9abbcf25f2564c59f07557676efc89be125644b195609eecc95b34",
+        "trusted_cas": [
+          "c3139b59bc9abbcf25f2564c59f07557676efc89be125644b195609eecc95b34"
+        ],
+        "certificate": "4899bad4a3a8399c41cc268ec9474222068cb69526c2cac577d5ec6c82a575e0"
+      }
+    ]
+  },
+  {
+    "service": "generative-mock",
+    "record_count": 1,
+    "records": [
+      {
+        "pid": 1,
+        "ca": "c3139b59bc9abbcf25f2564c59f07557676efc89be125644b195609eecc95b34",
+        "trusted_cas": [
+          "c3139b59bc9abbcf25f2564c59f07557676efc89be125644b195609eecc95b34"
+        ],
+        "certificate": "8f2b34a89a593c425dd30bf5d448006b22bd7aa76f59e9d6f4e3663561fcd18e"
+      }
+    ]
+  }
+]

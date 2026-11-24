@@ -3,6 +3,13 @@ const amqp = require('amqplib/callback_api');
 
 const exchange = 'picturas';
 const retryMs = 3000;
+let activeCallbacks = 0;
+const workMarker = `/tmp/picturas-work-${process.pid}.json`;
+function recordWork() {
+    fs.writeFileSync(`${workMarker}.tmp`, JSON.stringify({ pid: process.pid, active_count: activeCallbacks }), { mode: 0o600 });
+    fs.renameSync(`${workMarker}.tmp`, workMarker);
+}
+recordWork();
 const host = process.env.RABBITMQ_HOST;
 const port = Number(process.env.RABBITMQ_PORT);
 const url = `amqps://${encodeURIComponent(process.env.RABBITMQ_USER)}:${encodeURIComponent(process.env.RABBITMQ_PASS)}@${host}:${port}`;
@@ -52,8 +59,14 @@ function read_rabbit_msg(queue, callback) {
                     if (queueError) { connection.close(); retry(); return; }
                     channel.consume(queue, (message) => {
                         if (!message) return;
-                        try { callback(message); }
-                        catch (_) { console.error('[rabbit] message handler failed'); }
+                        activeCallbacks++; recordWork();
+                        const finished = () => { activeCallbacks--; recordWork(); };
+                        try {
+                            const pending = callback(message);
+                            if (pending && typeof pending.finally === 'function') pending.finally(finished);
+                            else finished();
+                        } catch (_) { finished(); console.error('[rabbit] message handler failed'); }
+                        // Preserve existing acknowledgement timing; B11 owns reconciliation.
                         channel.ack(message);
                     }, { noAck: false });
                 });

@@ -3,7 +3,8 @@
 #
 #   ops/pki.sh init            create the installation CA (365 days) and issue every service certificate
 #   ops/pki.sh issue <svc|all> issue (or reissue) service certificates (30 days, new key)
-#   ops/pki.sh renew [svc|all] reissue the certificates that expire within 7 days
+#   ops/pki.sh renew --project <name> [--service <svc|all>] [--force]  drain, renew and apply
+#   ops/pki.sh retire --project <name>  replace the CA and every key, remaining isolated until verified
 #   ops/pki.sh check           verify CA and service certificates before starting the stack
 #   ops/pki.sh list            show the current certificates (public data only)
 #
@@ -149,16 +150,12 @@ cmd_issue() {
 }
 
 cmd_renew() {
-  require_ca
-  local target=${1:-all} s cert renewed=0
-  for s in $(all_services); do
-    [ "$target" = all ] || [ "$target" = "$s" ] || continue
-    cert="$SVC_DIR/$s/service.crt"
-    if [ ! -f "$cert" ] || expires_within "$cert" $((RENEW_DAYS * 86400)); then
-      issue_one "$s"; renewed=$((renewed + 1))
-    fi
-  done
-  echo "pki: $renewed certificate(s) renewed (threshold: $RENEW_DAYS days); restart the affected services"
+  # The applied operation owns draining, process/socket replacement and verification.
+  exec python3 "$(dirname "$0")/maintenance.py" renew "$@"
+}
+
+cmd_retire() {
+  exec python3 "$(dirname "$0")/maintenance.py" retire "$@"
 }
 
 perm() {
@@ -167,7 +164,7 @@ perm() {
 }
 
 cmd_check() {
-  local fail=0 warn=0 s dir cert key mod_c mod_k
+  local fail=0 warn=0 s dir cert key mod_c mod_k entry eku subject
   if [ ! -f "$CA_DIR/ca.crt" ]; then echo "FAIL CA missing ($CA_DIR/ca.crt)"; exit 1; fi
   if expires_within "$CA_DIR/ca.crt" 0; then echo "FAIL CA expired"; fail=1
   elif expires_within "$CA_DIR/ca.crt" $((CERT_DAYS * 86400)); then echo "WARN CA expires within $CERT_DAYS days: plan its replacement"; warn=1
@@ -186,6 +183,17 @@ cmd_check() {
       echo "FAIL $s: SAN does not contain DNS:$s"; fail=1; continue
     fi
     if [ "$(perm "$key")" != 600 ]; then echo "FAIL $s: key permissions are not 600"; fail=1; continue; fi
+    subject=$(openssl x509 -in "$cert" -noout -subject -nameopt RFC2253 | sed 's/^subject=//')
+    if ! printf '%s\n' "$subject" | grep -Eq "(^|,)CN=$s(,|$)"; then
+      echo "FAIL $s: certificate CN differs from service identity"; fail=1; continue
+    fi
+    entry=$(service_entry "$s"); eku=${entry##*|}
+    if [[ "$eku" == *serverAuth* ]] && ! openssl verify -purpose sslserver -CAfile "$CA_DIR/ca.crt" "$cert" >/dev/null 2>&1; then
+      echo "FAIL $s: invalid server purpose"; fail=1; continue
+    fi
+    if [[ "$eku" == *clientAuth* ]] && ! openssl verify -purpose sslclient -CAfile "$CA_DIR/ca.crt" "$cert" >/dev/null 2>&1; then
+      echo "FAIL $s: invalid client purpose"; fail=1; continue
+    fi
     if expires_within "$cert" $((RENEW_DAYS * 86400)); then
       echo "WARN $s: expires within $RENEW_DAYS days (run: ops/pki.sh renew)"; warn=1
     else
@@ -214,6 +222,7 @@ case "${1:-}" in
   init) cmd_init ;;
   issue) shift; cmd_issue "$@" ;;
   renew) shift; cmd_renew "$@" ;;
+  retire) shift; cmd_retire "$@" ;;
   check) cmd_check ;;
   list) cmd_list ;;
   *) sed -n '2,9p' "$0" | sed 's/^# \{0,1\}//'; exit 2 ;;

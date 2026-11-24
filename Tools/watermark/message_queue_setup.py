@@ -1,6 +1,9 @@
 import logging
 import os
 import ssl
+import hashlib
+import json
+from threading import Lock
 
 import pika
 from pika.adapters.blocking_connection import BlockingChannel
@@ -20,6 +23,10 @@ def message_queue_connect() -> tuple[pika.BlockingConnection, BlockingChannel]:
 
     # Verifies the certificate chain against the CA and the server name.
     context = ssl.create_default_context(cafile=RABBITMQ_TLS_CA_FILE)
+    loaded_cas = sorted(hashlib.sha256(c).hexdigest() for c in context.get_ca_certs(binary_form=True))
+    with open(f"/tmp/pki-loaded-{os.getpid()}.json", "w") as record:
+        json.dump({"pid": os.getpid(), "ca": loaded_cas[0], "trusted_cas": loaded_cas}, record)
+    os.chmod(f"/tmp/pki-loaded-{os.getpid()}.json", 0o600)
 
     parameters = pika.ConnectionParameters(
         host=RABBITMQ_HOST,
@@ -32,4 +39,36 @@ def message_queue_connect() -> tuple[pika.BlockingConnection, BlockingChannel]:
     connection = pika.BlockingConnection(parameters)
     channel = connection.channel()
 
+    # The fixed image dispatches work onto threads. Observe the actual worker method,
+    # not the short AMQP callback that only starts that thread.
+    from .message_processor import MessageProcessor
+    if not getattr(MessageProcessor, "_picturas_observed_work", False):
+        original_handle = MessageProcessor.handle_request_message
+        marker = f"/tmp/picturas-work-{os.getpid()}.json"
+        lock = Lock()
+        active = 0
+        try:
+            os.unlink(marker)
+        except FileNotFoundError:
+            pass
+
+        def record_work():
+            with open(marker + ".tmp", "w") as record:
+                json.dump({"pid": os.getpid(), "active_count": active}, record)
+            os.chmod(marker + ".tmp", 0o600)
+            os.replace(marker + ".tmp", marker)
+
+        def observed_handle(instance, *args, **kwargs):
+            nonlocal active
+            with lock:
+                active += 1
+                record_work()
+            try:
+                return original_handle(instance, *args, **kwargs)
+            finally:
+                with lock:
+                    active -= 1
+                    record_work()
+        MessageProcessor.handle_request_message = observed_handle
+        MessageProcessor._picturas_observed_work = True
     return connection, channel

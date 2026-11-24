@@ -1,0 +1,4660 @@
+{
+  "schema_version": 1,
+  "operation": "6b7f8d72a82c438db4aa019eea02a688",
+  "project": "picturas-pki-pilot-b10",
+  "mode": "compromise",
+  "commit": "cb1e0289d3519c0f492f36b3a353246578110040",
+  "t_detectado": "2026-11-24T18:35:23.843006+00:00",
+  "t_comando": "2026-11-24T18:35:23.883903+00:00",
+  "t_isolado": "2026-11-24T18:35:27.603103+00:00",
+  "t_reabertura": "2026-11-24T18:38:35.237302+00:00",
+  "isolation_ms": 3719.219898,
+  "isolation_target_met": true,
+  "phase": "reopened",
+  "events": [
+    {
+      "phase": "starting",
+      "at": "2026-11-24T18:35:24.149304+00:00",
+      "monotonic_ns": 1876815236264
+    },
+    {
+      "phase": "isolated",
+      "at": "2026-11-24T18:35:27.603131+00:00",
+      "monotonic_ns": 1880269046808
+    },
+    {
+      "phase": "preparing_pki",
+      "at": "2026-11-24T18:36:01.731996+00:00",
+      "monotonic_ns": 1914397910485
+    },
+    {
+      "phase": "pki_activation_intent",
+      "at": "2026-11-24T18:36:03.697840+00:00",
+      "monotonic_ns": 1916363763151
+    },
+    {
+      "phase": "pki_activated_isolated",
+      "at": "2026-11-24T18:36:03.870980+00:00",
+      "monotonic_ns": 1916536907948
+    },
+    {
+      "phase": "fixture_quarantined_isolated",
+      "at": "2026-11-24T18:37:25.136711+00:00",
+      "monotonic_ns": 1997802625784
+    },
+    {
+      "phase": "restarting_isolated",
+      "at": "2026-11-24T18:37:26.002817+00:00",
+      "monotonic_ns": 1998668746228
+    },
+    {
+      "phase": "verifying_isolated",
+      "at": "2026-11-24T18:38:07.040575+00:00",
+      "monotonic_ns": 2039706498105
+    },
+    {
+      "phase": "verified_admissions_closed",
+      "at": "2026-11-24T18:38:34.995977+00:00",
+      "monotonic_ns": 2067661908294
+    },
+    {
+      "phase": "reopened",
+      "at": "2026-11-24T18:38:35.237318+00:00",
+      "monotonic_ns": 2067903234770
+    }
+  ],
+  "participants_before": [
+    {
+      "service": "nginx",
+      "id": "5e7d93140ff5bddfd13f9903360c22c1240f89b1056feb1ab3451c8f7e117966",
+      "image": "sha256:14fb90841494b84ec6f9ea2de7562ae28ccdb6e74c660d48f7b565c389ffe590",
+      "pid": 106230,
+      "started_at": "2026-11-24T18:33:49.995801134Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "no",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.33"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/etc/nginx/pki",
+          "source_sha256": "6252e1545fccf3b3e52fff110e15ddac7a8aa7739702a1fbbb152ef9bdfd1e63"
+        }
+      ]
+    },
+    {
+      "service": "api_gateway",
+      "id": "7b696465f1d9f4dc6fa38ecaa3accf6633783470dffe74c8d5fc0611212ebc0e",
+      "image": "sha256:4323b6f198e10901776f4becfb3fb5131dfde86b242f23ab633eeb0af800022b",
+      "pid": 106082,
+      "started_at": "2026-11-24T18:33:47.367554578Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "on-failure",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.32"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki",
+          "source_sha256": "15b986727850b805c6634fe967d085dbdd6e8d426356fe2f59b12c0dc44185b7"
+        }
+      ]
+    },
+    {
+      "service": "subscriptions",
+      "id": "66dac14fa43193642b9dd19b4d407a7a2f0b5215752f956cce27aec6ef29ff9b",
+      "image": "sha256:fce84c34a434dcbce77328e67b0c442830456baa4afb7be9ecec107caedc450e",
+      "pid": 103296,
+      "started_at": "2026-11-24T18:33:13.715799375Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "on-failure",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.12"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki",
+          "source_sha256": "ecefd85f2e6849910e40143ddc1bb2204a9738589faaecf272cc0737c889dcf1"
+        }
+      ]
+    },
+    {
+      "service": "img_storage",
+      "id": "a1d24e4a652177a42a1d2587f7c9cc8c3d546f3fd5c3f4231e8e6ea495507e17",
+      "image": "sha256:ecdc83a0df46eb4aee401d3b87cedec3e8487c05d41563827cc13a80321da852",
+      "pid": 103935,
+      "started_at": "2026-11-24T18:33:30.721311936Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "on-failure",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.11"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki",
+          "source_sha256": "dcaad75071e0165b502d2eb902983b043664e9bbe10087b66f63a37ce5a83e0c"
+        }
+      ]
+    },
+    {
+      "service": "mongo-backup",
+      "id": "5c8cfc9fdba33edfa166733a3f422d551490201ffc1aa95e61515329eba8e637",
+      "image": "sha256:0010f63d26952bd3960fac5513c64a1cf7d6299f31fa7b54ac1b36633ee04333",
+      "pid": 103043,
+      "started_at": "2026-11-24T18:33:13.462117608Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "on-failure",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.10"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki/ca.crt",
+          "source_sha256": "f92bd507ba4bfc617892605fd29f3787a2663cf4125b42c0d2edf17699325c72"
+        }
+      ]
+    },
+    {
+      "service": "expand_ai_tool",
+      "id": "35c819170db189748a617993eb5a37b810ec22bb2d09854961d7bd491fa23203",
+      "image": "sha256:8832fb5c0bbb999553e418a4137715f7c8ff3a905e4d120dbdbcb5f58c98d628",
+      "pid": 105112,
+      "started_at": "2026-11-24T18:33:44.355657832Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "on-failure",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.21"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki",
+          "source_sha256": "a84b5f3796a011903259cb47053443d4e7d71a5576b69b743016f09add6b4e03"
+        }
+      ]
+    },
+    {
+      "service": "video_tool",
+      "id": "c79ba48b82ba19e9322c0d3ed37ae6ca353d6bac52452a947abab78cca90acdf",
+      "image": "sha256:319ecbbd1bec4a996a33da1626e4428adea81539a210dd09587008755f4f0f59",
+      "pid": 105192,
+      "started_at": "2026-11-24T18:33:44.531789329Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "on-failure",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.22"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki/ca.crt",
+          "source_sha256": "b60af72ef2633909165d0724693e50ab0ce83a1f7632d9840fe97d91dae37b0c"
+        }
+      ]
+    },
+    {
+      "service": "text_ai_tool",
+      "id": "5fff50f383e25c2b22e2c73d1cc3ff5291dc968ad260791ec585573c33137fc9",
+      "image": "sha256:65d166fdc6efab1532dc507cfc6602bc6aa7dda77c3533e1701e859702a7d1c3",
+      "pid": 104499,
+      "started_at": "2026-11-24T18:33:43.266431655Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "on-failure",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.13"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki/ca.crt",
+          "source_sha256": "b60af72ef2633909165d0724693e50ab0ce83a1f7632d9840fe97d91dae37b0c"
+        }
+      ]
+    },
+    {
+      "service": "projects",
+      "id": "f5d121250e6d4aa638b8e28fb62acce8ceac7622f133cb331dcbcdabe0c6db88",
+      "image": "sha256:7ba8631e37fb0d8d83b82dc2686c56ee8c139f4a92451f789eddde4686f0a4eb",
+      "pid": 105276,
+      "started_at": "2026-11-24T18:33:44.699181711Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "on-failure",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.23"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki",
+          "source_sha256": "df77e8cd295d00e07f9f1c75f0911d5cec782cf14aae387881d97250fc784d33"
+        }
+      ]
+    },
+    {
+      "service": "people_ai_tool",
+      "id": "40c51c748e907dbb5ca5b32722575e3a961e6367a1796c77e5fb7ee2940ceac9",
+      "image": "sha256:2f88a8fec5d7e29fe96bb03e82d33dbbe1dbc0640e216bff26c22acbe349eacd",
+      "pid": 105756,
+      "started_at": "2026-11-24T18:33:45.625318673Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "on-failure",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.29"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki/ca.crt",
+          "source_sha256": "b60af72ef2633909165d0724693e50ab0ce83a1f7632d9840fe97d91dae37b0c"
+        }
+      ]
+    },
+    {
+      "service": "upgrade_ai_tool",
+      "id": "b95c372448ef79f7d3ce3705c60189b17506f27bf32eedee6ee20a458096b49f",
+      "image": "sha256:3635a3465c1b87c2b90dada81dca2a2d5e8868dc93d97837e0e491056c7b19e4",
+      "pid": 105834,
+      "started_at": "2026-11-24T18:33:45.766444025Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "on-failure",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.30"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki/ca.crt",
+          "source_sha256": "b60af72ef2633909165d0724693e50ab0ce83a1f7632d9840fe97d91dae37b0c"
+        }
+      ]
+    },
+    {
+      "service": "saturation_tool",
+      "id": "23863ad4eb47a517e869a350d7c428591b6b3636afae723720d1bd14fc75c213",
+      "image": "sha256:74a896f4c1704de6188b1d639e7d1a00e8a0ca546bd4f2233d9ca4e88d66e3fe",
+      "pid": 105489,
+      "started_at": "2026-11-24T18:33:45.181355309Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "on-failure",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.26"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki/ca.crt",
+          "source_sha256": "b60af72ef2633909165d0724693e50ab0ce83a1f7632d9840fe97d91dae37b0c"
+        }
+      ]
+    },
+    {
+      "service": "watermark_tool_ms",
+      "id": "62067a59c6f34e2560b2e287b1f6490ec3e9fc5d48d24067b1480e8549548a7e",
+      "image": "sha256:f4e598cdd50f416ee2aea913e6d7b02546b65ae69d37a3e5af6c57461a3665b2",
+      "pid": 104977,
+      "started_at": "2026-11-24T18:33:44.075425465Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "always",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.19"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki/ca.crt",
+          "source_sha256": "b60af72ef2633909165d0724693e50ab0ce83a1f7632d9840fe97d91dae37b0c"
+        }
+      ]
+    },
+    {
+      "service": "rotate_tool",
+      "id": "b39e58a03db1459c96bf2a926375013574ba58eefbd7b69aed6ebe1efb4d9500",
+      "image": "sha256:1e7ba7763ad05d4f4e25c05691df830dae157c40ae2a218b1bed28f0c438b101",
+      "pid": 105365,
+      "started_at": "2026-11-24T18:33:44.863836817Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "on-failure",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.24"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki/ca.crt",
+          "source_sha256": "b60af72ef2633909165d0724693e50ab0ce83a1f7632d9840fe97d91dae37b0c"
+        }
+      ]
+    },
+    {
+      "service": "border_tool",
+      "id": "672058ee2b760768a8fbcfb6799b0ed19d31a57fe9dbb4cf4e57202c232aa6e8",
+      "image": "sha256:bba9d4a9c748632763cff38094df4a876d745f26f4411ebcec71a3c266c439af",
+      "pid": 104842,
+      "started_at": "2026-11-24T18:33:43.837918361Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "on-failure",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.17"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki/ca.crt",
+          "source_sha256": "b60af72ef2633909165d0724693e50ab0ce83a1f7632d9840fe97d91dae37b0c"
+        }
+      ]
+    },
+    {
+      "service": "binarization_tool",
+      "id": "85a08fb9efef83258b1a01a43106981c267a8fd9bf8c336001f00e871e1d8304",
+      "image": "sha256:85cfd4ecb56f9c69b1cee35cc4a5ea06b9c19ef2237408f478bd9a62257c5059",
+      "pid": 104905,
+      "started_at": "2026-11-24T18:33:43.949581359Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "on-failure",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.18"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki/ca.crt",
+          "source_sha256": "b60af72ef2633909165d0724693e50ab0ce83a1f7632d9840fe97d91dae37b0c"
+        }
+      ]
+    },
+    {
+      "service": "obj_ai_tool",
+      "id": "20940992c7d36bf6ff7b4c2b704713ff8dd4334f697f8c477963e3d81ad7e82d",
+      "image": "sha256:9ad57aceac673a132820c5588ef9ec5955ea42ce7941488b3df3f4dd76c96861",
+      "pid": 105565,
+      "started_at": "2026-11-24T18:33:45.319292682Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "on-failure",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.27"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki/ca.crt",
+          "source_sha256": "b60af72ef2633909165d0724693e50ab0ce83a1f7632d9840fe97d91dae37b0c"
+        }
+      ]
+    },
+    {
+      "service": "brightness_tool",
+      "id": "4c5ad43f6af333d751d2c062884cc3eef21282139f821106314dfb264dd8ae9e",
+      "image": "sha256:21e6b410453469235c25e0619d74e80813d18d0a58542d0d0e1c712eb94d0649",
+      "pid": 105424,
+      "started_at": "2026-11-24T18:33:45.024109204Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "on-failure",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.25"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki/ca.crt",
+          "source_sha256": "b60af72ef2633909165d0724693e50ab0ce83a1f7632d9840fe97d91dae37b0c"
+        }
+      ]
+    },
+    {
+      "service": "resize_tool",
+      "id": "5510bbb334ef22791ad6e02a460960ff2a77081d89104a5604ed9307836dec2f",
+      "image": "sha256:dc31a712123d3120b1e57ee3c891f7ed84bf4006f43defcc127f36e55d0bcb48",
+      "pid": 105950,
+      "started_at": "2026-11-24T18:33:45.949519589Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "on-failure",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.31"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki/ca.crt",
+          "source_sha256": "b60af72ef2633909165d0724693e50ab0ce83a1f7632d9840fe97d91dae37b0c"
+        }
+      ]
+    },
+    {
+      "service": "contrast_tool",
+      "id": "2db6dfe216183004930c03771d94557d3a5a288deedfa763e30d667bc24a2635",
+      "image": "sha256:a5ab2de0d721f61a8bc31b1b0e7dcad37b629caa94d4cb690b771a4a4a243fdf",
+      "pid": 104718,
+      "started_at": "2026-11-24T18:33:43.540307428Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "on-failure",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.15"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki/ca.crt",
+          "source_sha256": "b60af72ef2633909165d0724693e50ab0ce83a1f7632d9840fe97d91dae37b0c"
+        }
+      ]
+    },
+    {
+      "service": "cut_ai_tool",
+      "id": "26437d208263f83bf2a04df204dbce71457fee5794fca4fb28fd9d2e160428e7",
+      "image": "sha256:643fb40b4abcf681f5372f5b243a724c8f1a4c696abd64cf5c1be94168200012",
+      "pid": 104634,
+      "started_at": "2026-11-24T18:33:43.3825085Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "on-failure",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.14"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki/ca.crt",
+          "source_sha256": "b60af72ef2633909165d0724693e50ab0ce83a1f7632d9840fe97d91dae37b0c"
+        }
+      ]
+    },
+    {
+      "service": "ws_gateway",
+      "id": "015357cba1ab744fff54920b76e9c4dba58c855d8e78db95e870706948a265e9",
+      "image": "sha256:9c5acb25cc330152a6e44ad4261e8defa711545d7291bf136b1a075a4943c660",
+      "pid": 104776,
+      "started_at": "2026-11-24T18:33:43.710149431Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "on-failure",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.16"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki",
+          "source_sha256": "4e24b7f0452f01283d9543fa13ebd2d30037638ad46c209f3e66226933bb8613"
+        }
+      ]
+    },
+    {
+      "service": "cut_tool",
+      "id": "f4fc1a0c521c34b0eaaa3eb73add3e1a9d6158692446b0e5da638033bb2f3332",
+      "image": "sha256:68d8ef35c853ea32c3220e4237bfd0cea6fb5f85b332041501e9c4e728e63326",
+      "pid": 105653,
+      "started_at": "2026-11-24T18:33:45.451631369Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "on-failure",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.28"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki/ca.crt",
+          "source_sha256": "b60af72ef2633909165d0724693e50ab0ce83a1f7632d9840fe97d91dae37b0c"
+        }
+      ]
+    },
+    {
+      "service": "bg_remove_ai_tool",
+      "id": "f95230d6962b0f25b66558f69427b64a71bc4dc58a6faf03a1ac2ebde65151e1",
+      "image": "sha256:32124ee2c9776c43b3f75ad663329808d3dc01c74a778d452c88bd1d0d5b50ad",
+      "pid": 105037,
+      "started_at": "2026-11-24T18:33:44.2113741Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "on-failure",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.20"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki/ca.crt",
+          "source_sha256": "b60af72ef2633909165d0724693e50ab0ce83a1f7632d9840fe97d91dae37b0c"
+        }
+      ]
+    },
+    {
+      "service": "users",
+      "id": "0eeddae6327fa5eb22dc719e9ff09d474dbbc657447953957265df863ab539e5",
+      "image": "sha256:e342ad7ab1bee06ca0fefe3f688ca87d7993c5155e2bfe4594864b61f6bebdb9",
+      "pid": 102942,
+      "started_at": "2026-11-24T18:33:13.330965374Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "on-failure",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.9"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki",
+          "source_sha256": "fed04c584118ef2f065e0889211f1dc1140c41c36d11f193d9583fa19cb1e045"
+        }
+      ]
+    },
+    {
+      "service": "s3-bootstrap",
+      "id": "3f8bc9b7bf1aa4cb310adc86af38a22307a0d47f11d11b01b23a728d45749001",
+      "image": "sha256:d46de30de68e273d8598e1d684809af75c51076e496d39ea9bc09076ca53e431",
+      "pid": 0,
+      "started_at": "2026-11-24T18:33:13.591667727Z",
+      "running": false,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "no",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki/ca.crt",
+          "source_sha256": "46b0a77dd6e40a09a049b6ca1373a4db709bdb63784b3e413f21303f9247d65f"
+        }
+      ]
+    },
+    {
+      "service": "users_mongoDB",
+      "id": "1132caa11f83b1fee9ac6e011b6df01c773b3c3711e7363b8d749a6ef263207d",
+      "image": "sha256:0010f63d26952bd3960fac5513c64a1cf7d6299f31fa7b54ac1b36633ee04333",
+      "pid": 102642,
+      "started_at": "2026-11-24T18:33:12.929455694Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "on-failure",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.6"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki",
+          "source_sha256": "abaf32810b57a2858dd2277bddfb54a64ef3b8b94a099ab3451980c8788358dd"
+        }
+      ]
+    },
+    {
+      "service": "subscriptions_mongoDB",
+      "id": "fdecb29f8581d0fecb3ac551b7ccb113c423e225f48ba36d1e7bd3902313ebb0",
+      "image": "sha256:0010f63d26952bd3960fac5513c64a1cf7d6299f31fa7b54ac1b36633ee04333",
+      "pid": 102736,
+      "started_at": "2026-11-24T18:33:13.063971164Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "on-failure",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.7"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki",
+          "source_sha256": "8ba800d9ee9fe4f21515decc4e349baa10be22276c9e3a272052234678a40186"
+        }
+      ]
+    },
+    {
+      "service": "projects_mongoDB",
+      "id": "9342c062f93869784a642f0c2f5cd9a5d6677102bdfc9aa8561f81108d7746e3",
+      "image": "sha256:0010f63d26952bd3960fac5513c64a1cf7d6299f31fa7b54ac1b36633ee04333",
+      "pid": 102462,
+      "started_at": "2026-11-24T18:33:12.76020317Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "on-failure",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.5"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki",
+          "source_sha256": "a4c7573b3db5a86cc29b0696cb10d962cd06e06930966cda23332bc5f209b4d5"
+        }
+      ]
+    },
+    {
+      "service": "rabbitmq",
+      "id": "9f5f6070f34b7dc43be4728e5e636165205087f31db133079027e1805965179e",
+      "image": "sha256:9887bbea3ca1594eb1340b3cb8ce3a27b7e367ccb6d8bd2c246e389d3d1bf049",
+      "pid": 102356,
+      "started_at": "2026-11-24T18:33:12.638765746Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "on-failure",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.4"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki",
+          "source_sha256": "9d12066b3f5b499444411cb38ec0a9206bd15029cb8124173db9f473acc270b8"
+        }
+      ]
+    },
+    {
+      "service": "seaweedfs",
+      "id": "9298a6fd8ceb22b4b2826bb18ef37c216546f722ffc7b54b0ae1c5f0cdee309d",
+      "image": "sha256:31d61f5e8771cbd5993912cd051be0c7bcdc207faaa12c50e1a3b8371631c927",
+      "pid": 102828,
+      "started_at": "2026-11-24T18:33:13.201587886Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "on-failure",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.8"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki",
+          "source_sha256": "412a84d078962739d70f2d0cf28917568c1e2d7d81ed17904f1543b22d12cfd5"
+        }
+      ]
+    },
+    {
+      "service": "generative-mock",
+      "id": "0fcf3ec8de5d9e02b42afeb716af0cfc7458321a76efcaac38c43bc773fecd00",
+      "image": "sha256:8146819cca31a7f7aa0428bdd54e36f4892d3d84dde5f30c2a7539f7170a07ba",
+      "pid": 102299,
+      "started_at": "2026-11-24T18:33:12.516493424Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "on-failure",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.3"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki",
+          "source_sha256": "c39108def285d8dac514a1d8912655d5d5df8c2597672eb7108d74b139afe21d"
+        }
+      ]
+    },
+    {
+      "service": "frontend",
+      "id": "431415a0ce825a48db5c4de7526d1201d0bfcdd5f02abae4e60af3dc39a85eea",
+      "image": "sha256:086d7f20cc9ca22be1653f4eaf5a4d37e18d5c6437fb797561e4a578e3c094c4",
+      "pid": 102193,
+      "started_at": "2026-11-24T18:33:12.386845674Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "on-failure",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.2"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki",
+          "source_sha256": "3fc27becdfd7d8603a3243ac7c1bac60ed5c39a0f7f1c962c96e041df8fa8f34"
+        }
+      ]
+    }
+  ],
+  "participants_isolated": [
+    {
+      "service": "nginx",
+      "id": "5e7d93140ff5bddfd13f9903360c22c1240f89b1056feb1ab3451c8f7e117966",
+      "image": "sha256:14fb90841494b84ec6f9ea2de7562ae28ccdb6e74c660d48f7b565c389ffe590",
+      "pid": 0,
+      "started_at": "2026-11-24T18:33:49.995801134Z",
+      "running": false,
+      "exit_code": 137,
+      "restart_policy": {
+        "Name": "no",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [],
+      "pki_mounts": [
+        {
+          "destination": "/etc/nginx/pki",
+          "source_sha256": "6252e1545fccf3b3e52fff110e15ddac7a8aa7739702a1fbbb152ef9bdfd1e63"
+        }
+      ]
+    },
+    {
+      "service": "api_gateway",
+      "id": "7b696465f1d9f4dc6fa38ecaa3accf6633783470dffe74c8d5fc0611212ebc0e",
+      "image": "sha256:4323b6f198e10901776f4becfb3fb5131dfde86b242f23ab633eeb0af800022b",
+      "pid": 0,
+      "started_at": "2026-11-24T18:33:47.367554578Z",
+      "running": false,
+      "exit_code": 137,
+      "restart_policy": {
+        "Name": "no",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki",
+          "source_sha256": "15b986727850b805c6634fe967d085dbdd6e8d426356fe2f59b12c0dc44185b7"
+        }
+      ]
+    },
+    {
+      "service": "subscriptions",
+      "id": "66dac14fa43193642b9dd19b4d407a7a2f0b5215752f956cce27aec6ef29ff9b",
+      "image": "sha256:fce84c34a434dcbce77328e67b0c442830456baa4afb7be9ecec107caedc450e",
+      "pid": 0,
+      "started_at": "2026-11-24T18:33:13.715799375Z",
+      "running": false,
+      "exit_code": 137,
+      "restart_policy": {
+        "Name": "no",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki",
+          "source_sha256": "ecefd85f2e6849910e40143ddc1bb2204a9738589faaecf272cc0737c889dcf1"
+        }
+      ]
+    },
+    {
+      "service": "img_storage",
+      "id": "a1d24e4a652177a42a1d2587f7c9cc8c3d546f3fd5c3f4231e8e6ea495507e17",
+      "image": "sha256:ecdc83a0df46eb4aee401d3b87cedec3e8487c05d41563827cc13a80321da852",
+      "pid": 0,
+      "started_at": "2026-11-24T18:33:30.721311936Z",
+      "running": false,
+      "exit_code": 137,
+      "restart_policy": {
+        "Name": "no",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki",
+          "source_sha256": "dcaad75071e0165b502d2eb902983b043664e9bbe10087b66f63a37ce5a83e0c"
+        }
+      ]
+    },
+    {
+      "service": "mongo-backup",
+      "id": "5c8cfc9fdba33edfa166733a3f422d551490201ffc1aa95e61515329eba8e637",
+      "image": "sha256:0010f63d26952bd3960fac5513c64a1cf7d6299f31fa7b54ac1b36633ee04333",
+      "pid": 0,
+      "started_at": "2026-11-24T18:33:13.462117608Z",
+      "running": false,
+      "exit_code": 137,
+      "restart_policy": {
+        "Name": "no",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki/ca.crt",
+          "source_sha256": "f92bd507ba4bfc617892605fd29f3787a2663cf4125b42c0d2edf17699325c72"
+        }
+      ]
+    },
+    {
+      "service": "expand_ai_tool",
+      "id": "35c819170db189748a617993eb5a37b810ec22bb2d09854961d7bd491fa23203",
+      "image": "sha256:8832fb5c0bbb999553e418a4137715f7c8ff3a905e4d120dbdbcb5f58c98d628",
+      "pid": 0,
+      "started_at": "2026-11-24T18:33:44.355657832Z",
+      "running": false,
+      "exit_code": 137,
+      "restart_policy": {
+        "Name": "no",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki",
+          "source_sha256": "a84b5f3796a011903259cb47053443d4e7d71a5576b69b743016f09add6b4e03"
+        }
+      ]
+    },
+    {
+      "service": "video_tool",
+      "id": "c79ba48b82ba19e9322c0d3ed37ae6ca353d6bac52452a947abab78cca90acdf",
+      "image": "sha256:319ecbbd1bec4a996a33da1626e4428adea81539a210dd09587008755f4f0f59",
+      "pid": 0,
+      "started_at": "2026-11-24T18:33:44.531789329Z",
+      "running": false,
+      "exit_code": 137,
+      "restart_policy": {
+        "Name": "no",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki/ca.crt",
+          "source_sha256": "b60af72ef2633909165d0724693e50ab0ce83a1f7632d9840fe97d91dae37b0c"
+        }
+      ]
+    },
+    {
+      "service": "text_ai_tool",
+      "id": "5fff50f383e25c2b22e2c73d1cc3ff5291dc968ad260791ec585573c33137fc9",
+      "image": "sha256:65d166fdc6efab1532dc507cfc6602bc6aa7dda77c3533e1701e859702a7d1c3",
+      "pid": 0,
+      "started_at": "2026-11-24T18:33:43.266431655Z",
+      "running": false,
+      "exit_code": 137,
+      "restart_policy": {
+        "Name": "no",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki/ca.crt",
+          "source_sha256": "b60af72ef2633909165d0724693e50ab0ce83a1f7632d9840fe97d91dae37b0c"
+        }
+      ]
+    },
+    {
+      "service": "projects",
+      "id": "f5d121250e6d4aa638b8e28fb62acce8ceac7622f133cb331dcbcdabe0c6db88",
+      "image": "sha256:7ba8631e37fb0d8d83b82dc2686c56ee8c139f4a92451f789eddde4686f0a4eb",
+      "pid": 0,
+      "started_at": "2026-11-24T18:33:44.699181711Z",
+      "running": false,
+      "exit_code": 137,
+      "restart_policy": {
+        "Name": "no",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki",
+          "source_sha256": "df77e8cd295d00e07f9f1c75f0911d5cec782cf14aae387881d97250fc784d33"
+        }
+      ]
+    },
+    {
+      "service": "people_ai_tool",
+      "id": "40c51c748e907dbb5ca5b32722575e3a961e6367a1796c77e5fb7ee2940ceac9",
+      "image": "sha256:2f88a8fec5d7e29fe96bb03e82d33dbbe1dbc0640e216bff26c22acbe349eacd",
+      "pid": 0,
+      "started_at": "2026-11-24T18:33:45.625318673Z",
+      "running": false,
+      "exit_code": 137,
+      "restart_policy": {
+        "Name": "no",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki/ca.crt",
+          "source_sha256": "b60af72ef2633909165d0724693e50ab0ce83a1f7632d9840fe97d91dae37b0c"
+        }
+      ]
+    },
+    {
+      "service": "upgrade_ai_tool",
+      "id": "b95c372448ef79f7d3ce3705c60189b17506f27bf32eedee6ee20a458096b49f",
+      "image": "sha256:3635a3465c1b87c2b90dada81dca2a2d5e8868dc93d97837e0e491056c7b19e4",
+      "pid": 0,
+      "started_at": "2026-11-24T18:33:45.766444025Z",
+      "running": false,
+      "exit_code": 137,
+      "restart_policy": {
+        "Name": "no",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki/ca.crt",
+          "source_sha256": "b60af72ef2633909165d0724693e50ab0ce83a1f7632d9840fe97d91dae37b0c"
+        }
+      ]
+    },
+    {
+      "service": "saturation_tool",
+      "id": "23863ad4eb47a517e869a350d7c428591b6b3636afae723720d1bd14fc75c213",
+      "image": "sha256:74a896f4c1704de6188b1d639e7d1a00e8a0ca546bd4f2233d9ca4e88d66e3fe",
+      "pid": 0,
+      "started_at": "2026-11-24T18:33:45.181355309Z",
+      "running": false,
+      "exit_code": 137,
+      "restart_policy": {
+        "Name": "no",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki/ca.crt",
+          "source_sha256": "b60af72ef2633909165d0724693e50ab0ce83a1f7632d9840fe97d91dae37b0c"
+        }
+      ]
+    },
+    {
+      "service": "watermark_tool_ms",
+      "id": "62067a59c6f34e2560b2e287b1f6490ec3e9fc5d48d24067b1480e8549548a7e",
+      "image": "sha256:f4e598cdd50f416ee2aea913e6d7b02546b65ae69d37a3e5af6c57461a3665b2",
+      "pid": 0,
+      "started_at": "2026-11-24T18:33:44.075425465Z",
+      "running": false,
+      "exit_code": 137,
+      "restart_policy": {
+        "Name": "no",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki/ca.crt",
+          "source_sha256": "b60af72ef2633909165d0724693e50ab0ce83a1f7632d9840fe97d91dae37b0c"
+        }
+      ]
+    },
+    {
+      "service": "rotate_tool",
+      "id": "b39e58a03db1459c96bf2a926375013574ba58eefbd7b69aed6ebe1efb4d9500",
+      "image": "sha256:1e7ba7763ad05d4f4e25c05691df830dae157c40ae2a218b1bed28f0c438b101",
+      "pid": 0,
+      "started_at": "2026-11-24T18:33:44.863836817Z",
+      "running": false,
+      "exit_code": 137,
+      "restart_policy": {
+        "Name": "no",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki/ca.crt",
+          "source_sha256": "b60af72ef2633909165d0724693e50ab0ce83a1f7632d9840fe97d91dae37b0c"
+        }
+      ]
+    },
+    {
+      "service": "border_tool",
+      "id": "672058ee2b760768a8fbcfb6799b0ed19d31a57fe9dbb4cf4e57202c232aa6e8",
+      "image": "sha256:bba9d4a9c748632763cff38094df4a876d745f26f4411ebcec71a3c266c439af",
+      "pid": 0,
+      "started_at": "2026-11-24T18:33:43.837918361Z",
+      "running": false,
+      "exit_code": 137,
+      "restart_policy": {
+        "Name": "no",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki/ca.crt",
+          "source_sha256": "b60af72ef2633909165d0724693e50ab0ce83a1f7632d9840fe97d91dae37b0c"
+        }
+      ]
+    },
+    {
+      "service": "binarization_tool",
+      "id": "85a08fb9efef83258b1a01a43106981c267a8fd9bf8c336001f00e871e1d8304",
+      "image": "sha256:85cfd4ecb56f9c69b1cee35cc4a5ea06b9c19ef2237408f478bd9a62257c5059",
+      "pid": 0,
+      "started_at": "2026-11-24T18:33:43.949581359Z",
+      "running": false,
+      "exit_code": 137,
+      "restart_policy": {
+        "Name": "no",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki/ca.crt",
+          "source_sha256": "b60af72ef2633909165d0724693e50ab0ce83a1f7632d9840fe97d91dae37b0c"
+        }
+      ]
+    },
+    {
+      "service": "obj_ai_tool",
+      "id": "20940992c7d36bf6ff7b4c2b704713ff8dd4334f697f8c477963e3d81ad7e82d",
+      "image": "sha256:9ad57aceac673a132820c5588ef9ec5955ea42ce7941488b3df3f4dd76c96861",
+      "pid": 0,
+      "started_at": "2026-11-24T18:33:45.319292682Z",
+      "running": false,
+      "exit_code": 137,
+      "restart_policy": {
+        "Name": "no",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki/ca.crt",
+          "source_sha256": "b60af72ef2633909165d0724693e50ab0ce83a1f7632d9840fe97d91dae37b0c"
+        }
+      ]
+    },
+    {
+      "service": "brightness_tool",
+      "id": "4c5ad43f6af333d751d2c062884cc3eef21282139f821106314dfb264dd8ae9e",
+      "image": "sha256:21e6b410453469235c25e0619d74e80813d18d0a58542d0d0e1c712eb94d0649",
+      "pid": 0,
+      "started_at": "2026-11-24T18:33:45.024109204Z",
+      "running": false,
+      "exit_code": 137,
+      "restart_policy": {
+        "Name": "no",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki/ca.crt",
+          "source_sha256": "b60af72ef2633909165d0724693e50ab0ce83a1f7632d9840fe97d91dae37b0c"
+        }
+      ]
+    },
+    {
+      "service": "resize_tool",
+      "id": "5510bbb334ef22791ad6e02a460960ff2a77081d89104a5604ed9307836dec2f",
+      "image": "sha256:dc31a712123d3120b1e57ee3c891f7ed84bf4006f43defcc127f36e55d0bcb48",
+      "pid": 0,
+      "started_at": "2026-11-24T18:33:45.949519589Z",
+      "running": false,
+      "exit_code": 137,
+      "restart_policy": {
+        "Name": "no",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki/ca.crt",
+          "source_sha256": "b60af72ef2633909165d0724693e50ab0ce83a1f7632d9840fe97d91dae37b0c"
+        }
+      ]
+    },
+    {
+      "service": "contrast_tool",
+      "id": "2db6dfe216183004930c03771d94557d3a5a288deedfa763e30d667bc24a2635",
+      "image": "sha256:a5ab2de0d721f61a8bc31b1b0e7dcad37b629caa94d4cb690b771a4a4a243fdf",
+      "pid": 0,
+      "started_at": "2026-11-24T18:33:43.540307428Z",
+      "running": false,
+      "exit_code": 137,
+      "restart_policy": {
+        "Name": "no",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki/ca.crt",
+          "source_sha256": "b60af72ef2633909165d0724693e50ab0ce83a1f7632d9840fe97d91dae37b0c"
+        }
+      ]
+    },
+    {
+      "service": "cut_ai_tool",
+      "id": "26437d208263f83bf2a04df204dbce71457fee5794fca4fb28fd9d2e160428e7",
+      "image": "sha256:643fb40b4abcf681f5372f5b243a724c8f1a4c696abd64cf5c1be94168200012",
+      "pid": 0,
+      "started_at": "2026-11-24T18:33:43.3825085Z",
+      "running": false,
+      "exit_code": 137,
+      "restart_policy": {
+        "Name": "no",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki/ca.crt",
+          "source_sha256": "b60af72ef2633909165d0724693e50ab0ce83a1f7632d9840fe97d91dae37b0c"
+        }
+      ]
+    },
+    {
+      "service": "ws_gateway",
+      "id": "015357cba1ab744fff54920b76e9c4dba58c855d8e78db95e870706948a265e9",
+      "image": "sha256:9c5acb25cc330152a6e44ad4261e8defa711545d7291bf136b1a075a4943c660",
+      "pid": 0,
+      "started_at": "2026-11-24T18:33:43.710149431Z",
+      "running": false,
+      "exit_code": 137,
+      "restart_policy": {
+        "Name": "no",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki",
+          "source_sha256": "4e24b7f0452f01283d9543fa13ebd2d30037638ad46c209f3e66226933bb8613"
+        }
+      ]
+    },
+    {
+      "service": "cut_tool",
+      "id": "f4fc1a0c521c34b0eaaa3eb73add3e1a9d6158692446b0e5da638033bb2f3332",
+      "image": "sha256:68d8ef35c853ea32c3220e4237bfd0cea6fb5f85b332041501e9c4e728e63326",
+      "pid": 0,
+      "started_at": "2026-11-24T18:33:45.451631369Z",
+      "running": false,
+      "exit_code": 137,
+      "restart_policy": {
+        "Name": "no",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki/ca.crt",
+          "source_sha256": "b60af72ef2633909165d0724693e50ab0ce83a1f7632d9840fe97d91dae37b0c"
+        }
+      ]
+    },
+    {
+      "service": "bg_remove_ai_tool",
+      "id": "f95230d6962b0f25b66558f69427b64a71bc4dc58a6faf03a1ac2ebde65151e1",
+      "image": "sha256:32124ee2c9776c43b3f75ad663329808d3dc01c74a778d452c88bd1d0d5b50ad",
+      "pid": 0,
+      "started_at": "2026-11-24T18:33:44.2113741Z",
+      "running": false,
+      "exit_code": 137,
+      "restart_policy": {
+        "Name": "no",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki/ca.crt",
+          "source_sha256": "b60af72ef2633909165d0724693e50ab0ce83a1f7632d9840fe97d91dae37b0c"
+        }
+      ]
+    },
+    {
+      "service": "users",
+      "id": "0eeddae6327fa5eb22dc719e9ff09d474dbbc657447953957265df863ab539e5",
+      "image": "sha256:e342ad7ab1bee06ca0fefe3f688ca87d7993c5155e2bfe4594864b61f6bebdb9",
+      "pid": 0,
+      "started_at": "2026-11-24T18:33:13.330965374Z",
+      "running": false,
+      "exit_code": 137,
+      "restart_policy": {
+        "Name": "no",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki",
+          "source_sha256": "fed04c584118ef2f065e0889211f1dc1140c41c36d11f193d9583fa19cb1e045"
+        }
+      ]
+    },
+    {
+      "service": "s3-bootstrap",
+      "id": "3f8bc9b7bf1aa4cb310adc86af38a22307a0d47f11d11b01b23a728d45749001",
+      "image": "sha256:d46de30de68e273d8598e1d684809af75c51076e496d39ea9bc09076ca53e431",
+      "pid": 0,
+      "started_at": "2026-11-24T18:33:13.591667727Z",
+      "running": false,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "no",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki/ca.crt",
+          "source_sha256": "46b0a77dd6e40a09a049b6ca1373a4db709bdb63784b3e413f21303f9247d65f"
+        }
+      ]
+    },
+    {
+      "service": "users_mongoDB",
+      "id": "1132caa11f83b1fee9ac6e011b6df01c773b3c3711e7363b8d749a6ef263207d",
+      "image": "sha256:0010f63d26952bd3960fac5513c64a1cf7d6299f31fa7b54ac1b36633ee04333",
+      "pid": 0,
+      "started_at": "2026-11-24T18:33:12.929455694Z",
+      "running": false,
+      "exit_code": 137,
+      "restart_policy": {
+        "Name": "no",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki",
+          "source_sha256": "abaf32810b57a2858dd2277bddfb54a64ef3b8b94a099ab3451980c8788358dd"
+        }
+      ]
+    },
+    {
+      "service": "subscriptions_mongoDB",
+      "id": "fdecb29f8581d0fecb3ac551b7ccb113c423e225f48ba36d1e7bd3902313ebb0",
+      "image": "sha256:0010f63d26952bd3960fac5513c64a1cf7d6299f31fa7b54ac1b36633ee04333",
+      "pid": 0,
+      "started_at": "2026-11-24T18:33:13.063971164Z",
+      "running": false,
+      "exit_code": 137,
+      "restart_policy": {
+        "Name": "no",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki",
+          "source_sha256": "8ba800d9ee9fe4f21515decc4e349baa10be22276c9e3a272052234678a40186"
+        }
+      ]
+    },
+    {
+      "service": "projects_mongoDB",
+      "id": "9342c062f93869784a642f0c2f5cd9a5d6677102bdfc9aa8561f81108d7746e3",
+      "image": "sha256:0010f63d26952bd3960fac5513c64a1cf7d6299f31fa7b54ac1b36633ee04333",
+      "pid": 0,
+      "started_at": "2026-11-24T18:33:12.76020317Z",
+      "running": false,
+      "exit_code": 137,
+      "restart_policy": {
+        "Name": "no",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki",
+          "source_sha256": "a4c7573b3db5a86cc29b0696cb10d962cd06e06930966cda23332bc5f209b4d5"
+        }
+      ]
+    },
+    {
+      "service": "rabbitmq",
+      "id": "9f5f6070f34b7dc43be4728e5e636165205087f31db133079027e1805965179e",
+      "image": "sha256:9887bbea3ca1594eb1340b3cb8ce3a27b7e367ccb6d8bd2c246e389d3d1bf049",
+      "pid": 0,
+      "started_at": "2026-11-24T18:33:12.638765746Z",
+      "running": false,
+      "exit_code": 137,
+      "restart_policy": {
+        "Name": "no",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki",
+          "source_sha256": "9d12066b3f5b499444411cb38ec0a9206bd15029cb8124173db9f473acc270b8"
+        }
+      ]
+    },
+    {
+      "service": "seaweedfs",
+      "id": "9298a6fd8ceb22b4b2826bb18ef37c216546f722ffc7b54b0ae1c5f0cdee309d",
+      "image": "sha256:31d61f5e8771cbd5993912cd051be0c7bcdc207faaa12c50e1a3b8371631c927",
+      "pid": 0,
+      "started_at": "2026-11-24T18:33:13.201587886Z",
+      "running": false,
+      "exit_code": 137,
+      "restart_policy": {
+        "Name": "no",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki",
+          "source_sha256": "412a84d078962739d70f2d0cf28917568c1e2d7d81ed17904f1543b22d12cfd5"
+        }
+      ]
+    },
+    {
+      "service": "generative-mock",
+      "id": "0fcf3ec8de5d9e02b42afeb716af0cfc7458321a76efcaac38c43bc773fecd00",
+      "image": "sha256:8146819cca31a7f7aa0428bdd54e36f4892d3d84dde5f30c2a7539f7170a07ba",
+      "pid": 0,
+      "started_at": "2026-11-24T18:33:12.516493424Z",
+      "running": false,
+      "exit_code": 137,
+      "restart_policy": {
+        "Name": "no",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki",
+          "source_sha256": "c39108def285d8dac514a1d8912655d5d5df8c2597672eb7108d74b139afe21d"
+        }
+      ]
+    },
+    {
+      "service": "frontend",
+      "id": "431415a0ce825a48db5c4de7526d1201d0bfcdd5f02abae4e60af3dc39a85eea",
+      "image": "sha256:086d7f20cc9ca22be1653f4eaf5a4d37e18d5c6437fb797561e4a578e3c094c4",
+      "pid": 0,
+      "started_at": "2026-11-24T18:33:12.386845674Z",
+      "running": false,
+      "exit_code": 137,
+      "restart_policy": {
+        "Name": "no",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki",
+          "source_sha256": "3fc27becdfd7d8603a3243ac7c1bac60ed5c39a0f7f1c962c96e041df8fa8f34"
+        }
+      ]
+    }
+  ],
+  "participants_loaded": [
+    {
+      "service": "nginx",
+      "id": "e55f423287ac3a1e62f56bdbcbcd640db51530b11d3f02d5a3c9e114b38fa805",
+      "image": "sha256:14fb90841494b84ec6f9ea2de7562ae28ccdb6e74c660d48f7b565c389ffe590",
+      "pid": 127611,
+      "started_at": "2026-11-24T18:38:06.070178436Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "no",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.33"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/etc/nginx/pki",
+          "source_sha256": "6252e1545fccf3b3e52fff110e15ddac7a8aa7739702a1fbbb152ef9bdfd1e63"
+        }
+      ]
+    },
+    {
+      "service": "api_gateway",
+      "id": "f934f856901be58c78fa7c0ad5a758f2cc38f4d88bf007b2d04f9ae267201e01",
+      "image": "sha256:4323b6f198e10901776f4becfb3fb5131dfde86b242f23ab633eeb0af800022b",
+      "pid": 127489,
+      "started_at": "2026-11-24T18:38:03.440332144Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "on-failure",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.32"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki",
+          "source_sha256": "15b986727850b805c6634fe967d085dbdd6e8d426356fe2f59b12c0dc44185b7"
+        }
+      ]
+    },
+    {
+      "service": "img_storage",
+      "id": "9a3d5a763947022135f9e5c8c7dae17b1f023501ef2d1545776d18f530284f06",
+      "image": "sha256:ecdc83a0df46eb4aee401d3b87cedec3e8487c05d41563827cc13a80321da852",
+      "pid": 125182,
+      "started_at": "2026-11-24T18:37:39.220662758Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "on-failure",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.4"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki",
+          "source_sha256": "dcaad75071e0165b502d2eb902983b043664e9bbe10087b66f63a37ce5a83e0c"
+        }
+      ]
+    },
+    {
+      "service": "subscriptions",
+      "id": "98c9fb6d59f2ce952ba2298cc3d45cc81e2aaacd4a470f75d7eed338a11670c5",
+      "image": "sha256:fce84c34a434dcbce77328e67b0c442830456baa4afb7be9ecec107caedc450e",
+      "pid": 124627,
+      "started_at": "2026-11-24T18:37:27.660694822Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "on-failure",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.12"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki",
+          "source_sha256": "ecefd85f2e6849910e40143ddc1bb2204a9738589faaecf272cc0737c889dcf1"
+        }
+      ]
+    },
+    {
+      "service": "projects",
+      "id": "2154f0cf0667e86edcf8edcd1d545397bac52ec91cf886867cc0147ee14c074f",
+      "image": "sha256:7ba8631e37fb0d8d83b82dc2686c56ee8c139f4a92451f789eddde4686f0a4eb",
+      "pid": 127153,
+      "started_at": "2026-11-24T18:38:00.798118411Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "on-failure",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.29"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki",
+          "source_sha256": "df77e8cd295d00e07f9f1c75f0911d5cec782cf14aae387881d97250fc784d33"
+        }
+      ]
+    },
+    {
+      "service": "mongo-backup",
+      "id": "0af73132f03169cf2de2c5b1810fee204bb1d39cec72901ff6967a308cad2ee3",
+      "image": "sha256:0010f63d26952bd3960fac5513c64a1cf7d6299f31fa7b54ac1b36633ee04333",
+      "pid": 124516,
+      "started_at": "2026-11-24T18:37:27.537140748Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "on-failure",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.11"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki/ca.crt",
+          "source_sha256": "f92bd507ba4bfc617892605fd29f3787a2663cf4125b42c0d2edf17699325c72"
+        }
+      ]
+    },
+    {
+      "service": "text_ai_tool",
+      "id": "cc7f66ea0975b2cd7d999f62c7faa5544b1cc24451c484fb8cc8b70530ceab01",
+      "image": "sha256:65d166fdc6efab1532dc507cfc6602bc6aa7dda77c3533e1701e859702a7d1c3",
+      "pid": 126523,
+      "started_at": "2026-11-24T18:37:59.530177928Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "on-failure",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.21"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki/ca.crt",
+          "source_sha256": "b60af72ef2633909165d0724693e50ab0ce83a1f7632d9840fe97d91dae37b0c"
+        }
+      ]
+    },
+    {
+      "service": "brightness_tool",
+      "id": "831c57eb3899c4cd6f35676d43bb6b3a96048ac8b67999f117b08d918696a6d1",
+      "image": "sha256:21e6b410453469235c25e0619d74e80813d18d0a58542d0d0e1c712eb94d0649",
+      "pid": 126704,
+      "started_at": "2026-11-24T18:37:59.83822197Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "on-failure",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.23"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki/ca.crt",
+          "source_sha256": "b60af72ef2633909165d0724693e50ab0ce83a1f7632d9840fe97d91dae37b0c"
+        }
+      ]
+    },
+    {
+      "service": "rotate_tool",
+      "id": "bae69efe8deecfae2e92e274b37c389dd145689db03aec964839e1bcb80c85b0",
+      "image": "sha256:1e7ba7763ad05d4f4e25c05691df830dae157c40ae2a218b1bed28f0c438b101",
+      "pid": 126095,
+      "started_at": "2026-11-24T18:37:58.649204135Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "on-failure",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.15"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki/ca.crt",
+          "source_sha256": "b60af72ef2633909165d0724693e50ab0ce83a1f7632d9840fe97d91dae37b0c"
+        }
+      ]
+    },
+    {
+      "service": "saturation_tool",
+      "id": "096c3d223bb92ac1890a0ea2b3c37af1a5cc5807e61554a81fcc24ff19b4aa96",
+      "image": "sha256:74a896f4c1704de6188b1d639e7d1a00e8a0ca546bd4f2233d9ca4e88d66e3fe",
+      "pid": 127221,
+      "started_at": "2026-11-24T18:38:00.934877073Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "on-failure",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.30"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki/ca.crt",
+          "source_sha256": "b60af72ef2633909165d0724693e50ab0ce83a1f7632d9840fe97d91dae37b0c"
+        }
+      ]
+    },
+    {
+      "service": "video_tool",
+      "id": "0f54e36fe79c8c5a8d7f53f5c74a5e1164070419bd865e88053f3f3bf0bb268a",
+      "image": "sha256:319ecbbd1bec4a996a33da1626e4428adea81539a210dd09587008755f4f0f59",
+      "pid": 126154,
+      "started_at": "2026-11-24T18:37:58.82934212Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "on-failure",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.16"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki/ca.crt",
+          "source_sha256": "b60af72ef2633909165d0724693e50ab0ce83a1f7632d9840fe97d91dae37b0c"
+        }
+      ]
+    },
+    {
+      "service": "watermark_tool_ms",
+      "id": "f3a7ab888327125977702bb9f597462d66f74187bc19b3c978932e563f252fce",
+      "image": "sha256:f4e598cdd50f416ee2aea913e6d7b02546b65ae69d37a3e5af6c57461a3665b2",
+      "pid": 127296,
+      "started_at": "2026-11-24T18:38:01.070525963Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "always",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.31"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki/ca.crt",
+          "source_sha256": "b60af72ef2633909165d0724693e50ab0ce83a1f7632d9840fe97d91dae37b0c"
+        }
+      ]
+    },
+    {
+      "service": "border_tool",
+      "id": "f4e7403395a11e1354ae06dd0910ddb7a27e34339ddbed426035064bffbfe5e9",
+      "image": "sha256:bba9d4a9c748632763cff38094df4a876d745f26f4411ebcec71a3c266c439af",
+      "pid": 126408,
+      "started_at": "2026-11-24T18:37:59.241789858Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "on-failure",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.19"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki/ca.crt",
+          "source_sha256": "b60af72ef2633909165d0724693e50ab0ce83a1f7632d9840fe97d91dae37b0c"
+        }
+      ]
+    },
+    {
+      "service": "contrast_tool",
+      "id": "837b8a9cc4324a7b1565a321c6bc4ad222fe05a2ef5fc40319b31621e3a5f3a6",
+      "image": "sha256:a5ab2de0d721f61a8bc31b1b0e7dcad37b629caa94d4cb690b771a4a4a243fdf",
+      "pid": 125914,
+      "started_at": "2026-11-24T18:37:58.40886332Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "on-failure",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.13"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki/ca.crt",
+          "source_sha256": "b60af72ef2633909165d0724693e50ab0ce83a1f7632d9840fe97d91dae37b0c"
+        }
+      ]
+    },
+    {
+      "service": "resize_tool",
+      "id": "077f32e662717918ab87e25bd4fe3270237ccf2961a016dc2f4e3e17ce686d84",
+      "image": "sha256:dc31a712123d3120b1e57ee3c891f7ed84bf4006f43defcc127f36e55d0bcb48",
+      "pid": 126465,
+      "started_at": "2026-11-24T18:37:59.394417207Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "on-failure",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.20"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki/ca.crt",
+          "source_sha256": "b60af72ef2633909165d0724693e50ab0ce83a1f7632d9840fe97d91dae37b0c"
+        }
+      ]
+    },
+    {
+      "service": "obj_ai_tool",
+      "id": "2cb103d9ca980ec370aaa398c7258943ba8afc94023771bab2f7c6d2b911abaa",
+      "image": "sha256:9ad57aceac673a132820c5588ef9ec5955ea42ce7941488b3df3f4dd76c96861",
+      "pid": 126328,
+      "started_at": "2026-11-24T18:37:59.069127523Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "on-failure",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.18"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki/ca.crt",
+          "source_sha256": "b60af72ef2633909165d0724693e50ab0ce83a1f7632d9840fe97d91dae37b0c"
+        }
+      ]
+    },
+    {
+      "service": "expand_ai_tool",
+      "id": "62ff345dd3efd1200bab27c14750f5ee7e47de81edddbcbc09d5cfc5ca591485",
+      "image": "sha256:8832fb5c0bbb999553e418a4137715f7c8ff3a905e4d120dbdbcb5f58c98d628",
+      "pid": 126927,
+      "started_at": "2026-11-24T18:38:00.316907755Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "on-failure",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.26"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki",
+          "source_sha256": "a84b5f3796a011903259cb47053443d4e7d71a5576b69b743016f09add6b4e03"
+        }
+      ]
+    },
+    {
+      "service": "cut_ai_tool",
+      "id": "f953efe752ae980e694894c2a0043c4e641a0ace5212a2403cbce81976f651df",
+      "image": "sha256:643fb40b4abcf681f5372f5b243a724c8f1a4c696abd64cf5c1be94168200012",
+      "pid": 127008,
+      "started_at": "2026-11-24T18:38:00.501299782Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "on-failure",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.27"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki/ca.crt",
+          "source_sha256": "b60af72ef2633909165d0724693e50ab0ce83a1f7632d9840fe97d91dae37b0c"
+        }
+      ]
+    },
+    {
+      "service": "upgrade_ai_tool",
+      "id": "87568299055c44e969f754b203d57dc335d4950333b1200909f6344c66b3e394",
+      "image": "sha256:3635a3465c1b87c2b90dada81dca2a2d5e8868dc93d97837e0e491056c7b19e4",
+      "pid": 126013,
+      "started_at": "2026-11-24T18:37:58.529419248Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "on-failure",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.14"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki/ca.crt",
+          "source_sha256": "b60af72ef2633909165d0724693e50ab0ce83a1f7632d9840fe97d91dae37b0c"
+        }
+      ]
+    },
+    {
+      "service": "cut_tool",
+      "id": "124065a9ae00bcb4e34b653e01bd3e8e01031f4dafd079e2f43cb12229df6bed",
+      "image": "sha256:68d8ef35c853ea32c3220e4237bfd0cea6fb5f85b332041501e9c4e728e63326",
+      "pid": 126868,
+      "started_at": "2026-11-24T18:38:00.186467662Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "on-failure",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.25"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki/ca.crt",
+          "source_sha256": "b60af72ef2633909165d0724693e50ab0ce83a1f7632d9840fe97d91dae37b0c"
+        }
+      ]
+    },
+    {
+      "service": "bg_remove_ai_tool",
+      "id": "4e4bb76a0ad7fe5083b7fc7363ffa8de16ed23213773d447859c06a9451f2cf5",
+      "image": "sha256:32124ee2c9776c43b3f75ad663329808d3dc01c74a778d452c88bd1d0d5b50ad",
+      "pid": 126604,
+      "started_at": "2026-11-24T18:37:59.658957688Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "on-failure",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.22"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki/ca.crt",
+          "source_sha256": "b60af72ef2633909165d0724693e50ab0ce83a1f7632d9840fe97d91dae37b0c"
+        }
+      ]
+    },
+    {
+      "service": "binarization_tool",
+      "id": "6f5688e2aa66dcf50992fbdb292799e3080b1c745bf07c5df423d57f67787dff",
+      "image": "sha256:85cfd4ecb56f9c69b1cee35cc4a5ea06b9c19ef2237408f478bd9a62257c5059",
+      "pid": 126810,
+      "started_at": "2026-11-24T18:38:00.016230839Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "on-failure",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.24"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki/ca.crt",
+          "source_sha256": "b60af72ef2633909165d0724693e50ab0ce83a1f7632d9840fe97d91dae37b0c"
+        }
+      ]
+    },
+    {
+      "service": "people_ai_tool",
+      "id": "686d73b558629bb4a0d05d869c57565f16f8028a1be74930e0e87db9b57deb76",
+      "image": "sha256:2f88a8fec5d7e29fe96bb03e82d33dbbe1dbc0640e216bff26c22acbe349eacd",
+      "pid": 126214,
+      "started_at": "2026-11-24T18:37:58.953896981Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "on-failure",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.17"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki/ca.crt",
+          "source_sha256": "b60af72ef2633909165d0724693e50ab0ce83a1f7632d9840fe97d91dae37b0c"
+        }
+      ]
+    },
+    {
+      "service": "ws_gateway",
+      "id": "4e08e864ac41ab32d55634eab6293bb45c3e2d28cf5b6c15e46ca7ce15ddc92c",
+      "image": "sha256:9c5acb25cc330152a6e44ad4261e8defa711545d7291bf136b1a075a4943c660",
+      "pid": 127084,
+      "started_at": "2026-11-24T18:38:00.631255352Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "on-failure",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.28"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki",
+          "source_sha256": "4e24b7f0452f01283d9543fa13ebd2d30037638ad46c209f3e66226933bb8613"
+        }
+      ]
+    },
+    {
+      "service": "s3-bootstrap",
+      "id": "96d14d3382c33f6699ed64b910bef8ea86c87256269640bda236fb5c435ed0ba",
+      "image": "sha256:d46de30de68e273d8598e1d684809af75c51076e496d39ea9bc09076ca53e431",
+      "pid": 0,
+      "started_at": "2026-11-24T18:37:26.582643898Z",
+      "running": false,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "no",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki/ca.crt",
+          "source_sha256": "46b0a77dd6e40a09a049b6ca1373a4db709bdb63784b3e413f21303f9247d65f"
+        }
+      ]
+    },
+    {
+      "service": "users",
+      "id": "b3c1874e636d48525d906815262309227631c60ddb0624183bf622cf6619feed",
+      "image": "sha256:e342ad7ab1bee06ca0fefe3f688ca87d7993c5155e2bfe4594864b61f6bebdb9",
+      "pid": 124368,
+      "started_at": "2026-11-24T18:37:27.401251892Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "on-failure",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.10"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki",
+          "source_sha256": "fed04c584118ef2f065e0889211f1dc1140c41c36d11f193d9583fa19cb1e045"
+        }
+      ]
+    },
+    {
+      "service": "projects_mongoDB",
+      "id": "4128084ac22984257747ec56312acf3df1e8ecb57073875c740ef5391038e891",
+      "image": "sha256:0010f63d26952bd3960fac5513c64a1cf7d6299f31fa7b54ac1b36633ee04333",
+      "pid": 124104,
+      "started_at": "2026-11-24T18:37:27.073381232Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "on-failure",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.8"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki",
+          "source_sha256": "a4c7573b3db5a86cc29b0696cb10d962cd06e06930966cda23332bc5f209b4d5"
+        }
+      ]
+    },
+    {
+      "service": "users_mongoDB",
+      "id": "d5afc5264aef7ad823a1a8ea344e3e479784de8f8ed8c6ae16bd79e64ff7b578",
+      "image": "sha256:0010f63d26952bd3960fac5513c64a1cf7d6299f31fa7b54ac1b36633ee04333",
+      "pid": 124019,
+      "started_at": "2026-11-24T18:37:26.961084403Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "on-failure",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.7"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki",
+          "source_sha256": "abaf32810b57a2858dd2277bddfb54a64ef3b8b94a099ab3451980c8788358dd"
+        }
+      ]
+    },
+    {
+      "service": "subscriptions_mongoDB",
+      "id": "e9671feb231165ae480b4403dc5266cf42716f6b58aa9bb1837b6e5dc9b8f9d2",
+      "image": "sha256:0010f63d26952bd3960fac5513c64a1cf7d6299f31fa7b54ac1b36633ee04333",
+      "pid": 123565,
+      "started_at": "2026-11-24T18:37:26.33994122Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "on-failure",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.2"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki",
+          "source_sha256": "8ba800d9ee9fe4f21515decc4e349baa10be22276c9e3a272052234678a40186"
+        }
+      ]
+    },
+    {
+      "service": "seaweedfs",
+      "id": "b609dd26821c0212a2b4b4f2277c84c895121e03cdae1a1a7c40c2a48aa363d8",
+      "image": "sha256:31d61f5e8771cbd5993912cd051be0c7bcdc207faaa12c50e1a3b8371631c927",
+      "pid": 123694,
+      "started_at": "2026-11-24T18:37:26.458788603Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "on-failure",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.3"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki",
+          "source_sha256": "412a84d078962739d70f2d0cf28917568c1e2d7d81ed17904f1543b22d12cfd5"
+        }
+      ]
+    },
+    {
+      "service": "rabbitmq",
+      "id": "829b4e1c1daefd1bc9a2826dab4a2af6cf3e1c06eb0a9582542daa12e922f7d1",
+      "image": "sha256:9887bbea3ca1594eb1340b3cb8ce3a27b7e367ccb6d8bd2c246e389d3d1bf049",
+      "pid": 124254,
+      "started_at": "2026-11-24T18:37:27.255373571Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "on-failure",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.9"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki",
+          "source_sha256": "9d12066b3f5b499444411cb38ec0a9206bd15029cb8124173db9f473acc270b8"
+        }
+      ]
+    },
+    {
+      "service": "frontend",
+      "id": "1555042f9fcf8d331daeb4c1c553a0044a7288bad3a3451496b0dd89f2f5d7d3",
+      "image": "sha256:086d7f20cc9ca22be1653f4eaf5a4d37e18d5c6437fb797561e4a578e3c094c4",
+      "pid": 123862,
+      "started_at": "2026-11-24T18:37:26.713366437Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "on-failure",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.5"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki",
+          "source_sha256": "3fc27becdfd7d8603a3243ac7c1bac60ed5c39a0f7f1c962c96e041df8fa8f34"
+        }
+      ]
+    },
+    {
+      "service": "generative-mock",
+      "id": "9b1c3dbbfc8270ff7bee914e5f14b908a06ec659504bcc6e29c66f09a427ee25",
+      "image": "sha256:8146819cca31a7f7aa0428bdd54e36f4892d3d84dde5f30c2a7539f7170a07ba",
+      "pid": 123960,
+      "started_at": "2026-11-24T18:37:26.836542549Z",
+      "running": true,
+      "exit_code": 0,
+      "restart_policy": {
+        "Name": "on-failure",
+        "MaximumRetryCount": 0
+      },
+      "addresses": [
+        "192.168.16.6"
+      ],
+      "pki_mounts": [
+        {
+          "destination": "/run/secrets/pki",
+          "source_sha256": "c39108def285d8dac514a1d8912655d5d5df8c2597672eb7108d74b139afe21d"
+        }
+      ]
+    }
+  ],
+  "certificates_before": {
+    "users_mongoDB": {
+      "certificate": "ed0b805b2e11d27686fc98b10366560d277df43a6f9deae676cf36d99514547f",
+      "ca": "e2f99d7067c250b560520f8b45a9791e967f0460185379f6f605c89b97507f70",
+      "public_profile": "serial=B98F915648E99658DCFEFF65F6342309\nsubject=CN=users_mongoDB,O=PictuRAS\nissuer=CN=PictuRAS installation CA 20261124182904,O=PictuRAS\nnotBefore=Nov 24 18:29:04 2026 GMT\nnotAfter=Dec 24 18:29:04 2026 GMT\nX509v3 Extended Key Usage: \n    TLS Web Server Authentication\nX509v3 Subject Alternative Name: \n    DNS:users_mongoDB"
+    },
+    "ws_gateway": {
+      "certificate": "4f34149831ab2766dcd9a01b1f6adc097adc70a7c445c3171483e1dc4d65fb58",
+      "ca": "e2f99d7067c250b560520f8b45a9791e967f0460185379f6f605c89b97507f70",
+      "public_profile": "serial=0CA11F8520CF8CEC394EEA38AD1B75B8\nsubject=CN=ws_gateway,O=PictuRAS\nissuer=CN=PictuRAS installation CA 20261124182904,O=PictuRAS\nnotBefore=Nov 24 18:29:04 2026 GMT\nnotAfter=Dec 24 18:29:04 2026 GMT\nX509v3 Extended Key Usage: \n    TLS Web Server Authentication, TLS Web Client Authentication\nX509v3 Subject Alternative Name: \n    DNS:ws_gateway"
+    },
+    "nginx": {
+      "certificate": "798696c5a07f747c393f62dfaeb7a7ee6f23915e60b1e6ed5cd58d112b44cc84",
+      "ca": "e2f99d7067c250b560520f8b45a9791e967f0460185379f6f605c89b97507f70",
+      "public_profile": "serial=724FC7FB6B6EBFA3A939077D1EA042B3\nsubject=CN=nginx,O=PictuRAS\nissuer=CN=PictuRAS installation CA 20261124182904,O=PictuRAS\nnotBefore=Nov 24 18:29:04 2026 GMT\nnotAfter=Dec 24 18:29:04 2026 GMT\nX509v3 Extended Key Usage: \n    TLS Web Server Authentication, TLS Web Client Authentication\nX509v3 Subject Alternative Name: \n    DNS:nginx, DNS:localhost, IP Address:127.0.0.1"
+    },
+    "projects": {
+      "certificate": "6b4352d92953e0cb0b9a456a04032856261d5dac30d6729775c7336ff0ba81bd",
+      "ca": "e2f99d7067c250b560520f8b45a9791e967f0460185379f6f605c89b97507f70",
+      "public_profile": "serial=CFE3B88D84B34CC77805ED29ABBA197F\nsubject=CN=projects,O=PictuRAS\nissuer=CN=PictuRAS installation CA 20261124182904,O=PictuRAS\nnotBefore=Nov 24 18:29:04 2026 GMT\nnotAfter=Dec 24 18:29:04 2026 GMT\nX509v3 Extended Key Usage: \n    TLS Web Server Authentication, TLS Web Client Authentication\nX509v3 Subject Alternative Name: \n    DNS:projects"
+    },
+    "generative-mock": {
+      "certificate": "505f7ff00cbb2ef4884fb35de2b62d24c143a4f84f90bcac7632b9f54727a643",
+      "ca": "e2f99d7067c250b560520f8b45a9791e967f0460185379f6f605c89b97507f70",
+      "public_profile": "serial=8AE6EAC6E0CAF5F3FDEF2D9E9E5FE6A6\nsubject=CN=generative-mock,O=PictuRAS\nissuer=CN=PictuRAS installation CA 20261124182904,O=PictuRAS\nnotBefore=Nov 24 18:29:05 2026 GMT\nnotAfter=Dec 24 18:29:05 2026 GMT\nX509v3 Extended Key Usage: \n    TLS Web Server Authentication, TLS Web Client Authentication\nX509v3 Subject Alternative Name: \n    DNS:generative-mock"
+    },
+    "api_gateway": {
+      "certificate": "a62854d0e5cdbc7afe4bab99656d1c2848ca73b3795afe0ddd3fff33b48a6069",
+      "ca": "e2f99d7067c250b560520f8b45a9791e967f0460185379f6f605c89b97507f70",
+      "public_profile": "serial=799F5A6CAD6E80E271BEB69DC791CA16\nsubject=CN=api_gateway,O=PictuRAS\nissuer=CN=PictuRAS installation CA 20261124182904,O=PictuRAS\nnotBefore=Nov 24 18:29:04 2026 GMT\nnotAfter=Dec 24 18:29:04 2026 GMT\nX509v3 Extended Key Usage: \n    TLS Web Server Authentication, TLS Web Client Authentication\nX509v3 Subject Alternative Name: \n    DNS:api_gateway"
+    },
+    "subscriptions_mongoDB": {
+      "certificate": "f1d5f2b61cbf2498a40ab370c45fa844b43b415563b1d968677bb7b2bfce9233",
+      "ca": "e2f99d7067c250b560520f8b45a9791e967f0460185379f6f605c89b97507f70",
+      "public_profile": "serial=CCB1FF4493F9ABD978B14772BB550E5B\nsubject=CN=subscriptions_mongoDB,O=PictuRAS\nissuer=CN=PictuRAS installation CA 20261124182904,O=PictuRAS\nnotBefore=Nov 24 18:29:05 2026 GMT\nnotAfter=Dec 24 18:29:05 2026 GMT\nX509v3 Extended Key Usage: \n    TLS Web Server Authentication\nX509v3 Subject Alternative Name: \n    DNS:subscriptions_mongoDB"
+    },
+    "seaweedfs": {
+      "certificate": "ac81d6ad7ba5ec01e04e83ffe00ac6eb23230951d4a9dfb9865597dcea4b12a8",
+      "ca": "e2f99d7067c250b560520f8b45a9791e967f0460185379f6f605c89b97507f70",
+      "public_profile": "serial=2654E5C319BA13667D5B469492481F63\nsubject=CN=seaweedfs,O=PictuRAS\nissuer=CN=PictuRAS installation CA 20261124182904,O=PictuRAS\nnotBefore=Nov 24 18:29:04 2026 GMT\nnotAfter=Dec 24 18:29:04 2026 GMT\nX509v3 Extended Key Usage: \n    TLS Web Server Authentication, TLS Web Client Authentication\nX509v3 Subject Alternative Name: \n    DNS:seaweedfs, DNS:localhost"
+    },
+    "projects_mongoDB": {
+      "certificate": "0fa426db4af948c4b15ac01c15bc70da7315a95006e37b1e273e969f66152ee7",
+      "ca": "e2f99d7067c250b560520f8b45a9791e967f0460185379f6f605c89b97507f70",
+      "public_profile": "serial=43D211676918F2587AF123109696C6CD\nsubject=CN=projects_mongoDB,O=PictuRAS\nissuer=CN=PictuRAS installation CA 20261124182904,O=PictuRAS\nnotBefore=Nov 24 18:29:04 2026 GMT\nnotAfter=Dec 24 18:29:04 2026 GMT\nX509v3 Extended Key Usage: \n    TLS Web Server Authentication\nX509v3 Subject Alternative Name: \n    DNS:projects_mongoDB"
+    },
+    "users": {
+      "certificate": "93d9ff08b3b1afd9063f198d3bf9b0dc0c7690df24917439b37543571839c8b8",
+      "ca": "e2f99d7067c250b560520f8b45a9791e967f0460185379f6f605c89b97507f70",
+      "public_profile": "serial=6562D277172FF233DBFD20A36BC58451\nsubject=CN=users,O=PictuRAS\nissuer=CN=PictuRAS installation CA 20261124182904,O=PictuRAS\nnotBefore=Nov 24 18:29:04 2026 GMT\nnotAfter=Dec 24 18:29:04 2026 GMT\nX509v3 Extended Key Usage: \n    TLS Web Server Authentication, TLS Web Client Authentication\nX509v3 Subject Alternative Name: \n    DNS:users"
+    },
+    "subscriptions": {
+      "certificate": "28f361df20197e265e0340c0880169e7292e0cc5e29cb5e6b45be45f5ca356e5",
+      "ca": "e2f99d7067c250b560520f8b45a9791e967f0460185379f6f605c89b97507f70",
+      "public_profile": "serial=3B4069DA29976F240DC9088F0519DE0E\nsubject=CN=subscriptions,O=PictuRAS\nissuer=CN=PictuRAS installation CA 20261124182904,O=PictuRAS\nnotBefore=Nov 24 18:29:04 2026 GMT\nnotAfter=Dec 24 18:29:04 2026 GMT\nX509v3 Extended Key Usage: \n    TLS Web Server Authentication, TLS Web Client Authentication\nX509v3 Subject Alternative Name: \n    DNS:subscriptions"
+    },
+    "expand_ai_tool": {
+      "certificate": "4ec09d5430166278209ed23b43510f527056194673ed59d01aaf9eac2babedcf",
+      "ca": "e2f99d7067c250b560520f8b45a9791e967f0460185379f6f605c89b97507f70",
+      "public_profile": "serial=950B9850FD43A6676C7EDA17EAA23E24\nsubject=CN=expand_ai_tool,O=PictuRAS\nissuer=CN=PictuRAS installation CA 20261124182904,O=PictuRAS\nnotBefore=Nov 24 18:29:05 2026 GMT\nnotAfter=Dec 24 18:29:05 2026 GMT\nX509v3 Extended Key Usage: \n    TLS Web Client Authentication\nX509v3 Subject Alternative Name: \n    DNS:expand_ai_tool"
+    },
+    "frontend": {
+      "certificate": "39cbdc7f55eefb6d800b5aef42f11f9deee00504d39f376b5442257833725d1b",
+      "ca": "e2f99d7067c250b560520f8b45a9791e967f0460185379f6f605c89b97507f70",
+      "public_profile": "serial=D90305A909F2F8D8BF62A492EB91F1B3\nsubject=CN=frontend,O=PictuRAS\nissuer=CN=PictuRAS installation CA 20261124182904,O=PictuRAS\nnotBefore=Nov 24 18:29:04 2026 GMT\nnotAfter=Dec 24 18:29:04 2026 GMT\nX509v3 Extended Key Usage: \n    TLS Web Server Authentication, TLS Web Client Authentication\nX509v3 Subject Alternative Name: \n    DNS:frontend"
+    },
+    "img_storage": {
+      "certificate": "ab8753c75d2e2837fa26e7bae6003cf07267e35b5d8c86788f5468e91e366b1d",
+      "ca": "e2f99d7067c250b560520f8b45a9791e967f0460185379f6f605c89b97507f70",
+      "public_profile": "serial=28A562BCC61821B004A88E9C45F6A94C\nsubject=CN=img_storage,O=PictuRAS\nissuer=CN=PictuRAS installation CA 20261124182904,O=PictuRAS\nnotBefore=Nov 24 18:29:04 2026 GMT\nnotAfter=Dec 24 18:29:04 2026 GMT\nX509v3 Extended Key Usage: \n    TLS Web Server Authentication, TLS Web Client Authentication\nX509v3 Subject Alternative Name: \n    DNS:img_storage"
+    },
+    "rabbitmq": {
+      "certificate": "9b822464166fdfe116a7c2987cec90b0e3e1d4930b42849174b8da8211fc9a43",
+      "ca": "e2f99d7067c250b560520f8b45a9791e967f0460185379f6f605c89b97507f70",
+      "public_profile": "serial=7539768AC1914654CB5023F38F5140F1\nsubject=CN=rabbitmq,O=PictuRAS\nissuer=CN=PictuRAS installation CA 20261124182904,O=PictuRAS\nnotBefore=Nov 24 18:29:04 2026 GMT\nnotAfter=Dec 24 18:29:04 2026 GMT\nX509v3 Extended Key Usage: \n    TLS Web Server Authentication\nX509v3 Subject Alternative Name: \n    DNS:rabbitmq"
+    }
+  },
+  "certificates_expected": {
+    "users_mongoDB": {
+      "certificate": "53dc5aad694b77519bae60a4755654a16b94ea80eb546c4ac50bd54b045673c0",
+      "ca": "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b",
+      "public_profile": "serial=09430097D2E10DCBB8ACD375F863D7D0\nsubject=CN=users_mongoDB,O=PictuRAS\nissuer=CN=PictuRAS installation CA 20261124183601,O=PictuRAS\nnotBefore=Nov 24 18:36:02 2026 GMT\nnotAfter=Dec 24 18:36:02 2026 GMT\nX509v3 Extended Key Usage: \n    TLS Web Server Authentication\nX509v3 Subject Alternative Name: \n    DNS:users_mongoDB"
+    },
+    "ws_gateway": {
+      "certificate": "436bc554e9525875743c6ed4bf30db9557bbacef656bdc0036c8bc0875cd8edf",
+      "ca": "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b",
+      "public_profile": "serial=6200D31A21817C969FFABB77A0B68784\nsubject=CN=ws_gateway,O=PictuRAS\nissuer=CN=PictuRAS installation CA 20261124183601,O=PictuRAS\nnotBefore=Nov 24 18:36:02 2026 GMT\nnotAfter=Dec 24 18:36:02 2026 GMT\nX509v3 Extended Key Usage: \n    TLS Web Server Authentication, TLS Web Client Authentication\nX509v3 Subject Alternative Name: \n    DNS:ws_gateway"
+    },
+    "nginx": {
+      "certificate": "cf9d10eac6162418fdae5184b1d0441c2bad7f58ad1b74506e6be737b6b0baeb",
+      "ca": "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b",
+      "public_profile": "serial=86F232792422430ED18E59FFC5E4CA58\nsubject=CN=nginx,O=PictuRAS\nissuer=CN=PictuRAS installation CA 20261124183601,O=PictuRAS\nnotBefore=Nov 24 18:36:01 2026 GMT\nnotAfter=Dec 24 18:36:01 2026 GMT\nX509v3 Extended Key Usage: \n    TLS Web Server Authentication, TLS Web Client Authentication\nX509v3 Subject Alternative Name: \n    DNS:nginx, DNS:localhost, IP Address:127.0.0.1"
+    },
+    "projects": {
+      "certificate": "7bc9205fbbfe909f34a1344c898e88f9fdb3f0095c64ba186a51998fac408a8e",
+      "ca": "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b",
+      "public_profile": "serial=FE3061EA499AC8A91F4A53410D648C3D\nsubject=CN=projects,O=PictuRAS\nissuer=CN=PictuRAS installation CA 20261124183601,O=PictuRAS\nnotBefore=Nov 24 18:36:02 2026 GMT\nnotAfter=Dec 24 18:36:02 2026 GMT\nX509v3 Extended Key Usage: \n    TLS Web Server Authentication, TLS Web Client Authentication\nX509v3 Subject Alternative Name: \n    DNS:projects"
+    },
+    "generative-mock": {
+      "certificate": "7bdb1ee46fc9e15274bb5c83e159760075c7b470354acd402b6c2f8d9c4d0b33",
+      "ca": "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b",
+      "public_profile": "serial=DF561F807F438C1C58426949286DE256\nsubject=CN=generative-mock,O=PictuRAS\nissuer=CN=PictuRAS installation CA 20261124183601,O=PictuRAS\nnotBefore=Nov 24 18:36:02 2026 GMT\nnotAfter=Dec 24 18:36:02 2026 GMT\nX509v3 Extended Key Usage: \n    TLS Web Server Authentication, TLS Web Client Authentication\nX509v3 Subject Alternative Name: \n    DNS:generative-mock"
+    },
+    "api_gateway": {
+      "certificate": "6653fc8bda897122c804dd3ffc4770cda68724131624448126483518103eab45",
+      "ca": "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b",
+      "public_profile": "serial=2A91AEE6FA82DB99A50E7EC54068BDD1\nsubject=CN=api_gateway,O=PictuRAS\nissuer=CN=PictuRAS installation CA 20261124183601,O=PictuRAS\nnotBefore=Nov 24 18:36:02 2026 GMT\nnotAfter=Dec 24 18:36:02 2026 GMT\nX509v3 Extended Key Usage: \n    TLS Web Server Authentication, TLS Web Client Authentication\nX509v3 Subject Alternative Name: \n    DNS:api_gateway"
+    },
+    "subscriptions_mongoDB": {
+      "certificate": "b86bea5ea60d1e417aa591b574a3d5c06ebc036c4393cc89e5caa59da9297fd7",
+      "ca": "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b",
+      "public_profile": "serial=9E900AF0FBB01439BDC4620BC9545D39\nsubject=CN=subscriptions_mongoDB,O=PictuRAS\nissuer=CN=PictuRAS installation CA 20261124183601,O=PictuRAS\nnotBefore=Nov 24 18:36:02 2026 GMT\nnotAfter=Dec 24 18:36:02 2026 GMT\nX509v3 Extended Key Usage: \n    TLS Web Server Authentication\nX509v3 Subject Alternative Name: \n    DNS:subscriptions_mongoDB"
+    },
+    "seaweedfs": {
+      "certificate": "9058033bf8fc02f07a3bd3ea4f85f75f8375216d25ff2c2b07111ae94fb51808",
+      "ca": "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b",
+      "public_profile": "serial=0F6E98B48CBC3AE01E350F965A5C2FC4\nsubject=CN=seaweedfs,O=PictuRAS\nissuer=CN=PictuRAS installation CA 20261124183601,O=PictuRAS\nnotBefore=Nov 24 18:36:02 2026 GMT\nnotAfter=Dec 24 18:36:02 2026 GMT\nX509v3 Extended Key Usage: \n    TLS Web Server Authentication, TLS Web Client Authentication\nX509v3 Subject Alternative Name: \n    DNS:seaweedfs, DNS:localhost"
+    },
+    "projects_mongoDB": {
+      "certificate": "2d5cb4e7f3064ddc3f512d7c20a8c2506c245b47f783f2ffb514afbfc5ba0f48",
+      "ca": "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b",
+      "public_profile": "serial=7910A80371DA3A51666FC5321EA75C30\nsubject=CN=projects_mongoDB,O=PictuRAS\nissuer=CN=PictuRAS installation CA 20261124183601,O=PictuRAS\nnotBefore=Nov 24 18:36:02 2026 GMT\nnotAfter=Dec 24 18:36:02 2026 GMT\nX509v3 Extended Key Usage: \n    TLS Web Server Authentication\nX509v3 Subject Alternative Name: \n    DNS:projects_mongoDB"
+    },
+    "users": {
+      "certificate": "a79d542c9aafc17cf916a7a7a088ddef52611dddcda3c065aa3e9a1cb6f32db8",
+      "ca": "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b",
+      "public_profile": "serial=E17FDDEC7B4CEF60D9C62F2B1E6911F3\nsubject=CN=users,O=PictuRAS\nissuer=CN=PictuRAS installation CA 20261124183601,O=PictuRAS\nnotBefore=Nov 24 18:36:02 2026 GMT\nnotAfter=Dec 24 18:36:02 2026 GMT\nX509v3 Extended Key Usage: \n    TLS Web Server Authentication, TLS Web Client Authentication\nX509v3 Subject Alternative Name: \n    DNS:users"
+    },
+    "subscriptions": {
+      "certificate": "d36cc0a64f894b764bb640231464d1c58218d311e062f46e79601d2028f77e43",
+      "ca": "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b",
+      "public_profile": "serial=AB4C1B7C82CDECBC7A4CC9DAD89E56A5\nsubject=CN=subscriptions,O=PictuRAS\nissuer=CN=PictuRAS installation CA 20261124183601,O=PictuRAS\nnotBefore=Nov 24 18:36:02 2026 GMT\nnotAfter=Dec 24 18:36:02 2026 GMT\nX509v3 Extended Key Usage: \n    TLS Web Server Authentication, TLS Web Client Authentication\nX509v3 Subject Alternative Name: \n    DNS:subscriptions"
+    },
+    "expand_ai_tool": {
+      "certificate": "07d01f01e20018017de5ccf91ca3afa50a536bc36e79d321236c1cbfa8d2c172",
+      "ca": "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b",
+      "public_profile": "serial=B3DEF83F3EF133AA58A73EFD9234FB97\nsubject=CN=expand_ai_tool,O=PictuRAS\nissuer=CN=PictuRAS installation CA 20261124183601,O=PictuRAS\nnotBefore=Nov 24 18:36:02 2026 GMT\nnotAfter=Dec 24 18:36:02 2026 GMT\nX509v3 Extended Key Usage: \n    TLS Web Client Authentication\nX509v3 Subject Alternative Name: \n    DNS:expand_ai_tool"
+    },
+    "frontend": {
+      "certificate": "2a3bf330b6c78e55aaa33489c33e38602bccbdd94885dca7483e55f2b4599a12",
+      "ca": "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b",
+      "public_profile": "serial=18276D981364B34BEC873C0F2A1162DB\nsubject=CN=frontend,O=PictuRAS\nissuer=CN=PictuRAS installation CA 20261124183601,O=PictuRAS\nnotBefore=Nov 24 18:36:01 2026 GMT\nnotAfter=Dec 24 18:36:01 2026 GMT\nX509v3 Extended Key Usage: \n    TLS Web Server Authentication, TLS Web Client Authentication\nX509v3 Subject Alternative Name: \n    DNS:frontend"
+    },
+    "img_storage": {
+      "certificate": "7d97e51eed8efbd610664401f851cf91b6ee64365d6d122747b5fa6bbcb2cc07",
+      "ca": "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b",
+      "public_profile": "serial=7B88E5AB43F70B8F2E8F5038094361A9\nsubject=CN=img_storage,O=PictuRAS\nissuer=CN=PictuRAS installation CA 20261124183601,O=PictuRAS\nnotBefore=Nov 24 18:36:02 2026 GMT\nnotAfter=Dec 24 18:36:02 2026 GMT\nX509v3 Extended Key Usage: \n    TLS Web Server Authentication, TLS Web Client Authentication\nX509v3 Subject Alternative Name: \n    DNS:img_storage"
+    },
+    "rabbitmq": {
+      "certificate": "87cc5f4119f6182e93f4c2652dc16708cbecd09dfbc7fcaed982cfb3171ac6c4",
+      "ca": "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b",
+      "public_profile": "serial=F9965044D225378B8A21A758C14D5BBA\nsubject=CN=rabbitmq,O=PictuRAS\nissuer=CN=PictuRAS installation CA 20261124183601,O=PictuRAS\nnotBefore=Nov 24 18:36:02 2026 GMT\nnotAfter=Dec 24 18:36:02 2026 GMT\nX509v3 Extended Key Usage: \n    TLS Web Server Authentication\nX509v3 Subject Alternative Name: \n    DNS:rabbitmq"
+    }
+  },
+  "certificates_loaded": {
+    "users_mongoDB": {
+      "certificate": "53dc5aad694b77519bae60a4755654a16b94ea80eb546c4ac50bd54b045673c0",
+      "ca": "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b",
+      "public_profile": "serial=09430097D2E10DCBB8ACD375F863D7D0\nsubject=CN=users_mongoDB,O=PictuRAS\nissuer=CN=PictuRAS installation CA 20261124183601,O=PictuRAS\nnotBefore=Nov 24 18:36:02 2026 GMT\nnotAfter=Dec 24 18:36:02 2026 GMT\nX509v3 Extended Key Usage: \n    TLS Web Server Authentication\nX509v3 Subject Alternative Name: \n    DNS:users_mongoDB"
+    },
+    "ws_gateway": {
+      "certificate": "436bc554e9525875743c6ed4bf30db9557bbacef656bdc0036c8bc0875cd8edf",
+      "ca": "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b",
+      "public_profile": "serial=6200D31A21817C969FFABB77A0B68784\nsubject=CN=ws_gateway,O=PictuRAS\nissuer=CN=PictuRAS installation CA 20261124183601,O=PictuRAS\nnotBefore=Nov 24 18:36:02 2026 GMT\nnotAfter=Dec 24 18:36:02 2026 GMT\nX509v3 Extended Key Usage: \n    TLS Web Server Authentication, TLS Web Client Authentication\nX509v3 Subject Alternative Name: \n    DNS:ws_gateway"
+    },
+    "nginx": {
+      "certificate": "cf9d10eac6162418fdae5184b1d0441c2bad7f58ad1b74506e6be737b6b0baeb",
+      "ca": "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b",
+      "public_profile": "serial=86F232792422430ED18E59FFC5E4CA58\nsubject=CN=nginx,O=PictuRAS\nissuer=CN=PictuRAS installation CA 20261124183601,O=PictuRAS\nnotBefore=Nov 24 18:36:01 2026 GMT\nnotAfter=Dec 24 18:36:01 2026 GMT\nX509v3 Extended Key Usage: \n    TLS Web Server Authentication, TLS Web Client Authentication\nX509v3 Subject Alternative Name: \n    DNS:nginx, DNS:localhost, IP Address:127.0.0.1"
+    },
+    "projects": {
+      "certificate": "7bc9205fbbfe909f34a1344c898e88f9fdb3f0095c64ba186a51998fac408a8e",
+      "ca": "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b",
+      "public_profile": "serial=FE3061EA499AC8A91F4A53410D648C3D\nsubject=CN=projects,O=PictuRAS\nissuer=CN=PictuRAS installation CA 20261124183601,O=PictuRAS\nnotBefore=Nov 24 18:36:02 2026 GMT\nnotAfter=Dec 24 18:36:02 2026 GMT\nX509v3 Extended Key Usage: \n    TLS Web Server Authentication, TLS Web Client Authentication\nX509v3 Subject Alternative Name: \n    DNS:projects"
+    },
+    "generative-mock": {
+      "certificate": "7bdb1ee46fc9e15274bb5c83e159760075c7b470354acd402b6c2f8d9c4d0b33",
+      "ca": "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b",
+      "public_profile": "serial=DF561F807F438C1C58426949286DE256\nsubject=CN=generative-mock,O=PictuRAS\nissuer=CN=PictuRAS installation CA 20261124183601,O=PictuRAS\nnotBefore=Nov 24 18:36:02 2026 GMT\nnotAfter=Dec 24 18:36:02 2026 GMT\nX509v3 Extended Key Usage: \n    TLS Web Server Authentication, TLS Web Client Authentication\nX509v3 Subject Alternative Name: \n    DNS:generative-mock"
+    },
+    "api_gateway": {
+      "certificate": "6653fc8bda897122c804dd3ffc4770cda68724131624448126483518103eab45",
+      "ca": "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b",
+      "public_profile": "serial=2A91AEE6FA82DB99A50E7EC54068BDD1\nsubject=CN=api_gateway,O=PictuRAS\nissuer=CN=PictuRAS installation CA 20261124183601,O=PictuRAS\nnotBefore=Nov 24 18:36:02 2026 GMT\nnotAfter=Dec 24 18:36:02 2026 GMT\nX509v3 Extended Key Usage: \n    TLS Web Server Authentication, TLS Web Client Authentication\nX509v3 Subject Alternative Name: \n    DNS:api_gateway"
+    },
+    "subscriptions_mongoDB": {
+      "certificate": "b86bea5ea60d1e417aa591b574a3d5c06ebc036c4393cc89e5caa59da9297fd7",
+      "ca": "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b",
+      "public_profile": "serial=9E900AF0FBB01439BDC4620BC9545D39\nsubject=CN=subscriptions_mongoDB,O=PictuRAS\nissuer=CN=PictuRAS installation CA 20261124183601,O=PictuRAS\nnotBefore=Nov 24 18:36:02 2026 GMT\nnotAfter=Dec 24 18:36:02 2026 GMT\nX509v3 Extended Key Usage: \n    TLS Web Server Authentication\nX509v3 Subject Alternative Name: \n    DNS:subscriptions_mongoDB"
+    },
+    "seaweedfs": {
+      "certificate": "9058033bf8fc02f07a3bd3ea4f85f75f8375216d25ff2c2b07111ae94fb51808",
+      "ca": "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b",
+      "public_profile": "serial=0F6E98B48CBC3AE01E350F965A5C2FC4\nsubject=CN=seaweedfs,O=PictuRAS\nissuer=CN=PictuRAS installation CA 20261124183601,O=PictuRAS\nnotBefore=Nov 24 18:36:02 2026 GMT\nnotAfter=Dec 24 18:36:02 2026 GMT\nX509v3 Extended Key Usage: \n    TLS Web Server Authentication, TLS Web Client Authentication\nX509v3 Subject Alternative Name: \n    DNS:seaweedfs, DNS:localhost"
+    },
+    "projects_mongoDB": {
+      "certificate": "2d5cb4e7f3064ddc3f512d7c20a8c2506c245b47f783f2ffb514afbfc5ba0f48",
+      "ca": "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b",
+      "public_profile": "serial=7910A80371DA3A51666FC5321EA75C30\nsubject=CN=projects_mongoDB,O=PictuRAS\nissuer=CN=PictuRAS installation CA 20261124183601,O=PictuRAS\nnotBefore=Nov 24 18:36:02 2026 GMT\nnotAfter=Dec 24 18:36:02 2026 GMT\nX509v3 Extended Key Usage: \n    TLS Web Server Authentication\nX509v3 Subject Alternative Name: \n    DNS:projects_mongoDB"
+    },
+    "users": {
+      "certificate": "a79d542c9aafc17cf916a7a7a088ddef52611dddcda3c065aa3e9a1cb6f32db8",
+      "ca": "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b",
+      "public_profile": "serial=E17FDDEC7B4CEF60D9C62F2B1E6911F3\nsubject=CN=users,O=PictuRAS\nissuer=CN=PictuRAS installation CA 20261124183601,O=PictuRAS\nnotBefore=Nov 24 18:36:02 2026 GMT\nnotAfter=Dec 24 18:36:02 2026 GMT\nX509v3 Extended Key Usage: \n    TLS Web Server Authentication, TLS Web Client Authentication\nX509v3 Subject Alternative Name: \n    DNS:users"
+    },
+    "subscriptions": {
+      "certificate": "d36cc0a64f894b764bb640231464d1c58218d311e062f46e79601d2028f77e43",
+      "ca": "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b",
+      "public_profile": "serial=AB4C1B7C82CDECBC7A4CC9DAD89E56A5\nsubject=CN=subscriptions,O=PictuRAS\nissuer=CN=PictuRAS installation CA 20261124183601,O=PictuRAS\nnotBefore=Nov 24 18:36:02 2026 GMT\nnotAfter=Dec 24 18:36:02 2026 GMT\nX509v3 Extended Key Usage: \n    TLS Web Server Authentication, TLS Web Client Authentication\nX509v3 Subject Alternative Name: \n    DNS:subscriptions"
+    },
+    "expand_ai_tool": {
+      "certificate": "07d01f01e20018017de5ccf91ca3afa50a536bc36e79d321236c1cbfa8d2c172",
+      "ca": "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b",
+      "public_profile": "serial=B3DEF83F3EF133AA58A73EFD9234FB97\nsubject=CN=expand_ai_tool,O=PictuRAS\nissuer=CN=PictuRAS installation CA 20261124183601,O=PictuRAS\nnotBefore=Nov 24 18:36:02 2026 GMT\nnotAfter=Dec 24 18:36:02 2026 GMT\nX509v3 Extended Key Usage: \n    TLS Web Client Authentication\nX509v3 Subject Alternative Name: \n    DNS:expand_ai_tool"
+    },
+    "frontend": {
+      "certificate": "2a3bf330b6c78e55aaa33489c33e38602bccbdd94885dca7483e55f2b4599a12",
+      "ca": "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b",
+      "public_profile": "serial=18276D981364B34BEC873C0F2A1162DB\nsubject=CN=frontend,O=PictuRAS\nissuer=CN=PictuRAS installation CA 20261124183601,O=PictuRAS\nnotBefore=Nov 24 18:36:01 2026 GMT\nnotAfter=Dec 24 18:36:01 2026 GMT\nX509v3 Extended Key Usage: \n    TLS Web Server Authentication, TLS Web Client Authentication\nX509v3 Subject Alternative Name: \n    DNS:frontend"
+    },
+    "img_storage": {
+      "certificate": "7d97e51eed8efbd610664401f851cf91b6ee64365d6d122747b5fa6bbcb2cc07",
+      "ca": "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b",
+      "public_profile": "serial=7B88E5AB43F70B8F2E8F5038094361A9\nsubject=CN=img_storage,O=PictuRAS\nissuer=CN=PictuRAS installation CA 20261124183601,O=PictuRAS\nnotBefore=Nov 24 18:36:02 2026 GMT\nnotAfter=Dec 24 18:36:02 2026 GMT\nX509v3 Extended Key Usage: \n    TLS Web Server Authentication, TLS Web Client Authentication\nX509v3 Subject Alternative Name: \n    DNS:img_storage"
+    },
+    "rabbitmq": {
+      "certificate": "87cc5f4119f6182e93f4c2652dc16708cbecd09dfbc7fcaed982cfb3171ac6c4",
+      "ca": "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b",
+      "public_profile": "serial=F9965044D225378B8A21A758C14D5BBA\nsubject=CN=rabbitmq,O=PictuRAS\nissuer=CN=PictuRAS installation CA 20261124183601,O=PictuRAS\nnotBefore=Nov 24 18:36:02 2026 GMT\nnotAfter=Dec 24 18:36:02 2026 GMT\nX509v3 Extended Key Usage: \n    TLS Web Server Authentication\nX509v3 Subject Alternative Name: \n    DNS:rabbitmq"
+    }
+  },
+  "loaded_material": {
+    "api_gateway": [
+      {
+        "pid": 7,
+        "ca": "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b",
+        "trusted_cas": [
+          "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b"
+        ],
+        "certificate": "6653fc8bda897122c804dd3ffc4770cda68724131624448126483518103eab45"
+      }
+    ],
+    "img_storage": [
+      {
+        "pid": 7,
+        "ca": "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b",
+        "trusted_cas": [
+          "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b"
+        ],
+        "certificate": "7d97e51eed8efbd610664401f851cf91b6ee64365d6d122747b5fa6bbcb2cc07"
+      }
+    ],
+    "subscriptions": [
+      {
+        "pid": 7,
+        "ca": "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b",
+        "trusted_cas": [
+          "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b"
+        ],
+        "certificate": "d36cc0a64f894b764bb640231464d1c58218d311e062f46e79601d2028f77e43"
+      }
+    ],
+    "projects": [
+      {
+        "pid": 7,
+        "ca": "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b",
+        "trusted_cas": [
+          "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b"
+        ],
+        "certificate": "7bc9205fbbfe909f34a1344c898e88f9fdb3f0095c64ba186a51998fac408a8e"
+      }
+    ],
+    "text_ai_tool": [
+      {
+        "pid": 1,
+        "ca": "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b",
+        "trusted_cas": [
+          "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b"
+        ]
+      }
+    ],
+    "brightness_tool": [
+      {
+        "pid": 1,
+        "ca": "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b",
+        "trusted_cas": [
+          "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b"
+        ]
+      }
+    ],
+    "rotate_tool": [
+      {
+        "pid": 1,
+        "ca": "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b",
+        "trusted_cas": [
+          "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b"
+        ]
+      }
+    ],
+    "saturation_tool": [
+      {
+        "pid": 1,
+        "ca": "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b",
+        "trusted_cas": [
+          "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b"
+        ]
+      }
+    ],
+    "video_tool": [
+      {
+        "pid": 1,
+        "ca": "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b",
+        "trusted_cas": [
+          "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b"
+        ]
+      }
+    ],
+    "watermark_tool_ms": [
+      {
+        "pid": 1,
+        "ca": "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b",
+        "trusted_cas": [
+          "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b"
+        ]
+      }
+    ],
+    "border_tool": [
+      {
+        "pid": 1,
+        "ca": "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b",
+        "trusted_cas": [
+          "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b"
+        ]
+      }
+    ],
+    "contrast_tool": [
+      {
+        "pid": 1,
+        "ca": "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b",
+        "trusted_cas": [
+          "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b"
+        ]
+      }
+    ],
+    "resize_tool": [
+      {
+        "pid": 1,
+        "ca": "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b",
+        "trusted_cas": [
+          "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b"
+        ]
+      }
+    ],
+    "obj_ai_tool": [
+      {
+        "pid": 1,
+        "ca": "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b",
+        "trusted_cas": [
+          "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b"
+        ]
+      }
+    ],
+    "expand_ai_tool": [
+      {
+        "pid": 1,
+        "ca": "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b",
+        "trusted_cas": [
+          "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b"
+        ]
+      }
+    ],
+    "cut_ai_tool": [
+      {
+        "pid": 1,
+        "ca": "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b",
+        "trusted_cas": [
+          "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b"
+        ]
+      }
+    ],
+    "upgrade_ai_tool": [
+      {
+        "pid": 1,
+        "ca": "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b",
+        "trusted_cas": [
+          "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b"
+        ]
+      }
+    ],
+    "cut_tool": [
+      {
+        "pid": 1,
+        "ca": "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b",
+        "trusted_cas": [
+          "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b"
+        ]
+      }
+    ],
+    "bg_remove_ai_tool": [
+      {
+        "pid": 1,
+        "ca": "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b",
+        "trusted_cas": [
+          "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b"
+        ]
+      }
+    ],
+    "binarization_tool": [
+      {
+        "pid": 1,
+        "ca": "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b",
+        "trusted_cas": [
+          "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b"
+        ]
+      }
+    ],
+    "people_ai_tool": [
+      {
+        "pid": 1,
+        "ca": "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b",
+        "trusted_cas": [
+          "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b"
+        ]
+      }
+    ],
+    "ws_gateway": [
+      {
+        "pid": 6,
+        "ca": "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b",
+        "trusted_cas": [
+          "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b"
+        ],
+        "certificate": "436bc554e9525875743c6ed4bf30db9557bbacef656bdc0036c8bc0875cd8edf"
+      }
+    ],
+    "users": [
+      {
+        "pid": 7,
+        "ca": "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b",
+        "trusted_cas": [
+          "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b"
+        ],
+        "certificate": "a79d542c9aafc17cf916a7a7a088ddef52611dddcda3c065aa3e9a1cb6f32db8"
+      }
+    ],
+    "frontend": [
+      {
+        "pid": 7,
+        "ca": "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b",
+        "trusted_cas": [
+          "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b"
+        ],
+        "certificate": "2a3bf330b6c78e55aaa33489c33e38602bccbdd94885dca7483e55f2b4599a12"
+      }
+    ],
+    "generative-mock": [
+      {
+        "pid": 1,
+        "ca": "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b",
+        "trusted_cas": [
+          "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b"
+        ],
+        "certificate": "7bdb1ee46fc9e15274bb5c83e159760075c7b470354acd402b6c2f8d9c4d0b33"
+      }
+    ]
+  },
+  "registered_consumers": {
+    "brightness_tool": 1,
+    "binarization_tool": 1,
+    "obj_ai_tool": 1,
+    "bg_remove_ai_tool": 1,
+    "contrast_tool": 1,
+    "people_ai_tool": 1,
+    "ws_gateway": 1,
+    "text_ai_tool": 1,
+    "cut_ai_tool": 1,
+    "rotate_tool": 1,
+    "border_tool": 1,
+    "video_tool": 1,
+    "cut_tool": 1,
+    "watermark_tool_ms": 1,
+    "projects": 1,
+    "upgrade_ai_tool": 1,
+    "expand_ai_tool": 1,
+    "saturation_tool": 1,
+    "resize_tool": 1
+  },
+  "cut_observation": {
+    "all_closed": true,
+    "rows": [
+      {
+        "service": "nginx",
+        "address": "192.168.16.33",
+        "port": 443,
+        "closed": true
+      },
+      {
+        "service": "api_gateway",
+        "address": "192.168.16.32",
+        "port": 8000,
+        "closed": true
+      },
+      {
+        "service": "subscriptions",
+        "address": "192.168.16.12",
+        "port": 11001,
+        "closed": true
+      },
+      {
+        "service": "img_storage",
+        "address": "192.168.16.11",
+        "port": 11000,
+        "closed": true
+      },
+      {
+        "service": "projects",
+        "address": "192.168.16.23",
+        "port": 9001,
+        "closed": true
+      },
+      {
+        "service": "ws_gateway",
+        "address": "192.168.16.16",
+        "port": 4000,
+        "closed": true
+      },
+      {
+        "service": "users",
+        "address": "192.168.16.9",
+        "port": 10001,
+        "closed": true
+      },
+      {
+        "service": "users_mongoDB",
+        "address": "192.168.16.6",
+        "port": 27019,
+        "closed": true
+      },
+      {
+        "service": "subscriptions_mongoDB",
+        "address": "192.168.16.7",
+        "port": 27017,
+        "closed": true
+      },
+      {
+        "service": "projects_mongoDB",
+        "address": "192.168.16.5",
+        "port": 27018,
+        "closed": true
+      },
+      {
+        "service": "rabbitmq",
+        "address": "192.168.16.4",
+        "port": 5671,
+        "closed": true
+      },
+      {
+        "service": "rabbitmq",
+        "address": "192.168.16.4",
+        "port": 15671,
+        "closed": true
+      },
+      {
+        "service": "seaweedfs",
+        "address": "192.168.16.8",
+        "port": 9000,
+        "closed": true
+      },
+      {
+        "service": "seaweedfs",
+        "address": "192.168.16.8",
+        "port": 19000,
+        "closed": true
+      },
+      {
+        "service": "generative-mock",
+        "address": "192.168.16.3",
+        "port": 7860,
+        "closed": true
+      },
+      {
+        "service": "frontend",
+        "address": "192.168.16.2",
+        "port": 3000,
+        "closed": true
+      }
+    ],
+    "observed_at_ns": 1795545327481864411,
+    "public_closed": true
+  },
+  "persistent_cut_witness": {
+    "operation": "6b7f8d72a82c438db4aa019eea02a688",
+    "all_persistent_cut": true,
+    "rows": {
+      "s3": {
+        "successes": 40,
+        "last_success_ns": 1795545324721213202,
+        "first_cut_ns": 1795545324799299626,
+        "socket_identity": 128224778463488,
+        "error_type": "RemoteDisconnected",
+        "trace": [
+          {
+            "function": "repeat",
+            "line": 49
+          },
+          {
+            "function": "s3_step",
+            "line": 84
+          },
+          {
+            "function": "getresponse",
+            "line": 1478
+          },
+          {
+            "function": "begin",
+            "line": 343
+          },
+          {
+            "function": "_read_status",
+            "line": 312
+          }
+        ],
+        "attribute": null
+      },
+      "https-public": {
+        "successes": 31,
+        "last_success_ns": 1795545324142117492,
+        "first_cut_ns": 1795545324217818309,
+        "socket_identity": 128224778462144,
+        "error_type": "RuntimeError",
+        "trace": [
+          {
+            "function": "repeat",
+            "line": 49
+          },
+          {
+            "function": "http_step",
+            "line": 76
+          }
+        ],
+        "attribute": null
+      },
+      "http-internal": {
+        "successes": 39,
+        "last_success_ns": 1795545324633659844,
+        "first_cut_ns": 1795545324716796205,
+        "socket_identity": 128224778466848,
+        "error_type": "RemoteDisconnected",
+        "trace": [
+          {
+            "function": "repeat",
+            "line": 49
+          },
+          {
+            "function": "http_step",
+            "line": 72
+          },
+          {
+            "function": "getresponse",
+            "line": 1478
+          },
+          {
+            "function": "begin",
+            "line": 343
+          },
+          {
+            "function": "_read_status",
+            "line": 312
+          }
+        ],
+        "attribute": null
+      },
+      "amqp": {
+        "successes": 40,
+        "last_success_ns": 1795545324696009408,
+        "first_cut_ns": 1795545324807923292,
+        "error_type": "StreamLostError",
+        "trace": [
+          {
+            "function": "repeat",
+            "line": 49
+          },
+          {
+            "function": "<lambda>",
+            "line": 137
+          },
+          {
+            "function": "queue_declare",
+            "line": 2524
+          },
+          {
+            "function": "_flush_output",
+            "line": 1353
+          },
+          {
+            "function": "_flush_output",
+            "line": 523
+          }
+        ],
+        "attribute": null
+      },
+      "grpc": {
+        "successes": 36,
+        "last_success_ns": 1795545324724641421,
+        "first_cut_ns": 1795545324799902058,
+        "error_type": "EOFError",
+        "trace": [
+          {
+            "function": "repeat",
+            "line": 49
+          },
+          {
+            "function": "grpc_step",
+            "line": 120
+          },
+          {
+            "function": "recv_exact",
+            "line": 112
+          }
+        ],
+        "attribute": null
+      },
+      "mongo": {
+        "successes": 40,
+        "last_success_ns": 1795545324706841169,
+        "first_cut_ns": 1795545325282463025,
+        "error_type": "ServerSelectionTimeoutError",
+        "trace": [
+          {
+            "function": "repeat",
+            "line": 49
+          },
+          {
+            "function": "<lambda>",
+            "line": 138
+          },
+          {
+            "function": "find_one",
+            "line": 1755
+          },
+          {
+            "function": "__next__",
+            "line": 1289
+          },
+          {
+            "function": "next",
+            "line": 1265
+          },
+          {
+            "function": "_refresh",
+            "line": 1213
+          },
+          {
+            "function": "_send_message",
+            "line": 1108
+          },
+          {
+            "function": "csot_wrapper",
+            "line": 125
+          },
+          {
+            "function": "_run_operation",
+            "line": 1938
+          },
+          {
+            "function": "_retryable_read",
+            "line": 2047
+          },
+          {
+            "function": "csot_wrapper",
+            "line": 125
+          },
+          {
+            "function": "_retry_internal",
+            "line": 2014
+          },
+          {
+            "function": "run",
+            "line": 2765
+          },
+          {
+            "function": "_read",
+            "line": 2910
+          },
+          {
+            "function": "_get_server",
+            "line": 2858
+          },
+          {
+            "function": "_select_server",
+            "line": 1833
+          },
+          {
+            "function": "select_server",
+            "line": 409
+          },
+          {
+            "function": "_select_server",
+            "line": 387
+          },
+          {
+            "function": "select_servers",
+            "line": 294
+          },
+          {
+            "function": "_select_servers_loop",
+            "line": 344
+          }
+        ],
+        "attribute": null
+      },
+      "websocket": {
+        "successes": 1,
+        "last_success_ns": 1795545321762413702,
+        "first_cut_ns": 1795545324766367538,
+        "error_type": "EOFError"
+      },
+      "video-progress": {
+        "successes": 2,
+        "last_success_ns": 1795545324379494593,
+        "first_cut_ns": null
+      }
+    },
+    "at_ns": 1795545326261471313
+  },
+  "channel_controls": {
+    "passed": true,
+    "rows": [
+      {
+        "channel": "tls-client -> nginx:443",
+        "case": "current certificate actually served",
+        "observation": {
+          "result": "http",
+          "status": 503,
+          "peer": "cf9d10eac6162418fdae5184b1d0441c2bad7f58ad1b74506e6be737b6b0baeb",
+          "resumed": false
+        },
+        "passed": true
+      },
+      {
+        "channel": "tls-client -> nginx:443",
+        "case": "wrong server name",
+        "observation": {
+          "result": "tls_refused",
+          "reason": 62
+        },
+        "passed": true
+      },
+      {
+        "channel": "tls-client -> nginx:443",
+        "case": "withdrawn server CA rejected",
+        "observation": {
+          "result": "tls_refused",
+          "reason": 20
+        },
+        "passed": true
+      },
+      {
+        "channel": "nginx -> frontend:3000",
+        "case": "current certificate actually served",
+        "observation": {
+          "result": "http",
+          "status": 200,
+          "peer": "2a3bf330b6c78e55aaa33489c33e38602bccbdd94885dca7483e55f2b4599a12",
+          "resumed": false
+        },
+        "passed": true
+      },
+      {
+        "channel": "nginx -> frontend:3000",
+        "case": "no client certificate",
+        "observation": {
+          "result": "tls_refused",
+          "reason": "TLSV13_ALERT_CERTIFICATE_REQUIRED"
+        },
+        "passed": true
+      },
+      {
+        "channel": "nginx -> frontend:3000",
+        "case": "wrong server name",
+        "observation": {
+          "result": "tls_refused",
+          "reason": 62
+        },
+        "passed": true
+      },
+      {
+        "channel": "nginx -> frontend:3000",
+        "case": "withdrawn server CA rejected",
+        "observation": {
+          "result": "tls_refused",
+          "reason": 19
+        },
+        "passed": true
+      },
+      {
+        "channel": "nginx -> frontend:3000",
+        "case": "current client on the same TLS 1.2 control",
+        "observation": {
+          "result": "http",
+          "status": 200,
+          "peer": "2a3bf330b6c78e55aaa33489c33e38602bccbdd94885dca7483e55f2b4599a12",
+          "resumed": false
+        },
+        "passed": true
+      },
+      {
+        "channel": "nginx -> frontend:3000",
+        "case": "withdrawn client certificate rejected",
+        "observation": {
+          "result": "tls_refused",
+          "reason": "UNEXPECTED_EOF_WHILE_READING"
+        },
+        "passed": true
+      },
+      {
+        "channel": "nginx -> api_gateway:8000",
+        "case": "current certificate actually served",
+        "observation": {
+          "result": "http",
+          "status": 401,
+          "peer": "6653fc8bda897122c804dd3ffc4770cda68724131624448126483518103eab45",
+          "resumed": false
+        },
+        "passed": true
+      },
+      {
+        "channel": "nginx -> api_gateway:8000",
+        "case": "no client certificate",
+        "observation": {
+          "result": "tls_refused",
+          "reason": "TLSV13_ALERT_CERTIFICATE_REQUIRED"
+        },
+        "passed": true
+      },
+      {
+        "channel": "nginx -> api_gateway:8000",
+        "case": "wrong server name",
+        "observation": {
+          "result": "tls_refused",
+          "reason": 62
+        },
+        "passed": true
+      },
+      {
+        "channel": "nginx -> api_gateway:8000",
+        "case": "withdrawn server CA rejected",
+        "observation": {
+          "result": "tls_refused",
+          "reason": 19
+        },
+        "passed": true
+      },
+      {
+        "channel": "nginx -> api_gateway:8000",
+        "case": "current client on the same TLS 1.2 control",
+        "observation": {
+          "result": "http",
+          "status": 401,
+          "peer": "6653fc8bda897122c804dd3ffc4770cda68724131624448126483518103eab45",
+          "resumed": false
+        },
+        "passed": true
+      },
+      {
+        "channel": "nginx -> api_gateway:8000",
+        "case": "withdrawn client certificate rejected",
+        "observation": {
+          "result": "tls_refused",
+          "reason": "UNEXPECTED_EOF_WHILE_READING"
+        },
+        "passed": true
+      },
+      {
+        "channel": "nginx -> ws_gateway:4000",
+        "case": "current certificate actually served",
+        "observation": {
+          "result": "http",
+          "status": 200,
+          "peer": "436bc554e9525875743c6ed4bf30db9557bbacef656bdc0036c8bc0875cd8edf",
+          "resumed": false
+        },
+        "passed": true
+      },
+      {
+        "channel": "nginx -> ws_gateway:4000",
+        "case": "no client certificate",
+        "observation": {
+          "result": "tls_refused",
+          "reason": "TLSV13_ALERT_CERTIFICATE_REQUIRED"
+        },
+        "passed": true
+      },
+      {
+        "channel": "nginx -> ws_gateway:4000",
+        "case": "wrong server name",
+        "observation": {
+          "result": "tls_refused",
+          "reason": 62
+        },
+        "passed": true
+      },
+      {
+        "channel": "nginx -> ws_gateway:4000",
+        "case": "withdrawn server CA rejected",
+        "observation": {
+          "result": "tls_refused",
+          "reason": 19
+        },
+        "passed": true
+      },
+      {
+        "channel": "nginx -> ws_gateway:4000",
+        "case": "current client on the same TLS 1.2 control",
+        "observation": {
+          "result": "http",
+          "status": 200,
+          "peer": "436bc554e9525875743c6ed4bf30db9557bbacef656bdc0036c8bc0875cd8edf",
+          "resumed": false
+        },
+        "passed": true
+      },
+      {
+        "channel": "nginx -> ws_gateway:4000",
+        "case": "withdrawn client certificate rejected",
+        "observation": {
+          "result": "tls_refused",
+          "reason": "UNEXPECTED_EOF_WHILE_READING"
+        },
+        "passed": true
+      },
+      {
+        "channel": "api_gateway -> projects:9001",
+        "case": "current certificate actually served",
+        "observation": {
+          "result": "http",
+          "status": 401,
+          "peer": "7bc9205fbbfe909f34a1344c898e88f9fdb3f0095c64ba186a51998fac408a8e",
+          "resumed": false
+        },
+        "passed": true
+      },
+      {
+        "channel": "api_gateway -> projects:9001",
+        "case": "no client certificate",
+        "observation": {
+          "result": "tls_refused",
+          "reason": "TLSV13_ALERT_CERTIFICATE_REQUIRED"
+        },
+        "passed": true
+      },
+      {
+        "channel": "api_gateway -> projects:9001",
+        "case": "wrong server name",
+        "observation": {
+          "result": "tls_refused",
+          "reason": 62
+        },
+        "passed": true
+      },
+      {
+        "channel": "api_gateway -> projects:9001",
+        "case": "withdrawn server CA rejected",
+        "observation": {
+          "result": "tls_refused",
+          "reason": 19
+        },
+        "passed": true
+      },
+      {
+        "channel": "api_gateway -> projects:9001",
+        "case": "current client on the same TLS 1.2 control",
+        "observation": {
+          "result": "http",
+          "status": 401,
+          "peer": "7bc9205fbbfe909f34a1344c898e88f9fdb3f0095c64ba186a51998fac408a8e",
+          "resumed": false
+        },
+        "passed": true
+      },
+      {
+        "channel": "api_gateway -> projects:9001",
+        "case": "withdrawn client certificate rejected",
+        "observation": {
+          "result": "tls_refused",
+          "reason": "UNEXPECTED_EOF_WHILE_READING"
+        },
+        "passed": true
+      },
+      {
+        "channel": "projects -> users:10001",
+        "case": "current certificate actually served",
+        "observation": {
+          "result": "http",
+          "status": 403,
+          "peer": "a79d542c9aafc17cf916a7a7a088ddef52611dddcda3c065aa3e9a1cb6f32db8",
+          "resumed": false
+        },
+        "passed": true
+      },
+      {
+        "channel": "projects -> users:10001",
+        "case": "no client certificate",
+        "observation": {
+          "result": "tls_refused",
+          "reason": "TLSV13_ALERT_CERTIFICATE_REQUIRED"
+        },
+        "passed": true
+      },
+      {
+        "channel": "projects -> users:10001",
+        "case": "wrong server name",
+        "observation": {
+          "result": "tls_refused",
+          "reason": 62
+        },
+        "passed": true
+      },
+      {
+        "channel": "projects -> users:10001",
+        "case": "withdrawn server CA rejected",
+        "observation": {
+          "result": "tls_refused",
+          "reason": 19
+        },
+        "passed": true
+      },
+      {
+        "channel": "projects -> users:10001",
+        "case": "current client on the same TLS 1.2 control",
+        "observation": {
+          "result": "http",
+          "status": 403,
+          "peer": "a79d542c9aafc17cf916a7a7a088ddef52611dddcda3c065aa3e9a1cb6f32db8",
+          "resumed": false
+        },
+        "passed": true
+      },
+      {
+        "channel": "projects -> users:10001",
+        "case": "withdrawn client certificate rejected",
+        "observation": {
+          "result": "tls_refused",
+          "reason": "UNEXPECTED_EOF_WHILE_READING"
+        },
+        "passed": true
+      },
+      {
+        "channel": "api_gateway -> subscriptions:11001",
+        "case": "current certificate actually served",
+        "observation": {
+          "result": "http",
+          "status": 401,
+          "peer": "d36cc0a64f894b764bb640231464d1c58218d311e062f46e79601d2028f77e43",
+          "resumed": false
+        },
+        "passed": true
+      },
+      {
+        "channel": "api_gateway -> subscriptions:11001",
+        "case": "no client certificate",
+        "observation": {
+          "result": "tls_refused",
+          "reason": "TLSV13_ALERT_CERTIFICATE_REQUIRED"
+        },
+        "passed": true
+      },
+      {
+        "channel": "api_gateway -> subscriptions:11001",
+        "case": "wrong server name",
+        "observation": {
+          "result": "tls_refused",
+          "reason": 62
+        },
+        "passed": true
+      },
+      {
+        "channel": "api_gateway -> subscriptions:11001",
+        "case": "withdrawn server CA rejected",
+        "observation": {
+          "result": "tls_refused",
+          "reason": 19
+        },
+        "passed": true
+      },
+      {
+        "channel": "api_gateway -> subscriptions:11001",
+        "case": "current client on the same TLS 1.2 control",
+        "observation": {
+          "result": "http",
+          "status": 401,
+          "peer": "d36cc0a64f894b764bb640231464d1c58218d311e062f46e79601d2028f77e43",
+          "resumed": false
+        },
+        "passed": true
+      },
+      {
+        "channel": "api_gateway -> subscriptions:11001",
+        "case": "withdrawn client certificate rejected",
+        "observation": {
+          "result": "tls_refused",
+          "reason": "UNEXPECTED_EOF_WHILE_READING"
+        },
+        "passed": true
+      },
+      {
+        "channel": "projects -> img_storage:11000",
+        "case": "current certificate actually served",
+        "observation": {
+          "result": "http",
+          "status": 404,
+          "peer": "7d97e51eed8efbd610664401f851cf91b6ee64365d6d122747b5fa6bbcb2cc07",
+          "resumed": false
+        },
+        "passed": true
+      },
+      {
+        "channel": "projects -> img_storage:11000",
+        "case": "no client certificate",
+        "observation": {
+          "result": "tls_refused",
+          "reason": "TLSV13_ALERT_CERTIFICATE_REQUIRED"
+        },
+        "passed": true
+      },
+      {
+        "channel": "projects -> img_storage:11000",
+        "case": "wrong server name",
+        "observation": {
+          "result": "tls_refused",
+          "reason": 62
+        },
+        "passed": true
+      },
+      {
+        "channel": "projects -> img_storage:11000",
+        "case": "withdrawn server CA rejected",
+        "observation": {
+          "result": "tls_refused",
+          "reason": 19
+        },
+        "passed": true
+      },
+      {
+        "channel": "projects -> img_storage:11000",
+        "case": "current client on the same TLS 1.2 control",
+        "observation": {
+          "result": "http",
+          "status": 404,
+          "peer": "7d97e51eed8efbd610664401f851cf91b6ee64365d6d122747b5fa6bbcb2cc07",
+          "resumed": false
+        },
+        "passed": true
+      },
+      {
+        "channel": "projects -> img_storage:11000",
+        "case": "withdrawn client certificate rejected",
+        "observation": {
+          "result": "tls_refused",
+          "reason": "UNEXPECTED_EOF_WHILE_READING"
+        },
+        "passed": true
+      },
+      {
+        "channel": "expand_ai_tool -> generative-mock:7860",
+        "case": "current certificate actually served",
+        "observation": {
+          "result": "http",
+          "status": 404,
+          "peer": "7bdb1ee46fc9e15274bb5c83e159760075c7b470354acd402b6c2f8d9c4d0b33",
+          "resumed": false
+        },
+        "passed": true
+      },
+      {
+        "channel": "expand_ai_tool -> generative-mock:7860",
+        "case": "no client certificate",
+        "observation": {
+          "result": "tls_refused",
+          "reason": "TLSV13_ALERT_CERTIFICATE_REQUIRED"
+        },
+        "passed": true
+      },
+      {
+        "channel": "expand_ai_tool -> generative-mock:7860",
+        "case": "wrong server name",
+        "observation": {
+          "result": "tls_refused",
+          "reason": 62
+        },
+        "passed": true
+      },
+      {
+        "channel": "expand_ai_tool -> generative-mock:7860",
+        "case": "withdrawn server CA rejected",
+        "observation": {
+          "result": "tls_refused",
+          "reason": 19
+        },
+        "passed": true
+      },
+      {
+        "channel": "expand_ai_tool -> generative-mock:7860",
+        "case": "withdrawn client certificate rejected",
+        "observation": {
+          "result": "tls_refused",
+          "reason": "TLSV1_ALERT_UNKNOWN_CA"
+        },
+        "passed": true
+      },
+      {
+        "channel": "tls-client -> rabbitmq:5671",
+        "case": "current certificate actually served",
+        "observation": {
+          "result": "tls",
+          "peer": "87cc5f4119f6182e93f4c2652dc16708cbecd09dfbc7fcaed982cfb3171ac6c4",
+          "resumed": false
+        },
+        "passed": true
+      },
+      {
+        "channel": "tls-client -> rabbitmq:5671",
+        "case": "wrong server name",
+        "observation": {
+          "result": "tls_refused",
+          "reason": 62
+        },
+        "passed": true
+      },
+      {
+        "channel": "tls-client -> rabbitmq:5671",
+        "case": "withdrawn server CA rejected",
+        "observation": {
+          "result": "tls_refused",
+          "reason": 19
+        },
+        "passed": true
+      },
+      {
+        "channel": "tls-client -> rabbitmq:15671",
+        "case": "current certificate actually served",
+        "observation": {
+          "result": "http",
+          "status": 200,
+          "peer": "87cc5f4119f6182e93f4c2652dc16708cbecd09dfbc7fcaed982cfb3171ac6c4",
+          "resumed": false
+        },
+        "passed": true
+      },
+      {
+        "channel": "tls-client -> rabbitmq:15671",
+        "case": "wrong server name",
+        "observation": {
+          "result": "tls_refused",
+          "reason": 62
+        },
+        "passed": true
+      },
+      {
+        "channel": "tls-client -> rabbitmq:15671",
+        "case": "withdrawn server CA rejected",
+        "observation": {
+          "result": "tls_refused",
+          "reason": 19
+        },
+        "passed": true
+      },
+      {
+        "channel": "tls-client -> seaweedfs:9000",
+        "case": "current certificate actually served",
+        "observation": {
+          "result": "http",
+          "status": 403,
+          "peer": "9058033bf8fc02f07a3bd3ea4f85f75f8375216d25ff2c2b07111ae94fb51808",
+          "resumed": false
+        },
+        "passed": true
+      },
+      {
+        "channel": "tls-client -> seaweedfs:9000",
+        "case": "wrong server name",
+        "observation": {
+          "result": "tls_refused",
+          "reason": 62
+        },
+        "passed": true
+      },
+      {
+        "channel": "tls-client -> seaweedfs:9000",
+        "case": "withdrawn server CA rejected",
+        "observation": {
+          "result": "tls_refused",
+          "reason": 20
+        },
+        "passed": true
+      },
+      {
+        "channel": "seaweedfs -> seaweedfs:19000",
+        "case": "current certificate actually served",
+        "observation": {
+          "result": "tls",
+          "peer": "9058033bf8fc02f07a3bd3ea4f85f75f8375216d25ff2c2b07111ae94fb51808",
+          "resumed": false
+        },
+        "passed": true
+      },
+      {
+        "channel": "seaweedfs -> seaweedfs:19000",
+        "case": "no client certificate",
+        "observation": {
+          "result": "tls_refused",
+          "reason": "TLSV13_ALERT_CERTIFICATE_REQUIRED"
+        },
+        "passed": true
+      },
+      {
+        "channel": "seaweedfs -> seaweedfs:19000",
+        "case": "wrong server name",
+        "observation": {
+          "result": "tls_refused",
+          "reason": 62
+        },
+        "passed": true
+      },
+      {
+        "channel": "seaweedfs -> seaweedfs:19000",
+        "case": "withdrawn server CA rejected",
+        "observation": {
+          "result": "tls_refused",
+          "reason": 20
+        },
+        "passed": true
+      },
+      {
+        "channel": "seaweedfs -> seaweedfs:19000",
+        "case": "withdrawn client certificate rejected",
+        "observation": {
+          "result": "tls_refused",
+          "reason": "SSLV3_ALERT_BAD_CERTIFICATE"
+        },
+        "passed": true
+      },
+      {
+        "channel": "tls-client -> projects_mongoDB:27018",
+        "case": "current certificate actually served",
+        "observation": {
+          "result": "tls",
+          "peer": "2d5cb4e7f3064ddc3f512d7c20a8c2506c245b47f783f2ffb514afbfc5ba0f48",
+          "resumed": false
+        },
+        "passed": true
+      },
+      {
+        "channel": "tls-client -> projects_mongoDB:27018",
+        "case": "wrong server name",
+        "observation": {
+          "result": "tls_refused",
+          "reason": 62
+        },
+        "passed": true
+      },
+      {
+        "channel": "tls-client -> projects_mongoDB:27018",
+        "case": "withdrawn server CA rejected",
+        "observation": {
+          "result": "tls_refused",
+          "reason": 19
+        },
+        "passed": true
+      },
+      {
+        "channel": "tls-client -> users_mongoDB:27019",
+        "case": "current certificate actually served",
+        "observation": {
+          "result": "tls",
+          "peer": "53dc5aad694b77519bae60a4755654a16b94ea80eb546c4ac50bd54b045673c0",
+          "resumed": false
+        },
+        "passed": true
+      },
+      {
+        "channel": "tls-client -> users_mongoDB:27019",
+        "case": "wrong server name",
+        "observation": {
+          "result": "tls_refused",
+          "reason": 62
+        },
+        "passed": true
+      },
+      {
+        "channel": "tls-client -> users_mongoDB:27019",
+        "case": "withdrawn server CA rejected",
+        "observation": {
+          "result": "tls_refused",
+          "reason": 19
+        },
+        "passed": true
+      },
+      {
+        "channel": "tls-client -> subscriptions_mongoDB:27017",
+        "case": "current certificate actually served",
+        "observation": {
+          "result": "tls",
+          "peer": "b86bea5ea60d1e417aa591b574a3d5c06ebc036c4393cc89e5caa59da9297fd7",
+          "resumed": false
+        },
+        "passed": true
+      },
+      {
+        "channel": "tls-client -> subscriptions_mongoDB:27017",
+        "case": "wrong server name",
+        "observation": {
+          "result": "tls_refused",
+          "reason": 62
+        },
+        "passed": true
+      },
+      {
+        "channel": "tls-client -> subscriptions_mongoDB:27017",
+        "case": "withdrawn server CA rejected",
+        "observation": {
+          "result": "tls_refused",
+          "reason": 19
+        },
+        "passed": true
+      },
+      {
+        "channel": "seaweedfs -> frontend",
+        "case": "wrong principal refused",
+        "observation": {
+          "result": "http",
+          "status": 403,
+          "peer": "2a3bf330b6c78e55aaa33489c33e38602bccbdd94885dca7483e55f2b4599a12",
+          "resumed": false
+        },
+        "passed": true
+      },
+      {
+        "channel": "seaweedfs -> api_gateway",
+        "case": "wrong principal refused",
+        "observation": {
+          "result": "http",
+          "status": 403,
+          "peer": "6653fc8bda897122c804dd3ffc4770cda68724131624448126483518103eab45",
+          "resumed": false
+        },
+        "passed": true
+      },
+      {
+        "channel": "seaweedfs -> ws_gateway",
+        "case": "wrong principal refused",
+        "observation": {
+          "result": "http",
+          "status": 403,
+          "peer": "436bc554e9525875743c6ed4bf30db9557bbacef656bdc0036c8bc0875cd8edf",
+          "resumed": false
+        },
+        "passed": true
+      },
+      {
+        "channel": "seaweedfs -> projects",
+        "case": "wrong principal refused",
+        "observation": {
+          "result": "http",
+          "status": 403,
+          "peer": "7bc9205fbbfe909f34a1344c898e88f9fdb3f0095c64ba186a51998fac408a8e",
+          "resumed": false
+        },
+        "passed": true
+      },
+      {
+        "channel": "seaweedfs -> users",
+        "case": "wrong principal refused",
+        "observation": {
+          "result": "http",
+          "status": 403,
+          "peer": "a79d542c9aafc17cf916a7a7a088ddef52611dddcda3c065aa3e9a1cb6f32db8",
+          "resumed": false
+        },
+        "passed": true
+      },
+      {
+        "channel": "seaweedfs -> subscriptions",
+        "case": "wrong principal refused",
+        "observation": {
+          "result": "http",
+          "status": 403,
+          "peer": "d36cc0a64f894b764bb640231464d1c58218d311e062f46e79601d2028f77e43",
+          "resumed": false
+        },
+        "passed": true
+      },
+      {
+        "channel": "seaweedfs -> img_storage",
+        "case": "wrong principal refused",
+        "observation": {
+          "result": "http",
+          "status": 403,
+          "peer": "7d97e51eed8efbd610664401f851cf91b6ee64365d6d122747b5fa6bbcb2cc07",
+          "resumed": false
+        },
+        "passed": true
+      },
+      {
+        "channel": "seaweedfs -> generative-mock",
+        "case": "wrong principal refused",
+        "observation": {
+          "result": "http",
+          "status": 403,
+          "peer": "7bdb1ee46fc9e15274bb5c83e159760075c7b470354acd402b6c2f8d9c4d0b33",
+          "resumed": false
+        },
+        "passed": true
+      },
+      {
+        "channel": "network -> rabbitmq:5672",
+        "case": "plaintext/admin bypass closed",
+        "observation": {
+          "closed": true
+        },
+        "passed": true
+      },
+      {
+        "channel": "network -> rabbitmq:15672",
+        "case": "plaintext/admin bypass closed",
+        "observation": {
+          "closed": true
+        },
+        "passed": true
+      },
+      {
+        "channel": "network -> seaweedfs:8888",
+        "case": "plaintext/admin bypass closed",
+        "observation": {
+          "closed": true
+        },
+        "passed": true
+      },
+      {
+        "channel": "network -> seaweedfs:18888",
+        "case": "plaintext/admin bypass closed",
+        "observation": {
+          "closed": true
+        },
+        "passed": true
+      },
+      {
+        "channel": "network -> seaweedfs:9333",
+        "case": "plaintext/admin bypass closed",
+        "observation": {
+          "closed": true
+        },
+        "passed": true
+      },
+      {
+        "channel": "network -> seaweedfs:19333",
+        "case": "plaintext/admin bypass closed",
+        "observation": {
+          "closed": true
+        },
+        "passed": true
+      },
+      {
+        "channel": "network -> seaweedfs:8080",
+        "case": "plaintext/admin bypass closed",
+        "observation": {
+          "closed": true
+        },
+        "passed": true
+      },
+      {
+        "channel": "network -> seaweedfs:18080",
+        "case": "plaintext/admin bypass closed",
+        "observation": {
+          "closed": true
+        },
+        "passed": true
+      },
+      {
+        "channel": "service -> users_mongoDB",
+        "case": "native authenticated read and role scope",
+        "observation": {
+          "read": true,
+          "has_write": true,
+          "write_scoped": true
+        },
+        "passed": true
+      },
+      {
+        "channel": "backup -> users_mongoDB",
+        "case": "native authenticated read and role scope",
+        "observation": {
+          "read": true,
+          "has_write": false,
+          "write_scoped": true
+        },
+        "passed": true
+      },
+      {
+        "channel": "invalid credential -> users_mongoDB",
+        "case": "native authentication refusal",
+        "observation": {
+          "refused": true
+        },
+        "passed": true
+      },
+      {
+        "channel": "service -> projects_mongoDB",
+        "case": "native authenticated read and role scope",
+        "observation": {
+          "read": true,
+          "has_write": true,
+          "write_scoped": true
+        },
+        "passed": true
+      },
+      {
+        "channel": "backup -> projects_mongoDB",
+        "case": "native authenticated read and role scope",
+        "observation": {
+          "read": true,
+          "has_write": false,
+          "write_scoped": true
+        },
+        "passed": true
+      },
+      {
+        "channel": "invalid credential -> projects_mongoDB",
+        "case": "native authentication refusal",
+        "observation": {
+          "refused": true
+        },
+        "passed": true
+      },
+      {
+        "channel": "service -> subscriptions_mongoDB",
+        "case": "native authenticated read and role scope",
+        "observation": {
+          "read": true,
+          "has_write": true,
+          "write_scoped": true
+        },
+        "passed": true
+      },
+      {
+        "channel": "backup -> subscriptions_mongoDB",
+        "case": "native authenticated read and role scope",
+        "observation": {
+          "read": true,
+          "has_write": false,
+          "write_scoped": true
+        },
+        "passed": true
+      },
+      {
+        "channel": "invalid credential -> subscriptions_mongoDB",
+        "case": "native authentication refusal",
+        "observation": {
+          "refused": true
+        },
+        "passed": true
+      },
+      {
+        "channel": "brightness_tool -> rabbitmq",
+        "case": "native AMQPS principal and own queue",
+        "observation": {
+          "authenticated": true,
+          "queue_scope": true
+        },
+        "passed": true
+      },
+      {
+        "channel": "contrast_tool -> rabbitmq",
+        "case": "native AMQPS principal and own queue",
+        "observation": {
+          "authenticated": true,
+          "queue_scope": true
+        },
+        "passed": true
+      },
+      {
+        "channel": "resize_tool -> rabbitmq",
+        "case": "native AMQPS principal and own queue",
+        "observation": {
+          "authenticated": true,
+          "queue_scope": true
+        },
+        "passed": true
+      },
+      {
+        "channel": "video_tool -> rabbitmq",
+        "case": "native AMQPS principal and own queue",
+        "observation": {
+          "authenticated": true,
+          "queue_scope": true
+        },
+        "passed": true
+      },
+      {
+        "channel": "rotate_tool -> rabbitmq",
+        "case": "native AMQPS principal and own queue",
+        "observation": {
+          "authenticated": true,
+          "queue_scope": true
+        },
+        "passed": true
+      },
+      {
+        "channel": "cut_ai_tool -> rabbitmq",
+        "case": "native AMQPS principal and own queue",
+        "observation": {
+          "authenticated": true,
+          "queue_scope": true
+        },
+        "passed": true
+      },
+      {
+        "channel": "expand_ai_tool -> rabbitmq",
+        "case": "native AMQPS principal and own queue",
+        "observation": {
+          "authenticated": true,
+          "queue_scope": true
+        },
+        "passed": true
+      },
+      {
+        "channel": "ws_gateway -> rabbitmq",
+        "case": "native AMQPS principal and own queue",
+        "observation": {
+          "authenticated": true,
+          "queue_scope": true
+        },
+        "passed": true
+      },
+      {
+        "channel": "text_ai_tool -> rabbitmq",
+        "case": "native AMQPS principal and own queue",
+        "observation": {
+          "authenticated": true,
+          "queue_scope": true
+        },
+        "passed": true
+      },
+      {
+        "channel": "cut_tool -> rabbitmq",
+        "case": "native AMQPS principal and own queue",
+        "observation": {
+          "authenticated": true,
+          "queue_scope": true
+        },
+        "passed": true
+      },
+      {
+        "channel": "upgrade_ai_tool -> rabbitmq",
+        "case": "native AMQPS principal and own queue",
+        "observation": {
+          "authenticated": true,
+          "queue_scope": true
+        },
+        "passed": true
+      },
+      {
+        "channel": "binarization_tool -> rabbitmq",
+        "case": "native AMQPS principal and own queue",
+        "observation": {
+          "authenticated": true,
+          "queue_scope": true
+        },
+        "passed": true
+      },
+      {
+        "channel": "people_ai_tool -> rabbitmq",
+        "case": "native AMQPS principal and own queue",
+        "observation": {
+          "authenticated": true,
+          "queue_scope": true
+        },
+        "passed": true
+      },
+      {
+        "channel": "bg_remove_ai_tool -> rabbitmq",
+        "case": "native AMQPS principal and own queue",
+        "observation": {
+          "authenticated": true,
+          "queue_scope": true
+        },
+        "passed": true
+      },
+      {
+        "channel": "watermark_tool_ms -> rabbitmq",
+        "case": "native AMQPS principal and own queue",
+        "observation": {
+          "authenticated": true,
+          "queue_scope": true
+        },
+        "passed": true
+      },
+      {
+        "channel": "projects -> rabbitmq",
+        "case": "native AMQPS principal and own queue",
+        "observation": {
+          "authenticated": true,
+          "queue_scope": true
+        },
+        "passed": true
+      },
+      {
+        "channel": "obj_ai_tool -> rabbitmq",
+        "case": "native AMQPS principal and own queue",
+        "observation": {
+          "authenticated": true,
+          "queue_scope": true
+        },
+        "passed": true
+      },
+      {
+        "channel": "saturation_tool -> rabbitmq",
+        "case": "native AMQPS principal and own queue",
+        "observation": {
+          "authenticated": true,
+          "queue_scope": true
+        },
+        "passed": true
+      },
+      {
+        "channel": "border_tool -> rabbitmq",
+        "case": "native AMQPS principal and own queue",
+        "observation": {
+          "authenticated": true,
+          "queue_scope": true
+        },
+        "passed": true
+      },
+      {
+        "channel": "invalid credential -> rabbitmq",
+        "case": "native AMQPS authentication refusal",
+        "observation": {
+          "refused": true
+        },
+        "passed": true
+      }
+    ],
+    "observed_at_ns": 1795545514285109614,
+    "native_s3_head": true
+  },
+  "persistent_controls": {
+    "operation": "6b7f8d72a82c438db4aa019eea02a688",
+    "new_ca": "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b",
+    "all_persistent_cut": true,
+    "valid_old_ticket_tested": true,
+    "all_refused": true,
+    "rows": [
+      {
+        "name": "s3",
+        "refused": true,
+        "tls_reason": 20,
+        "has_ticket": true,
+        "session_age_seconds": 166.0657684803009,
+        "session_timeout_seconds": 7200
+      },
+      {
+        "name": "https-public",
+        "refused": true,
+        "tls_reason": 20,
+        "has_ticket": true,
+        "session_age_seconds": 166.06823563575745,
+        "session_timeout_seconds": 7200
+      },
+      {
+        "name": "grpc",
+        "refused": true,
+        "tls_reason": 20,
+        "has_ticket": true,
+        "session_age_seconds": 166.07024955749512,
+        "session_timeout_seconds": 7200
+      },
+      {
+        "name": "http-internal",
+        "refused": true,
+        "tls_reason": 19,
+        "has_ticket": true,
+        "session_age_seconds": 166.07255816459656,
+        "session_timeout_seconds": 7200
+      },
+      {
+        "name": "mongo-session",
+        "refused": true,
+        "tls_reason": 19,
+        "has_ticket": true,
+        "session_age_seconds": 166.07440209388733,
+        "session_timeout_seconds": 7200
+      },
+      {
+        "name": "amqp-session",
+        "refused": true,
+        "tls_reason": 19,
+        "has_ticket": false,
+        "session_age_seconds": 165.0761525630951,
+        "session_timeout_seconds": 7200
+      }
+    ]
+  },
+  "browser_proof": {
+    "operation": "6b7f8d72a82c438db4aa019eea02a688",
+    "new_ca": "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b",
+    "manual": true,
+    "performed_by": "Codex: interactive Firefox and visual inspection of native certificate pages",
+    "human_user_confirmation": false,
+    "new_trust_positive": true,
+    "old_ca_removed": true,
+    "old_ca_rejected": true,
+    "expired_rejected": true,
+    "wrong_name_rejected": true,
+    "no_warning_override": true,
+    "screenshots_sha256": {
+      "CURRENT": "233982d4b1d707bb39b2e43f78c2f4b4fdb3278c92458493116321d097f6562d",
+      "OLD_CA": "af5a551543bca68a807d44349c1aaf4aad1772de76927d27ccfd90fccfda87a6",
+      "WRONG_NAME": "b3db7d2337361d7baca524250c74bd3f04b255e96e7c12b8e84e729ce94716f7",
+      "EXPIRED": "b69cd4debd2cbf7ce878c77b0d8364a1c487e36dbf3c854f1fe1c76b98475b94"
+    },
+    "inspected_at_ns": 1795545441912599992
+  },
+  "interrupted_work": true,
+  "technical_fixture_correlation_sha256": "3b7da6864925ab36954fbcfbcee33c1da664a835eb0a0d4faf1cbeef7544e6c5",
+  "key_replacement": {
+    "ca_key_changed": true,
+    "all_leaf_keys_changed": true,
+    "leaves": {
+      "users_mongoDB": true,
+      "ws_gateway": true,
+      "nginx": true,
+      "projects": true,
+      "generative-mock": true,
+      "api_gateway": true,
+      "subscriptions_mongoDB": true,
+      "seaweedfs": true,
+      "projects_mongoDB": true,
+      "users": true,
+      "subscriptions": true,
+      "expand_ai_tool": true,
+      "frontend": true,
+      "img_storage": true,
+      "rabbitmq": true
+    }
+  },
+  "ready": {
+    "prepared": true,
+    "at_ns": 1795545322469839483,
+    "rows": {
+      "s3": {
+        "successes": 10,
+        "last_success_ns": 1795545322420753597,
+        "first_cut_ns": null,
+        "socket_identity": 128224778463488
+      },
+      "https-public": {
+        "successes": 10,
+        "last_success_ns": 1795545322452974126,
+        "first_cut_ns": null,
+        "socket_identity": 128224778462144
+      },
+      "http-internal": {
+        "successes": 10,
+        "last_success_ns": 1795545322420890363,
+        "first_cut_ns": null,
+        "socket_identity": 128224778466848
+      },
+      "amqp": {
+        "successes": 10,
+        "last_success_ns": 1795545322417346781,
+        "first_cut_ns": null
+      },
+      "grpc": {
+        "successes": 9,
+        "last_success_ns": 1795545322421408249,
+        "first_cut_ns": null
+      },
+      "mongo": {
+        "successes": 10,
+        "last_success_ns": 1795545322426681149,
+        "first_cut_ns": null
+      },
+      "websocket": {
+        "successes": 1,
+        "last_success_ns": 1795545321762413702,
+        "first_cut_ns": null
+      }
+    }
+  },
+  "ready_written_at_ns": 1795545322468090896,
+  "cut": {
+    "operation": "6b7f8d72a82c438db4aa019eea02a688",
+    "all_persistent_cut": true,
+    "rows": {
+      "s3": {
+        "successes": 40,
+        "last_success_ns": 1795545324721213202,
+        "first_cut_ns": 1795545324799299626,
+        "socket_identity": 128224778463488,
+        "error_type": "RemoteDisconnected",
+        "trace": [
+          {
+            "function": "repeat",
+            "line": 49
+          },
+          {
+            "function": "s3_step",
+            "line": 84
+          },
+          {
+            "function": "getresponse",
+            "line": 1478
+          },
+          {
+            "function": "begin",
+            "line": 343
+          },
+          {
+            "function": "_read_status",
+            "line": 312
+          }
+        ],
+        "attribute": null
+      },
+      "https-public": {
+        "successes": 31,
+        "last_success_ns": 1795545324142117492,
+        "first_cut_ns": 1795545324217818309,
+        "socket_identity": 128224778462144,
+        "error_type": "RuntimeError",
+        "trace": [
+          {
+            "function": "repeat",
+            "line": 49
+          },
+          {
+            "function": "http_step",
+            "line": 76
+          }
+        ],
+        "attribute": null
+      },
+      "http-internal": {
+        "successes": 39,
+        "last_success_ns": 1795545324633659844,
+        "first_cut_ns": 1795545324716796205,
+        "socket_identity": 128224778466848,
+        "error_type": "RemoteDisconnected",
+        "trace": [
+          {
+            "function": "repeat",
+            "line": 49
+          },
+          {
+            "function": "http_step",
+            "line": 72
+          },
+          {
+            "function": "getresponse",
+            "line": 1478
+          },
+          {
+            "function": "begin",
+            "line": 343
+          },
+          {
+            "function": "_read_status",
+            "line": 312
+          }
+        ],
+        "attribute": null
+      },
+      "amqp": {
+        "successes": 40,
+        "last_success_ns": 1795545324696009408,
+        "first_cut_ns": 1795545324807923292,
+        "error_type": "StreamLostError",
+        "trace": [
+          {
+            "function": "repeat",
+            "line": 49
+          },
+          {
+            "function": "<lambda>",
+            "line": 137
+          },
+          {
+            "function": "queue_declare",
+            "line": 2524
+          },
+          {
+            "function": "_flush_output",
+            "line": 1353
+          },
+          {
+            "function": "_flush_output",
+            "line": 523
+          }
+        ],
+        "attribute": null
+      },
+      "grpc": {
+        "successes": 36,
+        "last_success_ns": 1795545324724641421,
+        "first_cut_ns": 1795545324799902058,
+        "error_type": "EOFError",
+        "trace": [
+          {
+            "function": "repeat",
+            "line": 49
+          },
+          {
+            "function": "grpc_step",
+            "line": 120
+          },
+          {
+            "function": "recv_exact",
+            "line": 112
+          }
+        ],
+        "attribute": null
+      },
+      "mongo": {
+        "successes": 40,
+        "last_success_ns": 1795545324706841169,
+        "first_cut_ns": 1795545325282463025,
+        "error_type": "ServerSelectionTimeoutError",
+        "trace": [
+          {
+            "function": "repeat",
+            "line": 49
+          },
+          {
+            "function": "<lambda>",
+            "line": 138
+          },
+          {
+            "function": "find_one",
+            "line": 1755
+          },
+          {
+            "function": "__next__",
+            "line": 1289
+          },
+          {
+            "function": "next",
+            "line": 1265
+          },
+          {
+            "function": "_refresh",
+            "line": 1213
+          },
+          {
+            "function": "_send_message",
+            "line": 1108
+          },
+          {
+            "function": "csot_wrapper",
+            "line": 125
+          },
+          {
+            "function": "_run_operation",
+            "line": 1938
+          },
+          {
+            "function": "_retryable_read",
+            "line": 2047
+          },
+          {
+            "function": "csot_wrapper",
+            "line": 125
+          },
+          {
+            "function": "_retry_internal",
+            "line": 2014
+          },
+          {
+            "function": "run",
+            "line": 2765
+          },
+          {
+            "function": "_read",
+            "line": 2910
+          },
+          {
+            "function": "_get_server",
+            "line": 2858
+          },
+          {
+            "function": "_select_server",
+            "line": 1833
+          },
+          {
+            "function": "select_server",
+            "line": 409
+          },
+          {
+            "function": "_select_server",
+            "line": 387
+          },
+          {
+            "function": "select_servers",
+            "line": 294
+          },
+          {
+            "function": "_select_servers_loop",
+            "line": 344
+          }
+        ],
+        "attribute": null
+      },
+      "websocket": {
+        "successes": 1,
+        "last_success_ns": 1795545321762413702,
+        "first_cut_ns": 1795545324766367538,
+        "error_type": "EOFError"
+      },
+      "video-progress": {
+        "successes": 2,
+        "last_success_ns": 1795545324379494593,
+        "first_cut_ns": null
+      }
+    },
+    "at_ns": 1795545326261471313
+  },
+  "cut_written_at_ns": 1795545326260117291,
+  "isolation": {
+    "operation": "6b7f8d72a82c438db4aa019eea02a688",
+    "command_wall_ns": 1795545323843035430,
+    "controller": {
+      "operation": "6b7f8d72a82c438db4aa019eea02a688",
+      "phase": "isolated",
+      "isolation_ms": 3719.219898,
+      "isolation_target_met": true
+    },
+    "independent_last_cut_ns": 1795545325282463025,
+    "independent_cut_ms": 1439.427595,
+    "persistent_cut": true,
+    "job_observed": true
+  },
+  "isolation_written_at_ns": 1795545327618126736,
+  "resumption": {
+    "operation": "6b7f8d72a82c438db4aa019eea02a688",
+    "new_ca": "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b",
+    "all_persistent_cut": true,
+    "valid_old_ticket_tested": true,
+    "all_refused": true,
+    "rows": [
+      {
+        "name": "s3",
+        "refused": true,
+        "tls_reason": 20,
+        "has_ticket": true,
+        "session_age_seconds": 166.0657684803009,
+        "session_timeout_seconds": 7200
+      },
+      {
+        "name": "https-public",
+        "refused": true,
+        "tls_reason": 20,
+        "has_ticket": true,
+        "session_age_seconds": 166.06823563575745,
+        "session_timeout_seconds": 7200
+      },
+      {
+        "name": "grpc",
+        "refused": true,
+        "tls_reason": 20,
+        "has_ticket": true,
+        "session_age_seconds": 166.07024955749512,
+        "session_timeout_seconds": 7200
+      },
+      {
+        "name": "http-internal",
+        "refused": true,
+        "tls_reason": 19,
+        "has_ticket": true,
+        "session_age_seconds": 166.07255816459656,
+        "session_timeout_seconds": 7200
+      },
+      {
+        "name": "mongo-session",
+        "refused": true,
+        "tls_reason": 19,
+        "has_ticket": true,
+        "session_age_seconds": 166.07440209388733,
+        "session_timeout_seconds": 7200
+      },
+      {
+        "name": "amqp-session",
+        "refused": true,
+        "tls_reason": 19,
+        "has_ticket": false,
+        "session_age_seconds": 165.0761525630951,
+        "session_timeout_seconds": 7200
+      }
+    ]
+  },
+  "resumption_written_at_ns": 1795545487075211331,
+  "completed": {
+    "operation": "6b7f8d72a82c438db4aa019eea02a688",
+    "completed": true,
+    "t_reabertura": "2026-11-24T18:38:35.237302+00:00",
+    "isolation_ms": 3719.219898,
+    "isolation_target_met": true,
+    "old_session_refused": true
+  },
+  "completed_written_at_ns": 1795545515295578309,
+  "browser-ready": {
+    "operation": "6b7f8d72a82c438db4aa019eea02a688",
+    "new_ca": "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b",
+    "old_ca": "e2f99d7067c250b560520f8b45a9791e967f0460185379f6f605c89b97507f70",
+    "cases": {
+      "CURRENT": {
+        "accepted": true,
+        "http_status": 200
+      },
+      "OLD_CA": {
+        "accepted": false,
+        "error_codes": [
+          "SEC_ERROR_UNKNOWN_ISSUER"
+        ]
+      },
+      "WRONG_NAME": {
+        "accepted": false,
+        "error_codes": [
+          "SSL_ERROR_BAD_CERT_DOMAIN"
+        ]
+      },
+      "EXPIRED": {
+        "accepted": false,
+        "error_codes": [
+          "SEC_ERROR_EXPIRED_CERTIFICATE"
+        ]
+      }
+    },
+    "automated_preparation": true,
+    "manual": false,
+    "old_ca_removed": true,
+    "no_warning_override": true,
+    "ready_at_ns": 1795545405968320286
+  },
+  "browser-ready_written_at_ns": 1795545405967665084,
+  "browser-proof": {
+    "operation": "6b7f8d72a82c438db4aa019eea02a688",
+    "new_ca": "6682b106b4416708340d33bb5cb478c93c8c2732e9ac4c7f34692f6e9807157b",
+    "manual": true,
+    "performed_by": "Codex: interactive Firefox and visual inspection of native certificate pages",
+    "human_user_confirmation": false,
+    "new_trust_positive": true,
+    "old_ca_removed": true,
+    "old_ca_rejected": true,
+    "expired_rejected": true,
+    "wrong_name_rejected": true,
+    "no_warning_override": true,
+    "screenshots_sha256": {
+      "CURRENT": "233982d4b1d707bb39b2e43f78c2f4b4fdb3278c92458493116321d097f6562d",
+      "OLD_CA": "af5a551543bca68a807d44349c1aaf4aad1772de76927d27ccfd90fccfda87a6",
+      "WRONG_NAME": "b3db7d2337361d7baca524250c74bd3f04b255e96e7c12b8e84e729ce94716f7",
+      "EXPIRED": "b69cd4debd2cbf7ce878c77b0d8364a1c487e36dbf3c854f1fe1c76b98475b94"
+    },
+    "inspected_at_ns": 1795545441912599992
+  },
+  "browser-proof_written_at_ns": 1795545441911908351,
+  "job-active": {
+    "at_ns": 1795545323842781211,
+    "active_marker": true
+  },
+  "job-active_written_at_ns": 1795545323841100457,
+  "quarantine": {
+    "operation": "6b7f8d72a82c438db4aa019eea02a688",
+    "technical_fixture": true,
+    "only_fixture_message_quarantined": true,
+    "no_domain_process": true,
+    "no_domain_debit": true,
+    "no_automatic_replay": true,
+    "holding_queue": "pki_quarantine_6b7f8d72a82c438db4aa019eea02a688",
+    "fixture_outputs_quarantined": true
+  },
+  "quarantine_written_at_ns": 1795545396497600638
+}

@@ -1,0 +1,8 @@
+{
+  "durable_json_gate": true,
+  "nginx_admissions_suspended": true,
+  "participants_unchanged": true,
+  "unchanged_owned_deferral_cancelled": true,
+  "nginx_reopened": true,
+  "no_pki_change": true
+}

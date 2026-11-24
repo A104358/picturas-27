@@ -84,7 +84,8 @@ Behind the gateway:
 ```bash
 export PICTURAS_SECRETS_DIR=<dir outside the repo>   # required: compose refuses to start without it
 ops/secrets.sh init && ops/pki.sh init       # once per machine: secrets, local CA, service certificates
-ops/pki.sh check                             # before starting; `ops/pki.sh renew` at 7 days left
+ops/pki.sh check                             # before starting
+ops/pki.sh renew --project picturas-dev      # at 7 days left: drains, applies and verifies
 docker compose up -d --build                 # first build: 15-30 min, ~15 GB disk, 8+ GB RAM
 docker compose up -d --build <service>       # rebuild one service after a change
 docker compose restart nginx                 # after rebuilding the frontend (avoids 502)
@@ -103,7 +104,9 @@ cd Tools/video && python3 -m venv .venv && .venv/bin/pip install -r requirements
 .venv/bin/python -m pytest -q tests
 ```
 
-- Open `https://localhost:8080` (https, port 8080) and accept the self-signed certificate.
+- Import the verified installation CA into a dedicated browser profile, then open
+  `https://localhost:8080`. Never bypass certificate warnings. Applied PKI operations:
+  [docs/pki-operations.md](docs/pki-operations.md).
 - Only nginx publishes a port (8080). Internal services, databases, the broker and S3 have no
   host port: administer them with `docker compose exec` (B3, D-05).
 - The Node services run `node` with `init`, `restart`, `healthcheck` and `mem_limit`. For live

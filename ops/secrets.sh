@@ -86,6 +86,8 @@ write_env() { # <service> <KEY=value lines...>
 }
 
 cmd_render() {
+  # Public admission flag only; mounted separately so nginx workers never need key-directory access.
+  mkdir -p "$ROOT/maintenance-gate"; chmod 755 "$ROOT/maintenance-gate"
   mkdir -p "$ENV_DIR"; chmod 700 "$ENV_DIR"
   local jwt w
   jwt=$(val jwt_hs256)

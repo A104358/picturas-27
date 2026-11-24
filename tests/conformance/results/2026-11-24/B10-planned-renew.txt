@@ -1,0 +1,11 @@
+PASS pre-existing TLS session captured
+PASS pre-existing authenticated WS
+PASS buffered request body defers maintenance without killing participants
+PASS new admissions are suspended at nginx
+PASS all real processes and socket contexts are replaced
+PASS normal renewal preserves the CA
+PASS old TLS session is not resumed by the new nginx process
+PASS nginx leaf key changed under the same CA
+PASS renewal reopens only after complete manifest and controls
+PASS previous still-valid client certificate remains valid under the same CA
+Planned renewal: all checks passed

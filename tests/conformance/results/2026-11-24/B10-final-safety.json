@@ -1,0 +1,13 @@
+{
+  "secret_values_checked": 82,
+  "public_files_scanned": 113,
+  "secret_matches": 0,
+  "JWT_matches": 0,
+  "private_key_matches": 0,
+  "positive_control_in_memory": true,
+  "measurement_instrument_unchanged": true,
+  "env_med_git_ignored": true,
+  "handoff_section_1_unchanged": true,
+  "git_rebase_conflicts": false,
+  "stacks_stopped_without_volume_deletion": true
+}

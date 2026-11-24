@@ -4,6 +4,8 @@
 # connection presents its certificate. The own certificate is checked at start-up and the
 # process stops when it expires (PKI-C3 A).
 import os
+import hashlib
+import json
 import ssl
 import sys
 import threading
@@ -54,5 +56,10 @@ if __name__ == "__main__":
     ctx.options |= ssl.OP_NO_TICKET
     ctx.load_cert_chain(CERT, KEY)
     ctx.load_verify_locations(CA)
+    loaded_cas = sorted(hashlib.sha256(c).hexdigest() for c in ctx.get_ca_certs(binary_form=True))
+    with open(f"/tmp/pki-loaded-{os.getpid()}.json", "w") as record:
+        json.dump({"pid": os.getpid(), "ca": loaded_cas[0], "trusted_cas": loaded_cas,
+                   "certificate": hashlib.sha256(ssl.PEM_cert_to_DER_cert(open(CERT).read())).hexdigest()}, record)
+    os.chmod(f"/tmp/pki-loaded-{os.getpid()}.json", 0o600)
     ctx.verify_mode = ssl.CERT_REQUIRED
     app.run(host="0.0.0.0", port=7860, debug=False, ssl_context=ctx)

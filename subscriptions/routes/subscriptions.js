@@ -145,6 +145,10 @@ router.get('/:user/card', function(req, res, next) {
 // Subscribe to a plan 
 router.post("/", async (req, res) => {
   try {
+    if (!req.internalIdentity?.sub ||
+        String(req.body?.subscription?.user_id) !== req.internalIdentity.sub) {
+      return res.status(403).jsonp({ error: "Subscription owner mismatch" });
+    }
     const validation = validateCreditCard(
       req.body.card.cardNumber,
       req.body.card.expiryMonth,
@@ -249,10 +253,18 @@ router.put('/:user/card', function(req, res, next) {
 ////////////
 
 // Delete subscription
-router.delete('/:subscription', function(req, res, next) {
-	Subscriptions.delete(req.params.subscription)
-				 .then(subscription => res.status(200).jsonp(subscription))
-				 .catch(err => res.status(706).jsonp(err));
+router.delete('/:subscription', async function(req, res, next) {
+    try {
+        const subscription = await Subscriptions.getOne(req.params.subscription);
+        if (!subscription) return res.status(404).jsonp({ error: 'Subscription not found' });
+        if (String(subscription.user_id) !== req.internalIdentity?.sub) {
+            return res.status(403).jsonp({ error: 'Subscription owner mismatch' });
+        }
+        await Subscriptions.deleteOne(req.params.subscription);
+        return res.status(200).jsonp(subscription);
+    } catch (_) {
+        return res.status(500).jsonp({ error: 'Error deleting subscription' });
+    }
 }); 
 
 module.exports = router;

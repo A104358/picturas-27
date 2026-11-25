@@ -1,0 +1,811 @@
+{
+  "passed": false,
+  "rows": [
+    {
+      "channel": "tls-client -> nginx:443",
+      "case": "current certificate actually served",
+      "observation": {
+        "result": "http",
+        "status": 200,
+        "peer": "7a6dbdc6d8f76fa1d51162208006138f16adb11a5517e17c06294b4e8bdbd2d1",
+        "resumed": false
+      },
+      "passed": true
+    },
+    {
+      "channel": "tls-client -> nginx:443",
+      "case": "wrong server name",
+      "observation": {
+        "result": "tls_refused",
+        "reason": 62
+      },
+      "passed": true
+    },
+    {
+      "channel": "nginx -> frontend:3000",
+      "case": "current certificate actually served",
+      "observation": {
+        "result": "http",
+        "status": 200,
+        "peer": "4899bad4a3a8399c41cc268ec9474222068cb69526c2cac577d5ec6c82a575e0",
+        "resumed": false
+      },
+      "passed": true
+    },
+    {
+      "channel": "nginx -> frontend:3000",
+      "case": "no client certificate",
+      "observation": {
+        "result": "tls_refused",
+        "reason": "TLSV13_ALERT_CERTIFICATE_REQUIRED"
+      },
+      "passed": true
+    },
+    {
+      "channel": "nginx -> frontend:3000",
+      "case": "wrong server name",
+      "observation": {
+        "result": "tls_refused",
+        "reason": 62
+      },
+      "passed": true
+    },
+    {
+      "channel": "nginx -> api_gateway:8000",
+      "case": "current certificate actually served",
+      "observation": {
+        "result": "http",
+        "status": 401,
+        "peer": "ee42cc7735559954f21349f09ca43bb7a373d6340cc2dbd4dec62c7e6ddd836a",
+        "resumed": false
+      },
+      "passed": true
+    },
+    {
+      "channel": "nginx -> api_gateway:8000",
+      "case": "no client certificate",
+      "observation": {
+        "result": "tls_refused",
+        "reason": "TLSV13_ALERT_CERTIFICATE_REQUIRED"
+      },
+      "passed": true
+    },
+    {
+      "channel": "nginx -> api_gateway:8000",
+      "case": "wrong server name",
+      "observation": {
+        "result": "tls_refused",
+        "reason": 62
+      },
+      "passed": true
+    },
+    {
+      "channel": "nginx -> ws_gateway:4000",
+      "case": "current certificate actually served",
+      "observation": {
+        "result": "unavailable"
+      },
+      "passed": false
+    },
+    {
+      "channel": "nginx -> ws_gateway:4000",
+      "case": "no client certificate",
+      "observation": {
+        "result": "tls_refused",
+        "reason": "TLSV13_ALERT_CERTIFICATE_REQUIRED"
+      },
+      "passed": true
+    },
+    {
+      "channel": "nginx -> ws_gateway:4000",
+      "case": "wrong server name",
+      "observation": {
+        "result": "tls_refused",
+        "reason": 62
+      },
+      "passed": true
+    },
+    {
+      "channel": "api_gateway -> projects:9001",
+      "case": "current certificate actually served",
+      "observation": {
+        "result": "http",
+        "status": 401,
+        "peer": "b4fa7bc62c2d8e4aa23edae7cfcccb670f7bef7eebc401b720bfddf1058b3e41",
+        "resumed": false
+      },
+      "passed": true
+    },
+    {
+      "channel": "api_gateway -> projects:9001",
+      "case": "no client certificate",
+      "observation": {
+        "result": "tls_refused",
+        "reason": "TLSV13_ALERT_CERTIFICATE_REQUIRED"
+      },
+      "passed": true
+    },
+    {
+      "channel": "api_gateway -> projects:9001",
+      "case": "wrong server name",
+      "observation": {
+        "result": "tls_refused",
+        "reason": 62
+      },
+      "passed": true
+    },
+    {
+      "channel": "projects -> users:10001",
+      "case": "current certificate actually served",
+      "observation": {
+        "result": "http",
+        "status": 403,
+        "peer": "cfbe69d597e20f3cccb8f2febecd695f3dce8244af098a32e91ed87f54150c18",
+        "resumed": false
+      },
+      "passed": true
+    },
+    {
+      "channel": "projects -> users:10001",
+      "case": "no client certificate",
+      "observation": {
+        "result": "tls_refused",
+        "reason": "TLSV13_ALERT_CERTIFICATE_REQUIRED"
+      },
+      "passed": true
+    },
+    {
+      "channel": "projects -> users:10001",
+      "case": "wrong server name",
+      "observation": {
+        "result": "tls_refused",
+        "reason": 62
+      },
+      "passed": true
+    },
+    {
+      "channel": "api_gateway -> subscriptions:11001",
+      "case": "current certificate actually served",
+      "observation": {
+        "result": "http",
+        "status": 401,
+        "peer": "c8eba874f5ea51ac71eb873c17557f0c771ad9111cfbe7068a8e611353555ba7",
+        "resumed": false
+      },
+      "passed": true
+    },
+    {
+      "channel": "api_gateway -> subscriptions:11001",
+      "case": "no client certificate",
+      "observation": {
+        "result": "tls_refused",
+        "reason": "TLSV13_ALERT_CERTIFICATE_REQUIRED"
+      },
+      "passed": true
+    },
+    {
+      "channel": "api_gateway -> subscriptions:11001",
+      "case": "wrong server name",
+      "observation": {
+        "result": "tls_refused",
+        "reason": 62
+      },
+      "passed": true
+    },
+    {
+      "channel": "projects -> img_storage:11000",
+      "case": "current certificate actually served",
+      "observation": {
+        "result": "http",
+        "status": 404,
+        "peer": "444798fd18ae6563dc844e990bf48ab0ccc458481bfc92c960995ab19e415084",
+        "resumed": false
+      },
+      "passed": true
+    },
+    {
+      "channel": "projects -> img_storage:11000",
+      "case": "no client certificate",
+      "observation": {
+        "result": "tls_refused",
+        "reason": "TLSV13_ALERT_CERTIFICATE_REQUIRED"
+      },
+      "passed": true
+    },
+    {
+      "channel": "projects -> img_storage:11000",
+      "case": "wrong server name",
+      "observation": {
+        "result": "tls_refused",
+        "reason": 62
+      },
+      "passed": true
+    },
+    {
+      "channel": "expand_ai_tool -> generative-mock:7860",
+      "case": "current certificate actually served",
+      "observation": {
+        "result": "http",
+        "status": 404,
+        "peer": "8f2b34a89a593c425dd30bf5d448006b22bd7aa76f59e9d6f4e3663561fcd18e",
+        "resumed": false
+      },
+      "passed": true
+    },
+    {
+      "channel": "expand_ai_tool -> generative-mock:7860",
+      "case": "no client certificate",
+      "observation": {
+        "result": "tls_refused",
+        "reason": "TLSV13_ALERT_CERTIFICATE_REQUIRED"
+      },
+      "passed": true
+    },
+    {
+      "channel": "expand_ai_tool -> generative-mock:7860",
+      "case": "wrong server name",
+      "observation": {
+        "result": "tls_refused",
+        "reason": 62
+      },
+      "passed": true
+    },
+    {
+      "channel": "tls-client -> rabbitmq:5671",
+      "case": "current certificate actually served",
+      "observation": {
+        "result": "tls",
+        "peer": "fe412f3696aed23528dfc6418c4121de9af5decf3779f0d11d843a136afb7450",
+        "resumed": false
+      },
+      "passed": true
+    },
+    {
+      "channel": "tls-client -> rabbitmq:5671",
+      "case": "wrong server name",
+      "observation": {
+        "result": "tls_refused",
+        "reason": 62
+      },
+      "passed": true
+    },
+    {
+      "channel": "tls-client -> rabbitmq:15671",
+      "case": "current certificate actually served",
+      "observation": {
+        "result": "http",
+        "status": 200,
+        "peer": "fe412f3696aed23528dfc6418c4121de9af5decf3779f0d11d843a136afb7450",
+        "resumed": false
+      },
+      "passed": true
+    },
+    {
+      "channel": "tls-client -> rabbitmq:15671",
+      "case": "wrong server name",
+      "observation": {
+        "result": "tls_refused",
+        "reason": 62
+      },
+      "passed": true
+    },
+    {
+      "channel": "tls-client -> seaweedfs:9000",
+      "case": "current certificate actually served",
+      "observation": {
+        "result": "http",
+        "status": 403,
+        "peer": "9b21d542e454e8e34b9edfbf4136d3e95b39d74e66d118fd5234b9e564226be6",
+        "resumed": false
+      },
+      "passed": true
+    },
+    {
+      "channel": "tls-client -> seaweedfs:9000",
+      "case": "wrong server name",
+      "observation": {
+        "result": "tls_refused",
+        "reason": 62
+      },
+      "passed": true
+    },
+    {
+      "channel": "seaweedfs -> seaweedfs:19000",
+      "case": "current certificate actually served",
+      "observation": {
+        "result": "tls",
+        "peer": "9b21d542e454e8e34b9edfbf4136d3e95b39d74e66d118fd5234b9e564226be6",
+        "resumed": false
+      },
+      "passed": true
+    },
+    {
+      "channel": "seaweedfs -> seaweedfs:19000",
+      "case": "no client certificate",
+      "observation": {
+        "result": "tls_refused",
+        "reason": "TLSV13_ALERT_CERTIFICATE_REQUIRED"
+      },
+      "passed": true
+    },
+    {
+      "channel": "seaweedfs -> seaweedfs:19000",
+      "case": "wrong server name",
+      "observation": {
+        "result": "tls_refused",
+        "reason": 62
+      },
+      "passed": true
+    },
+    {
+      "channel": "tls-client -> projects_mongoDB:27018",
+      "case": "current certificate actually served",
+      "observation": {
+        "result": "tls",
+        "peer": "93f0d01dfcc39a10727f853fd40b5e5014febe476c5ff3b3ff0b4b7692fab5f8",
+        "resumed": false
+      },
+      "passed": true
+    },
+    {
+      "channel": "tls-client -> projects_mongoDB:27018",
+      "case": "wrong server name",
+      "observation": {
+        "result": "tls_refused",
+        "reason": 62
+      },
+      "passed": true
+    },
+    {
+      "channel": "tls-client -> users_mongoDB:27019",
+      "case": "current certificate actually served",
+      "observation": {
+        "result": "tls",
+        "peer": "338af05295cc7e0f864f6c4e8c9fc5a0be92add4835e5b5f8e18c364170de87a",
+        "resumed": false
+      },
+      "passed": true
+    },
+    {
+      "channel": "tls-client -> users_mongoDB:27019",
+      "case": "wrong server name",
+      "observation": {
+        "result": "tls_refused",
+        "reason": 62
+      },
+      "passed": true
+    },
+    {
+      "channel": "tls-client -> subscriptions_mongoDB:27017",
+      "case": "current certificate actually served",
+      "observation": {
+        "result": "tls",
+        "peer": "362a5cea5933e88eec95a597a382e3095382a875b00308905e8f67015dd665c3",
+        "resumed": false
+      },
+      "passed": true
+    },
+    {
+      "channel": "tls-client -> subscriptions_mongoDB:27017",
+      "case": "wrong server name",
+      "observation": {
+        "result": "tls_refused",
+        "reason": 62
+      },
+      "passed": true
+    },
+    {
+      "channel": "seaweedfs -> frontend",
+      "case": "wrong principal refused",
+      "observation": {
+        "result": "http",
+        "status": 403,
+        "peer": "4899bad4a3a8399c41cc268ec9474222068cb69526c2cac577d5ec6c82a575e0",
+        "resumed": false
+      },
+      "passed": true
+    },
+    {
+      "channel": "seaweedfs -> api_gateway",
+      "case": "wrong principal refused",
+      "observation": {
+        "result": "http",
+        "status": 403,
+        "peer": "ee42cc7735559954f21349f09ca43bb7a373d6340cc2dbd4dec62c7e6ddd836a",
+        "resumed": false
+      },
+      "passed": true
+    },
+    {
+      "channel": "seaweedfs -> ws_gateway",
+      "case": "wrong principal refused",
+      "observation": {
+        "result": "unavailable"
+      },
+      "passed": false
+    },
+    {
+      "channel": "seaweedfs -> projects",
+      "case": "wrong principal refused",
+      "observation": {
+        "result": "http",
+        "status": 403,
+        "peer": "b4fa7bc62c2d8e4aa23edae7cfcccb670f7bef7eebc401b720bfddf1058b3e41",
+        "resumed": false
+      },
+      "passed": true
+    },
+    {
+      "channel": "seaweedfs -> users",
+      "case": "wrong principal refused",
+      "observation": {
+        "result": "http",
+        "status": 403,
+        "peer": "cfbe69d597e20f3cccb8f2febecd695f3dce8244af098a32e91ed87f54150c18",
+        "resumed": false
+      },
+      "passed": true
+    },
+    {
+      "channel": "seaweedfs -> subscriptions",
+      "case": "wrong principal refused",
+      "observation": {
+        "result": "http",
+        "status": 403,
+        "peer": "c8eba874f5ea51ac71eb873c17557f0c771ad9111cfbe7068a8e611353555ba7",
+        "resumed": false
+      },
+      "passed": true
+    },
+    {
+      "channel": "seaweedfs -> img_storage",
+      "case": "wrong principal refused",
+      "observation": {
+        "result": "http",
+        "status": 403,
+        "peer": "444798fd18ae6563dc844e990bf48ab0ccc458481bfc92c960995ab19e415084",
+        "resumed": false
+      },
+      "passed": true
+    },
+    {
+      "channel": "seaweedfs -> generative-mock",
+      "case": "wrong principal refused",
+      "observation": {
+        "result": "http",
+        "status": 403,
+        "peer": "8f2b34a89a593c425dd30bf5d448006b22bd7aa76f59e9d6f4e3663561fcd18e",
+        "resumed": false
+      },
+      "passed": true
+    },
+    {
+      "channel": "network -> rabbitmq:5672",
+      "case": "plaintext/admin bypass closed",
+      "observation": {
+        "closed": true
+      },
+      "passed": true
+    },
+    {
+      "channel": "network -> rabbitmq:15672",
+      "case": "plaintext/admin bypass closed",
+      "observation": {
+        "closed": true
+      },
+      "passed": true
+    },
+    {
+      "channel": "network -> seaweedfs:8888",
+      "case": "plaintext/admin bypass closed",
+      "observation": {
+        "closed": true
+      },
+      "passed": true
+    },
+    {
+      "channel": "network -> seaweedfs:18888",
+      "case": "plaintext/admin bypass closed",
+      "observation": {
+        "closed": true
+      },
+      "passed": true
+    },
+    {
+      "channel": "network -> seaweedfs:9333",
+      "case": "plaintext/admin bypass closed",
+      "observation": {
+        "closed": true
+      },
+      "passed": true
+    },
+    {
+      "channel": "network -> seaweedfs:19333",
+      "case": "plaintext/admin bypass closed",
+      "observation": {
+        "closed": true
+      },
+      "passed": true
+    },
+    {
+      "channel": "network -> seaweedfs:8080",
+      "case": "plaintext/admin bypass closed",
+      "observation": {
+        "closed": true
+      },
+      "passed": true
+    },
+    {
+      "channel": "network -> seaweedfs:18080",
+      "case": "plaintext/admin bypass closed",
+      "observation": {
+        "closed": true
+      },
+      "passed": true
+    },
+    {
+      "channel": "service -> users_mongoDB",
+      "case": "native authenticated read and role scope",
+      "observation": {
+        "read": true,
+        "has_write": true,
+        "write_scoped": true
+      },
+      "passed": true
+    },
+    {
+      "channel": "backup -> users_mongoDB",
+      "case": "native authenticated read and role scope",
+      "observation": {
+        "read": true,
+        "has_write": false,
+        "write_scoped": true
+      },
+      "passed": true
+    },
+    {
+      "channel": "invalid credential -> users_mongoDB",
+      "case": "native authentication refusal",
+      "observation": {
+        "refused": true
+      },
+      "passed": true
+    },
+    {
+      "channel": "service -> projects_mongoDB",
+      "case": "native authenticated read and role scope",
+      "observation": {
+        "read": true,
+        "has_write": true,
+        "write_scoped": true
+      },
+      "passed": true
+    },
+    {
+      "channel": "backup -> projects_mongoDB",
+      "case": "native authenticated read and role scope",
+      "observation": {
+        "read": true,
+        "has_write": false,
+        "write_scoped": true
+      },
+      "passed": true
+    },
+    {
+      "channel": "invalid credential -> projects_mongoDB",
+      "case": "native authentication refusal",
+      "observation": {
+        "refused": true
+      },
+      "passed": true
+    },
+    {
+      "channel": "service -> subscriptions_mongoDB",
+      "case": "native authenticated read and role scope",
+      "observation": {
+        "read": true,
+        "has_write": true,
+        "write_scoped": true
+      },
+      "passed": true
+    },
+    {
+      "channel": "backup -> subscriptions_mongoDB",
+      "case": "native authenticated read and role scope",
+      "observation": {
+        "read": true,
+        "has_write": false,
+        "write_scoped": true
+      },
+      "passed": true
+    },
+    {
+      "channel": "invalid credential -> subscriptions_mongoDB",
+      "case": "native authentication refusal",
+      "observation": {
+        "refused": true
+      },
+      "passed": true
+    },
+    {
+      "channel": "brightness_tool -> rabbitmq",
+      "case": "native AMQPS principal and own queue",
+      "observation": {
+        "authenticated": true,
+        "queue_scope": true
+      },
+      "passed": true
+    },
+    {
+      "channel": "contrast_tool -> rabbitmq",
+      "case": "native AMQPS principal and own queue",
+      "observation": {
+        "authenticated": true,
+        "queue_scope": true
+      },
+      "passed": true
+    },
+    {
+      "channel": "resize_tool -> rabbitmq",
+      "case": "native AMQPS principal and own queue",
+      "observation": {
+        "authenticated": true,
+        "queue_scope": true
+      },
+      "passed": true
+    },
+    {
+      "channel": "video_tool -> rabbitmq",
+      "case": "native AMQPS principal and own queue",
+      "observation": {
+        "authenticated": true,
+        "queue_scope": true
+      },
+      "passed": true
+    },
+    {
+      "channel": "rotate_tool -> rabbitmq",
+      "case": "native AMQPS principal and own queue",
+      "observation": {
+        "authenticated": true,
+        "queue_scope": true
+      },
+      "passed": true
+    },
+    {
+      "channel": "cut_ai_tool -> rabbitmq",
+      "case": "native AMQPS principal and own queue",
+      "observation": {
+        "authenticated": true,
+        "queue_scope": true
+      },
+      "passed": true
+    },
+    {
+      "channel": "expand_ai_tool -> rabbitmq",
+      "case": "native AMQPS principal and own queue",
+      "observation": {
+        "authenticated": true,
+        "queue_scope": true
+      },
+      "passed": true
+    },
+    {
+      "channel": "ws_gateway -> rabbitmq",
+      "case": "native AMQPS principal and own queue",
+      "observation": {
+        "authenticated": true,
+        "queue_scope": true
+      },
+      "passed": true
+    },
+    {
+      "channel": "text_ai_tool -> rabbitmq",
+      "case": "native AMQPS principal and own queue",
+      "observation": {
+        "authenticated": true,
+        "queue_scope": true
+      },
+      "passed": true
+    },
+    {
+      "channel": "cut_tool -> rabbitmq",
+      "case": "native AMQPS principal and own queue",
+      "observation": {
+        "authenticated": true,
+        "queue_scope": true
+      },
+      "passed": true
+    },
+    {
+      "channel": "upgrade_ai_tool -> rabbitmq",
+      "case": "native AMQPS principal and own queue",
+      "observation": {
+        "authenticated": true,
+        "queue_scope": true
+      },
+      "passed": true
+    },
+    {
+      "channel": "binarization_tool -> rabbitmq",
+      "case": "native AMQPS principal and own queue",
+      "observation": {
+        "authenticated": true,
+        "queue_scope": true
+      },
+      "passed": true
+    },
+    {
+      "channel": "people_ai_tool -> rabbitmq",
+      "case": "native AMQPS principal and own queue",
+      "observation": {
+        "authenticated": true,
+        "queue_scope": true
+      },
+      "passed": true
+    },
+    {
+      "channel": "bg_remove_ai_tool -> rabbitmq",
+      "case": "native AMQPS principal and own queue",
+      "observation": {
+        "authenticated": true,
+        "queue_scope": true
+      },
+      "passed": true
+    },
+    {
+      "channel": "watermark_tool_ms -> rabbitmq",
+      "case": "native AMQPS principal and own queue",
+      "observation": {
+        "authenticated": true,
+        "queue_scope": true
+      },
+      "passed": true
+    },
+    {
+      "channel": "projects -> rabbitmq",
+      "case": "native AMQPS principal and own queue",
+      "observation": {
+        "authenticated": true,
+        "queue_scope": true
+      },
+      "passed": true
+    },
+    {
+      "channel": "obj_ai_tool -> rabbitmq",
+      "case": "native AMQPS principal and own queue",
+      "observation": {
+        "authenticated": true,
+        "queue_scope": true
+      },
+      "passed": true
+    },
+    {
+      "channel": "saturation_tool -> rabbitmq",
+      "case": "native AMQPS principal and own queue",
+      "observation": {
+        "authenticated": true,
+        "queue_scope": true
+      },
+      "passed": true
+    },
+    {
+      "channel": "border_tool -> rabbitmq",
+      "case": "native AMQPS principal and own queue",
+      "observation": {
+        "authenticated": true,
+        "queue_scope": true
+      },
+      "passed": true
+    },
+    {
+      "channel": "invalid credential -> rabbitmq",
+      "case": "native AMQPS authentication refusal",
+      "observation": {
+        "refused": true
+      },
+      "passed": true
+    }
+  ],
+  "observed_at_ns": 1795530411729821932
+}

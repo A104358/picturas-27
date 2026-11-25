@@ -1,0 +1,1 @@
+PASS S06/SEC-02: normal profile, same subject, absolute 7 days, exact expiry/+1 and different installation refusal

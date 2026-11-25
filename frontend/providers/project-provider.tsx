@@ -63,16 +63,44 @@ export function ProjectProvider({
   const [tools, setTools] = useState(project.tools);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
-  // entrar na room do projeto
+  // Every transport connection obtains fresh project authorization.
   useEffect(() => {
     if (!socket.data) return;
+    const connection = socket.data;
     const projectId = project._id;
-    socket.data.emit("join-project", projectId);
-
-    return () => {
-      socket.data?.emit("leave-project", projectId);
+    let live = true;
+    const report = (result?: { status?: string }) => {
+      if (live && result?.status !== "joined") toast({
+        title: "Live updates unavailable",
+        description: result?.status === "denied" ? "Project access was denied." :
+          result?.status === "session_expired" ? "Sign in to reconnect." : "Please try reopening this project.",
+        variant: "destructive",
+      });
     };
-  }, [socket.data, project._id]);
+    const join = () => connection.timeout(1500).emit("join-project", {
+      projectId, access: shareId ? { kind: "share", shareId } : { kind: "owner" },
+    }, (error: Error | null, result: { status?: string }) => report(error ? undefined : result));
+    const access = (result: { projectId: string; status: string }) => {
+      if (result.projectId === projectId) report(result);
+    };
+    const expired = () => report({ status: "session_expired" });
+    const refused = (error: { data?: { status?: string } }) => {
+      if (["denied", "session_expired"].includes(error.data?.status || "")) report(error.data);
+    };
+    connection.on("connect", join);
+    connection.on("project-access", access);
+    connection.on("session-expired", expired);
+    connection.on("connect_error", refused);
+    if (connection.connected) join();
+    return () => {
+      live = false;
+      connection.off("connect", join);
+      connection.off("project-access", access);
+      connection.off("session-expired", expired);
+      connection.off("connect_error", refused);
+      connection.emit("leave-project", projectId);
+    };
+  }, [socket.data, project._id, shareId, toast]);
 
   // manter state tools alinhado com o project vindo do backend
   useEffect(() => {

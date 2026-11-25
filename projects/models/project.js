@@ -10,7 +10,8 @@ const imgSchema = new mongoose.Schema({
   og_uri: { type: String, required: true },
   new_uri: { type: String, required: true },
   og_img_key: { type: String, required: true },
-  og_sha256: { type: String, required: true }, 
+  og_sha256: { type: String, required: function () { return this.media_type !== "video" || this.hash_state !== "ready_hash_pending"; } },
+  hash_state: { type: String, enum: ["ready_hash_pending", "ready"], default: "ready" },
   // A project media item can be an image or a video
   media_type: { type: String, enum: ["image", "video"], default: "image" },
   // video characteristics read on upload
@@ -36,6 +37,7 @@ const projectSchema = new mongoose.Schema({
   imgs: { type: [imgSchema], default: [] },
   tools: { type: [toolSchema], default: [] },
   version: { type: Number, default: 0 },
+  uploadBarrier: { type: Number, default: 0 },
   activeToken: { type: Number, default: 0 },
   resultsToken: { type: Number, default: 0 },
   cancelToken: { type: Number, default: 0 },
@@ -55,6 +57,10 @@ const projectSchema = new mongoose.Schema({
   // nº de operações avançadas reservadas numa execução em curso
   // (serve só para saber quanto refund fazer em caso de cancel)
   pendingAdvancedOps: { type: Number, default: 0 },
+  processingRunId: { type: String, default: null },
+  reconciliationHold: { type: Boolean, default: false },
+  committedRun: { type: mongoose.Schema.Types.Mixed, default: null },
+  prevCommittedRun: { type: mongoose.Schema.Types.Mixed, default: null },
   
   // campo de partilhas
   sharedLinks: [
@@ -71,4 +77,8 @@ const projectSchema = new mongoose.Schema({
   ],
 });
 
+projectSchema.set('toJSON',{transform:(_,ret)=>{
+  delete ret.processingRunId;delete ret.reconciliationHold;delete ret.committedRun;delete ret.prevCommittedRun;
+  return ret;
+}});
 module.exports = mongoose.model("project", projectSchema);

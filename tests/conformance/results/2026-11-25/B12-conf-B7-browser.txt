@@ -1,0 +1,10 @@
+# B7-browser — 2026-11-25T07:46:20Z
+$ /Users/miguelsantos/picturas-b7-diagnostico/.venv/bin/python tests/conformance/upload/b7-browser.py
+
+PASS UI invalid file rejected
+PASS UI image upload
+PASS UI video PUT and confirmation
+PASS UI free duration limit
+PASS UI premium duration limit
+PASS UI cancellation before commit
+exit: 0

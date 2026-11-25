@@ -1,0 +1,36 @@
+ALLOW  admin create_bucket picturas
+ALLOW  admin create_bucket other
+DENY   admin put other/x  [InternalError 500]
+ALLOW  git_default list_buckets
+ALLOW  git_default list picturas
+DENY   bad_secret list_buckets  [SignatureDoesNotMatch 403]
+DENY   bad_secret list picturas  [SignatureDoesNotMatch 403]
+DENY   img_storage put users/u/projects/p/src/a.png  [InternalError 500]
+DENY   img_storage get  [NoSuchKey 404]
+DENY   img_storage head  [404 404]
+ALLOW  img_storage list picturas
+DENY   img_storage copy src->out  [NoSuchKey 404]
+ALLOW  img_storage delete out
+DENY   img_storage create_bucket canary (B2)  [AccessDenied 403]
+DENY   img_storage delete_bucket picturas  [AccessDenied 403]
+ALLOW  img_storage list_buckets
+DENY   img_storage get other/x  [AccessDenied 403]
+DENY   img_storage put other/y  [AccessDenied 403]
+DENY   img_storage put_bucket_policy  [AccessDenied 403]
+DENY   img_storage put_bucket_acl public-read  [AccessDenied 403]
+DENY   uploader put staging/att1  [InternalError 500]
+DENY   uploader put users/u/projects/p/src/evil  [AccessDenied 403]
+DENY   uploader get staging/att1  [AccessDenied 403]
+ALLOW  uploader delete staging/att1
+DENY   uploader list picturas  [AccessDenied 403]
+DENY   reader_src get users/.../a.png  [NoSuchKey 404]
+DENY   reader_src get staging/att1  [AccessDenied 403]
+DENY   reader_src put users/x  [AccessDenied 403]
+presigned GET (img_storage) -> 404
+presigned PUT staging (uploader) -> 500
+presigned PUT outside staging (uploader) -> 403
+anonymous GET object -> 403
+anonymous PUT object -> 403
+ERROR  img_storage with otherca trust  [SSLError: SSL validation failed for https://seaweedfs:9000/picturas?list-type=2&encoding-type=url [S]
+   keys: []
+ALLOW  final admin list

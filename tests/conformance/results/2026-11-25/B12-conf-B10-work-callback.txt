@@ -1,0 +1,15 @@
+# B10-work-callback — 2026-11-25T06:19:42Z
+$ docker run --rm --network none -v /Users/miguelsantos/Documents/GitHub/picturas-27F2:/repo:ro -w /repo --entrypoint node picturas-dev-projects --test tests/conformance/pki-operations/work-callback.test.js
+
+PASS async callback remains visible while ack timing is unchanged; marker clears at completion
+PASS synchronous callback releases its marker without changing acknowledgement count
+✔ tests/conformance/pki-operations/work-callback.test.js (22.965583ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 28.67975
+exit: 0

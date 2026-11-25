@@ -1,0 +1,34 @@
+## version
+nginx version: nginx/1.31.9
+## A1 auth ok, small body
+201
+## A2 auth bad -> 401
+401
+## A3 no auth -> 401
+401
+## A4 bad auth + 20 MiB at 2 MiB/s (should be refused fast; time and bytes sent)
+code=401 t=0.031751 up=65346
+## B1 streaming: good auth, 20 MiB at 2 MiB/s through /uploads/ (unbuffered)
+{"bytes": 20971520, "headers_at": 1795288947.7800677, "end_at": 1795288957.7745535}
+code=201 t=10.001071
+1795288947.761
+## B2 control: same through /buffered/
+{"bytes": 20971520, "headers_at": 1795288967.8073838, "end_at": 1795288967.8248432}
+code=201 t=10.019362
+1795288957.785
+## B3 chunked client through /uploads/
+{"bytes": 20971520, "headers_at": 1795288967.849973, "end_at": 1795288968.0000505}
+code=201
+## B4 over location limit (Content-Length 1200 MiB declared, bad auth vs good auth)
+bad b'HTTP/1.1 413 Request Entity Too Large'
+good b'HTTP/1.1 413 Request Entity Too Large'
+## C1 tls-ok
+tls-ok peer=nginx-client
+## C2 tls-wrongname
+502
+## C3 tls-untrusted
+502
+## C4 tls-noclientcert
+502
+## C5 control verify off
+tls-ok peer=nginx-client

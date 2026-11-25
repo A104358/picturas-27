@@ -1,0 +1,5 @@
+# B4-route-matrix — 2026-11-25T06:19:27Z
+$ evaluation/.venv/bin/python tests/conformance/b4-route-matrix.py
+
+B4 route matrix: 130 route/verb declarations covered, verbs and paths match
+exit: 0

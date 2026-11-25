@@ -1,0 +1,15 @@
+PASS node guard: expired at start-up: exit=1
+PASS node guard: not yet valid: exit=1
+PASS node guard: valid certificate keeps running (timeout): exit=124
+PASS node guard: stops when the certificate expires: exit=1
+PASS node guard: stops within 3 s of expiry (12 s certificate): yes
+PASS python guard: expired at start-up: exit=1
+PASS python guard: not yet valid: exit=1
+PASS python guard: valid certificate keeps running (timeout): exit=124
+PASS python guard: stops when the certificate expires: exit=1
+PASS python guard: stops within 3 s of expiry (12 s certificate): yes
+PASS projects client: expected name users: http
+PASS projects client: server name img_storage on the users server: ERR_TLS_CERT_ALTNAME_INVALID
+PASS expand_ai client: generative-mock by name: 200
+PASS expand_ai client: generative-mock by IP (name mismatch): SSLError
+B5 guard and client identity: 14/14 checks passed

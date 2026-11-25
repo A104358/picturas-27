@@ -1,0 +1,1 @@
+{"stratum": "premium-10-H-aquecido", "residual": {"nginx": {"kib": 0, "files": 0}, "api_gateway": {"kib": 0, "files": 0}, "projects": {"kib": 0, "files": 0}, "img_storage": {"kib": 0, "files": 0}}, "t_utc": "2026-11-25T03:53:38Z"}

@@ -1,0 +1,21 @@
+PASS S06/AR-05 expired: 401
+PASS S06/AR-05 old installation secret: 401
+PASS S06/AR-05 wrong issuer: 401
+PASS S06/AR-05 wrong audience: 401
+PASS S06/AR-05 wrong type: 401
+PASS S06/AR-05 wrong algorithm: 401
+PASS S06/AR-05 subject mismatch: 401
+PASS S06/AR-05 over seven days: 401
+PASS S06/AR-05 future issuance: 401
+PASS S06 valid positive control: 200
+PASS AR-12 no public administrative issuer: 403
+PASS AR-12 no public administrative issuer: 404
+PASS AR-12 no public administrative issuer: 403
+PASS SEC-02 registered password update: 204
+PASS SEC-02 copied bearer remains valid after password change (declared limitation): 200
+PASS SEC-01 registered account signs in again without replacing account: True
+PASS SEC-02 validation returns same bearer, without refresh: True
+PASS F06 registered reauthentication preserves presets and their tools: True
+PASS S06/SEC-02 future issuance is also refused by WS: False
+PASS SEC-02 established WS disconnects at JWT expiry: False
+B9 sessions: 20/20 checks passed

@@ -1,0 +1,125 @@
+{
+ "vhosts": [
+  {
+   "name": "/"
+  }
+ ],
+ "users": [],
+ "permissions": [],
+ "exchanges": [
+  {
+   "name": "picturas",
+   "vhost": "/",
+   "type": "direct",
+   "durable": true,
+   "auto_delete": false,
+   "internal": false,
+   "arguments": {}
+  },
+  {
+   "name": "picturas_topic",
+   "vhost": "/",
+   "type": "topic",
+   "durable": true,
+   "auto_delete": false,
+   "internal": false,
+   "arguments": {}
+  }
+ ],
+ "queues": [
+  {
+   "name": "project_queue",
+   "vhost": "/",
+   "durable": true,
+   "auto_delete": false,
+   "arguments": {}
+  },
+  {
+   "name": "brightness_queue",
+   "vhost": "/",
+   "durable": true,
+   "auto_delete": false,
+   "arguments": {}
+  },
+  {
+   "name": "video_queue",
+   "vhost": "/",
+   "durable": true,
+   "auto_delete": false,
+   "arguments": {}
+  },
+  {
+   "name": "ws_queue",
+   "vhost": "/",
+   "durable": true,
+   "auto_delete": false,
+   "arguments": {}
+  }
+ ],
+ "bindings": [
+  {
+   "source": "picturas",
+   "vhost": "/",
+   "destination": "project_queue",
+   "destination_type": "queue",
+   "routing_key": "project_queue",
+   "arguments": {}
+  },
+  {
+   "source": "picturas_topic",
+   "vhost": "/",
+   "destination": "project_queue",
+   "destination_type": "queue",
+   "routing_key": "project_queue",
+   "arguments": {}
+  },
+  {
+   "source": "picturas",
+   "vhost": "/",
+   "destination": "brightness_queue",
+   "destination_type": "queue",
+   "routing_key": "brightness_queue",
+   "arguments": {}
+  },
+  {
+   "source": "picturas_topic",
+   "vhost": "/",
+   "destination": "brightness_queue",
+   "destination_type": "queue",
+   "routing_key": "brightness_queue",
+   "arguments": {}
+  },
+  {
+   "source": "picturas",
+   "vhost": "/",
+   "destination": "video_queue",
+   "destination_type": "queue",
+   "routing_key": "video_queue",
+   "arguments": {}
+  },
+  {
+   "source": "picturas_topic",
+   "vhost": "/",
+   "destination": "video_queue",
+   "destination_type": "queue",
+   "routing_key": "video_queue",
+   "arguments": {}
+  },
+  {
+   "source": "picturas",
+   "vhost": "/",
+   "destination": "ws_queue",
+   "destination_type": "queue",
+   "routing_key": "ws_queue",
+   "arguments": {}
+  },
+  {
+   "source": "picturas_topic",
+   "vhost": "/",
+   "destination": "ws_queue",
+   "destination_type": "queue",
+   "routing_key": "ws_queue",
+   "arguments": {}
+  }
+ ]
+}

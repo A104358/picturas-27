@@ -1,0 +1,93 @@
+PASS S06 control: issued session reads own profile: 200
+PASS S06 no Authorization: 401
+PASS S06 malformed Authorization: 401
+PASS S06 alg none: 401
+PASS S06 HS256 with another secret: 401
+PASS S06 typ missing: 401
+PASS S06 typ of the internal identity: 401
+PASS S06 issuer of another installation: 401
+PASS S06 audience of another installation: 401
+PASS S06 expired (exp = now - 1, no tolerance): 401
+PASS S06 lifetime over 7 days: 401
+PASS S06 issued over 7 days ago: 401
+PASS S06 sub different from id: 401
+PASS S06 sub missing: 401
+PASS S06 exp missing: 401
+PASS S06 RS256 with the gateway key (algorithm confusion): 401
+PASS S06 HS256 keyed with the RS256 public key: 401
+PASS S06 valid session of another account on this account's path: 403
+PASS S06 public route still public (login): 201
+PASS D7 owner absent -> allowed: 200
+PASS D7 owner equal to path owner -> allowed: 200
+PASS D7 owner contradicts path -> refused: 403
+PASS D7 owner repeated (multi-value) -> refused: 403
+PASS D7 owner empty -> refused: 403
+PASS D7 share repeated (multi-value) -> refused: 403
+PASS D7 other account with matching owner, no share -> refused: 403
+PASS S07-users control: gateway certificate + valid identity: 200
+PASS S07-users no client certificate (TLS refused): TLS
+PASS S07-users valid identity from another peer (ws_gateway): 403
+PASS S07-users gateway certificate, no identity: 401
+PASS S07-users alg none: 401
+PASS S07-users signed by another RSA key: 401
+PASS S07-users HS256 keyed with the public key: 401
+PASS S07-users issuer differs: 401
+PASS S07-users typ differs: 401
+PASS S07-users kid unknown: 401
+PASS S07-users expired (no tolerance): 401
+PASS S07-users lifetime over 30 s: 401
+PASS S07-users method differs: 401
+PASS S07-users route differs: 401
+PASS S07-users share context differs: 401
+PASS S07-users public flag on a private route: 401
+PASS S07-users source differs: 401
+PASS S07-users requestId missing: 401
+PASS S07-users audience of subscriptions (replay to another service): 401
+PASS S07-users audience of projects (replay to another service): 401
+PASS S07-users valid identity, different subject: 403
+PASS S07-users two share values in the query: 401
+PASS S07-projects control: gateway certificate + valid identity: 200
+PASS S07-projects no client certificate (TLS refused): TLS
+PASS S07-projects valid identity from another peer (ws_gateway): 403
+PASS S07-projects gateway certificate, no identity: 401
+PASS S07-projects alg none: 401
+PASS S07-projects signed by another RSA key: 401
+PASS S07-projects HS256 keyed with the public key: 401
+PASS S07-projects issuer differs: 401
+PASS S07-projects typ differs: 401
+PASS S07-projects kid unknown: 401
+PASS S07-projects expired (no tolerance): 401
+PASS S07-projects lifetime over 30 s: 401
+PASS S07-projects method differs: 401
+PASS S07-projects route differs: 401
+PASS S07-projects share context differs: 401
+PASS S07-projects public flag on a private route: 401
+PASS S07-projects source differs: 401
+PASS S07-projects requestId missing: 401
+PASS S07-projects audience of subscriptions (replay to another service): 401
+PASS S07-projects audience of users (replay to another service): 401
+PASS S07-projects valid identity, different subject: 403
+PASS S07-projects two share values in the query: 401
+PASS S07-subscriptions control: gateway certificate + valid identity: 404
+PASS S07-subscriptions no client certificate (TLS refused): TLS
+PASS S07-subscriptions valid identity from another peer (ws_gateway): 403
+PASS S07-subscriptions gateway certificate, no identity: 401
+PASS S07-subscriptions alg none: 401
+PASS S07-subscriptions signed by another RSA key: 401
+PASS S07-subscriptions HS256 keyed with the public key: 401
+PASS S07-subscriptions issuer differs: 401
+PASS S07-subscriptions typ differs: 401
+PASS S07-subscriptions kid unknown: 401
+PASS S07-subscriptions expired (no tolerance): 401
+PASS S07-subscriptions lifetime over 30 s: 401
+PASS S07-subscriptions method differs: 401
+PASS S07-subscriptions route differs: 401
+PASS S07-subscriptions share context differs: 401
+PASS S07-subscriptions public flag on a private route: 401
+PASS S07-subscriptions source differs: 401
+PASS S07-subscriptions requestId missing: 401
+PASS S07-subscriptions audience of projects (replay to another service): 401
+PASS S07-subscriptions audience of users (replay to another service): 401
+PASS S07-subscriptions valid identity, different subject: 403
+PASS S07-subscriptions two share values in the query: 401
+B4 identity: 92/92 checks passed

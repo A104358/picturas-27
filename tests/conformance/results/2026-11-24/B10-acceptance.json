@@ -1,0 +1,83 @@
+{
+  "block": "B10",
+  "status": "complete_awaiting_human_commit",
+  "base_commit": "cb1e0289d3519c0f492f36b3a353246578110040",
+  "criteria": {
+    "PKI-C2 B": [
+      "B10-planned-renew.txt: same CA, new processes, old still-valid certificate accepted",
+      "B10-trial-1/2/3.json: new CA/all 15 leaf keys, old client/server CA and unexpired tickets refused"
+    ],
+    "PKI-C3 A": [
+      "B10-planned-renew.txt: buffered HTTP upload defers, admissions suspended",
+      "B10-negative-real.json: real local job without Process defers; partial/expired/wrong-role/restart faults stay isolated",
+      "B10-gate-live.json: durable flag, real nginx 503/200, unchanged owned cancellation",
+      "B10-b5-guard-dev.txt: 14/14"
+    ],
+    "PKI-C4 B": [
+      "B10-trial-1/2/3.json: seven persistent types, actual job, 19 principals before/isolated/reopened, stable output, no clock reset",
+      "docs/refactor-piloto-pki.md: all samples, phases, operator time, failures and contextual calibration"
+    ],
+    "PKI-C5 A": [
+      "docs/refactor-matriz-canais.md: 54 channels/principals, 33 image IDs/runtime versions and 15 certificate profiles",
+      "B10-seaweed-internal.json: 28 real internal controls",
+      "B10-browser-live.json and trial browser proofs: isolated NSS, strict current trust, old/expired/wrong-name refusal, visual actor Codex, fresh owner WSS"
+    ],
+    "S20": [
+      "B10-trial-1/2/3.json; conformance, no frozen measurement metric added"
+    ],
+    "F06": [
+      "trial quarantine/domain hashes: no Process/debit, identity and project unchanged",
+      "B10-b9-functional-dev.txt; volumes always preserved"
+    ]
+  },
+  "pilot": {
+    "n": 3,
+    "isolation_ms": [
+      3674.077746,
+      3665.975494,
+      3685.627679
+    ],
+    "isolation_limit_ms": 30000,
+    "isolation_target_ms": 10000,
+    "all_target_met": true,
+    "per_trial_controls": 121,
+    "principals": 19,
+    "substitution_seconds": [
+      136.389085,
+      350.642556,
+      170.097942
+    ],
+    "contextual_substitution_reference_seconds": 350.642556,
+    "operator_and_browser_retries_included": true,
+    "initial_trials_retained": 3,
+    "diagnostic_control_retry_retained": true,
+    "preparation_failures_retained": 4,
+    "trial_2_browser_timeouts_retained": 2
+  },
+  "dev": {
+    "F01_projects": 8,
+    "F01_video": 74,
+    "B4_identity": 92,
+    "B4_routes": 557,
+    "B5_mtls": 147,
+    "B5_guard": 14,
+    "B5_functional": 10,
+    "B8_network": 33,
+    "B9_sessions": 20,
+    "smoke": 12,
+    "F02_image_video": true,
+    "all_passed": true
+  },
+  "EXP": "evaluation/results/EXP-20261124T190201Z/report.md",
+  "metrics": "B10-metrics.json",
+  "sync": "B10-git-sync.json",
+  "safety": "B10-final-safety.json",
+  "limits": [
+    "technical fixture only (D-33 / decision 42); normal compromised installation remains blocked until B11 reconciliation",
+    "contextual pilot/reference only; official BF/MF remains B12",
+    "interactive/visual browser operator was Codex, no human-user approval claimed",
+    "all preparation/diagnostic/initial samples and browser timeouts retained"
+  ],
+  "no_commit_no_push": true,
+  "B11_started": false
+}

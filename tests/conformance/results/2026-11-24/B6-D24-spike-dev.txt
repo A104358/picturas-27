@@ -1,0 +1,34 @@
+# B6 D-24 spike (U04 replica, picturas-dev) — 2026-11-24T16:20:30Z
+Method: restart seaweedfs, then api_gateway/projects/img_storage and nginx; sample seaweedfs cgroup anon every 50 ms during one premium 500 MiB H upload (tests/conformance/upload/b6-capacity.py); delta = peak - first sample.
+BF (EXP med.py): seaweedfs delta median 584.9, max 619.2 MiB. B6 EXP-20261124T123303Z: median 862.2, max 942.9.
+
+## Before the fix (open-ended reads)
+atual-p5q1 #1 HTTP 204 4287 ms seaweedfs idle=112 peak=1279 delta=1167 MiB
+atual-p5q1 #2 HTTP 204 4226 ms seaweedfs idle=111 peak=1122 delta=1011 MiB
+atual-p5q1 #3 HTTP 204 3963 ms seaweedfs idle=113 peak=912 delta=799 MiB
+p8q1 #1 HTTP 204 3598 ms seaweedfs idle=119 peak=1095 delta=976 MiB
+p8q1 #2 HTTP 204 4173 ms seaweedfs idle=118 peak=1267 delta=1149 MiB
+p8q1 #3 HTTP 204 3875 ms seaweedfs idle=110 peak=1342 delta=1232 MiB
+p5q4-BF #1 HTTP 204 2993 ms seaweedfs idle=115 peak=1313 delta=1198 MiB
+p5q4-BF #2 HTTP 204 3131 ms seaweedfs idle=82 peak=1218 delta=1136 MiB
+p5q4-BF #3 HTTP 204 3099 ms seaweedfs idle=85 peak=1171 delta=1086 MiB
+p5q1+cul64 #1 HTTP 204 4543 ms seaweedfs idle=108 peak=1119 delta=1011 MiB
+p5q1+cul64 #2 HTTP 204 4301 ms seaweedfs idle=108 peak=998 delta=890 MiB
+p5q1+cul64 #3 HTTP 204 3989 ms seaweedfs idle=110 peak=990 delta=880 MiB
+(GOMEMLIMIT=200MiB: +379/+454/+462 MiB but 7.1-8.5 s; GOGC=25: +634/+738/+740; volume.max=8: +873/+1017/+1313)
+
+## Isolation: ranged GET of a stored 500 MiB object on a freshly restarted SeaweedFS, read 5 MiB and close
+bytes=0-        : idle 107 -> peak 892 MiB (+785)
+bytes=0-8388607 : idle 118 -> peak 170 MiB (+52)
+Time series of a full upload: body phase reaches ~510 MiB, then +830 MiB in <1 s right after the body (ffprobe relay read, open-ended range).
+
+## After: relay and hash read in bounded 4 MiB windows
+windowed #1 HTTP 204 4168 ms seaweedfs idle=117 peak=518 delta=401 MiB
+windowed #2 HTTP 204 4187 ms seaweedfs idle=109 peak=496 delta=387 MiB
+windowed #3 HTTP 204 4565 ms seaweedfs idle=107 peak=519 delta=412 MiB
+windowed+gogc25 #1 HTTP 204 4379 ms seaweedfs idle=91 peak=229 delta=138 MiB
+windowed+gogc25 #2 HTTP 204 4021 ms seaweedfs idle=72 peak=194 delta=122 MiB
+windowed+gogc25 #3 HTTP 204 4089 ms seaweedfs idle=120 peak=257 delta=137 MiB
+windowed+gogc25+cul64 #1 HTTP 204 4035 ms seaweedfs idle=75 peak=207 delta=132 MiB
+windowed+gogc25+cul64 #2 HTTP 204 4030 ms seaweedfs idle=91 peak=229 delta=138 MiB
+windowed+gogc25+cul64 #3 HTTP 204 4147 ms seaweedfs idle=105 peak=236 delta=131 MiB

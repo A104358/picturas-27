@@ -1,0 +1,910 @@
+{
+  "project": "picturas-pki-pilot-b10",
+  "commit": "cb1e0289d3519c0f492f36b3a353246578110040",
+  "working_tree": "B10 uncommitted",
+  "host": {
+    "os": "Linux",
+    "architecture": "x86_64",
+    "python": "3.10.12",
+    "cpu_count": 20,
+    "memory_bytes": 16452444160,
+    "docker": "29.9.3"
+  },
+  "browser": {
+    "engine": "Firefox Playwright isolated NSS",
+    "version": "159.0",
+    "version_command_exit": 0
+  },
+  "services": [
+    {
+      "service": "api_gateway",
+      "image_id": "sha256:4323b6f198e10901776f4becfb3fb5131dfde86b242f23ab633eeb0af800022b",
+      "repo_digests": [],
+      "container_id": "8c7a6ef1a50ed835d0e83a0a801e7c6b13e36a9a411a6aaaaaf46d5dc48b9994",
+      "pid": 352162,
+      "started_at": "2026-11-24T19:19:35.617319955Z",
+      "versions": {
+        "runtime": {
+          "node": "26.13.1",
+          "acorn": "8.19.0",
+          "ada": "4.0.0",
+          "amaro": "1.1.11",
+          "ares": "1.34.9",
+          "brotli": "1.2.1",
+          "cldr": "48.0",
+          "icu": "78.3",
+          "libffi": "3.8.0",
+          "lief": "1.0.0",
+          "llhttp": "9.4.4",
+          "merve": "1.2.2",
+          "modules": "147",
+          "napi": "10",
+          "nbytes": "0.1.4",
+          "ncrypto": "0.0.1",
+          "nghttp2": "1.70.0",
+          "nghttp3": "",
+          "ngtcp2": "",
+          "openssl": "3.5.9",
+          "simdjson": "5.0.3",
+          "simdutf": "7.7.0",
+          "sqlite": "3.54.1",
+          "tz": "2026e",
+          "undici": "8.12.4",
+          "unicode": "17.0",
+          "uv": "1.52.1",
+          "uvwasi": "0.0.23",
+          "v8": "14.6.202.34-node.40",
+          "zlib": "1.3.2.1-motley-456ae73",
+          "zstd": "1.5.7"
+        },
+        "libraries": {
+          "express": "4.16.4",
+          "axios": "1.21.1"
+        }
+      },
+      "version_command_exit": 0
+    },
+    {
+      "service": "bg_remove_ai_tool",
+      "image_id": "sha256:32124ee2c9776c43b3f75ad663329808d3dc01c74a778d452c88bd1d0d5b50ad",
+      "repo_digests": [],
+      "container_id": "4d237b1ad5a42e57c8f32b20c9e532729e8df5188eec90ac5dbcfa35dc216c6e",
+      "pid": 351177,
+      "started_at": "2026-11-24T19:19:33.369770279Z",
+      "versions": {
+        "runtime": "3.11.18 (main, Nov 24 2026, 05:00:19) [GCC 14.2.0]",
+        "ssl": "OpenSSL 3.5.9 29 Sep 2026",
+        "libraries": {
+          "pika": "1.3.2",
+          "Pillow": "11.0.0",
+          "requests": "2.34.2"
+        }
+      },
+      "version_command_exit": 0
+    },
+    {
+      "service": "binarization_tool",
+      "image_id": "sha256:85cfd4ecb56f9c69b1cee35cc4a5ea06b9c19ef2237408f478bd9a62257c5059",
+      "repo_digests": [],
+      "container_id": "792901ec866ad94070c7f964cd6b96e0e96fd22d5ffef13cdf7b6cd5d7bd4f1e",
+      "pid": 351415,
+      "started_at": "2026-11-24T19:19:33.83943891Z",
+      "versions": {
+        "runtime": "3.11.18 (main, Nov 24 2026, 05:00:19) [GCC 14.2.0]",
+        "ssl": "OpenSSL 3.5.9 29 Sep 2026",
+        "libraries": {
+          "pika": "1.3.2",
+          "Pillow": "11.0.0"
+        }
+      },
+      "version_command_exit": 0
+    },
+    {
+      "service": "border_tool",
+      "image_id": "sha256:bba9d4a9c748632763cff38094df4a876d745f26f4411ebcec71a3c266c439af",
+      "repo_digests": [],
+      "container_id": "c6b4318e4f3b91ff215f5a922c600bbd76dbfce88ec438cea3ebb19ec0f5c233",
+      "pid": 351822,
+      "started_at": "2026-11-24T19:19:34.636138457Z",
+      "versions": {
+        "runtime": "3.11.18 (main, Nov 24 2026, 05:00:19) [GCC 14.2.0]",
+        "ssl": "OpenSSL 3.5.9 29 Sep 2026",
+        "libraries": {
+          "pika": "1.3.2",
+          "Pillow": "11.0.0"
+        }
+      },
+      "version_command_exit": 0
+    },
+    {
+      "service": "brightness_tool",
+      "image_id": "sha256:21e6b410453469235c25e0619d74e80813d18d0a58542d0d0e1c712eb94d0649",
+      "repo_digests": [],
+      "container_id": "82cccedcd5971b85de8842555d8dc8c314bf836ea8af238916605d458fe39bf9",
+      "pid": 351112,
+      "started_at": "2026-11-24T19:19:33.250279728Z",
+      "versions": {
+        "runtime": "3.11.18 (main, Nov 24 2026, 05:00:19) [GCC 14.2.0]",
+        "ssl": "OpenSSL 3.5.9 29 Sep 2026",
+        "libraries": {
+          "pika": "1.3.2",
+          "Pillow": "11.0.0"
+        }
+      },
+      "version_command_exit": 0
+    },
+    {
+      "service": "contrast_tool",
+      "image_id": "sha256:a5ab2de0d721f61a8bc31b1b0e7dcad37b629caa94d4cb690b771a4a4a243fdf",
+      "repo_digests": [],
+      "container_id": "71c26c4aeee2e5ba73daf12acf1ed48dc20dcd1438851f70652f1cf50d3196f1",
+      "pid": 351056,
+      "started_at": "2026-11-24T19:19:33.115397228Z",
+      "versions": {
+        "runtime": "3.11.18 (main, Nov 24 2026, 05:00:19) [GCC 14.2.0]",
+        "ssl": "OpenSSL 3.5.9 29 Sep 2026",
+        "libraries": {
+          "pika": "1.3.2",
+          "Pillow": "11.0.0"
+        }
+      },
+      "version_command_exit": 0
+    },
+    {
+      "service": "cut_ai_tool",
+      "image_id": "sha256:643fb40b4abcf681f5372f5b243a724c8f1a4c696abd64cf5c1be94168200012",
+      "repo_digests": [],
+      "container_id": "79c905fa3dad2b4a05d1532eebd6eadd460cf473f8608a4acfe6292a7f74a564",
+      "pid": 351338,
+      "started_at": "2026-11-24T19:19:33.677384812Z",
+      "versions": {
+        "runtime": "3.11.18 (main, Nov 24 2026, 05:00:19) [GCC 14.2.0]",
+        "ssl": "OpenSSL 3.5.9 29 Sep 2026",
+        "libraries": {
+          "pika": "1.3.2",
+          "Pillow": "11.0.0",
+          "requests": "2.34.2"
+        }
+      },
+      "version_command_exit": 0
+    },
+    {
+      "service": "cut_tool",
+      "image_id": "sha256:68d8ef35c853ea32c3220e4237bfd0cea6fb5f85b332041501e9c4e728e63326",
+      "repo_digests": [],
+      "container_id": "c656f56f48bce10156446311360eeadd6eb6d29604afe8fe742c60c9a1c52fcf",
+      "pid": 352104,
+      "started_at": "2026-11-24T19:19:35.17299386Z",
+      "versions": {
+        "runtime": "3.11.18 (main, Nov 24 2026, 05:00:19) [GCC 14.2.0]",
+        "ssl": "OpenSSL 3.5.9 29 Sep 2026",
+        "libraries": {
+          "pika": "1.3.2",
+          "Pillow": "11.0.0"
+        }
+      },
+      "version_command_exit": 0
+    },
+    {
+      "service": "expand_ai_tool",
+      "image_id": "sha256:8832fb5c0bbb999553e418a4137715f7c8ff3a905e4d120dbdbcb5f58c98d628",
+      "repo_digests": [],
+      "container_id": "5e709a1a790f12d31ce2c9463d937f559b06c7fe7905c92bc180b454d20edf53",
+      "pid": 350907,
+      "started_at": "2026-11-24T19:19:32.822546826Z",
+      "versions": {
+        "runtime": "3.10.22 (main, Oct  6 2026, 04:42:03) [GCC 14.2.0]",
+        "ssl": "OpenSSL 3.5.7 9 Jun 2026",
+        "libraries": {
+          "pika": "1.3.2",
+          "Pillow": "10.3.0",
+          "requests": "2.32.3"
+        }
+      },
+      "version_command_exit": 0
+    },
+    {
+      "service": "frontend",
+      "image_id": "sha256:086d7f20cc9ca22be1653f4eaf5a4d37e18d5c6437fb797561e4a578e3c094c4",
+      "repo_digests": [],
+      "container_id": "29394f90a412bc305af0e4cef214a08d408215ce9d549c652bd403f92236aa2b",
+      "pid": 348370,
+      "started_at": "2026-11-24T19:19:00.765447064Z",
+      "versions": {
+        "runtime": {
+          "node": "18.20.8",
+          "acorn": "8.14.0",
+          "ada": "2.8.0",
+          "ares": "1.29.0",
+          "base64": "0.5.2",
+          "brotli": "1.1.0",
+          "cjs_module_lexer": "1.2.2",
+          "cldr": "44.1",
+          "icu": "74.2",
+          "llhttp": "6.1.1",
+          "modules": "108",
+          "napi": "9",
+          "nghttp2": "1.61.0",
+          "openssl": "3.0.16",
+          "simdutf": "5.6.4",
+          "tz": "2024a",
+          "undici": "5.29.0",
+          "unicode": "15.1",
+          "uv": "1.44.2",
+          "uvwasi": "0.0.19",
+          "v8": "10.2.154.26-node.39",
+          "zlib": "1.3.0.1-motley"
+        },
+        "libraries": {
+          "axios": "1.21.0",
+          "mongoose": "8.24.7",
+          "next": "15.1.3",
+          "socket.io": "4.8.4",
+          "socket.io-client": "4.8.4"
+        }
+      },
+      "version_command_exit": 0
+    },
+    {
+      "service": "generative-mock",
+      "image_id": "sha256:8146819cca31a7f7aa0428bdd54e36f4892d3d84dde5f30c2a7539f7170a07ba",
+      "repo_digests": [],
+      "container_id": "d7b789422dbd9686c063e6958bd7b50e43add14fbae66d2e43654fc05097609e",
+      "pid": 348576,
+      "started_at": "2026-11-24T19:19:01.015842435Z",
+      "versions": {
+        "runtime": "3.11.18 (main, Nov 24 2026, 05:00:19) [GCC 14.2.0]",
+        "ssl": "OpenSSL 3.5.9 29 Sep 2026",
+        "libraries": {
+          "Pillow": "13.0.0",
+          "Flask": "3.1.3",
+          "Werkzeug": "3.1.9"
+        }
+      },
+      "version_command_exit": 0
+    },
+    {
+      "service": "img_storage",
+      "image_id": "sha256:ecdc83a0df46eb4aee401d3b87cedec3e8487c05d41563827cc13a80321da852",
+      "repo_digests": [],
+      "container_id": "622168ee11dab4615afb9115ce1e3c398e6d7b75612bdeef5b53b82f202bfb26",
+      "pid": 349973,
+      "started_at": "2026-11-24T19:19:13.8815312Z",
+      "versions": {
+        "runtime": {
+          "node": "26.13.1",
+          "acorn": "8.19.0",
+          "ada": "4.0.0",
+          "amaro": "1.1.11",
+          "ares": "1.34.9",
+          "brotli": "1.2.1",
+          "cldr": "48.0",
+          "icu": "78.3",
+          "libffi": "3.8.0",
+          "lief": "1.0.0",
+          "llhttp": "9.4.4",
+          "merve": "1.2.2",
+          "modules": "147",
+          "napi": "10",
+          "nbytes": "0.1.4",
+          "ncrypto": "0.0.1",
+          "nghttp2": "1.70.0",
+          "nghttp3": "",
+          "ngtcp2": "",
+          "openssl": "3.5.9",
+          "simdjson": "5.0.3",
+          "simdutf": "7.7.0",
+          "sqlite": "3.54.1",
+          "tz": "2026e",
+          "undici": "8.12.4",
+          "unicode": "17.0",
+          "uv": "1.52.1",
+          "uvwasi": "0.0.23",
+          "v8": "14.6.202.34-node.40",
+          "zlib": "1.3.2.1-motley-456ae73",
+          "zstd": "1.5.7"
+        },
+        "libraries": {
+          "express": "4.22.3",
+          "aws-sdk": "2.1693.0"
+        }
+      },
+      "version_command_exit": 0
+    },
+    {
+      "service": "mongo-backup",
+      "image_id": "sha256:0010f63d26952bd3960fac5513c64a1cf7d6299f31fa7b54ac1b36633ee04333",
+      "repo_digests": [
+        "mongo@sha256:4be76f674fc4b27859816811b8baa3c51830eb1dbf4ca81a51e26b79edd662ef"
+      ],
+      "container_id": "a4f4a18092e42a70774ae1d25d1c204286eb18378e9e386969af34bbfe2bc173",
+      "pid": 349326,
+      "started_at": "2026-11-24T19:19:02.008186796Z",
+      "versions": "mongodump version: 100.10.0\ngit version: 6d4f001be3fcf673de04d20176e90ee02ef233a9\nGo version: go1.21.12\n   os: linux\n   arch: amd64\n   compiler: gc",
+      "version_command_exit": 0
+    },
+    {
+      "service": "nginx",
+      "image_id": "sha256:14fb90841494b84ec6f9ea2de7562ae28ccdb6e74c660d48f7b565c389ffe590",
+      "repo_digests": [
+        "nginx@sha256:84f7876d21d154885f99554d7ae325d8c2213f9169726ea7ab60642f2573a787"
+      ],
+      "container_id": "c44dc7c0205c5af6ca255aad3eccb627e079ec04cbf0e06d9b42a6c54b244e25",
+      "pid": 352374,
+      "started_at": "2026-11-24T19:19:38.247403456Z",
+      "versions": "nginx version: nginx/1.31.9\nbuilt by gcc 14.2.0 (Debian 14.2.0-19) \nbuilt with OpenSSL 3.5.7 9 Jun 2026\nTLS SNI support enabled\nconfigure arguments: --prefix=/etc/nginx --sbin-path=/usr/sbin/nginx --modules-path=/usr/lib/nginx/modules --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --pid-path=/run/nginx.pid --lock-path=/run/nginx.lock --http-client-body-temp-path=/var/cache/nginx/client_temp --http-proxy-temp-path=/var/cache/nginx/proxy_temp --http-fastcgi-temp-path=/var/cache/nginx/fastcgi_temp --http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp --http-scgi-temp-path=/var/cache/nginx/scgi_temp --user=nginx --group=nginx --with-compat --with-control-api --with-file-aio --with-threads --with-http_addition_module --with-http_auth_request_module --with-http_dav_module --with-http_flv_module --with-http_gunzip_module --with-http_gzip_static_module --with-http_json_module --with-http_mp4_module --with-http_random_index_module --with-http_realip_module --with-http_secure_link_module --with-http_slice_module --with-http_ssl_module --with-http_stub_status_module --with-http_sub_module --with-http_v2_module --with-http_v3_module --with-mail --with-mail_ssl_module --with-stream --with-stream_realip_module --with-stream_ssl_module --with-stream_ssl_preread_module --with-cc-opt='-g -O2 -Werror=implicit-function-declaration -ffile-prefix-map=/home/builder/debuild/nginx-1.31.9/debian/debuild-base/nginx-1.31.9=. -fstack-protector-strong -fstack-clash-protection -Wformat -Werror=format-security -fcf-protection -Wp,-D_FORTIFY_SOURCE=2 -fPIC' --with-ld-opt='-Wl,-z,relro -Wl,-z,now -Wl,--as-needed -pie'",
+      "version_command_exit": 0
+    },
+    {
+      "service": "obj_ai_tool",
+      "image_id": "sha256:9ad57aceac673a132820c5588ef9ec5955ea42ce7941488b3df3f4dd76c96861",
+      "repo_digests": [],
+      "container_id": "6d9764a321991ebbcc8454954f8b16d56eaf11a2fba348e205c8770e534f967f",
+      "pid": 350714,
+      "started_at": "2026-11-24T19:19:32.52122938Z",
+      "versions": {
+        "runtime": "3.11.18 (main, Nov 24 2026, 05:00:19) [GCC 14.2.0]",
+        "ssl": "OpenSSL 3.5.9 29 Sep 2026",
+        "libraries": {
+          "pika": "1.3.2",
+          "Pillow": "11.0.0",
+          "requests": "2.34.2"
+        }
+      },
+      "version_command_exit": 0
+    },
+    {
+      "service": "people_ai_tool",
+      "image_id": "sha256:2f88a8fec5d7e29fe96bb03e82d33dbbe1dbc0640e216bff26c22acbe349eacd",
+      "repo_digests": [],
+      "container_id": "3099972fa76b894cfc9817d4cdd775d06f40deac706a94bb5197f37678b710da",
+      "pid": 352003,
+      "started_at": "2026-11-24T19:19:35.038894376Z",
+      "versions": {
+        "runtime": "3.11.18 (main, Nov 24 2026, 05:00:19) [GCC 14.2.0]",
+        "ssl": "OpenSSL 3.5.9 29 Sep 2026",
+        "libraries": {
+          "pika": "1.3.2",
+          "Pillow": "11.0.0",
+          "requests": "2.34.2"
+        }
+      },
+      "version_command_exit": 0
+    },
+    {
+      "service": "projects",
+      "image_id": "sha256:7ba8631e37fb0d8d83b82dc2686c56ee8c139f4a92451f789eddde4686f0a4eb",
+      "repo_digests": [],
+      "container_id": "c09c540d55611a04877663580cca21cff8ff10ddbace286f6a479323c1fb20c2",
+      "pid": 350963,
+      "started_at": "2026-11-24T19:19:32.985297366Z",
+      "versions": {
+        "runtime": {
+          "node": "26.13.1",
+          "acorn": "8.19.0",
+          "ada": "4.0.0",
+          "amaro": "1.1.11",
+          "ares": "1.34.9",
+          "brotli": "1.2.1",
+          "cldr": "48.0",
+          "icu": "78.3",
+          "libffi": "3.8.0",
+          "lief": "1.0.0",
+          "llhttp": "9.4.4",
+          "merve": "1.2.2",
+          "modules": "147",
+          "napi": "10",
+          "nbytes": "0.1.4",
+          "ncrypto": "0.0.1",
+          "nghttp2": "1.70.0",
+          "nghttp3": "",
+          "ngtcp2": "",
+          "openssl": "3.5.9",
+          "simdjson": "5.0.3",
+          "simdutf": "7.7.0",
+          "sqlite": "3.54.1",
+          "tz": "2026e",
+          "undici": "8.12.4",
+          "unicode": "17.0",
+          "uv": "1.52.1",
+          "uvwasi": "0.0.23",
+          "v8": "14.6.202.34-node.40",
+          "zlib": "1.3.2.1-motley-456ae73",
+          "zstd": "1.5.7"
+        },
+        "libraries": {
+          "express": "4.16.4",
+          "axios": "1.21.1",
+          "amqplib": "0.10.9",
+          "mongoose": "8.24.11"
+        }
+      },
+      "version_command_exit": 0
+    },
+    {
+      "service": "projects_mongoDB",
+      "image_id": "sha256:0010f63d26952bd3960fac5513c64a1cf7d6299f31fa7b54ac1b36633ee04333",
+      "repo_digests": [
+        "mongo@sha256:4be76f674fc4b27859816811b8baa3c51830eb1dbf4ca81a51e26b79edd662ef"
+      ],
+      "container_id": "3862845847d38d76b5c56b87399a7bc353a9686ef8b396ed498a5a5658681378",
+      "pid": 348876,
+      "started_at": "2026-11-24T19:19:01.493762542Z",
+      "versions": "db version v4.4.30\nBuild Info: {\n    \"version\": \"4.4.30\",\n    \"gitVersion\": \"4d7fa6a6260d25c5caa971dce10561690cb79dea\",\n    \"openSSLVersion\": \"OpenSSL 1.1.1f  31 Mar 2020\",\n    \"modules\": [],\n    \"allocator\": \"tcmalloc\",\n    \"environment\": {\n        \"distmod\": \"ubuntu2004\",\n        \"distarch\": \"x86_64\",\n        \"target_arch\": \"x86_64\"\n    }\n}",
+      "version_command_exit": 0
+    },
+    {
+      "service": "rabbitmq",
+      "image_id": "sha256:9887bbea3ca1594eb1340b3cb8ce3a27b7e367ccb6d8bd2c246e389d3d1bf049",
+      "repo_digests": [],
+      "container_id": "c1d364db422e5d10238639af6973086fdc8d98ba8dafc5ddc4719714f847ee4e",
+      "pid": 348792,
+      "started_at": "2026-11-24T19:19:01.324360178Z",
+      "versions": "4.0.5",
+      "version_command_exit": 0
+    },
+    {
+      "service": "resize_tool",
+      "image_id": "sha256:dc31a712123d3120b1e57ee3c891f7ed84bf4006f43defcc127f36e55d0bcb48",
+      "repo_digests": [],
+      "container_id": "d586784bd8dbcfd242df255ce87cf1296d717dce9a0a6e5d463ec3192dba6325",
+      "pid": 351943,
+      "started_at": "2026-11-24T19:19:34.914696315Z",
+      "versions": {
+        "runtime": "3.11.18 (main, Nov 24 2026, 05:00:19) [GCC 14.2.0]",
+        "ssl": "OpenSSL 3.5.9 29 Sep 2026",
+        "libraries": {
+          "pika": "1.3.2",
+          "Pillow": "11.0.0"
+        }
+      },
+      "version_command_exit": 0
+    },
+    {
+      "service": "rotate_tool",
+      "image_id": "sha256:1e7ba7763ad05d4f4e25c05691df830dae157c40ae2a218b1bed28f0c438b101",
+      "repo_digests": [],
+      "container_id": "f1dda9107e8ec7d3f4b40bcb4bc0d0674d4c098974b861edd53270f83936458f",
+      "pid": 351884,
+      "started_at": "2026-11-24T19:19:34.778033125Z",
+      "versions": {
+        "runtime": "3.11.18 (main, Nov 24 2026, 05:00:19) [GCC 14.2.0]",
+        "ssl": "OpenSSL 3.5.9 29 Sep 2026",
+        "libraries": {
+          "pika": "1.3.2",
+          "Pillow": "11.0.0"
+        }
+      },
+      "version_command_exit": 0
+    },
+    {
+      "service": "s3-bootstrap",
+      "image_id": "sha256:d46de30de68e273d8598e1d684809af75c51076e496d39ea9bc09076ca53e431",
+      "repo_digests": [],
+      "container_id": "d3e01de6fde092e8f84b3c2bb2db70b69d287cdde8647558b1e7f74cacc91000",
+      "pid": 0,
+      "started_at": "2026-11-24T19:19:01.752067907Z",
+      "versions": {
+        "runtime": {
+          "node": "26.13.1",
+          "acorn": "8.19.0",
+          "ada": "4.0.0",
+          "amaro": "1.1.11",
+          "ares": "1.34.9",
+          "brotli": "1.2.1",
+          "cldr": "48.0",
+          "icu": "78.3",
+          "libffi": "3.8.0",
+          "lief": "1.0.0",
+          "llhttp": "9.4.4",
+          "merve": "1.2.2",
+          "modules": "147",
+          "napi": "10",
+          "nbytes": "0.1.4",
+          "ncrypto": "0.0.1",
+          "nghttp2": "1.70.0",
+          "nghttp3": "",
+          "ngtcp2": "",
+          "openssl": "3.5.9",
+          "simdjson": "5.0.3",
+          "simdutf": "7.7.0",
+          "sqlite": "3.54.1",
+          "tz": "2026e",
+          "undici": "8.12.4",
+          "unicode": "17.0",
+          "uv": "1.52.1",
+          "uvwasi": "0.0.23",
+          "v8": "14.6.202.34-node.40",
+          "zlib": "1.3.2.1-motley-456ae73",
+          "zstd": "1.5.7"
+        },
+        "libraries": {
+          "express": "4.22.3",
+          "aws-sdk": "2.1693.0"
+        }
+      },
+      "version_command_exit": 0
+    },
+    {
+      "service": "saturation_tool",
+      "image_id": "sha256:74a896f4c1704de6188b1d639e7d1a00e8a0ca546bd4f2233d9ca4e88d66e3fe",
+      "repo_digests": [],
+      "container_id": "9188f8653debf522cc018ff8331c84bfbbaa0fb92d1d0a34d37547acf7264a8c",
+      "pid": 351587,
+      "started_at": "2026-11-24T19:19:34.180064864Z",
+      "versions": {
+        "runtime": "3.11.18 (main, Nov 24 2026, 05:00:19) [GCC 14.2.0]",
+        "ssl": "OpenSSL 3.5.9 29 Sep 2026",
+        "libraries": {
+          "pika": "1.3.2",
+          "Pillow": "11.0.0"
+        }
+      },
+      "version_command_exit": 0
+    },
+    {
+      "service": "seaweedfs",
+      "image_id": "sha256:31d61f5e8771cbd5993912cd051be0c7bcdc207faaa12c50e1a3b8371631c927",
+      "repo_digests": [
+        "chrislusf/seaweedfs@sha256:ce9e796f1fe6f06968f4c04bdaf8f678dad9c8acdfef3d244133d71bfa6bf882"
+      ],
+      "container_id": "846caf731763a7dfb753c7b69e0fddbb4d895c2bd8097cc463ccdf04e2c55518",
+      "pid": 348478,
+      "started_at": "2026-11-24T19:19:00.891345476Z",
+      "versions": "version 30GB 4.47 c50733600 linux amd64\n\nFor enterprise users, please visit https://seaweedfs.com for the SeaweedFS Enterprise Edition,\nwhich has advanced features, including data recovery, self-healing storage, customizable erasure coding, EC vacuum and repair, etc.",
+      "version_command_exit": 0
+    },
+    {
+      "service": "subscriptions",
+      "image_id": "sha256:fce84c34a434dcbce77328e67b0c442830456baa4afb7be9ecec107caedc450e",
+      "repo_digests": [],
+      "container_id": "d180bdc107f22f10e05f54daadb0e4ed638b70acda902abc0982577038aaac09",
+      "pid": 349435,
+      "started_at": "2026-11-24T19:19:02.141183168Z",
+      "versions": {
+        "runtime": {
+          "node": "26.13.1",
+          "acorn": "8.19.0",
+          "ada": "4.0.0",
+          "amaro": "1.1.11",
+          "ares": "1.34.9",
+          "brotli": "1.2.1",
+          "cldr": "48.0",
+          "icu": "78.3",
+          "libffi": "3.8.0",
+          "lief": "1.0.0",
+          "llhttp": "9.4.4",
+          "merve": "1.2.2",
+          "modules": "147",
+          "napi": "10",
+          "nbytes": "0.1.4",
+          "ncrypto": "0.0.1",
+          "nghttp2": "1.70.0",
+          "nghttp3": "",
+          "ngtcp2": "",
+          "openssl": "3.5.9",
+          "simdjson": "5.0.3",
+          "simdutf": "7.7.0",
+          "sqlite": "3.54.1",
+          "tz": "2026e",
+          "undici": "8.12.4",
+          "unicode": "17.0",
+          "uv": "1.52.1",
+          "uvwasi": "0.0.23",
+          "v8": "14.6.202.34-node.40",
+          "zlib": "1.3.2.1-motley-456ae73",
+          "zstd": "1.5.7"
+        },
+        "libraries": {
+          "express": "4.16.4",
+          "mongoose": "8.24.11"
+        }
+      },
+      "version_command_exit": 0
+    },
+    {
+      "service": "subscriptions_mongoDB",
+      "image_id": "sha256:0010f63d26952bd3960fac5513c64a1cf7d6299f31fa7b54ac1b36633ee04333",
+      "repo_digests": [
+        "mongo@sha256:4be76f674fc4b27859816811b8baa3c51830eb1dbf4ca81a51e26b79edd662ef"
+      ],
+      "container_id": "35b5f1526c655f2564b15b81eb91e723448c1b0e5cc89a5b5fd34c56ee0dbdab",
+      "pid": 348638,
+      "started_at": "2026-11-24T19:19:01.160265828Z",
+      "versions": "db version v4.4.30\nBuild Info: {\n    \"version\": \"4.4.30\",\n    \"gitVersion\": \"4d7fa6a6260d25c5caa971dce10561690cb79dea\",\n    \"openSSLVersion\": \"OpenSSL 1.1.1f  31 Mar 2020\",\n    \"modules\": [],\n    \"allocator\": \"tcmalloc\",\n    \"environment\": {\n        \"distmod\": \"ubuntu2004\",\n        \"distarch\": \"x86_64\",\n        \"target_arch\": \"x86_64\"\n    }\n}",
+      "version_command_exit": 0
+    },
+    {
+      "service": "text_ai_tool",
+      "image_id": "sha256:65d166fdc6efab1532dc507cfc6602bc6aa7dda77c3533e1701e859702a7d1c3",
+      "repo_digests": [],
+      "container_id": "cba3f2ebd66bdb10178047aed61f9cbac7750289b1712f012a51a6c8302c1007",
+      "pid": 351646,
+      "started_at": "2026-11-24T19:19:34.313523269Z",
+      "versions": {
+        "runtime": "3.11.18 (main, Nov 24 2026, 05:00:19) [GCC 14.2.0]",
+        "ssl": "OpenSSL 3.5.9 29 Sep 2026",
+        "libraries": {
+          "pika": "1.3.2",
+          "Pillow": "11.0.0"
+        }
+      },
+      "version_command_exit": 0
+    },
+    {
+      "service": "upgrade_ai_tool",
+      "image_id": "sha256:3635a3465c1b87c2b90dada81dca2a2d5e8868dc93d97837e0e491056c7b19e4",
+      "repo_digests": [],
+      "container_id": "875b21af14d2279853b095e80cb8b612dc650ecbe9b956467aede33ffe89d1e4",
+      "pid": 350830,
+      "started_at": "2026-11-24T19:19:32.654920209Z",
+      "versions": {
+        "runtime": "3.11.18 (main, Nov 24 2026, 05:00:19) [GCC 14.2.0]",
+        "ssl": "OpenSSL 3.5.9 29 Sep 2026",
+        "libraries": {
+          "pika": "1.3.2",
+          "Pillow": "11.0.0"
+        }
+      },
+      "version_command_exit": 0
+    },
+    {
+      "service": "users",
+      "image_id": "sha256:e342ad7ab1bee06ca0fefe3f688ca87d7993c5155e2bfe4594864b61f6bebdb9",
+      "repo_digests": [],
+      "container_id": "8fdcbae70f3ea7ce87b9b1b9c81302acba768a0938e069c953e6b69b0fe4bbdb",
+      "pid": 349211,
+      "started_at": "2026-11-24T19:19:01.879919482Z",
+      "versions": {
+        "runtime": {
+          "node": "26.13.1",
+          "acorn": "8.19.0",
+          "ada": "4.0.0",
+          "amaro": "1.1.11",
+          "ares": "1.34.9",
+          "brotli": "1.2.1",
+          "cldr": "48.0",
+          "icu": "78.3",
+          "libffi": "3.8.0",
+          "lief": "1.0.0",
+          "llhttp": "9.4.4",
+          "merve": "1.2.2",
+          "modules": "147",
+          "napi": "10",
+          "nbytes": "0.1.4",
+          "ncrypto": "0.0.1",
+          "nghttp2": "1.70.0",
+          "nghttp3": "",
+          "ngtcp2": "",
+          "openssl": "3.5.9",
+          "simdjson": "5.0.3",
+          "simdutf": "7.7.0",
+          "sqlite": "3.54.1",
+          "tz": "2026e",
+          "undici": "8.12.4",
+          "unicode": "17.0",
+          "uv": "1.52.1",
+          "uvwasi": "0.0.23",
+          "v8": "14.6.202.34-node.40",
+          "zlib": "1.3.2.1-motley-456ae73",
+          "zstd": "1.5.7"
+        },
+        "libraries": {
+          "express": "4.16.4",
+          "axios": "1.21.1",
+          "mongoose": "8.24.11"
+        }
+      },
+      "version_command_exit": 0
+    },
+    {
+      "service": "users_mongoDB",
+      "image_id": "sha256:0010f63d26952bd3960fac5513c64a1cf7d6299f31fa7b54ac1b36633ee04333",
+      "repo_digests": [
+        "mongo@sha256:4be76f674fc4b27859816811b8baa3c51830eb1dbf4ca81a51e26b79edd662ef"
+      ],
+      "container_id": "563a95ee177d1ca330a9ad6ae05c3c8698f5edbdfeb87f917c857125550a9241",
+      "pid": 349018,
+      "started_at": "2026-11-24T19:19:01.619538572Z",
+      "versions": "db version v4.4.30\nBuild Info: {\n    \"version\": \"4.4.30\",\n    \"gitVersion\": \"4d7fa6a6260d25c5caa971dce10561690cb79dea\",\n    \"openSSLVersion\": \"OpenSSL 1.1.1f  31 Mar 2020\",\n    \"modules\": [],\n    \"allocator\": \"tcmalloc\",\n    \"environment\": {\n        \"distmod\": \"ubuntu2004\",\n        \"distarch\": \"x86_64\",\n        \"target_arch\": \"x86_64\"\n    }\n}",
+      "version_command_exit": 0
+    },
+    {
+      "service": "video_tool",
+      "image_id": "sha256:319ecbbd1bec4a996a33da1626e4428adea81539a210dd09587008755f4f0f59",
+      "repo_digests": [],
+      "container_id": "2fd045f8845ea5fd2661c2fa7c3cb9c19d2a1dc34a1a9c9a88fb9c0528712c02",
+      "pid": 351765,
+      "started_at": "2026-11-24T19:19:34.459440227Z",
+      "versions": {
+        "runtime": "3.11.18 (main, Nov 24 2026, 05:00:19) [GCC 14.2.0]",
+        "ssl": "OpenSSL 3.5.9 29 Sep 2026",
+        "libraries": {
+          "pika": "1.3.2",
+          "Pillow": "11.0.0",
+          "faster-whisper": "1.2.1"
+        }
+      },
+      "version_command_exit": 0
+    },
+    {
+      "service": "watermark_tool_ms",
+      "image_id": "sha256:f4e598cdd50f416ee2aea913e6d7b02546b65ae69d37a3e5af6c57461a3665b2",
+      "repo_digests": [],
+      "container_id": "bd4f3025a6d6bf9801f66c22eefb1d1b5211576b06452a9b70634382965005e1",
+      "pid": 351244,
+      "started_at": "2026-11-24T19:19:33.501611137Z",
+      "versions": {
+        "runtime": "3.13.1 (main, Dec 24 2024, 22:26:13) [GCC 12.2.0]",
+        "ssl": "OpenSSL 3.0.15 3 Sep 2024",
+        "libraries": {
+          "pika": "1.3.2",
+          "Pillow": "11.0.0"
+        }
+      },
+      "version_command_exit": 0
+    },
+    {
+      "service": "ws_gateway",
+      "image_id": "sha256:9c5acb25cc330152a6e44ad4261e8defa711545d7291bf136b1a075a4943c660",
+      "repo_digests": [],
+      "container_id": "d139047851dec856c211c2e9b1ff55cc7f15376b46d51c0ac6fa0f0da895a85e",
+      "pid": 351495,
+      "started_at": "2026-11-24T19:19:34.005666603Z",
+      "versions": {
+        "runtime": {
+          "node": "18.20.8",
+          "acorn": "8.14.0",
+          "ada": "2.8.0",
+          "ares": "1.29.0",
+          "base64": "0.5.2",
+          "brotli": "1.1.0",
+          "cjs_module_lexer": "1.2.2",
+          "cldr": "44.1",
+          "icu": "74.2",
+          "llhttp": "6.1.1",
+          "modules": "108",
+          "napi": "9",
+          "nghttp2": "1.61.0",
+          "openssl": "3.0.16",
+          "simdutf": "5.6.4",
+          "tz": "2024a",
+          "undici": "5.29.0",
+          "unicode": "15.1",
+          "uv": "1.44.2",
+          "uvwasi": "0.0.19",
+          "v8": "10.2.154.26-node.39",
+          "zlib": "1.3.0.1-motley"
+        },
+        "libraries": {
+          "express": "4.22.3",
+          "amqplib": "0.10.9",
+          "socket.io": "4.8.4"
+        }
+      },
+      "version_command_exit": 0
+    }
+  ],
+  "certificates": {
+    "users_mongoDB": {
+      "certificate": "ac6c859b20a061b732ce709c2c4f583696acbeade6e95dc32820f5c4e32fdf36",
+      "ca": "c51110ee652b4c5b26156750a5f6c2cd1787142c4aa6826ae58d84f6f1443550",
+      "public_profile": "serial=4E005F38189515C34E5A04B1C6DB5333\nsubject=CN=users_mongoDB,O=PictuRAS\nissuer=CN=PictuRAS installation CA 20261124191718,O=PictuRAS\nnotBefore=Nov 24 19:17:19 2026 GMT\nnotAfter=Dec 24 19:17:19 2026 GMT\nX509v3 Extended Key Usage: \n    TLS Web Server Authentication\nX509v3 Subject Alternative Name: \n    DNS:users_mongoDB"
+    },
+    "ws_gateway": {
+      "certificate": "ac9f5e67b11ad048a2ac864f510de3231a85c8009cef0397badf2187d98d965e",
+      "ca": "c51110ee652b4c5b26156750a5f6c2cd1787142c4aa6826ae58d84f6f1443550",
+      "public_profile": "serial=E4A17E1A4FCE838115D6678150954943\nsubject=CN=ws_gateway,O=PictuRAS\nissuer=CN=PictuRAS installation CA 20261124191718,O=PictuRAS\nnotBefore=Nov 24 19:17:18 2026 GMT\nnotAfter=Dec 24 19:17:18 2026 GMT\nX509v3 Extended Key Usage: \n    TLS Web Server Authentication, TLS Web Client Authentication\nX509v3 Subject Alternative Name: \n    DNS:ws_gateway"
+    },
+    "nginx": {
+      "certificate": "376903a77148cd9a553424a6457b858bed2c6414c69b33ca2058cc558d4b2764",
+      "ca": "c51110ee652b4c5b26156750a5f6c2cd1787142c4aa6826ae58d84f6f1443550",
+      "public_profile": "serial=CF92D7C4A1435001A32EF36109B6772C\nsubject=CN=nginx,O=PictuRAS\nissuer=CN=PictuRAS installation CA 20261124191718,O=PictuRAS\nnotBefore=Nov 24 19:17:18 2026 GMT\nnotAfter=Dec 24 19:17:18 2026 GMT\nX509v3 Extended Key Usage: \n    TLS Web Server Authentication, TLS Web Client Authentication\nX509v3 Subject Alternative Name: \n    DNS:nginx, DNS:localhost, IP Address:127.0.0.1"
+    },
+    "projects": {
+      "certificate": "abe70d5af5f0683fbe74488656fd5d29ca3bdc89311c8d1124f0c6cb6822f0be",
+      "ca": "c51110ee652b4c5b26156750a5f6c2cd1787142c4aa6826ae58d84f6f1443550",
+      "public_profile": "serial=1E4F64527FBD290C053E47266B3C1772\nsubject=CN=projects,O=PictuRAS\nissuer=CN=PictuRAS installation CA 20261124191718,O=PictuRAS\nnotBefore=Nov 24 19:17:18 2026 GMT\nnotAfter=Dec 24 19:17:18 2026 GMT\nX509v3 Extended Key Usage: \n    TLS Web Server Authentication, TLS Web Client Authentication\nX509v3 Subject Alternative Name: \n    DNS:projects"
+    },
+    "generative-mock": {
+      "certificate": "38834cecc5af2b98fb31737de9f04e55632de6878f97f11eec3c3ca266b7173d",
+      "ca": "c51110ee652b4c5b26156750a5f6c2cd1787142c4aa6826ae58d84f6f1443550",
+      "public_profile": "serial=31CC8BD5822D8271B072ACCED1629F99\nsubject=CN=generative-mock,O=PictuRAS\nissuer=CN=PictuRAS installation CA 20261124191718,O=PictuRAS\nnotBefore=Nov 24 19:17:19 2026 GMT\nnotAfter=Dec 24 19:17:19 2026 GMT\nX509v3 Extended Key Usage: \n    TLS Web Server Authentication, TLS Web Client Authentication\nX509v3 Subject Alternative Name: \n    DNS:generative-mock"
+    },
+    "api_gateway": {
+      "certificate": "33e77ed9a40bc86872f33a99e4307c08e158d4f02d6ec4517800150ef0bcdd3c",
+      "ca": "c51110ee652b4c5b26156750a5f6c2cd1787142c4aa6826ae58d84f6f1443550",
+      "public_profile": "serial=9EC5446B01141D30395A5EB2120EC821\nsubject=CN=api_gateway,O=PictuRAS\nissuer=CN=PictuRAS installation CA 20261124191718,O=PictuRAS\nnotBefore=Nov 24 19:17:18 2026 GMT\nnotAfter=Dec 24 19:17:18 2026 GMT\nX509v3 Extended Key Usage: \n    TLS Web Server Authentication, TLS Web Client Authentication\nX509v3 Subject Alternative Name: \n    DNS:api_gateway"
+    },
+    "subscriptions_mongoDB": {
+      "certificate": "232fc47f41769a9c551e20c0dc5db9adb2b6a5828e60c79b92692ba2aa927392",
+      "ca": "c51110ee652b4c5b26156750a5f6c2cd1787142c4aa6826ae58d84f6f1443550",
+      "public_profile": "serial=D6417B5DFD3EB663F7A4ED572A6E1DAB\nsubject=CN=subscriptions_mongoDB,O=PictuRAS\nissuer=CN=PictuRAS installation CA 20261124191718,O=PictuRAS\nnotBefore=Nov 24 19:17:19 2026 GMT\nnotAfter=Dec 24 19:17:19 2026 GMT\nX509v3 Extended Key Usage: \n    TLS Web Server Authentication\nX509v3 Subject Alternative Name: \n    DNS:subscriptions_mongoDB"
+    },
+    "seaweedfs": {
+      "certificate": "abab94c611425bf073c4f474d354c7f3dc598ae6ff589d16f1c29d5b0df2d2ef",
+      "ca": "c51110ee652b4c5b26156750a5f6c2cd1787142c4aa6826ae58d84f6f1443550",
+      "public_profile": "serial=BB252A031F09EFB117F508EC3C495504\nsubject=CN=seaweedfs,O=PictuRAS\nissuer=CN=PictuRAS installation CA 20261124191718,O=PictuRAS\nnotBefore=Nov 24 19:17:19 2026 GMT\nnotAfter=Dec 24 19:17:19 2026 GMT\nX509v3 Extended Key Usage: \n    TLS Web Server Authentication, TLS Web Client Authentication\nX509v3 Subject Alternative Name: \n    DNS:seaweedfs, DNS:localhost"
+    },
+    "projects_mongoDB": {
+      "certificate": "3be42efc05e49eff24f5d66fdedd492a11b421e3dcc4eb621c33c25120eba478",
+      "ca": "c51110ee652b4c5b26156750a5f6c2cd1787142c4aa6826ae58d84f6f1443550",
+      "public_profile": "serial=FA20CE219ECC47D0E9F24D654CD54CC5\nsubject=CN=projects_mongoDB,O=PictuRAS\nissuer=CN=PictuRAS installation CA 20261124191718,O=PictuRAS\nnotBefore=Nov 24 19:17:19 2026 GMT\nnotAfter=Dec 24 19:17:19 2026 GMT\nX509v3 Extended Key Usage: \n    TLS Web Server Authentication\nX509v3 Subject Alternative Name: \n    DNS:projects_mongoDB"
+    },
+    "users": {
+      "certificate": "443c21e325c316156f1b45e9907365b3869db9b25ad66e6347e55fe65fd728ca",
+      "ca": "c51110ee652b4c5b26156750a5f6c2cd1787142c4aa6826ae58d84f6f1443550",
+      "public_profile": "serial=7F481AE8B0141AC83CC3C9174E913764\nsubject=CN=users,O=PictuRAS\nissuer=CN=PictuRAS installation CA 20261124191718,O=PictuRAS\nnotBefore=Nov 24 19:17:19 2026 GMT\nnotAfter=Dec 24 19:17:19 2026 GMT\nX509v3 Extended Key Usage: \n    TLS Web Server Authentication, TLS Web Client Authentication\nX509v3 Subject Alternative Name: \n    DNS:users"
+    },
+    "subscriptions": {
+      "certificate": "81e8b58bf2855248605ad0b42a3d11d8b12a1db95a0a0cce7f297976a36faa2d",
+      "ca": "c51110ee652b4c5b26156750a5f6c2cd1787142c4aa6826ae58d84f6f1443550",
+      "public_profile": "serial=8B45DEA62D63D46A29E5B9F18116E3D0\nsubject=CN=subscriptions,O=PictuRAS\nissuer=CN=PictuRAS installation CA 20261124191718,O=PictuRAS\nnotBefore=Nov 24 19:17:19 2026 GMT\nnotAfter=Dec 24 19:17:19 2026 GMT\nX509v3 Extended Key Usage: \n    TLS Web Server Authentication, TLS Web Client Authentication\nX509v3 Subject Alternative Name: \n    DNS:subscriptions"
+    },
+    "expand_ai_tool": {
+      "certificate": "25823ae330c96b152b7f39a86d1949cad4639b1a9ac617f4f7ae3ddda8911332",
+      "ca": "c51110ee652b4c5b26156750a5f6c2cd1787142c4aa6826ae58d84f6f1443550",
+      "public_profile": "serial=C1AC5B46B7A84AC93C94BC503760EB2C\nsubject=CN=expand_ai_tool,O=PictuRAS\nissuer=CN=PictuRAS installation CA 20261124191718,O=PictuRAS\nnotBefore=Nov 24 19:17:19 2026 GMT\nnotAfter=Dec 24 19:17:19 2026 GMT\nX509v3 Extended Key Usage: \n    TLS Web Client Authentication\nX509v3 Subject Alternative Name: \n    DNS:expand_ai_tool"
+    },
+    "frontend": {
+      "certificate": "3c31c39cc027717709fcfeae6ef4cebbaf61f99758b5bea410dd15fad1c1cbd0",
+      "ca": "c51110ee652b4c5b26156750a5f6c2cd1787142c4aa6826ae58d84f6f1443550",
+      "public_profile": "serial=39694058DDBC61E3EFFFBFD206A4B522\nsubject=CN=frontend,O=PictuRAS\nissuer=CN=PictuRAS installation CA 20261124191718,O=PictuRAS\nnotBefore=Nov 24 19:17:18 2026 GMT\nnotAfter=Dec 24 19:17:18 2026 GMT\nX509v3 Extended Key Usage: \n    TLS Web Server Authentication, TLS Web Client Authentication\nX509v3 Subject Alternative Name: \n    DNS:frontend"
+    },
+    "img_storage": {
+      "certificate": "a65c453f8797593b7ab6894236fa330ecfd162b3ef44d34dd021de9501b875bd",
+      "ca": "c51110ee652b4c5b26156750a5f6c2cd1787142c4aa6826ae58d84f6f1443550",
+      "public_profile": "serial=DAF87411D6C2E9CFAD05BAB1211D503F\nsubject=CN=img_storage,O=PictuRAS\nissuer=CN=PictuRAS installation CA 20261124191718,O=PictuRAS\nnotBefore=Nov 24 19:17:19 2026 GMT\nnotAfter=Dec 24 19:17:19 2026 GMT\nX509v3 Extended Key Usage: \n    TLS Web Server Authentication, TLS Web Client Authentication\nX509v3 Subject Alternative Name: \n    DNS:img_storage"
+    },
+    "rabbitmq": {
+      "certificate": "2203421f3ed6eb8d791b07cf563e6a58801f669c93a6cf2b0188bd5e90c33e3c",
+      "ca": "c51110ee652b4c5b26156750a5f6c2cd1787142c4aa6826ae58d84f6f1443550",
+      "public_profile": "serial=037BFBE4ED56A90A66BD9CFDD0F69A54\nsubject=CN=rabbitmq,O=PictuRAS\nissuer=CN=PictuRAS installation CA 20261124191718,O=PictuRAS\nnotBefore=Nov 24 19:17:19 2026 GMT\nnotAfter=Dec 24 19:17:19 2026 GMT\nX509v3 Extended Key Usage: \n    TLS Web Server Authentication\nX509v3 Subject Alternative Name: \n    DNS:rabbitmq"
+    }
+  },
+  "verification_images": {
+    "picturas-maintenance-probe": {
+      "image_id": "sha256:af5fa9059ca97cffefec56ef5c78a8308893c3496ced44c20438ffe0021882a5",
+      "repo_digests": []
+    },
+    "picturas-pki-observer": {
+      "image_id": "sha256:61e2a94a0e25f1019f8c3bea2137b3afa3ed5d510880cf4e88ca82fd67a5be99",
+      "repo_digests": []
+    }
+  },
+  "source_sha256": {
+    "ops/secrets.sh": "73699c335d4d34aef5d204bca64e55af1ac74fa10b773276b2fd3fa963954328",
+    "ops/maintenance.py": "8666a2dbe49c3a5c66763c0f4a6f06283be16a18ab0472747b3a79f21efe28c2",
+    "ops/pki.sh": "a579015c140d1e6e9f125c3f6073862698f9418dcaa8e6bdd00dec790e486a7f",
+    "ops/session-recovery.sh": "363b810d2b3989858749e845e79f423fcfeeb147e93b30446b59c027d5985a72",
+    "ops/mongo-tls-entrypoint.sh": "0756321c6ed3c7d1259d3011c06fd9265bea20ddece92c517792a50adb53623e",
+    "ops/maintenance_probe.py": "db169ae2c6cf5a69e52f8c87c6085c4d339e14b00a1a4783dc31f8b31f9497de",
+    "ops/maintenance-probe.Dockerfile": "c0688ad1a6850e0f318ee32a4f20983b855e0438fd185f3a75ff54da012aff4e",
+    "ops/maintenance.sh": "5a447ec3ce1e63a37132411432f9bffcedfa94df45d40c6f6717a2b3166e46d1",
+    "tests/conformance/pki-operations/pilot_paths.py": "3a7bce81c2dad0dd3d38a83462f3ed32506d723b0d906617e0b314d0179b730d",
+    "tests/conformance/pki-operations/technical_job.py": "ba265acbb8a8325f3e1a57f830478e4a86db18987f8653c258ea48de84a25792",
+    "tests/conformance/pki-operations/export_evidence.py": "d98b1ce310d54dfa7503801844bf4bc202581f5374f3d0919fbeb575e5a288e3",
+    "tests/conformance/pki-operations/workflow_status.py": "4a8ef7c8e06d3b330f9fe9dc5cd266e1b0dbf1aa7fe2d4882e4864565e8b37fc",
+    "tests/conformance/pki-operations/negative.py": "210c9f374ec199400840fc1231a346fabda2dacd48ee96d403f8304717490543",
+    "tests/conformance/pki-operations/browser_live.py": "1c59cef1986e9a7db41bfc3a7d7cd38de23f0c4020ed3c8d1788fd2cbca84e84",
+    "tests/conformance/pki-operations/test_maintenance.py": "7fbdf1d1e0b8c613d0cbf9d13032e4fe9d59d40c262a233f89c45ff4c744c557",
+    "tests/conformance/pki-operations/work-callback.test.js": "978a36b30ebe7b37b588d95373f22839f8f4f740685ba57ec0dff21c80c07645",
+    "tests/conformance/pki-operations/channels.py": "745b61c62eb582610c8f6ab168d6da60990a2c1fcffbc4e9fd8453b668ccfe50",
+    "tests/conformance/pki-operations/gate_live.py": "dbe3ec25bcbd743936c048e1c6485ecb9b78413fe05a44aa9b4cab46f88c2df6",
+    "tests/conformance/pki-operations/record_browser_review.py": "06a8cefcf890426a46d4e9235c18e5f404b032af5f26593386e99d6536c5ddce",
+    "tests/conformance/pki-operations/stack_workflow.py": "dd5bd57da35c0f2bf8bd1d2419c633448a14c540b6e553888338bf375dc7ad00",
+    "tests/conformance/pki-operations/run-b10.sh": "d0f6ec69c03d262208ade33873c6f1c654e380d128e1a84aaa12f7f42a6179c3",
+    "tests/conformance/pki-operations/pilot.py": "0b5b3a809706f5c92a51ba86d960c25c4b383052d9cefcaa83a8624b052de809",
+    "tests/conformance/pki-operations/planned_renew.py": "e6d18b8224ce13052dcc1d056e3dd91a0c64aeb83b8a24990a55b3fd2b6ad702",
+    "tests/conformance/pki-operations/seaweed_loopback.py": "a4c459207ea4c0445c09af121ce74fca9b7c83dee4abe7c1a5f3b50400e010f8",
+    "tests/conformance/pki-operations/manual_browser.py": "d99d5a510300afac588cfb7274c05ee37d3808118db4c43930c95040bea28350",
+    "tests/conformance/pki-operations/README.md": "04a14490f9670cce9918d64a0a76668b56ad1c39d1868a456ac9a01b2a8347d3",
+    "tests/conformance/pki-operations/inventory.py": "6046e79409ce98a95fd6a5b8df3f031d159c50da250fe908190309094970847a",
+    "tests/conformance/pki-operations/persistent_observer.py": "5aebf0d9d690af6c1971d6bda6f7653116f8fe5ac12d3eedf0e19b9514250c7d",
+    "tests/conformance/pki-operations/build_report.py": "9e1a0aab1555f2b28f33cdbec03aeddab04755d38d14a571ce9dc43a3eeadd22",
+    "tests/conformance/pki-operations/observer.Dockerfile": "9e90790a61c0bec488fc79b9b213124441c84cf45b1604bd2cf88bf3fcb69ec9",
+    "tests/conformance/pki-operations/browser_certificates.py": "9f1766cac2b3fe7e3879b968292573d44c8fd2f9315e5e375ad362320481e375",
+    "tests/conformance/pki-operations/browser-trust-check.py": "79035b38ae064b0ae5e35b8749cdffa83fdf892aff51deee431752741dfccb7f",
+    "tests/conformance/pki-operations/close_browser.py": "217a0a2da2f17a79d7e0d09887d52e3825acc98dab40c369006dbb815b029c60"
+  }
+}

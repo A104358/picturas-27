@@ -1,0 +1,110 @@
+# B12-regression — 2026-11-25T07:46:31Z
+$ tests/conformance/in-network.sh picturas-dev regression/b12-regression.py
+
+PASS R01 login returns a session: True
+PASS R01 session is accepted: 200
+PASS R01 invalid session refused: 401
+PASS R01 free profile starts with 5 operations: 5
+PASS R01 subscribe: 200
+PASS R01 subscription makes the profile premium: premium
+PASS R01 anonymous session accepted: 200
+PASS R02 anonymous uploads an image: 204
+PASS R02 anonymous cannot upload a video (legacy POST): 403
+PASS R02 anonymous cannot request a direct video upload: ('request', 403)
+PASS R03 upload image 1: 204
+PASS R03 upload image 2: 204
+PASS R03 add brightness: 201
+PASS R03 add contrast: 201
+PASS R03 add saturation: 201
+PASS R03 add rotate: 201
+PASS R03 add resize: 201
+PASS R03 add cut: 201
+PASS R03 add border: 201
+PASS R03 add binarization: 201
+PASS R03 batch Apply (2 images x 8 tools): 201
+PASS R03 both results produced through the 8-step chain: 2
+PASS R03 results reflect resize -> cut -> border (42x32): [(42, 32), (42, 32)]
+PASS R03 ZIP export holds both results: 2
+PASS R04 add watermark: 201
+PASS R04 Apply: 201
+PASS R04 watermarked image produced (size, differs from original): ((96, 64), True)
+PASS R05 cut_ai: add: 201
+PASS R05 cut_ai: Apply: 201
+PASS R05 cut_ai: result produced: True
+PASS R05 upgrade_ai: add: 201
+PASS R05 upgrade_ai: Apply: 201
+PASS R05 upgrade_ai: result produced: True
+PASS R05 bg_remove_ai: add: 201
+PASS R05 bg_remove_ai: Apply: 201
+PASS R05 bg_remove_ai: result produced: True
+PASS R05 text_ai: add: 201
+PASS R05 text_ai: Apply: 201
+PASS R05 text_ai: result produced: True
+PASS R05 obj_ai: add: 201
+PASS R05 obj_ai: Apply: 201
+PASS R05 obj_ai: result produced: True
+PASS R05 people_ai: add: 201
+PASS R05 people_ai: Apply: 201
+PASS R05 people_ai: result produced: True
+PASS R05 expand_ai: add: 201
+PASS R05 expand_ai: Apply: 201
+PASS R05 expand_ai: result produced (128x96 -> 144x104): True
+PASS R06 owner joins the project room: joined
+PASS R06 video upload, legacy POST: 204
+PASS R06 video upload, direct flow: 204
+PASS R06 both videos listed: ['direct.mp4', 'legacy.mp4']
+PASS R06 add brightness: 201
+PASS R06 add trim 1-5 s (legacy.mp4): 201
+PASS R06 add speed 2x (legacy.mp4): 201
+PASS R06 preview request: 201
+PASS R06 preview-ready event (personal room): True
+PASS R06 video preview is an MP4 of at most 3 s (edited timeline 2 s): True
+PASS R06 batch Apply: 201
+PASS R06 trim+speed video lasts ~2 s: 2.0
+PASS R06 untouched-length video lasts ~10 s: 10.0
+PASS R06 video-progress events received: True
+PASS R06 process-update events received: True
+PASS R07 video into an image project: 204
+PASS R07 Apply: 201
+PASS R07 one image and one video result: ['image', 'video']
+PASS R08 speech video upload (webm, 177 s, premium): 204
+PASS R08 add subtitles: 201
+PASS R08 Apply: 201
+PASS R08 captioned MP4 keeps the duration (~177 s): 176.6
+PASS R09 add extract_frames (count 5, PNG): 201
+PASS R09 preview is a contact-sheet image: True
+PASS R09 Apply: 201
+PASS R09 five PNG frames saved as image results of the video: [True, True, True, True, True]
+PASS R10 adding an advanced (AI) tool does not debit: 5
+PASS R10 preview does not debit: 5
+PASS R10 Apply debits one operation (1 image x 1 AI tool): 4
+PASS R10 Apply (1 video x 2 effects): 201
+PASS R10 Apply debits two operations: 2
+PASS R10 cancel accepted: 204
+PASS R10 cancellation refunds the two operations: 4
+PASS R11 owner creates a edit link: 201
+PASS R11 owner creates a read link: 201
+PASS R11 reader opens the project: 200
+PASS R11 reader cannot edit the pipeline: 403
+PASS R11 owner joins: joined
+PASS R11 editor (member) joins with the edit link: joined
+PASS R11 presence (editor): 204
+PASS R11 editor adds a tool: 201
+PASS R11 owner and member get the project-room update: True
+PASS R11 member gets the project-room update: True
+PASS R11 stale version answers 409: 409
+PASS R11 member who previews gets preview-ready (personal room): True
+PASS R11 presence leave: 204
+PASS R11 owner revokes the edit link: 204
+PASS R11 revoked link no longer opens the project: 410
+PASS R12 own preset created: 201
+PASS R12 own preset listed: True
+PASS R12 another account cannot list it: 403
+PASS R12 preset shared: 200
+PASS R12 shared preset readable by its share id: 200
+PASS R13 cancel subscription: 200
+PASS R13 profile back to free: free
+PASS R14 holder deletes the account: 204
+PASS R14 no project left for the deleted account: []
+B12 regression: 105/105 checks passed
+exit: 0

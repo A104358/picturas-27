@@ -1,0 +1,19 @@
+# B1-S19-markers — 2026-11-25T06:10:43Z
+$ tests/conformance/mtls-pki/s19-markers.sh
+
+# S19 markers (S19-MARKER-339e62f95afb4dd8): 44 files in 11 locations
+## (a) Git ignores every marker
+ok   all 44 markers ignored
+## (b) markers are absent from each build context (.dockerignore)
+ok   apiGateway
+ok   users
+ok   subscriptions
+ok   projects
+ok   imageStorageService
+ok   wsGateway
+ok   frontend
+ok   Tools
+ok   generative-mock
+ok   rabbitMQ
+S19 markers: passed
+exit: 0

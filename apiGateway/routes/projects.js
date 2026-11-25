@@ -11,17 +11,24 @@ const FormData = require("form-data");
 
 const auth = require("../auth/auth");
 
-const key = fs.readFileSync(__dirname + "/../certs/selfsigned.key");
-const cert = fs.readFileSync(__dirname + "/../certs/selfsigned.crt");
 
-const httpsAgent = new https.Agent({
-  rejectUnauthorized: false, // (NOTE: this will disable client verification)
-  cert: cert,
-  key: key,
-});
+// Own certificate, installation CA, no cached TLS sessions (B5).
+const httpsAgent = require("../tls/pkiTls").clientAgent({ keepAlive: true });
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
+
+// Images keep the buffered path (B6 replaces the video one); cap them (idea 8, D-21).
+const IMAGE_MAX_BYTES = Number(process.env.IMAGE_MAX_BYTES || 25 * 1024 * 1024);
+const imageUpload = multer({ storage: storage, limits: { fileSize: IMAGE_MAX_BYTES, files: 1 } });
+
+function singleImage(req, res, next) {
+  imageUpload.single("image")(req, res, (err) => {
+    if (err?.code === "LIMIT_FILE_SIZE") return res.status(413).jsonp("Image too large");
+    if (err) return res.status(400).jsonp("Invalid image upload");
+    next();
+  });
+}
 
 const projectsURL = "https://projects:9001/";
 
@@ -408,8 +415,8 @@ router.post(
  */
 router.post(
   "/:user/:project/img",
-  upload.single("image"),
   auth.checkToken,
+  singleImage,
   function (req, res, next) {
     const ownerId = req.query.owner || req.params.user;
     const callerId = req.authUserId || req.params.user;
@@ -432,6 +439,7 @@ router.post(
             "X-Caller-Id": callerId,
           },
           httpsAgent: httpsAgent,
+          picturasRequest: req,
           params: req.query.share ? { share: req.query.share } : undefined, 
           // Videos can be hundreds of MB
           maxBodyLength: Infinity,
@@ -455,48 +463,49 @@ router.post(
  * @file Video to be added (.mp4, .mov, .webm)
  * @returns Post answer structure in case of success
  */
-router.post(
-  "/:user/:project/video",
-  upload.single("video"),
-  auth.checkToken,
-  function (req, res, next) {
-    const ownerId = req.query.owner || req.params.user;
-    const callerId = req.authUserId || req.params.user;
-
-    const data = new FormData();
-    data.append("video", req.file.buffer, {
-      filename: req.file.originalname,
-      contentType: req.file.mimetype,
+router.post("/:user/:project/video", auth.checkToken, async (req, res) => {
+  const ownerId = req.query.owner || req.params.user;
+  const url = projectsURL + `${ownerId}/${req.params.project}/video`;
+  const params = req.query.share ? { share: req.query.share } : undefined;
+  const headers = {
+    "Content-Type": req.headers["content-type"],
+    "X-Project-Version": req.headers["x-project-version"],
+  };
+  try {
+    // Authenticate and reserve capacity before consuming the multipart body.
+    const preflight = await axios.post(`${url}/preflight`, null, {
+      headers: { "X-Project-Version": req.headers["x-project-version"] },
+      httpsAgent, picturasRequest: req, params,
     });
-
-    axios
-      .post(
-        projectsURL + `${ownerId}/${req.params.project}/video`,
-        data,
-        {
-          headers: {
-            ...data.getHeaders(),                     
-            Authorization: req.headers["authorization"], 
-            "X-Project-Version": req.headers["x-project-version"],
-            "X-Caller-Id": callerId,
-          },
-          httpsAgent: httpsAgent,
-          params: req.query.share ? { share: req.query.share } : undefined, 
-          // Videos can be hundreds of MB
-          maxBodyLength: Infinity,
-          maxContentLength: Infinity,
-        }
-      )
-      .then((resp) => {
-        if (resp.headers?.["x-project-version"]) {
-          res.set("X-Project-Version", resp.headers["x-project-version"]);
-        }
-        return res.sendStatus(204);
-      })
-    .catch((err) => forwardAxiosError(res, err, "mensagem fallback"))
-
+    const length = Number(req.headers["content-length"]);
+    const max = Number(preflight.data.maxBytes);
+    if (Number.isFinite(length) && length > max + 1024 * 1024) {
+      await axios.post(`${url}/cancel`, null, {
+        httpsAgent, picturasRequest: req, params,
+        headers: { "X-Upload-Id": preflight.data.uploadId },
+      }).catch(() => {});
+      return res.status(413).jsonp("Video too large");
+    }
+    headers["X-Upload-Id"] = preflight.data.uploadId;
+    if (req.headers["content-length"]) headers["Content-Length"] = req.headers["content-length"];
+    // A client that disconnects mid-body must end the forwarded request too, so projects
+    // fails the attempt and frees its upload slot at once.
+    const forward = new AbortController();
+    req.on("close", () => { if (!req.complete) forward.abort(); });
+    const response = await axios.post(url, req, {
+      headers, httpsAgent, picturasRequest: req, params, signal: forward.signal,
+      maxBodyLength: Infinity, maxContentLength: Infinity,
+      maxRedirects: 0,
+      timeout: 780000,
+    });
+    if (response.headers?.["x-project-version"]) {
+      res.set("X-Project-Version", response.headers["x-project-version"]);
+    }
+    res.sendStatus(204);
+  } catch (err) {
+    forwardAxiosError(res, err, "Video upload failed");
   }
-);
+});
 
 /**
  * Add tool to project

@@ -1,0 +1,48 @@
+{"metric": "S05", "campaign": "EXP", "rep": 1, "step": "L1_criar_projeto", "ok": true, "note": "", "policy": false, "t_utc": "2026-11-25T13:26:29Z"}
+{"metric": "S05", "campaign": "EXP", "rep": 1, "step": "L2_upload_imagem", "ok": true, "note": "HTTP 204", "policy": false, "t_utc": "2026-11-25T13:26:29Z"}
+{"metric": "S05", "campaign": "EXP", "rep": 1, "step": "L3_upload_video", "ok": true, "note": "HTTP 204", "policy": false, "t_utc": "2026-11-25T13:26:30Z"}
+{"metric": "S05", "campaign": "EXP", "rep": 1, "step": "L12a_upload_nao_debita_quota", "ok": true, "note": "5->5", "policy": false, "t_utc": "2026-11-25T13:26:30Z"}
+{"metric": "S05", "campaign": "EXP", "rep": 1, "step": "L4_adicionar_ferramenta", "ok": true, "note": "HTTP 201", "policy": false, "t_utc": "2026-11-25T13:26:30Z"}
+{"metric": "S05", "campaign": "EXP", "rep": 1, "step": "L5_aplicar_pipeline", "ok": true, "note": "HTTP 201, 2/2", "policy": false, "t_utc": "2026-11-25T13:26:36Z"}
+{"metric": "S05", "campaign": "EXP", "rep": 1, "step": "L6_descarregar_resultado", "ok": true, "note": "", "policy": false, "t_utc": "2026-11-25T13:26:36Z"}
+{"metric": "S05", "campaign": "EXP", "rep": 1, "step": "L7_evento_process_update", "ok": true, "note": "", "policy": false, "t_utc": "2026-11-25T13:26:36Z"}
+{"metric": "S05", "campaign": "EXP", "rep": 1, "step": "L12b_apply_debita_quota", "ok": true, "note": "5->4", "policy": false, "t_utc": "2026-11-25T13:26:36Z"}
+{"metric": "S05", "campaign": "EXP", "rep": 1, "step": "L8_preview", "ok": true, "note": "HTTP 201", "policy": false, "t_utc": "2026-11-25T13:26:38Z"}
+{"metric": "S05", "campaign": "EXP", "rep": 1, "step": "L9_leitor_le", "ok": true, "note": "HTTP 200", "policy": false, "t_utc": "2026-11-25T13:26:38Z"}
+{"metric": "S05", "campaign": "EXP", "rep": 1, "step": "L10_editor_edita", "ok": true, "note": "HTTP 201", "policy": false, "t_utc": "2026-11-25T13:26:38Z"}
+{"metric": "S05", "campaign": "EXP", "rep": 1, "step": "L11_editor_remove_media", "ok": true, "note": "HTTP 204", "policy": false, "t_utc": "2026-11-25T13:26:38Z"}
+{"metric": "S05", "campaign": "EXP", "rep": 1, "step": "L13_subscricao_propria", "ok": true, "note": "HTTP 201", "policy": false, "t_utc": "2026-11-25T13:26:38Z"}
+{"metric": "S05", "campaign": "EXP", "rep": 1, "step": "L14_dono_elimina_projeto", "ok": true, "note": "HTTP 204", "policy": false, "t_utc": "2026-11-25T13:26:38Z"}
+{"metric": "S05", "campaign": "EXP", "rep": 1, "step": "P1_editor_elimina_projeto", "ok": false, "note": "HTTP 403; eliminado=False", "policy": true, "t_utc": "2026-11-25T13:26:39Z"}
+{"metric": "S05", "campaign": "EXP", "rep": 2, "step": "L1_criar_projeto", "ok": true, "note": "", "policy": false, "t_utc": "2026-11-25T13:26:39Z"}
+{"metric": "S05", "campaign": "EXP", "rep": 2, "step": "L2_upload_imagem", "ok": true, "note": "HTTP 204", "policy": false, "t_utc": "2026-11-25T13:26:39Z"}
+{"metric": "S05", "campaign": "EXP", "rep": 2, "step": "L3_upload_video", "ok": true, "note": "HTTP 204", "policy": false, "t_utc": "2026-11-25T13:26:39Z"}
+{"metric": "S05", "campaign": "EXP", "rep": 2, "step": "L12a_upload_nao_debita_quota", "ok": true, "note": "5->5", "policy": false, "t_utc": "2026-11-25T13:26:39Z"}
+{"metric": "S05", "campaign": "EXP", "rep": 2, "step": "L4_adicionar_ferramenta", "ok": true, "note": "HTTP 201", "policy": false, "t_utc": "2026-11-25T13:26:39Z"}
+{"metric": "S05", "campaign": "EXP", "rep": 2, "step": "L5_aplicar_pipeline", "ok": true, "note": "HTTP 201, 2/2", "policy": false, "t_utc": "2026-11-25T13:26:42Z"}
+{"metric": "S05", "campaign": "EXP", "rep": 2, "step": "L6_descarregar_resultado", "ok": true, "note": "", "policy": false, "t_utc": "2026-11-25T13:26:42Z"}
+{"metric": "S05", "campaign": "EXP", "rep": 2, "step": "L7_evento_process_update", "ok": true, "note": "", "policy": false, "t_utc": "2026-11-25T13:26:42Z"}
+{"metric": "S05", "campaign": "EXP", "rep": 2, "step": "L12b_apply_debita_quota", "ok": true, "note": "5->4", "policy": false, "t_utc": "2026-11-25T13:26:42Z"}
+{"metric": "S05", "campaign": "EXP", "rep": 2, "step": "L8_preview", "ok": true, "note": "HTTP 201", "policy": false, "t_utc": "2026-11-25T13:26:44Z"}
+{"metric": "S05", "campaign": "EXP", "rep": 2, "step": "L9_leitor_le", "ok": true, "note": "HTTP 200", "policy": false, "t_utc": "2026-11-25T13:26:44Z"}
+{"metric": "S05", "campaign": "EXP", "rep": 2, "step": "L10_editor_edita", "ok": true, "note": "HTTP 201", "policy": false, "t_utc": "2026-11-25T13:26:44Z"}
+{"metric": "S05", "campaign": "EXP", "rep": 2, "step": "L11_editor_remove_media", "ok": true, "note": "HTTP 204", "policy": false, "t_utc": "2026-11-25T13:26:45Z"}
+{"metric": "S05", "campaign": "EXP", "rep": 2, "step": "L13_subscricao_propria", "ok": true, "note": "HTTP 201", "policy": false, "t_utc": "2026-11-25T13:26:45Z"}
+{"metric": "S05", "campaign": "EXP", "rep": 2, "step": "L14_dono_elimina_projeto", "ok": true, "note": "HTTP 204", "policy": false, "t_utc": "2026-11-25T13:26:45Z"}
+{"metric": "S05", "campaign": "EXP", "rep": 2, "step": "P1_editor_elimina_projeto", "ok": false, "note": "HTTP 403; eliminado=False", "policy": true, "t_utc": "2026-11-25T13:26:45Z"}
+{"metric": "S05", "campaign": "EXP", "rep": 3, "step": "L1_criar_projeto", "ok": true, "note": "", "policy": false, "t_utc": "2026-11-25T13:26:45Z"}
+{"metric": "S05", "campaign": "EXP", "rep": 3, "step": "L2_upload_imagem", "ok": true, "note": "HTTP 204", "policy": false, "t_utc": "2026-11-25T13:26:45Z"}
+{"metric": "S05", "campaign": "EXP", "rep": 3, "step": "L3_upload_video", "ok": true, "note": "HTTP 204", "policy": false, "t_utc": "2026-11-25T13:26:45Z"}
+{"metric": "S05", "campaign": "EXP", "rep": 3, "step": "L12a_upload_nao_debita_quota", "ok": true, "note": "5->5", "policy": false, "t_utc": "2026-11-25T13:26:45Z"}
+{"metric": "S05", "campaign": "EXP", "rep": 3, "step": "L4_adicionar_ferramenta", "ok": true, "note": "HTTP 201", "policy": false, "t_utc": "2026-11-25T13:26:45Z"}
+{"metric": "S05", "campaign": "EXP", "rep": 3, "step": "L5_aplicar_pipeline", "ok": true, "note": "HTTP 201, 2/2", "policy": false, "t_utc": "2026-11-25T13:26:48Z"}
+{"metric": "S05", "campaign": "EXP", "rep": 3, "step": "L6_descarregar_resultado", "ok": true, "note": "", "policy": false, "t_utc": "2026-11-25T13:26:48Z"}
+{"metric": "S05", "campaign": "EXP", "rep": 3, "step": "L7_evento_process_update", "ok": true, "note": "", "policy": false, "t_utc": "2026-11-25T13:26:48Z"}
+{"metric": "S05", "campaign": "EXP", "rep": 3, "step": "L12b_apply_debita_quota", "ok": true, "note": "5->4", "policy": false, "t_utc": "2026-11-25T13:26:48Z"}
+{"metric": "S05", "campaign": "EXP", "rep": 3, "step": "L8_preview", "ok": true, "note": "HTTP 201", "policy": false, "t_utc": "2026-11-25T13:26:50Z"}
+{"metric": "S05", "campaign": "EXP", "rep": 3, "step": "L9_leitor_le", "ok": true, "note": "HTTP 200", "policy": false, "t_utc": "2026-11-25T13:26:50Z"}
+{"metric": "S05", "campaign": "EXP", "rep": 3, "step": "L10_editor_edita", "ok": true, "note": "HTTP 201", "policy": false, "t_utc": "2026-11-25T13:26:51Z"}
+{"metric": "S05", "campaign": "EXP", "rep": 3, "step": "L11_editor_remove_media", "ok": true, "note": "HTTP 204", "policy": false, "t_utc": "2026-11-25T13:26:51Z"}
+{"metric": "S05", "campaign": "EXP", "rep": 3, "step": "L13_subscricao_propria", "ok": true, "note": "HTTP 201", "policy": false, "t_utc": "2026-11-25T13:26:51Z"}
+{"metric": "S05", "campaign": "EXP", "rep": 3, "step": "L14_dono_elimina_projeto", "ok": true, "note": "HTTP 204", "policy": false, "t_utc": "2026-11-25T13:26:51Z"}
+{"metric": "S05", "campaign": "EXP", "rep": 3, "step": "P1_editor_elimina_projeto", "ok": false, "note": "HTTP 403; eliminado=False", "policy": true, "t_utc": "2026-11-25T13:26:51Z"}

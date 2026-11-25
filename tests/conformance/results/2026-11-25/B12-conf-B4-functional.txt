@@ -1,0 +1,5 @@
+# B4-functional — 2026-11-25T06:11:40Z
+$ tests/conformance/in-network.sh picturas-dev b4-functional.py
+
+B4: owner/share/D7, profile isolation, premium lifecycle and direct services passed
+exit: 0

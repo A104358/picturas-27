@@ -2,7 +2,6 @@ var express = require("express");
 var router = express.Router();
 
 const crypto = require("crypto");
-const auth = require("../auth/auth");
 const User = require("../controllers/user");
 const Presets = require("../controllers/presets");
 
@@ -52,18 +51,13 @@ const DEFAULT_PRESETS = [
  */
 async function requireAuth(req, res, next) {
   try {
-    const hdr = req.headers.authorization;
-    if (!hdr || !hdr.startsWith("Bearer ")) {
-      return res.status(400).jsonp("Missing or invalid Authorization header.");
+    if (req.internalIdentity?.source !== "api_gateway" ||
+        req.internalIdentity.sub !== req.params.user) {
+      return res.status(403).jsonp("Preset owner mismatch.");
     }
-
-    const token = hdr.split(" ")[1];
     const user = await User.getOne(req.params.user);
 
     if (!user) return res.status(404).jsonp("User not found.");
-
-    const ok = auth.validate_jwt(user, token);
-    if (!ok) return res.status(401).jsonp("Invalid token.");
 
     if (user.type === "anonymous") {
       return res.status(403).jsonp("Anonymous users cannot manage presets.");

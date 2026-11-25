@@ -10,26 +10,14 @@ function objectKey(userId, projectId, stage, fileName) {
   return `users/${userId}/projects/${projectId}/${stage}/${fileName}`;
 }
 
-// Create the bucket on first use. The promise is cached so concurrent uploads
-// share one check; on failure it is cleared so the next request retries.
+// The one-shot bootstrap job creates the bucket before this service starts.
+// Cache the check so concurrent uploads share it.
 let bucketReady = null;
 
 function ensureBucket() {
   if (!bucketReady) {
     bucketReady = (async () => {
-      try {
-        await s3.headBucket({ Bucket: BUCKET }).promise();
-      } catch (error) {
-        if (error.statusCode !== 404) throw error;
-        try {
-          await s3.createBucket({ Bucket: BUCKET }).promise();
-          console.log(`Bucket '${BUCKET}' created.`);
-        } catch (createError) {
-          if (createError.code !== "BucketAlreadyOwnedByYou" && createError.code !== "BucketAlreadyExists") {
-            throw createError;
-          }
-        }
-      }
+      await s3.headBucket({ Bucket: BUCKET }).promise();
     })().catch((error) => {
       bucketReady = null;
       throw error;

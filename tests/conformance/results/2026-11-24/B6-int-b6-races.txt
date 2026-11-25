@@ -1,0 +1,5 @@
+# b6-races — 2026-11-24T18:15:48Z — final code (as measured in EXP-20261124T162600Z); pause before the race for slots held by earlier suites' hashes
+$ evaluation/.venv/bin/python tests/conformance/upload/b6-races.py
+PASS simultaneous uploads publish exactly one media and one version
+PASS interrupted body leaves no media and a later upload succeeds
+exit=0

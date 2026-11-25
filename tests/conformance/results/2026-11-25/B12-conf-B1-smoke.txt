@@ -1,0 +1,17 @@
+# B1-smoke — 2026-11-25T06:10:51Z
+$ python3 tests/conformance/mtls-pki/b1-smoke.py
+
+ok   register (users, field encryption key from secrets) — HTTP 201
+ok   login returns a session token — HTTP 201
+ok   token signed with the old committed secret is refused — HTTP 401
+ok   token from login is accepted — HTTP 200
+ok   create project — HTTP 201
+ok   upload image (img_storage uses the S3 credential from secrets) — HTTP 204
+ok   image listed — HTTP 200, 1 item(s)
+ok   original downloaded through the signed /s3/ URL with the same SHA-256
+ok   add brightness tool — HTTP 201
+ok   apply pipeline — HTTP 201
+ok   result produced by the worker (broker credential from secrets) — last HTTP 200
+ok   result differs from the original (brightness applied)
+B1 smoke: 12/12 passed
+exit: 0

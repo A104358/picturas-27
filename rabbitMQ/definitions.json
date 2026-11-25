@@ -1,37 +1,11 @@
 {
-    "users": [
-        {
-            "name": "user",
-            "password": "password",
-            "tags": "administrator"
-        },
-        {
-            "name": "guest",
-            "password": "guest",
-            "tags": "administrator"
-        }
-    ],
+    "users": [],
     "vhosts": [
         {
             "name": "/"
         }
     ],
-    "permissions": [
-        {
-            "user": "user",
-            "vhost": "/",
-            "configure": ".*",
-            "write": ".*",
-            "read": ".*"
-        },
-        {
-            "user": "guest",
-            "vhost": "/",
-            "configure": ".*",
-            "write": ".*",
-            "read": ".*"
-        }
-    ],
+    "permissions": [],
     "queues": [
         {
             "name": "project_queue",
@@ -178,7 +152,7 @@
         {
             "name": "picturas",
             "vhost": "/",
-            "type": "direct",
+            "type": "topic",
             "durable": true,
             "auto_delete": false,
             "internal": false,

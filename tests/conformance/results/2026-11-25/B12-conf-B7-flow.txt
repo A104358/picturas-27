@@ -1,0 +1,10 @@
+# B7-flow — 2026-11-25T07:44:40Z
+$ evaluation/.venv/bin/python tests/conformance/upload/b7-flow.py
+
+PASS request auth and free size limit
+PASS early PUT refusal and direct transfer
+PASS one-use token, commit and idempotent confirmation
+PASS cancellation before PUT frees the attempt
+PASS cancellation after PUT prevents publication
+PASS concurrent PUT claim has one winner
+exit: 0

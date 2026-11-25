@@ -1,0 +1,10 @@
+PASS W1 wss through nginx connects (websocket transport): True
+PASS E1 upload image: 204
+PASS E1 add expand_ai (generative): 201
+PASS E1 apply (free account, one advanced operation): 201
+PASS E1 generative outpainting result is the padded PNG (48x32 -> 64x40): (64, 40)
+PASS W1 processing events received over wss: True
+PASS D1 projects listed before deletion: True
+PASS D1 holder deletes the account: 204
+PASS D1 no project left for the deleted account: []
+B5 functional: 9/9 checks passed

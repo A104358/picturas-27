@@ -1,0 +1,22 @@
+# B12 hash orphan (decision 51) — 2026-11-25T07:37:11Z — before the fix (HEAD projects image)
+PASS cycle 1: upload accepted, project deleted before its hash: upload 204, delete 204
+PASS cycle 2: upload accepted, project deleted before its hash: upload 204, delete 204
+PASS cycle 3: upload accepted, project deleted before its hash: upload 204, delete 204
+PASS cycle 4: upload accepted, project deleted before its hash: upload 204, delete 204
+PASS account cycle: upload accepted, account deleted before its hash: upload 204, delete 204
+PASS later upload after the orphans (no 429)
+FAIL orphaned attempts finished, no slot held: states ['ready', 'ready_hash_pending'], slots held 2
+FAIL later video gets its hash (pump not blocked by orphans): ['ready_hash_pending']
+B12 hash orphan: FAILED orphaned attempts finished, no slot held, later video gets its hash (pump not blocked by orphans)
+
+# after the fix — 2026-11-25T07:37:11Z
+PASS cycle 1: upload accepted, project deleted before its hash: upload 204, delete 204
+PASS cycle 2: upload accepted, project deleted before its hash: upload 204, delete 204
+PASS cycle 3: upload accepted, project deleted before its hash: upload 204, delete 204
+PASS cycle 4: upload accepted, project deleted before its hash: upload 204, delete 204
+PASS account cycle: upload accepted, account deleted before its hash: upload 204, delete 204
+PASS later upload after the orphans (no 429)
+PASS orphaned attempts finished, no slot held: states ['ready'], slots held 0
+PASS later video gets its hash (pump not blocked by orphans): ['ready']
+B12 hash orphan: all checks passed
+exit: 0

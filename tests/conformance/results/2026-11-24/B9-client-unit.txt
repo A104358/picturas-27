@@ -1,0 +1,5 @@
+PASS AR-07: exact 16 KiB/+1, 8 KiB token, invalid JSON, origin and untrusted fields
+PASS AR-05/08: only server-validated matching anonymous subject can reach import; failures write nothing
+PASS AR-06/10: expiry during confirmation and invalidated generation never write a candidate
+PASS AR-08/10: storage refusal, different identity and stale completion preserve saved session
+PASS AR-10/SEC-02: held recovery lock rejects writers; network errors never signal logout

@@ -202,6 +202,14 @@ Fontes primárias: [nginx proxy SSL](https://nginx.org/en/docs/http/ngx_http_pro
 
 ## OPS-C1 — recuperação administrativa, sem repetição cega
 
+**Atualização B11 (24–25/11):** as observações de código abaixo descrevem a base
+anterior à implementação. O [runbook de reconciliação](../reconciliation-operations.md)
+documenta o novo registo por execução, ledger atómico e ferramenta `ops/reconcile`.
+Os [ensaios de conformidade](../../tests/conformance/results/2026-11-24/B11-acceptance.json)
+distinguem workers reais, estados controlados, tentativas falhadas e casos que
+continuam isolados. Não se declara recuperação automática nem transação entre os
+vários canais de dados; os defeitos de ack antecipado mantêm-se explícitos.
+
 ### Evidência do código e limites
 
 - [Tools/utils/rabbit_mq.py](../../Tools/utils/rabbit_mq.py) usa `auto_ack=True`:

@@ -1,0 +1,23 @@
+# F01 regression — 2026-11-24T18:55:05Z
+commit: cb1e028 (+ uncommitted changes)
+images: picturas-dev-projects picturas-dev-video_tool
+
+## projects (node --test)
+v26.13.1
+✔ captions apply to all videos, while images skip them and trim stays targeted (1.103139ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 63.830216
+exit: 0
+
+## Tools/video (pytest)
+........................................................................ [ 97%]
+..                                                                       [100%]
+74 passed in 37.11s
+exit: 0
+saved: /home/luis/RAS/Projeto/picturas-27/tests/conformance/results/2026-11-24/F01-185505.txt

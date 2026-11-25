@@ -16,6 +16,9 @@ from utils.img_handler import Img_Handler
 # Define a URL do serviço gerativo (ex.: http://gen-ai:7860 ou http://comfyui:8188)
 # Espera-se um endpoint: POST {GEN_EXPAND_URL}/outpaint
 GEN_EXPAND_URL = os.getenv("GEN_EXPAND_URL", "").strip()
+GEN_TLS_CERT = os.getenv("GEN_TLS_CERT", "/run/secrets/pki/service.crt")
+GEN_TLS_KEY = os.getenv("GEN_TLS_KEY", "/run/secrets/pki/service.key")
+GEN_TLS_CA = os.getenv("GEN_TLS_CA", "/run/secrets/pki/ca.crt")
 
 try:
     import requests  # adiciona requests ao requirements.txt do expand_ai
@@ -157,7 +160,9 @@ def _generative_outpaint_http(canvas: Image.Image, mask: Image.Image, params: di
     if seed is not None:
         data["seed"] = str(seed)
 
-    resp = requests.post(url, files=files, data=data, timeout=timeout)
+    # mTLS to generative-mock (B5): own certificate, installation CA, server name = URL host.
+    resp = requests.post(url, files=files, data=data, timeout=timeout,
+                         cert=(GEN_TLS_CERT, GEN_TLS_KEY), verify=GEN_TLS_CA)
     resp.raise_for_status()
 
     out = Image.open(BytesIO(resp.content)).convert("RGB")

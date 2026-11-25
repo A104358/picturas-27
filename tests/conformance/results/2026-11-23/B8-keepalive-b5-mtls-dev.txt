@@ -1,0 +1,148 @@
+PASS S08 frontend no client certificate: TLS
+PASS S08 frontend other CA certificate (CN=nginx): TLS
+PASS S08 frontend expired certificate (CN=nginx): TLS
+PASS S08 frontend server-only certificate (EKU, rabbitmq): TLS
+PASS S08 frontend plaintext HTTP gets no HTTP answer: CLOSED
+PASS S09 frontend allowed peer nginx GET /: 200
+PASS RES frontend session offered by nginx not resumed: full handshake
+PASS D4 frontend peer frontend refused (valid CA is not enough): 403
+PASS D4 frontend peer api_gateway refused (valid CA is not enough): 403
+PASS D4 frontend peer ws_gateway refused (valid CA is not enough): 403
+PASS D4 frontend peer projects refused (valid CA is not enough): 403
+PASS D4 frontend peer users refused (valid CA is not enough): 403
+PASS D4 frontend peer subscriptions refused (valid CA is not enough): 403
+PASS D4 frontend peer img_storage refused (valid CA is not enough): 403
+PASS D4 frontend peer seaweedfs refused (valid CA is not enough): 403
+PASS D4 frontend peer generative-mock refused (valid CA is not enough): 403
+PASS D4 frontend peer expand_ai_tool refused (valid CA is not enough): 403
+PASS S08 api_gateway no client certificate: TLS
+PASS S08 api_gateway other CA certificate (CN=nginx): TLS
+PASS S08 api_gateway expired certificate (CN=nginx): TLS
+PASS S08 api_gateway server-only certificate (EKU, rabbitmq): CLOSED
+PASS S08 api_gateway plaintext HTTP gets no HTTP answer: CLOSED
+PASS S09 api_gateway allowed peer nginx GET /users/x: 401
+PASS RES api_gateway session offered by nginx not resumed: full handshake
+PASS D4 api_gateway peer frontend refused (valid CA is not enough): 403
+PASS D4 api_gateway peer api_gateway refused (valid CA is not enough): 403
+PASS D4 api_gateway peer ws_gateway refused (valid CA is not enough): 403
+PASS D4 api_gateway peer projects refused (valid CA is not enough): 403
+PASS D4 api_gateway peer users refused (valid CA is not enough): 403
+PASS D4 api_gateway peer subscriptions refused (valid CA is not enough): 403
+PASS D4 api_gateway peer img_storage refused (valid CA is not enough): 403
+PASS D4 api_gateway peer seaweedfs refused (valid CA is not enough): 403
+PASS D4 api_gateway peer generative-mock refused (valid CA is not enough): 403
+PASS D4 api_gateway peer expand_ai_tool refused (valid CA is not enough): 403
+PASS S08 ws_gateway no client certificate: TLS
+PASS S08 ws_gateway other CA certificate (CN=nginx): TLS
+PASS S08 ws_gateway expired certificate (CN=nginx): TLS
+PASS S08 ws_gateway server-only certificate (EKU, rabbitmq): TLS
+PASS S08 ws_gateway plaintext HTTP gets no HTTP answer: CLOSED
+PASS S09 ws_gateway allowed peer nginx GET /socket.io/: 200
+PASS RES ws_gateway session offered by nginx not resumed: full handshake
+PASS D4 ws_gateway peer frontend refused (valid CA is not enough): 403
+PASS D4 ws_gateway peer api_gateway refused (valid CA is not enough): 403
+PASS D4 ws_gateway peer ws_gateway refused (valid CA is not enough): 403
+PASS D4 ws_gateway peer projects refused (valid CA is not enough): 403
+PASS D4 ws_gateway peer users refused (valid CA is not enough): 403
+PASS D4 ws_gateway peer subscriptions refused (valid CA is not enough): 403
+PASS D4 ws_gateway peer img_storage refused (valid CA is not enough): 403
+PASS D4 ws_gateway peer seaweedfs refused (valid CA is not enough): 403
+PASS D4 ws_gateway peer generative-mock refused (valid CA is not enough): 403
+PASS D4 ws_gateway peer expand_ai_tool refused (valid CA is not enough): 403
+PASS S08 projects no client certificate: TLS
+PASS S08 projects other CA certificate (CN=api_gateway): CLOSED
+PASS S08 projects expired certificate (CN=api_gateway): TLS
+PASS S08 projects server-only certificate (EKU, rabbitmq): TLS
+PASS S08 projects plaintext HTTP gets no HTTP answer: CLOSED
+PASS D4 projects peer nginx refused (valid CA is not enough): 403
+PASS D4 projects peer frontend refused (valid CA is not enough): 403
+PASS S09 projects allowed peer api_gateway GET /000000000000000000000000: 401
+PASS RES projects session offered by api_gateway not resumed: full handshake
+PASS D4 projects peer ws_gateway refused (valid CA is not enough): 403
+PASS D4 projects peer projects refused (valid CA is not enough): 403
+PASS S09 projects allowed peer users DELETE /000000000000000000000000: 204
+PASS RES projects session offered by users not resumed: full handshake
+PASS D4 projects peer subscriptions refused (valid CA is not enough): 403
+PASS D4 projects peer img_storage refused (valid CA is not enough): 403
+PASS D4 projects peer seaweedfs refused (valid CA is not enough): 403
+PASS D4 projects peer generative-mock refused (valid CA is not enough): 403
+PASS D4 projects peer expand_ai_tool refused (valid CA is not enough): 403
+PASS S08 users no client certificate: TLS
+PASS S08 users other CA certificate (CN=api_gateway): TLS
+PASS S08 users expired certificate (CN=api_gateway): TLS
+PASS S08 users server-only certificate (EKU, rabbitmq): CLOSED
+PASS S08 users plaintext HTTP gets no HTTP answer: CLOSED
+PASS D4 users peer nginx refused (valid CA is not enough): 403
+PASS D4 users peer frontend refused (valid CA is not enough): 403
+PASS S09 users allowed peer api_gateway GET /000000000000000000000000: 401
+PASS RES users session offered by api_gateway not resumed: full handshake
+PASS D4 users peer ws_gateway refused (valid CA is not enough): 403
+PASS S09 users allowed peer projects GET /000000000000000000000000/process/0: 404
+PASS RES users session offered by projects not resumed: full handshake
+PASS D4 users peer users refused (valid CA is not enough): 403
+PASS D4 users peer subscriptions refused (valid CA is not enough): 403
+PASS D4 users peer img_storage refused (valid CA is not enough): 403
+PASS D4 users peer seaweedfs refused (valid CA is not enough): 403
+PASS D4 users peer generative-mock refused (valid CA is not enough): 403
+PASS D4 users peer expand_ai_tool refused (valid CA is not enough): 403
+PASS S08 subscriptions no client certificate: TLS
+PASS S08 subscriptions other CA certificate (CN=api_gateway): CLOSED
+PASS S08 subscriptions expired certificate (CN=api_gateway): TLS
+PASS S08 subscriptions server-only certificate (EKU, rabbitmq): TLS
+PASS S08 subscriptions plaintext HTTP gets no HTTP answer: CLOSED
+PASS D4 subscriptions peer nginx refused (valid CA is not enough): 403
+PASS D4 subscriptions peer frontend refused (valid CA is not enough): 403
+PASS S09 subscriptions allowed peer api_gateway GET /000000000000000000000000: 401
+PASS RES subscriptions session offered by api_gateway not resumed: full handshake
+PASS D4 subscriptions peer ws_gateway refused (valid CA is not enough): 403
+PASS D4 subscriptions peer projects refused (valid CA is not enough): 403
+PASS D4 subscriptions peer users refused (valid CA is not enough): 403
+PASS D4 subscriptions peer subscriptions refused (valid CA is not enough): 403
+PASS D4 subscriptions peer img_storage refused (valid CA is not enough): 403
+PASS D4 subscriptions peer seaweedfs refused (valid CA is not enough): 403
+PASS D4 subscriptions peer generative-mock refused (valid CA is not enough): 403
+PASS D4 subscriptions peer expand_ai_tool refused (valid CA is not enough): 403
+PASS S08 img_storage no client certificate: TLS
+PASS S08 img_storage other CA certificate (CN=projects): CLOSED
+PASS S08 img_storage expired certificate (CN=projects): TLS
+PASS S08 img_storage server-only certificate (EKU, rabbitmq): TLS
+PASS S08 img_storage plaintext HTTP gets no HTTP answer: CLOSED
+PASS D4 img_storage peer nginx refused (valid CA is not enough): 403
+PASS D4 img_storage peer frontend refused (valid CA is not enough): 403
+PASS D4 img_storage peer api_gateway refused (valid CA is not enough): 403
+PASS D4 img_storage peer ws_gateway refused (valid CA is not enough): 403
+PASS S09 img_storage allowed peer projects GET /b5-not-a-route: 404
+PASS RES img_storage session offered by projects not resumed: full handshake
+PASS D4 img_storage peer users refused (valid CA is not enough): 403
+PASS D4 img_storage peer subscriptions refused (valid CA is not enough): 403
+PASS D4 img_storage peer img_storage refused (valid CA is not enough): 403
+PASS D4 img_storage peer seaweedfs refused (valid CA is not enough): 403
+PASS D4 img_storage peer generative-mock refused (valid CA is not enough): 403
+PASS D4 img_storage peer expand_ai_tool refused (valid CA is not enough): 403
+PASS S08 generative-mock no client certificate: TLS
+PASS S08 generative-mock other CA certificate (CN=expand_ai_tool): TLS
+PASS S08 generative-mock expired certificate (CN=expand_ai_tool): TLS
+PASS S08 generative-mock server-only certificate (EKU, rabbitmq): TLS
+PASS S08 generative-mock plaintext HTTP gets no HTTP answer: CLOSED
+PASS D4 generative-mock peer nginx refused (valid CA is not enough): 403
+PASS D4 generative-mock peer frontend refused (valid CA is not enough): 403
+PASS D4 generative-mock peer api_gateway refused (valid CA is not enough): 403
+PASS D4 generative-mock peer ws_gateway refused (valid CA is not enough): 403
+PASS D4 generative-mock peer projects refused (valid CA is not enough): 403
+PASS D4 generative-mock peer users refused (valid CA is not enough): 403
+PASS D4 generative-mock peer subscriptions refused (valid CA is not enough): 403
+PASS D4 generative-mock peer img_storage refused (valid CA is not enough): 403
+PASS D4 generative-mock peer seaweedfs refused (valid CA is not enough): 403
+PASS D4 generative-mock peer generative-mock refused (valid CA is not enough): 403
+PASS S09 generative-mock allowed peer expand_ai_tool GET /sdapi/v1/samplers: 200
+PASS RES generative-mock session offered by expand_ai_tool not resumed: full handshake
+PASS RES control public nginx entry resumes a session (detector works): resumed
+PASS STATIC no disabled TLS verification in product code: none
+PASS STATIC every Node https.Agent without cached sessions: none
+PASS STATIC nginx: no plaintext upstream: none
+PASS STATIC nginx: upstream verification and no session reuse: True
+PASS STATIC nginx: expected name for frontend: True
+PASS STATIC nginx: expected name for api_gateway: True
+PASS STATIC nginx: expected name for ws_gateway: True
+PASS STATIC nginx: expected name for seaweedfs: True
+B5 mTLS: 147/147 checks passed

@@ -69,17 +69,38 @@ module.exports.delete = (user_id, project_id) => {
 module.exports.getOneByShareId = (shareId) =>
   Project.findOne({ "sharedLinks.id": shareId }).exec();
 
-module.exports.updateIfVersion = async (user_id, project_id, project, expectedVersion) => {
+module.exports.updateIfVersion = async (user_id, project_id, project, expectedVersion, processing = false) => {
   const raw = project.toObject ? project.toObject() : project;
 
   // remove campos que não se quer "setar"
-  const { _id, user_id: _uid, version, __v, sharedLinks, ...rest } = raw;
+  const { _id, user_id: _uid, version, __v, sharedLinks, uploadBarrier, ...rest } = raw;
 
-  return await Project.findOneAndUpdate(
-    { user_id: user_id, _id: project_id, version: expectedVersion },
-    { $set: rest, $inc: { version: 1 } },
-    { new: true } // devolve documento já com versão incrementada
-  ).exec();
+  // The background video hash changes media without changing the public project
+  // version. Retry an internal race and carry its latest hash into the snapshot.
+  for (let retry = 0; retry < 5; retry++) {
+    const current = await Project.findOne({ user_id, _id: project_id, version: expectedVersion }).lean();
+    if (!current) return null;
+    // A worker can commit without changing the editor's public version. Ordinary
+    // edits must carry forward that state, rather than write an older snapshot.
+    const execution = ['activeToken','committedToken','resultsToken','committedTools',
+      'committedRun','prevCommittedRun','processingRunId','reconciliationHold','pendingAdvancedOps','chargedAdvancedTools'];
+    if (!processing) for (const key of execution) {
+      if (current[key] !== undefined) rest[key] = current[key]; else delete rest[key];
+    }
+    const byId = new Map((current.imgs || []).map((img) => [String(img._id), img]));
+    const imgs = (rest.imgs || []).map((img) => {
+      const latest = byId.get(String(img._id));
+      if (!latest) return img;
+      return { ...img, og_sha256: latest.og_sha256, hash_state: latest.hash_state };
+    });
+    const updated = await Project.findOneAndUpdate(
+      { user_id, _id: project_id, version: expectedVersion, __v: current.__v },
+      { $set: { ...rest, imgs }, $inc: { version: 1, __v: 1 } },
+      { new: true }
+    ).exec();
+    if (updated) return updated;
+  }
+  return null;
 };
 
 module.exports.updateRaw = async (user_id, project_id, update) => {
@@ -91,10 +112,17 @@ module.exports.updateRaw = async (user_id, project_id, update) => {
 
 
 // Commit only if cancellation/new processing has not changed the active run.
-module.exports.commitRunIfActive = async (user_id, project_id, token, tools) => {
+module.exports.commitRunIfActive = async (user_id, project_id, token, tools, proof = null) => {
+  const query = { user_id, _id: project_id, activeToken: token };
+  const fields = { committedToken: token, resultsToken: token, committedTools: tools };
+  if (proof) {
+    query.processingRunId = proof.run_id;
+    query.reconciliationHold = { $ne: true };
+    Object.assign(fields,{committedRun:proof,processingRunId:null,pendingAdvancedOps:0,chargedAdvancedTools:proof.chargedAdvancedTools});
+  }
   return Project.findOneAndUpdate(
-    { user_id, _id: project_id, activeToken: token },
-    { $set: { committedToken: token, resultsToken: token, committedTools: tools } },
+    query,
+    { $set: fields, $inc: { __v: 1 } },
     { new: true }
   ).exec();
 };

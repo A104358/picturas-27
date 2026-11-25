@@ -1,0 +1,5 @@
+# B7-signature — 2026-11-25T07:44:41Z
+$ tests/conformance/in-network.sh picturas-dev upload/b7-signature.py
+
+PASS signed length, content type and Host; valid control
+exit: 0

@@ -60,8 +60,10 @@ Behind the gateway:
 
 ### Media types
 
-- Images are uploaded to `POST /:user/:project/img`, videos to `POST /:user/:project/video`;
-  each endpoint rejects the other kind. Videos are stored with `media_type: "video"`.
+- Images are uploaded to `POST /:user/:project/img`. The frontend uploads videos with
+  request → streamed PUT through nginx → confirmation; the legacy
+  `POST /:user/:project/video` remains for API compatibility and official upload metrics.
+  Each media endpoint rejects the other kind. Videos are stored with `media_type: "video"`.
 - Video validation (container, codec, duration, size, resolution) and the orchestrator's video
   logic live in `projects/utils/video.js`. Limits are env vars of `projects`
   (`VIDEO_FREE_*`, `VIDEO_PREMIUM_*`): free 60 s / 100 MB, premium 600 s / 1 GB.
@@ -82,6 +84,10 @@ Behind the gateway:
 ## Running and testing
 
 ```bash
+export PICTURAS_SECRETS_DIR=<dir outside the repo>   # required: compose refuses to start without it
+ops/secrets.sh init && ops/pki.sh init       # once per machine: secrets, local CA, service certificates
+ops/pki.sh check                             # before starting
+ops/pki.sh renew --project picturas-dev      # at 7 days left: drains, applies and verifies
 docker compose up -d --build                 # first build: 15-30 min, ~15 GB disk, 8+ GB RAM
 docker compose up -d --build <service>       # rebuild one service after a change
 docker compose restart nginx                 # after rebuilding the frontend (avoids 502)
@@ -100,10 +106,17 @@ cd Tools/video && python3 -m venv .venv && .venv/bin/pip install -r requirements
 .venv/bin/python -m pytest -q tests
 ```
 
-- Open `https://localhost:8080` (https, port 8080) and accept the self-signed certificate.
-- `users`, `subscriptions` and `apiGateway` bind-mount their source and reload with nodemon.
-  The frontend is a production build and Python tools have no bind mount: rebuild them.
-- RabbitMQ management: `http://localhost:15672` (`user` / `password`).
+- Import the verified installation CA into a dedicated browser profile, then open
+  `https://localhost:8080`. Never bypass certificate warnings. Applied PKI operations:
+  [docs/pki-operations.md](docs/pki-operations.md).
+- Only nginx publishes a port (8080). Internal services, databases, the broker and S3 have no
+  host port: administer them with `docker compose exec` (B3, D-05).
+- The Node services run `node` with `init`, `restart`, `healthcheck` and `mem_limit`. For live
+  reload, add `-f docker-compose.dev.yaml` (bind mounts + nodemon for `users`,
+  `subscriptions`, `apiGateway`; `med.py` never loads it). The frontend is a production
+  build and Python tools have no bind mount: rebuild them.
+- Conformance tests that call services directly run on the stack network:
+  `tests/conformance/in-network.sh <compose-project> <test.py>`.
 - Sample videos for manual tests: `samples/video/` (see its README).
 
 ## Conventions
@@ -121,10 +134,16 @@ cd Tools/video && python3 -m venv .venv && .venv/bin/pip install -r requirements
 
 ## Known pitfalls
 
-- `JWT_SECRET_KEY` must be the same in `users`, `api_gateway` and `ws_gateway`.
+- Secrets and keys never live in the checkout: `ops/secrets.sh` renders one
+  `$PICTURAS_SECRETS_DIR/env/<service>.env` per service (loaded with `env_file`) and `ops/pki.sh`
+  issues `pki/services/<svc>/service.{key,crt}`, mounted read-only at `/run/secrets/pki` (nginx:
+  `/etc/nginx/pki`). The broker users are rendered into `rabbitmq/definitions.json`, because the
+  broker skips `RABBITMQ_DEFAULT_USER` when it imports definitions.
 - Keep `NEXT_PUBLIC_API_BASE_URL` relative (`/api-gateway/`) and do not remap port 8080.
-- Internal service-to-service TLS certificates are expired and not validated
-  (`rejectUnauthorized: false`); several secrets are committed. Known issues, not patterns.
+- Internal TLS is mutual and validated (B5): every Node service uses its `tls/pkiTls.js`
+  (identical copies; change all of them together) for its server, client agent, peer
+  allowlist and certificate validity guard. Never add `rejectUnauthorized: false`,
+  `verify=False` or session reuse; a new internal caller needs an entry in the D4 matrix.
 - RabbitMQ consumers must survive broker restarts.
 - The image tools auto-acknowledge messages and swap `messageId`/`correlationId` in their error
   replies, so their errors do not reach the user.

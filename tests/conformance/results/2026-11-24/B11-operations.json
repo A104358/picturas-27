@@ -1,0 +1,175 @@
+{
+  "project": "picturas-ops-b11",
+  "checks": [
+    {
+      "case": "separate-normal-installation-healthy",
+      "passed": true,
+      "at": "2026-11-24T23:24:40.759249+00:00"
+    },
+    {
+      "case": "known-financial-fixtures-and-confirmed-output-prepared",
+      "passed": true,
+      "at": "2026-11-24T23:27:47.400307+00:00"
+    },
+    {
+      "case": "real-image-autoack-worker-stopped-during-active-callback",
+      "passed": true,
+      "at": "2026-11-24T23:28:09.026549+00:00"
+    },
+    {
+      "case": "real-project-consumer-stopped-after-admission",
+      "passed": false,
+      "at": "2026-11-24T23:28:09.203717+00:00"
+    },
+    {
+      "case": "real-image-autoack-worker-stopped-during-active-callback",
+      "passed": false,
+      "at": "2026-11-24T23:30:10.345204+00:00"
+    },
+    {
+      "case": "previous-observer-attempt-preserved-new-image-fixture-created",
+      "passed": true,
+      "at": "2026-11-24T23:31:16.206211+00:00"
+    },
+    {
+      "case": "real-image-autoack-worker-stopped-during-active-callback",
+      "passed": true,
+      "at": "2026-11-24T23:31:27.375695+00:00"
+    },
+    {
+      "case": "real-project-consumer-stopped-after-admission",
+      "passed": true,
+      "at": "2026-11-24T23:31:27.568336+00:00"
+    },
+    {
+      "case": "B10-cut-after-real-video-replies-before-domain-commit",
+      "passed": true,
+      "at": "2026-11-24T23:35:12.456501+00:00"
+    },
+    {
+      "case": "crash-generation_after_commit-remains-isolated",
+      "passed": true,
+      "at": "2026-11-24T23:37:19.829670+00:00"
+    },
+    {
+      "case": "crash-object_before_delete-remains-isolated",
+      "passed": true,
+      "at": "2026-11-24T23:38:03.319560+00:00"
+    },
+    {
+      "case": "crash-object_after_delete-remains-isolated",
+      "passed": true,
+      "at": "2026-11-24T23:38:46.813181+00:00"
+    },
+    {
+      "case": "crash-quota_before_commit-remains-isolated",
+      "passed": true,
+      "at": "2026-11-24T23:39:30.236842+00:00"
+    },
+    {
+      "case": "crash-quota_after_commit-remains-isolated",
+      "passed": true,
+      "at": "2026-11-24T23:40:13.656058+00:00"
+    },
+    {
+      "case": "crash-message-before-ack-remains-isolated",
+      "passed": false,
+      "at": "2026-11-24T23:40:57.529039+00:00"
+    },
+    {
+      "case": "lost-quota-response-reads-atomic-marker",
+      "passed": true,
+      "at": "2026-11-24T23:42:23.609715+00:00"
+    },
+    {
+      "case": "crash-message-before-ack-remains-isolated",
+      "passed": true,
+      "at": "2026-11-24T23:43:49.367934+00:00"
+    },
+    {
+      "case": "crash-message-before-ack-remains-isolated",
+      "passed": true,
+      "at": "2026-11-24T23:48:35.798135+00:00"
+    },
+    {
+      "case": "message-before-ack-helper-exited-at-target",
+      "passed": true,
+      "at": "2026-11-24T23:48:35.799531+00:00"
+    },
+    {
+      "case": "cleanup-precondition-failure",
+      "passed": true,
+      "at": "2026-11-24T23:50:03.302805+00:00"
+    },
+    {
+      "case": "cleanup-failure-blocks-seal",
+      "passed": true,
+      "at": "2026-11-24T23:50:46.773816+00:00"
+    },
+    {
+      "case": "crash-before-seal-remains-isolated",
+      "passed": true,
+      "at": "2026-11-24T23:52:13.582769+00:00"
+    },
+    {
+      "case": "business-case-sealed-without-technical-fixture-bypass",
+      "passed": true,
+      "at": "2026-11-24T23:52:57.734313+00:00"
+    },
+    {
+      "case": "B10-reopens-only-after-business-proof-and-channel-controls",
+      "passed": true,
+      "at": "2026-11-24T23:54:07.114144+00:00"
+    },
+    {
+      "case": "real-video-stopped-with-active-callback-and-partial-output",
+      "passed": true,
+      "at": "2026-11-24T23:54:56.864764+00:00"
+    },
+    {
+      "case": "hard-exit-after-real-video-quota-commit",
+      "passed": true,
+      "at": "2026-11-24T23:56:29.944350+00:00"
+    },
+    {
+      "case": "quota-helper-exited-86-before-any-journal",
+      "passed": true,
+      "at": "2026-11-24T23:56:29.945202+00:00"
+    },
+    {
+      "case": "native-existing-marker-readback-after-helper-exit",
+      "passed": true,
+      "at": "2026-11-25T00:00:09.990505+00:00"
+    },
+    {
+      "case": "real-video-interruption-before-completion-reconciled",
+      "passed": true,
+      "at": "2026-11-25T00:02:05.244389+00:00"
+    },
+    {
+      "case": "late-reply-does-not-affect-explicit-new-generation",
+      "passed": true,
+      "at": "2026-11-25T00:03:31.434735+00:00"
+    },
+    {
+      "case": "missing-receipt-blocks-seal",
+      "passed": true,
+      "at": "2026-11-25T00:06:24.088758+00:00"
+    },
+    {
+      "case": "missing-receipt-blocks-consumers",
+      "passed": true,
+      "at": "2026-11-25T00:06:24.137112+00:00"
+    },
+    {
+      "case": "indeterminate-case-kept-isolated-with-zero-financial-effect",
+      "passed": true,
+      "at": "2026-11-25T00:07:06.637183+00:00"
+    },
+    {
+      "case": "fixture-stopped-with-volumes-and-private-evidence-preserved",
+      "passed": true,
+      "at": "2026-11-25T00:07:44.602330+00:00"
+    }
+  ]
+}

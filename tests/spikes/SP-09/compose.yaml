@@ -1,0 +1,17 @@
+name: picturas-spike
+services:
+  frontend:
+    image: picturas-nfr-frontend
+    working_dir: /usr/src/app
+    command: ["node", "server-https.js"]
+    environment: {NODE_ENV: production, TLS_KEY: /pki/frontend.key, TLS_CERT: /pki/frontend.crt, TLS_CA: /pki/ca.crt}
+    volumes: ["./pki:/pki:ro", "./server-https.js:/usr/src/app/server-https.js:ro"]
+  nginx:
+    image: nginx@sha256:84f7876d21d154885f99554d7ae325d8c2213f9169726ea7ab60642f2573a787
+    ports: ["127.0.0.1:18443:443"]
+    volumes: ["./nginx.conf:/etc/nginx/nginx.conf:ro", "./pki:/pki:ro"]
+    depends_on: [frontend]
+  t:
+    image: picturas-spike-py
+    command: ["sleep", "infinity"]
+    volumes: ["./pki:/pki:ro"]

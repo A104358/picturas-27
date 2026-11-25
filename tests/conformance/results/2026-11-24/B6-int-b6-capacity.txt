@@ -1,0 +1,17 @@
+# b6-capacity — 2026-11-24T18:14:31Z — commit cb1e028 + B6 working tree (final, as measured in EXP-20261124T162600Z)
+$ env B6_CAPACITY_UPLOADS=5 evaluation/.venv/bin/python tests/conformance/upload/b6-capacity.py
+PASS upload 1/5 premium 100 MiB T (HTTP 204 945 ms)
+PASS upload 2/5 premium 100 MiB T (HTTP 204 862 ms)
+PASS upload 3/5 premium 100 MiB T (HTTP 204 1049 ms)
+PASS upload 4/5 premium 100 MiB T (HTTP 204 915 ms)
+PASS upload 5/5 premium 100 MiB T (HTTP 204 989 ms)
+PASS aborted upload 1 ended without a server answer (ConnectionError)
+PASS aborted upload 2 ended without a server answer (ConnectionError)
+PASS aborted upload 3 ended without a server answer (ConnectionError)
+PASS stalled upload 4 ended without a server answer (ConnectionError)
+PASS interrupted uploads published nothing
+PASS 3 simultaneous uploads after the interruptions admitted (all slots free) (HTTP [204, 409, 409])
+slot refusals (429, retried): 2
+accepted 6 uploads; project media 6
+RESULT PASS
+exit=0

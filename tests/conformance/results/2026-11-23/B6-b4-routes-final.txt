@@ -1,0 +1,590 @@
+PASS B4-R033 no session: 401
+PASS B4-R033 subscribe for another account: 403
+PASS B4-R033 holder subscribes (F05): 200
+PASS F05 profile becomes premium: premium
+PASS B4-R030 no session: 401
+PASS B4-R030 another account: 403
+PASS B4-R030 holder: 201
+PASS B4-R031 no session: 401
+PASS B4-R031 another account: 403
+PASS B4-R031 holder: 201
+PASS B4-R032 no session: 401
+PASS B4-R032 another account: 403
+PASS B4-R032 holder: 200
+PASS B4-R034 another account: 403
+PASS B4-R034 holder changes interval: 200
+PASS B4-R036 another account: 403
+PASS B4-R036 holder updates card: 200
+PASS B4-R035 another account cancels: 403
+PASS S15 subscription list not exposed at the gateway: 404
+PASS B4-R013 no session: 401
+PASS B4-R013 another account: 403
+PASS B4-R013 owner creates 'B4 main': 201
+PASS B4-R013 owner creates 'B4 disposable': 201
+PASS B4-R013 owner creates 'B4 video': 201
+PASS B4-R002 no session: 401
+PASS B4-R002 another account: 403
+PASS B4-R002 owner creates a edit link: 201
+PASS B4-R002 owner creates a read link: 201
+PASS B4-R002 owner creates a read link: 201
+PASS B4-R002 editor cannot create links: 403
+PASS B4-R001 no session: 401
+PASS B4-R001 another account: 403
+PASS B4-R001 editor cannot list links: 403
+PASS B4-R001 owner lists links: 200
+PASS S13 links have no expiresAt (LINK-C1 A): False
+PASS B4-R003 public link resolution: 200
+PASS B4-R003 unknown link: 404
+PASS B4-R004 no session: 401
+PASS B4-R004 authenticated link holder: 200
+PASS B4-R004 unknown link: 404
+PASS B4-R015 no session: 401
+PASS B4-R015 another account: 403
+PASS B4-R015 read link cannot upload: 403
+PASS B4-R015 owner uploads: 204
+PASS B4-R015 editor uploads: 204
+PASS B4-R015 image over 25 MiB refused (D-21): 413
+PASS B4-R007 no session: 401
+PASS B4-R007 another account: 403
+PASS B4-R007 read link: 200
+PASS B4-R007 owner: 200
+PASS B4-R009 no session: 401
+PASS B4-R009 another account: 403
+PASS B4-R009 read link: 200
+PASS B4-R009 owner: 200
+PASS B4-R007 edit link: 200
+PASS B4-R008 no session: 401
+PASS B4-R008 another account: 403
+PASS B4-R008 read link: 200
+PASS B4-R008 owner: 200
+PASS B4-R017 no session: 401
+PASS B4-R017 another account: 403
+PASS B4-R017 read link: 403
+PASS B4-R017 owner adds a tool: 201
+PASS B4-R017 editor adds a tool: 201
+PASS B4-R021 no session: 401
+PASS B4-R021 another account: 403
+PASS B4-R021 read link: 403
+PASS B4-R021 owner: 204
+PASS B4-R018 no session: 401
+PASS B4-R018 another account: 403
+PASS B4-R018 read link: 403
+PASS B4-R018 owner: 201
+PASS B4-R020 no session: 401
+PASS B4-R020 another account: 403
+PASS B4-R020 read link: 403
+PASS B4-R020 owner: 204
+PASS B4-R029 no session: 401
+PASS B4-R029 another account: 403
+PASS B4-R029 read link: 403
+PASS B4-R029 owner: 204
+PASS B4-R014 no session: 401
+PASS B4-R014 another account: 403
+PASS B4-R014 read link: 403
+PASS B4-R014 owner: 201
+PASS B4-R026 no session: 401
+PASS B4-R026 another account: 403
+PASS B4-R026 read link: 403
+PASS B4-R026 owner: 200
+PASS B4-R020 editor renames: 204
+PASS B4-R027 no session: 401
+PASS B4-R027 another account: 403
+PASS B4-R027 read link (presence needs edit): 403
+PASS B4-R027 owner: 204
+PASS B4-R027 edit link: 204
+PASS B4-R028 no session: 401
+PASS B4-R028 another account: 403
+PASS B4-R028 read link (presence needs edit): 403
+PASS B4-R028 owner: 204
+PASS B4-R028 edit link: 204
+PASS B4-R019 no session: 401
+PASS B4-R019 another account: 403
+PASS B4-R019 read link: 403
+PASS B4-R019 owner applies the pipeline: 201
+PASS B4-R010 no session: 401
+PASS B4-R010 another account: 403
+PASS B4-R010 read link: 200
+PASS B4-R010 owner: 200
+PASS B4-R012 no session: 401
+PASS B4-R012 another account: 403
+PASS B4-R012 read link: 200
+PASS B4-R012 owner: 200
+PASS B4-R011 no session: 401
+PASS B4-R011 another account: 403
+PASS B4-R011 read link: 403
+PASS B4-R011 owner: 204
+PASS B4-R024 no session: 401
+PASS B4-R024 another account: 403
+PASS B4-R024 read link: 403
+PASS B4-R024 edit link removes: 204
+PASS B4-R023 no session: 401
+PASS B4-R023 another account: 403
+PASS B4-R023 read link: 403
+PASS B4-R023 edit link removes: 204
+PASS B4-R016 no session: 401
+PASS B4-R016 another account: 403
+PASS B4-R016 owner uploads a video: 204
+PASS B4-R025 no session: 401
+PASS B4-R025 another account: 403
+PASS B4-R025 read link: 403
+PASS B4-R025 owner clears: 204
+PASS B4-R022 no session: 401
+PASS B4-R022 another account: 403
+PASS B4-R022 editor cannot delete the project (ACL-C1): 403
+PASS B4-R022 reader cannot delete the project: 403
+PASS B4-R022 owner deletes a project: 204
+PASS B4-R005 no session: 401
+PASS B4-R005 another account: 403
+PASS B4-R005 editor cannot revoke: 403
+PASS B4-R005 owner revokes: 204
+PASS S13 revoked link no longer resolves: 410
+PASS S13 revoked link no longer opens the project: 410
+PASS B4-R006 no session: 401
+PASS B4-R006 another account: 403
+PASS B4-R006 owner lists projects: 200
+PASS B4-R037 own session validates: 200
+PASS B4-R037 another account's session does not validate: 401
+PASS B4-R038 no session: 401
+PASS B4-R038 another account's profile (S14): 403
+PASS B4-R038 own profile: 200
+PASS S14 user list not available to users: 403
+PASS B4-R039 public registration cannot create premium (G06): 403
+PASS B4-R039 public registration (free): 201
+PASS B4-R040 login: 201
+PASS B4-R040 wrong password: 401
+PASS B4-R041 no session: 401
+PASS B4-R041 another account: 403
+PASS B4-R041 own profile: 204
+PASS B4-R041 profile update cannot change type (G07): 403
+PASS B4-R041 type unchanged: free
+PASS B4-R044 no session: 401
+PASS B4-R044 another account: 403
+PASS B4-R044 owner creates: 201
+PASS B4-R043 no session: 401
+PASS B4-R043 another account: 403
+PASS B4-R043 owner lists: 200
+PASS B4-R043 anonymous cannot manage presets: 403
+PASS B4-R045 another account: 403
+PASS B4-R045 owner edits: 200
+PASS B4-R047 another account: 403
+PASS B4-R047 owner shares: 200
+PASS B4-R048 shared preset is public: 200
+PASS B4-R048 unknown shared preset: 404
+PASS B4-R049 no client certificate: TLS
+PASS B4-R049 valid identity from ws_gateway: 403
+PASS B4-R049 gateway certificate, no identity: 401
+PASS B4-R049 identity for another route: 401
+PASS B4-R049 identity of another subject: 403
+PASS B4-R049 legitimate identity (direct): 200
+PASS B4-R050 no client certificate: TLS
+PASS B4-R050 valid identity from ws_gateway: 403
+PASS B4-R050 gateway certificate, no identity: 401
+PASS B4-R050 identity for another route: 401
+PASS B4-R050 identity of another subject: 403
+INFO B4-R050 legitimate path proven through the gateway (B4-R002)
+PASS B4-R051 no client certificate: TLS
+PASS B4-R051 valid identity from ws_gateway: 403
+PASS B4-R051 gateway certificate, no identity: 401
+PASS B4-R051 identity for another route: 401
+PASS B4-R051 legitimate identity (direct): 200
+PASS B4-R052 no client certificate: TLS
+PASS B4-R052 valid identity from ws_gateway: 403
+PASS B4-R052 gateway certificate, no identity: 401
+PASS B4-R052 identity for another route: 401
+PASS B4-R052 legitimate identity (direct): 200
+PASS B4-R052 public identity (no subject) refused: 401
+PASS B4-R053 no client certificate: TLS
+PASS B4-R053 valid identity from ws_gateway: 403
+PASS B4-R053 gateway certificate, no identity: 401
+PASS B4-R053 identity for another route: 401
+PASS B4-R053 identity of another subject: 403
+INFO B4-R053 legitimate path proven through the gateway (B4-R005)
+PASS B4-R054 no client certificate: TLS
+PASS B4-R054 valid identity from ws_gateway: 403
+PASS B4-R054 gateway certificate, no identity: 401
+PASS B4-R054 identity for another route: 401
+PASS B4-R054 identity of another subject: 403
+PASS B4-R054 legitimate identity (direct): 200
+PASS B4-R055 no client certificate: TLS
+PASS B4-R055 valid identity from ws_gateway: 403
+PASS B4-R055 gateway certificate, no identity: 401
+PASS B4-R055 identity for another route: 401
+PASS B4-R055 identity of another subject: 403
+PASS B4-R055 legitimate identity (direct): 200
+PASS B4-R055 share holder (direct, link in context): 200
+PASS B4-R056 no client certificate: TLS
+PASS B4-R056 valid identity from ws_gateway: 403
+PASS B4-R056 gateway certificate, no identity: 401
+PASS B4-R056 identity for another route: 401
+PASS B4-R056 identity of another subject: 403
+PASS B4-R056 legitimate identity (direct): 200
+PASS B4-R057 no client certificate: TLS
+PASS B4-R057 valid identity from ws_gateway: 403
+PASS B4-R057 gateway certificate, no identity: 401
+PASS B4-R057 identity for another route: 401
+PASS B4-R057 identity of another subject: 403
+PASS B4-R057 legitimate identity (direct): 200
+PASS B4-R058 no client certificate: TLS
+PASS B4-R058 valid identity from ws_gateway: 403
+PASS B4-R058 gateway certificate, no identity: 401
+PASS B4-R058 identity for another route: 401
+PASS B4-R058 identity of another subject: 403
+PASS B4-R058 legitimate identity (direct): 200
+PASS B4-R059 no client certificate: TLS
+PASS B4-R059 valid identity from ws_gateway: 403
+PASS B4-R059 gateway certificate, no identity: 401
+PASS B4-R059 identity for another route: 401
+PASS B4-R059 identity of another subject: 403
+PASS B4-R059 legitimate identity (direct): 200
+PASS B4-R060 no client certificate: TLS
+PASS B4-R060 valid identity from ws_gateway: 403
+PASS B4-R060 gateway certificate, no identity: 401
+PASS B4-R060 identity for another route: 401
+PASS B4-R060 identity of another subject: 403
+PASS B4-R060 legitimate identity (direct): 200
+PASS B4-R061 no client certificate: TLS
+PASS B4-R061 valid identity from ws_gateway: 403
+PASS B4-R061 gateway certificate, no identity: 401
+PASS B4-R061 identity for another route: 401
+PASS B4-R061 identity of another subject: 403
+INFO B4-R061 legitimate path proven through the gateway (B4-R013)
+PASS B4-R062 no client certificate: TLS
+PASS B4-R062 valid identity from ws_gateway: 403
+PASS B4-R062 gateway certificate, no identity: 401
+PASS B4-R062 identity for another route: 401
+PASS B4-R062 identity of another subject: 403
+INFO B4-R062 legitimate path proven through the gateway (B4-R014)
+PASS B4-R063 no client certificate: TLS
+PASS B4-R063 valid identity from ws_gateway: 403
+PASS B4-R063 gateway certificate, no identity: 401
+PASS B4-R063 identity for another route: 401
+PASS B4-R063 identity of another subject: 403
+INFO B4-R063 legitimate path proven through the gateway (B4-R015)
+PASS B4-R064 no client certificate: TLS
+PASS B4-R064 valid identity from ws_gateway: 403
+PASS B4-R064 gateway certificate, no identity: 401
+PASS B4-R064 identity for another route: 401
+PASS B4-R064 identity of another subject: 403
+INFO B4-R064 legitimate path proven through the gateway (B4-R016)
+PASS B4-R113 no client certificate: TLS
+PASS B4-R113 valid identity from ws_gateway: 403
+PASS B4-R113 gateway certificate, no identity: 401
+PASS B4-R113 identity for another route: 401
+PASS B4-R113 identity of another subject: 403
+INFO B4-R113 legitimate path proven through the gateway (B4-R016)
+PASS B4-R114 no client certificate: TLS
+PASS B4-R114 valid identity from ws_gateway: 403
+PASS B4-R114 gateway certificate, no identity: 401
+PASS B4-R114 identity for another route: 401
+PASS B4-R114 identity of another subject: 403
+INFO B4-R114 legitimate path proven through the gateway (B4-R016)
+PASS B4-R065 no client certificate: TLS
+PASS B4-R065 valid identity from ws_gateway: 403
+PASS B4-R065 gateway certificate, no identity: 401
+PASS B4-R065 identity for another route: 401
+PASS B4-R065 identity of another subject: 403
+INFO B4-R065 legitimate path proven through the gateway (B4-R017)
+PASS B4-R066 no client certificate: TLS
+PASS B4-R066 valid identity from ws_gateway: 403
+PASS B4-R066 gateway certificate, no identity: 401
+PASS B4-R066 identity for another route: 401
+PASS B4-R066 identity of another subject: 403
+INFO B4-R066 legitimate path proven through the gateway (B4-R018)
+PASS B4-R067 no client certificate: TLS
+PASS B4-R067 valid identity from ws_gateway: 403
+PASS B4-R067 gateway certificate, no identity: 401
+PASS B4-R067 identity for another route: 401
+PASS B4-R067 identity of another subject: 403
+INFO B4-R067 legitimate path proven through the gateway (B4-R019)
+PASS B4-R068 no client certificate: TLS
+PASS B4-R068 valid identity from ws_gateway: 403
+PASS B4-R068 gateway certificate, no identity: 401
+PASS B4-R068 identity for another route: 401
+PASS B4-R068 identity of another subject: 403
+INFO B4-R068 legitimate path proven through the gateway (B4-R020)
+PASS B4-R069 no client certificate: TLS
+PASS B4-R069 valid identity from ws_gateway: 403
+PASS B4-R069 gateway certificate, no identity: 401
+PASS B4-R069 identity for another route: 401
+PASS B4-R069 identity of another subject: 403
+INFO B4-R069 legitimate path proven through the gateway (B4-R021)
+PASS B4-R070 no client certificate: TLS
+PASS B4-R070 valid identity from ws_gateway: 403
+PASS B4-R070 gateway certificate, no identity: 401
+PASS B4-R070 identity for another route: 401
+PASS B4-R070 identity of another subject: 403
+INFO B4-R070 legitimate path proven through the gateway (B4-R022)
+PASS B4-R072 no client certificate: TLS
+PASS B4-R072 valid identity from ws_gateway: 403
+PASS B4-R072 gateway certificate, no identity: 401
+PASS B4-R072 identity for another route: 401
+PASS B4-R072 identity of another subject: 403
+INFO B4-R072 legitimate path proven through the gateway (B4-R023)
+PASS B4-R073 no client certificate: TLS
+PASS B4-R073 valid identity from ws_gateway: 403
+PASS B4-R073 gateway certificate, no identity: 401
+PASS B4-R073 identity for another route: 401
+PASS B4-R073 identity of another subject: 403
+INFO B4-R073 legitimate path proven through the gateway (B4-R024)
+PASS B4-R074 no client certificate: TLS
+PASS B4-R074 valid identity from ws_gateway: 403
+PASS B4-R074 gateway certificate, no identity: 401
+PASS B4-R074 identity for another route: 401
+PASS B4-R074 identity of another subject: 403
+INFO B4-R074 legitimate path proven through the gateway (B4-R025)
+PASS B4-R075 no client certificate: TLS
+PASS B4-R075 valid identity from ws_gateway: 403
+PASS B4-R075 gateway certificate, no identity: 401
+PASS B4-R075 identity for another route: 401
+PASS B4-R075 identity of another subject: 403
+INFO B4-R075 legitimate path proven through the gateway (B4-R011)
+PASS B4-R076 no client certificate: TLS
+PASS B4-R076 valid identity from ws_gateway: 403
+PASS B4-R076 gateway certificate, no identity: 401
+PASS B4-R076 identity for another route: 401
+PASS B4-R076 identity of another subject: 403
+INFO B4-R076 legitimate path proven through the gateway (B4-R026)
+PASS B4-R077 no client certificate: TLS
+PASS B4-R077 valid identity from ws_gateway: 403
+PASS B4-R077 gateway certificate, no identity: 401
+PASS B4-R077 identity for another route: 401
+PASS B4-R077 identity of another subject: 403
+INFO B4-R077 legitimate path proven through the gateway (B4-R027)
+PASS B4-R078 no client certificate: TLS
+PASS B4-R078 valid identity from ws_gateway: 403
+PASS B4-R078 gateway certificate, no identity: 401
+PASS B4-R078 identity for another route: 401
+PASS B4-R078 identity of another subject: 403
+INFO B4-R078 legitimate path proven through the gateway (B4-R028)
+PASS B4-R079 no client certificate: TLS
+PASS B4-R079 valid identity from ws_gateway: 403
+PASS B4-R079 gateway certificate, no identity: 401
+PASS B4-R079 identity for another route: 401
+PASS B4-R079 identity of another subject: 403
+INFO B4-R079 legitimate path proven through the gateway (B4-R027; route shadowed by B4-R077)
+PASS B4-R080 no client certificate: TLS
+PASS B4-R080 valid identity from ws_gateway: 403
+PASS B4-R080 gateway certificate, no identity: 401
+PASS B4-R080 identity for another route: 401
+PASS B4-R080 identity of another subject: 403
+INFO B4-R080 legitimate path proven through the gateway (B4-R028; route shadowed by B4-R078)
+PASS B4-R081 no client certificate: TLS
+PASS B4-R081 valid identity from ws_gateway: 403
+PASS B4-R081 gateway certificate, no identity: 401
+PASS B4-R081 identity for another route: 401
+PASS B4-R081 identity of another subject: 403
+INFO B4-R081 legitimate path proven through the gateway (B4-R029)
+PASS B4-R071 no client certificate: TLS
+PASS B4-R071 ws_gateway certificate: 403
+PASS B4-R071 gateway with the holder's own identity: 403
+PASS B4-R071 img_storage certificate: 403
+PASS B4-R071 users service removes the account's projects: 204
+PASS B4-R071 projects removed: []
+PASS B4-R082 no client certificate: TLS
+PASS B4-R082 valid identity from ws_gateway: 403
+PASS B4-R082 gateway certificate, no identity: 401
+PASS B4-R082 identity for another route: 401
+PASS B4-R082 identity of another subject: 403
+PASS B4-R082 legitimate identity (direct): 200
+PASS B4-R083 no client certificate: TLS
+PASS B4-R083 valid identity from ws_gateway: 403
+PASS B4-R083 gateway certificate, no identity: 401
+PASS B4-R083 identity for another route: 401
+PASS B4-R083 identity of another subject: 403
+INFO B4-R083 legitimate path proven through the gateway (B4-R044)
+PASS B4-R084 no client certificate: TLS
+PASS B4-R084 valid identity from ws_gateway: 403
+PASS B4-R084 gateway certificate, no identity: 401
+PASS B4-R084 identity for another route: 401
+PASS B4-R084 identity of another subject: 403
+INFO B4-R084 legitimate path proven through the gateway (B4-R045)
+PASS B4-R085 no client certificate: TLS
+PASS B4-R085 valid identity from ws_gateway: 403
+PASS B4-R085 gateway certificate, no identity: 401
+PASS B4-R085 identity for another route: 401
+PASS B4-R085 identity of another subject: 403
+INFO B4-R085 legitimate path proven through the gateway (B4-R046)
+PASS B4-R086 no client certificate: TLS
+PASS B4-R086 valid identity from ws_gateway: 403
+PASS B4-R086 gateway certificate, no identity: 401
+PASS B4-R086 identity for another route: 401
+PASS B4-R086 identity of another subject: 403
+INFO B4-R086 legitimate path proven through the gateway (B4-R047)
+PASS B4-R087 no client certificate: TLS
+PASS B4-R087 valid identity from ws_gateway: 403
+PASS B4-R087 gateway certificate, no identity: 401
+PASS B4-R087 identity for another route: 401
+PASS B4-R087 legitimate identity (direct): 200
+PASS B4-R088 no client certificate: TLS
+PASS B4-R088 ws_gateway certificate: 403
+PASS B4-R088 gateway certificate, no identity: 401
+PASS B4-R088 user list refused to a valid user identity: 403
+PASS B4-R088 user list refused to the projects service: 403
+PASS B4-R089 no client certificate: TLS
+PASS B4-R089 valid identity from ws_gateway: 403
+PASS B4-R089 gateway certificate, no identity: 401
+PASS B4-R089 identity for another route: 401
+PASS B4-R089 legitimate identity (direct, own session): 200
+PASS B4-R090 no client certificate: TLS
+PASS B4-R090 valid identity from ws_gateway: 403
+PASS B4-R090 gateway certificate, no identity: 401
+PASS B4-R090 identity for another route: 401
+PASS B4-R090 identity of another subject: 403
+PASS B4-R090 legitimate identity (direct): 200
+PASS B4-R091 no client certificate: TLS
+PASS B4-R091 ws_gateway certificate: 403
+PASS B4-R091 gateway with the holder's own identity: 403
+PASS B4-R091 subscriptions certificate: 403
+PASS B4-R091 projects service: 200
+PASS B4-R092 no client certificate: TLS
+PASS B4-R092 ws_gateway certificate: 403
+PASS B4-R092 gateway with the holder's own identity: 403
+PASS B4-R092 subscriptions certificate: 403
+PASS B4-R092 projects service: 200
+PASS B4-R096 no client certificate: TLS
+PASS B4-R096 ws_gateway certificate: 403
+PASS B4-R096 gateway with the holder's own identity: 403
+PASS B4-R096 subscriptions certificate: 403
+PASS B4-R096 projects service: 204
+PASS B4-R097 no client certificate: TLS
+PASS B4-R097 ws_gateway certificate: 403
+PASS B4-R097 gateway with the holder's own identity: 403
+PASS B4-R097 subscriptions certificate: 403
+PASS B4-R097 projects service: 400
+PASS B4-R093 no client certificate: TLS
+PASS B4-R093 valid identity from ws_gateway: 403
+PASS B4-R093 gateway certificate, no identity: 401
+PASS B4-R093 identity for another route: 401
+PASS B4-R093 legitimate identity (direct): 201
+PASS B4-R094 no client certificate: TLS
+PASS B4-R094 valid identity from ws_gateway: 403
+PASS B4-R094 gateway certificate, no identity: 401
+PASS B4-R094 identity for another route: 401
+PASS B4-R094 legitimate identity (direct): 200
+PASS B4-R095 no client certificate: TLS
+PASS B4-R095 valid identity from ws_gateway: 403
+PASS B4-R095 gateway certificate, no identity: 401
+PASS B4-R095 identity for another route: 401
+PASS B4-R095 identity of another subject: 403
+PASS B4-R095 another subject: 403
+PASS B4-R095 type outside the subscription context: 403
+INFO B4-R095 legitimate path proven through the gateway (B4-R041, F05)
+PASS B4-R098 no client certificate: TLS
+PASS B4-R098 valid identity from ws_gateway: 403
+PASS B4-R098 gateway certificate, no identity: 401
+PASS B4-R098 identity for another route: 401
+PASS B4-R098 identity of another subject: 403
+INFO B4-R098 legitimate path proven through the gateway (B4-R042)
+PASS B4-R046 no session: 401
+PASS B4-R046 another account: 403
+PASS B4-R046 owner deletes: 204
+PASS B4-R042 no session: 401
+PASS B4-R042 another account: 403
+PASS B4-R042 holder deletes the account: 204
+PASS B4-R042 account projects removed (users -> projects): (200, [])
+PASS B4-R099 no client certificate: TLS
+PASS B4-R099 ws_gateway certificate: 403
+PASS B4-R099 gateway certificate, no identity: 401
+PASS B4-R099 list refused to a valid user identity: 403
+PASS B4-R099 list refused to the projects service: 403
+PASS B4-R100 no client certificate: TLS
+PASS B4-R100 ws_gateway certificate: 403
+PASS B4-R100 gateway certificate, no identity: 401
+PASS B4-R100 list refused to a valid user identity: 403
+PASS B4-R100 list refused to the projects service: 403
+PASS B4-R101 no client certificate: TLS
+PASS B4-R101 valid identity from ws_gateway: 403
+PASS B4-R101 gateway certificate, no identity: 401
+PASS B4-R101 identity for another route: 401
+PASS B4-R101 identity of another subject: 403
+PASS B4-R101 legitimate identity (direct): 201
+PASS B4-R102 no client certificate: TLS
+PASS B4-R102 valid identity from ws_gateway: 403
+PASS B4-R102 gateway certificate, no identity: 401
+PASS B4-R102 identity for another route: 401
+PASS B4-R102 identity of another subject: 403
+PASS B4-R102 legitimate identity (direct): 201
+PASS B4-R103 no client certificate: TLS
+PASS B4-R103 valid identity from ws_gateway: 403
+PASS B4-R103 gateway certificate, no identity: 401
+PASS B4-R103 identity for another route: 401
+PASS B4-R103 identity of another subject: 403
+PASS B4-R103 legitimate identity (direct): 201
+PASS B4-R104 no client certificate: TLS
+PASS B4-R104 valid identity from ws_gateway: 403
+PASS B4-R104 gateway certificate, no identity: 401
+PASS B4-R104 identity for another route: 401
+PASS B4-R104 identity of another subject for this holder: 403
+INFO B4-R104 legitimate path proven through the gateway (B4-R033)
+PASS B4-R105 no client certificate: TLS
+PASS B4-R105 valid identity from ws_gateway: 403
+PASS B4-R105 gateway certificate, no identity: 401
+PASS B4-R105 identity for another route: 401
+PASS B4-R105 identity of another subject: 403
+INFO B4-R105 legitimate path proven through the gateway (B4-R034)
+PASS B4-R106 no client certificate: TLS
+PASS B4-R106 valid identity from ws_gateway: 403
+PASS B4-R106 gateway certificate, no identity: 401
+PASS B4-R106 identity for another route: 401
+PASS B4-R106 identity of another subject: 403
+INFO B4-R106 legitimate path proven through the gateway (B4-R035)
+PASS B4-R107 no client certificate: TLS
+PASS B4-R107 valid identity from ws_gateway: 403
+PASS B4-R107 gateway certificate, no identity: 401
+PASS B4-R107 identity for another route: 401
+PASS B4-R107 identity of another subject: 403
+INFO B4-R107 legitimate path proven through the gateway (B4-R036)
+PASS B4-R108 no client certificate: TLS
+PASS B4-R108 ws_gateway certificate: 403
+PASS B4-R108 gateway certificate, no identity: 401
+PASS B4-R108 holder identity outside the compensation context: 403
+PASS B4-R108 compensation context for another subject: 403
+PASS B4-R108 compensation of the holder's own subscription: 200
+PASS B4-R109 no client certificate: TLS
+PASS B4-R109 api_gateway certificate: 403
+PASS B4-R109 ws_gateway certificate: 403
+PASS B4-R109 users certificate: 403
+PASS B4-R109 projects certificate admitted (function proven by B4-R015/R019): 500
+PASS B4-R110 no client certificate: TLS
+PASS B4-R110 api_gateway certificate: 403
+PASS B4-R110 ws_gateway certificate: 403
+PASS B4-R110 users certificate: 403
+PASS B4-R110 projects certificate admitted (function proven by B4-R015/R019): 201
+PASS B4-R111 no client certificate: TLS
+PASS B4-R111 api_gateway certificate: 403
+PASS B4-R111 ws_gateway certificate: 403
+PASS B4-R111 users certificate: 403
+PASS B4-R111 projects certificate admitted (function proven by B4-R015/R019): 200
+PASS B4-R112 no client certificate: TLS
+PASS B4-R112 api_gateway certificate: 403
+PASS B4-R112 ws_gateway certificate: 403
+PASS B4-R112 users certificate: 403
+PASS B4-R112 projects certificate admitted (function proven by B4-R015/R019): 500
+PASS B4-R115 no client certificate: TLS
+PASS B4-R115 api_gateway certificate: 403
+PASS B4-R115 ws_gateway certificate: 403
+PASS B4-R115 users certificate: 403
+PASS B4-R115 projects certificate admitted; invalid key rejected: 400
+PASS B4-R116 no client certificate: TLS
+PASS B4-R116 api_gateway certificate: 403
+PASS B4-R116 ws_gateway certificate: 403
+PASS B4-R116 users certificate: 403
+PASS B4-R116 projects certificate admitted; invalid key rejected: 400
+PASS B4-R117 no client certificate: TLS
+PASS B4-R117 api_gateway certificate: 403
+PASS B4-R117 ws_gateway certificate: 403
+PASS B4-R117 users certificate: 403
+PASS B4-R117 projects certificate admitted; invalid key rejected: 400
+PASS B4-R118 no client certificate: TLS
+PASS B4-R118 api_gateway certificate: 403
+PASS B4-R118 ws_gateway certificate: 403
+PASS B4-R118 users certificate: 403
+PASS B4-R118 projects certificate admitted; invalid key rejected: 400
+PASS B4-R119 no client certificate: TLS
+PASS B4-R119 api_gateway certificate: 403
+PASS B4-R119 ws_gateway certificate: 403
+PASS B4-R119 users certificate: 403
+PASS B4-R119 projects certificate admitted; invalid key rejected: 400
+PASS B4-R035 holder cancels (F05): 200
+PASS F05 profile returns to free: free
+B4 routes: 589/589 checks passed

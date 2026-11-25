@@ -1,0 +1,16 @@
+{"metric": "S01", "campaign": "EXP", "case": "G01", "surface": "publica", "rep": 1, "result": "RECUSADO_DOMINIO", "reason": "HTTP 403, sem efeito", "t_utc": "2026-11-24T11:39:30Z", "status": 403}
+{"metric": "S01", "campaign": "EXP", "case": "G02", "surface": "publica", "rep": 1, "result": "RECUSADO_DOMINIO", "reason": "HTTP 403, sem efeito", "t_utc": "2026-11-24T11:39:30Z", "status": 403}
+{"metric": "S01", "campaign": "EXP", "case": "G03", "surface": "publica", "rep": 1, "result": "RECUSADO_DOMINIO", "reason": "HTTP 403, sem efeito", "t_utc": "2026-11-24T11:39:30Z", "status": 403, "tools": [1, 1]}
+{"metric": "S01", "campaign": "EXP", "case": "G04", "surface": "publica", "rep": 1, "result": "RECUSADO_DOMINIO", "reason": "HTTP 403, sem efeito", "t_utc": "2026-11-24T11:39:31Z", "status": 403, "imgs": [1, 1]}
+{"metric": "S01", "campaign": "EXP", "case": "G10", "surface": "publica", "rep": 1, "result": "RECUSADO_DOMINIO", "reason": "HTTP 403, sem efeito", "t_utc": "2026-11-24T11:39:31Z", "status": 403}
+{"metric": "S01", "campaign": "EXP", "case": "G11", "surface": "publica", "rep": 1, "result": "RECUSADO_DOMINIO", "reason": "HTTP 403, sem efeito", "t_utc": "2026-11-24T11:39:31Z", "status": 403}
+{"metric": "S01", "campaign": "EXP", "case": "G14", "surface": "publica", "rep": 1, "result": "RECUSADO_DOMINIO", "reason": "HTTP 403, sem efeito", "t_utc": "2026-11-24T11:39:31Z", "status": 403}
+{"metric": "S01", "campaign": "EXP", "case": "G15", "surface": "publica", "rep": 1, "result": "RECUSADO_DOMINIO", "reason": "HTTP 403, sem efeito", "t_utc": "2026-11-24T11:39:31Z", "status": 403, "tools": [1, 1]}
+{"metric": "S01", "campaign": "EXP", "case": "G05", "surface": "publica", "rep": 1, "result": "RECUSADO_DOMINIO", "reason": "HTTP 401, sem efeito", "t_utc": "2026-11-24T11:39:31Z", "status": 401}
+{"metric": "S01", "campaign": "EXP", "case": "G06", "surface": "publica", "rep": 1, "result": "RECUSADO_DOMINIO", "reason": "HTTP 403, sem efeito", "t_utc": "2026-11-24T11:39:31Z", "status": 403}
+{"metric": "S01", "campaign": "EXP", "case": "G07", "surface": "publica", "rep": 1, "result": "RECUSADO_DOMINIO", "reason": "HTTP 403, sem efeito", "t_utc": "2026-11-24T11:39:31Z", "status": 403}
+{"metric": "S01", "campaign": "EXP", "case": "G08", "surface": "publica", "rep": 1, "result": "RECUSADO_DOMINIO", "reason": "HTTP 401, sem efeito", "t_utc": "2026-11-24T11:39:31Z", "status": 401}
+{"metric": "S01", "campaign": "EXP", "case": "G09", "surface": "publica", "rep": 1, "result": "RECUSADO_DOMINIO", "reason": "HTTP 401, sem efeito", "t_utc": "2026-11-24T11:39:31Z", "status": 401}
+{"metric": "S01", "campaign": "EXP", "case": "G12", "surface": "publica", "rep": 1, "result": "RECUSADO_DOMINIO", "reason": "HTTP 403, sem efeito", "t_utc": "2026-11-24T11:39:31Z", "status": 403, "imgs": [1, 1]}
+{"metric": "S01", "campaign": "EXP", "case": "G13", "surface": "publica", "rep": 1, "result": "RECUSADO_DOMINIO", "reason": "HTTP 403, sem efeito", "t_utc": "2026-11-24T11:39:31Z", "status": 403}
+{"metric": "S01", "campaign": "EXP", "control": "dono_le_projeto", "rep": 1, "ok": true, "note": "", "t_utc": "2026-11-24T11:39:31Z"}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
   Dialog,
   DialogTrigger,
@@ -25,6 +25,8 @@ export function AddImagesDialog() {
   const [open, setOpen] = useState(false);
   const [images, setImages] = useState<string[]>([]);
   const [imageFiles, setImageFiles] = useState<File[]>([]);
+  const [progress, setProgress] = useState<number | null>(null);
+  const uploadController = useRef<AbortController | null>(null);
   const { toast } = useToast();
 
   const { _id: pid, version} = useProjectInfo();
@@ -53,19 +55,29 @@ export function AddImagesDialog() {
   }
 
   function handleAdd() {
+    const controller = new AbortController();
+    uploadController.current = controller;
+    setProgress(null);
     addImages.mutate(
       {
         images: imageFiles,
         projectVersion: version,
+        signal: controller.signal,
+        onProgress: setProgress,
       },
       {
         onSuccess: () => {
+          uploadController.current = null;
+          setProgress(null);
           toast({
             title: "Media added successfully.",
           });
           setOpen(false);
         },
         onError: (error) => {
+          uploadController.current = null;
+          setProgress(null);
+          if (controller.signal.aborted) return;
           const { title, description } = getErrorMessage("project-upload", error);
           toast({
             title,
@@ -78,7 +90,10 @@ export function AddImagesDialog() {
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={(next) => {
+      if (!next) uploadController.current?.abort();
+      setOpen(next);
+    }}>
       <DialogTrigger asChild>
         <Button className="inline-flex" variant="outline">
           <Plus /> Import
@@ -92,10 +107,18 @@ export function AddImagesDialog() {
           </DialogDescription>
         </DialogHeader>
         <ImageSubmissionArea onDrop={onDrop} />
+        {addImages.isPending && progress !== null && (
+          <p role="status">Uploading video: {progress}%{progress === 100 ? " — validating" : ""}</p>
+        )}
         <DialogFooter>
+          {addImages.isPending && (
+            <Button type="button" variant="outline" onClick={() => uploadController.current?.abort()}>
+              Cancel upload
+            </Button>
+          )}
           <Button
             onClick={handleAdd}
-            disabled={images.length === 0}
+            disabled={images.length === 0 || addImages.isPending}
             className="inline-flex items-center gap-1"
           >
             <span>Add</span>

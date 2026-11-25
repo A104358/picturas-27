@@ -1,0 +1,15 @@
+name: picturas-spike
+services:
+  rabbitmq:
+    image: rabbitmq:4.0.5-management
+    hostname: rabbitmq
+    environment:
+      RABBITMQ_NODENAME: rabbit@localhost
+      ERL_EPMD_ADDRESS: 127.0.0.1
+      RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS: "-kernel inet_dist_use_interface {127,0,0,1}"
+      RABBITMQ_CTL_ERL_ARGS: "-kernel inet_dist_use_interface {127,0,0,1}"
+    volumes: ["./pki:/pki:ro", "./rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro", "./definitions.json:/etc/rabbitmq/definitions.json:ro"]
+  t:
+    image: picturas-spike-py
+    command: ["sleep", "infinity"]
+    volumes: ["./pki:/pki:ro", "./:/w:ro"]

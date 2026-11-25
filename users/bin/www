@@ -20,11 +20,12 @@ app.set("port", port);
  * Create HTTP server.
  */
 
-const key = fs.readFileSync(__dirname + "/../certs/selfsigned.key");
-const cert = fs.readFileSync(__dirname + "/../certs/selfsigned.crt");
-const options = { key: key, cert: cert };
+// mTLS with the installation CA, no session resumption; the peer and operation
+// allowlist (D4 matrix) is applied per request by auth/internalIdentity.js (B4, B5).
+const pki = require("../tls/pkiTls");
 
-var server = https.createServer(options, app);
+var server = https.createServer(pki.serverOptions(), app);
+pki.guardValidity(() => server.close());
 
 /**
  * Listen on provided port, on all network interfaces.

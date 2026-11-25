@@ -1,0 +1,7 @@
+PASS WS-T01 owner joins: joined
+READY_STOP_PROJECTS
+PASS WS-T02 outage refuses fresh join: unavailable
+PASS WS-T04 outage does not extend personal/project emission deadline: False
+READY_START_PROJECTS
+PASS WS-T02 recovery allows a fresh join: joined
+B8 WebSocket: 4/4 checks passed

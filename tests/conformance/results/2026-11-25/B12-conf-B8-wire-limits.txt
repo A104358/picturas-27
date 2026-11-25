@@ -1,0 +1,41 @@
+# B8-wire-limits — 2026-11-25T13:14:49Z
+$ tests/conformance/in-network.sh picturas-dev websocket/b8-wire-limits.py 10
+
+{"case": "WS-B1 handshake", "round": 1, "bytes": 8191, "accepted": true, "ms": 32.63}
+{"case": "WS-B1 handshake", "round": 1, "bytes": 8192, "accepted": true, "ms": 13.06}
+{"case": "WS-B1 handshake", "round": 1, "bytes": 8193, "accepted": false, "ms": 9.8}
+{"case": "WS-B1 handshake", "round": 2, "bytes": 8191, "accepted": true, "ms": 7.64}
+{"case": "WS-B1 handshake", "round": 2, "bytes": 8192, "accepted": true, "ms": 5.99}
+{"case": "WS-B1 handshake", "round": 2, "bytes": 8193, "accepted": false, "ms": 5.9}
+{"case": "WS-B1 handshake", "round": 3, "bytes": 8191, "accepted": true, "ms": 5.01}
+{"case": "WS-B1 handshake", "round": 3, "bytes": 8192, "accepted": true, "ms": 4.87}
+{"case": "WS-B1 handshake", "round": 3, "bytes": 8193, "accepted": false, "ms": 4.54}
+{"case": "WS-B1 handshake", "round": 4, "bytes": 8191, "accepted": true, "ms": 6.79}
+{"case": "WS-B1 handshake", "round": 4, "bytes": 8192, "accepted": true, "ms": 6.51}
+{"case": "WS-B1 handshake", "round": 4, "bytes": 8193, "accepted": false, "ms": 6.12}
+{"case": "WS-B1 handshake", "round": 5, "bytes": 8191, "accepted": true, "ms": 6.18}
+{"case": "WS-B1 handshake", "round": 5, "bytes": 8192, "accepted": true, "ms": 6.46}
+{"case": "WS-B1 handshake", "round": 5, "bytes": 8193, "accepted": false, "ms": 5.45}
+{"case": "WS-B1 handshake", "round": 6, "bytes": 8191, "accepted": true, "ms": 23.71}
+{"case": "WS-B1 handshake", "round": 6, "bytes": 8192, "accepted": true, "ms": 16.61}
+{"case": "WS-B1 handshake", "round": 6, "bytes": 8193, "accepted": false, "ms": 7.63}
+{"case": "WS-B1 handshake", "round": 7, "bytes": 8191, "accepted": true, "ms": 5.56}
+{"case": "WS-B1 handshake", "round": 7, "bytes": 8192, "accepted": true, "ms": 4.76}
+{"case": "WS-B1 handshake", "round": 7, "bytes": 8193, "accepted": false, "ms": 4.93}
+{"case": "WS-B1 handshake", "round": 8, "bytes": 8191, "accepted": true, "ms": 6.65}
+{"case": "WS-B1 handshake", "round": 8, "bytes": 8192, "accepted": true, "ms": 5.9}
+{"case": "WS-B1 handshake", "round": 8, "bytes": 8193, "accepted": false, "ms": 3.99}
+{"case": "WS-B1 handshake", "round": 9, "bytes": 8191, "accepted": true, "ms": 4.13}
+{"case": "WS-B1 handshake", "round": 9, "bytes": 8192, "accepted": true, "ms": 4.08}
+{"case": "WS-B1 handshake", "round": 9, "bytes": 8193, "accepted": false, "ms": 3.14}
+{"case": "WS-B1 handshake", "round": 10, "bytes": 8191, "accepted": true, "ms": 3.18}
+{"case": "WS-B1 handshake", "round": 10, "bytes": 8192, "accepted": true, "ms": 3.4}
+{"case": "WS-B1 handshake", "round": 10, "bytes": 8193, "accepted": false, "ms": 2.63}
+{"case": "WS-B1 transport", "bytes": 65536, "application_ack": true}
+{"case": "WS-B1 transport", "bytes": 65537, "application_ack": false}
+{"case": "WS-B1 escaped handshake", "received_bytes": 8196, "accepted": false}
+{"case": "WS-B1 join JSON", "bytes": 4096, "callback": "denied"}
+{"case": "WS-B1 join JSON", "bytes": 4097, "callback": "invalid_request"}
+{"case": "WS-B1 escaped join", "received_bytes": 4879, "callback": "invalid_request"}
+B8 raw wire limits: 36/36 passed
+exit: 0

@@ -1,0 +1,4 @@
+dump via --config rc=0
+2026-11-21T19:46:00.889+0000	done dumping projects.project (2 documents)
+dump via --config wrong CA rc=1
+2026-11-21T19:46:30.900+0000	Failed: can't create session: failed to connect to mongodb://backup_ro@projects_mongoDB:27017/projects?authSource=projects&tls=true&tlsCAFile=/pki/otherca.crt: server sele

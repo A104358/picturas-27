@@ -10,7 +10,7 @@ COPY . .
 RUN bun run build
 
 EXPOSE 3000
-# para produção:
-CMD ["bun", "start"]
+# para produção: Next behind nginx over mTLS (B5), own HTTPS server with the normal build
+CMD ["node", "server-https.js"]
 # para dev:
 # CMD ["bun", "dev"]

@@ -1,0 +1,37 @@
+{"case": "WS-B1 handshake", "round": 1, "bytes": 8191, "accepted": true, "ms": 20.24}
+{"case": "WS-B1 handshake", "round": 1, "bytes": 8192, "accepted": true, "ms": 25.13}
+{"case": "WS-B1 handshake", "round": 1, "bytes": 8193, "accepted": false, "ms": 12.89}
+{"case": "WS-B1 handshake", "round": 2, "bytes": 8191, "accepted": true, "ms": 11.77}
+{"case": "WS-B1 handshake", "round": 2, "bytes": 8192, "accepted": true, "ms": 8.29}
+{"case": "WS-B1 handshake", "round": 2, "bytes": 8193, "accepted": false, "ms": 5.87}
+{"case": "WS-B1 handshake", "round": 3, "bytes": 8191, "accepted": true, "ms": 6.93}
+{"case": "WS-B1 handshake", "round": 3, "bytes": 8192, "accepted": true, "ms": 7.94}
+{"case": "WS-B1 handshake", "round": 3, "bytes": 8193, "accepted": false, "ms": 10.55}
+{"case": "WS-B1 handshake", "round": 4, "bytes": 8191, "accepted": true, "ms": 10.8}
+{"case": "WS-B1 handshake", "round": 4, "bytes": 8192, "accepted": true, "ms": 10.98}
+{"case": "WS-B1 handshake", "round": 4, "bytes": 8193, "accepted": false, "ms": 15.68}
+{"case": "WS-B1 handshake", "round": 5, "bytes": 8191, "accepted": true, "ms": 22.1}
+{"case": "WS-B1 handshake", "round": 5, "bytes": 8192, "accepted": true, "ms": 16.78}
+{"case": "WS-B1 handshake", "round": 5, "bytes": 8193, "accepted": false, "ms": 7.61}
+{"case": "WS-B1 handshake", "round": 6, "bytes": 8191, "accepted": true, "ms": 6.33}
+{"case": "WS-B1 handshake", "round": 6, "bytes": 8192, "accepted": true, "ms": 6.12}
+{"case": "WS-B1 handshake", "round": 6, "bytes": 8193, "accepted": false, "ms": 4.72}
+{"case": "WS-B1 handshake", "round": 7, "bytes": 8191, "accepted": true, "ms": 5.03}
+{"case": "WS-B1 handshake", "round": 7, "bytes": 8192, "accepted": true, "ms": 8.06}
+{"case": "WS-B1 handshake", "round": 7, "bytes": 8193, "accepted": false, "ms": 7.09}
+{"case": "WS-B1 handshake", "round": 8, "bytes": 8191, "accepted": true, "ms": 8.98}
+{"case": "WS-B1 handshake", "round": 8, "bytes": 8192, "accepted": true, "ms": 11.08}
+{"case": "WS-B1 handshake", "round": 8, "bytes": 8193, "accepted": false, "ms": 9.69}
+{"case": "WS-B1 handshake", "round": 9, "bytes": 8191, "accepted": true, "ms": 8.87}
+{"case": "WS-B1 handshake", "round": 9, "bytes": 8192, "accepted": true, "ms": 6.97}
+{"case": "WS-B1 handshake", "round": 9, "bytes": 8193, "accepted": false, "ms": 5.06}
+{"case": "WS-B1 handshake", "round": 10, "bytes": 8191, "accepted": true, "ms": 5.85}
+{"case": "WS-B1 handshake", "round": 10, "bytes": 8192, "accepted": true, "ms": 7.01}
+{"case": "WS-B1 handshake", "round": 10, "bytes": 8193, "accepted": false, "ms": 4.27}
+{"case": "WS-B1 transport", "bytes": 65536, "application_ack": true}
+{"case": "WS-B1 transport", "bytes": 65537, "application_ack": false}
+{"case": "WS-B1 escaped handshake", "received_bytes": 8196, "accepted": false}
+{"case": "WS-B1 join JSON", "bytes": 4096, "callback": "denied"}
+{"case": "WS-B1 join JSON", "bytes": 4097, "callback": "invalid_request"}
+{"case": "WS-B1 escaped join", "received_bytes": 4879, "callback": "invalid_request"}
+B8 raw wire limits: 36/36 passed

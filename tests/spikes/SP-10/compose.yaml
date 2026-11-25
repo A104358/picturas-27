@@ -1,0 +1,12 @@
+name: picturas-spike
+services:
+  generative-mock:
+    image: picturas-nfr-generative-mock
+    working_dir: /w
+    command: ["python", "-u", "server_tls.py"]
+    environment: {TLS_CERT: /pki/generative-mock.crt, TLS_KEY: /pki/generative-mock.key, TLS_CA: /pki/ca.crt}
+    volumes: ["./pki:/pki:ro", "../../../generative-mock/server.py:/w/server.py:ro", "./server_tls.py:/w/server_tls.py:ro"]
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import ssl,urllib.request as u; c=ssl.create_default_context(cafile='/pki/ca.crt'); c.load_cert_chain('/pki/expand_ai_tool.crt','/pki/expand_ai_tool.key'); u.urlopen('https://generative-mock:7860/sdapi/v1/samplers', context=c).read()\""]
+      interval: 5s
+      retries: 10

@@ -1,0 +1,30 @@
+{"metric": "S04", "campaign": "MF", "case": "W01", "surface": "ws", "rep": 1, "result": "RECUSADO_DOMINIO", "reason": "ligação WS recusada", "t_utc": "2026-11-25T13:55:02Z", "connected": false, "eventos": 0, "edicoes": 3, "controlo_dono": 3, "controlo_leitor": 3}
+{"metric": "S04", "campaign": "MF", "control": "W01_dono_e_leitor_recebem", "rep": 1, "ok": true, "note": "", "t_utc": "2026-11-25T13:55:02Z"}
+{"metric": "S04", "campaign": "MF", "case": "W02", "surface": "ws", "rep": 1, "result": "RECUSADO_DOMINIO", "reason": "sem eventos protegidos", "t_utc": "2026-11-25T13:55:07Z", "connected": true, "eventos": 0, "edicoes": 3, "controlo_dono": 3, "controlo_leitor": 3}
+{"metric": "S04", "campaign": "MF", "control": "W02_dono_e_leitor_recebem", "rep": 1, "ok": true, "note": "", "t_utc": "2026-11-25T13:55:07Z"}
+{"metric": "S04", "campaign": "MF", "case": "W03", "surface": "ws", "rep": 1, "result": "RECUSADO_DOMINIO", "reason": "ligação WS recusada", "t_utc": "2026-11-25T13:55:22Z", "connected": false, "eventos": 0, "edicoes": 3, "controlo_dono": 3, "controlo_leitor": 3}
+{"metric": "S04", "campaign": "MF", "control": "W03_dono_e_leitor_recebem", "rep": 1, "ok": true, "note": "", "t_utc": "2026-11-25T13:55:22Z"}
+{"metric": "S04", "campaign": "MF", "case": "W04", "surface": "ws", "rep": 1, "result": "RECUSADO_DOMINIO", "reason": "ligação WS recusada", "t_utc": "2026-11-25T13:55:37Z", "connected": false, "eventos": 0, "edicoes": 3, "controlo_dono": 3, "controlo_leitor": 3}
+{"metric": "S04", "campaign": "MF", "control": "W04_dono_e_leitor_recebem", "rep": 1, "ok": true, "note": "", "t_utc": "2026-11-25T13:55:37Z"}
+{"metric": "S04", "campaign": "MF", "case": "W05", "surface": "ws", "rep": 1, "result": "RECUSADO_DOMINIO", "reason": "sem eventos protegidos", "t_utc": "2026-11-25T13:55:48Z", "connected": true, "eventos": 0, "edicoes": 3, "controlo_dono": 3, "controlo_leitor": 3}
+{"metric": "S04", "campaign": "MF", "control": "W05_dono_e_leitor_recebem", "rep": 1, "ok": true, "note": "", "t_utc": "2026-11-25T13:55:48Z"}
+{"metric": "S04", "campaign": "MF", "case": "W01", "surface": "ws", "rep": 2, "result": "RECUSADO_DOMINIO", "reason": "ligação WS recusada", "t_utc": "2026-11-25T13:56:05Z", "connected": false, "eventos": 0, "edicoes": 3, "controlo_dono": 3, "controlo_leitor": 3}
+{"metric": "S04", "campaign": "MF", "control": "W01_dono_e_leitor_recebem", "rep": 2, "ok": true, "note": "", "t_utc": "2026-11-25T13:56:05Z"}
+{"metric": "S04", "campaign": "MF", "case": "W02", "surface": "ws", "rep": 2, "result": "RECUSADO_DOMINIO", "reason": "sem eventos protegidos", "t_utc": "2026-11-25T13:56:10Z", "connected": true, "eventos": 0, "edicoes": 3, "controlo_dono": 3, "controlo_leitor": 3}
+{"metric": "S04", "campaign": "MF", "control": "W02_dono_e_leitor_recebem", "rep": 2, "ok": true, "note": "", "t_utc": "2026-11-25T13:56:10Z"}
+{"metric": "S04", "campaign": "MF", "case": "W03", "surface": "ws", "rep": 2, "result": "RECUSADO_DOMINIO", "reason": "ligação WS recusada", "t_utc": "2026-11-25T13:56:25Z", "connected": false, "eventos": 0, "edicoes": 3, "controlo_dono": 3, "controlo_leitor": 3}
+{"metric": "S04", "campaign": "MF", "control": "W03_dono_e_leitor_recebem", "rep": 2, "ok": true, "note": "", "t_utc": "2026-11-25T13:56:25Z"}
+{"metric": "S04", "campaign": "MF", "case": "W04", "surface": "ws", "rep": 2, "result": "RECUSADO_DOMINIO", "reason": "ligação WS recusada", "t_utc": "2026-11-25T13:56:40Z", "connected": false, "eventos": 0, "edicoes": 3, "controlo_dono": 3, "controlo_leitor": 3}
+{"metric": "S04", "campaign": "MF", "control": "W04_dono_e_leitor_recebem", "rep": 2, "ok": true, "note": "", "t_utc": "2026-11-25T13:56:40Z"}
+{"metric": "S04", "campaign": "MF", "case": "W05", "surface": "ws", "rep": 2, "result": "RECUSADO_DOMINIO", "reason": "sem eventos protegidos", "t_utc": "2026-11-25T13:56:51Z", "connected": true, "eventos": 0, "edicoes": 3, "controlo_dono": 3, "controlo_leitor": 3}
+{"metric": "S04", "campaign": "MF", "control": "W05_dono_e_leitor_recebem", "rep": 2, "ok": true, "note": "", "t_utc": "2026-11-25T13:56:51Z"}
+{"metric": "S04", "campaign": "MF", "case": "W01", "surface": "ws", "rep": 3, "result": "RECUSADO_DOMINIO", "reason": "ligação WS recusada", "t_utc": "2026-11-25T13:57:08Z", "connected": false, "eventos": 0, "edicoes": 3, "controlo_dono": 3, "controlo_leitor": 3}
+{"metric": "S04", "campaign": "MF", "control": "W01_dono_e_leitor_recebem", "rep": 3, "ok": true, "note": "", "t_utc": "2026-11-25T13:57:08Z"}
+{"metric": "S04", "campaign": "MF", "case": "W02", "surface": "ws", "rep": 3, "result": "RECUSADO_DOMINIO", "reason": "sem eventos protegidos", "t_utc": "2026-11-25T13:57:13Z", "connected": true, "eventos": 0, "edicoes": 3, "controlo_dono": 3, "controlo_leitor": 3}
+{"metric": "S04", "campaign": "MF", "control": "W02_dono_e_leitor_recebem", "rep": 3, "ok": true, "note": "", "t_utc": "2026-11-25T13:57:13Z"}
+{"metric": "S04", "campaign": "MF", "case": "W03", "surface": "ws", "rep": 3, "result": "RECUSADO_DOMINIO", "reason": "ligação WS recusada", "t_utc": "2026-11-25T13:57:28Z", "connected": false, "eventos": 0, "edicoes": 3, "controlo_dono": 3, "controlo_leitor": 3}
+{"metric": "S04", "campaign": "MF", "control": "W03_dono_e_leitor_recebem", "rep": 3, "ok": true, "note": "", "t_utc": "2026-11-25T13:57:28Z"}
+{"metric": "S04", "campaign": "MF", "case": "W04", "surface": "ws", "rep": 3, "result": "RECUSADO_DOMINIO", "reason": "ligação WS recusada", "t_utc": "2026-11-25T13:57:43Z", "connected": false, "eventos": 0, "edicoes": 3, "controlo_dono": 3, "controlo_leitor": 3}
+{"metric": "S04", "campaign": "MF", "control": "W04_dono_e_leitor_recebem", "rep": 3, "ok": true, "note": "", "t_utc": "2026-11-25T13:57:43Z"}
+{"metric": "S04", "campaign": "MF", "case": "W05", "surface": "ws", "rep": 3, "result": "RECUSADO_DOMINIO", "reason": "sem eventos protegidos", "t_utc": "2026-11-25T13:57:54Z", "connected": true, "eventos": 0, "edicoes": 3, "controlo_dono": 3, "controlo_leitor": 3}
+{"metric": "S04", "campaign": "MF", "control": "W05_dono_e_leitor_recebem", "rep": 3, "ok": true, "note": "", "t_utc": "2026-11-25T13:57:54Z"}

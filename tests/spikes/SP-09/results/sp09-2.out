@@ -1,0 +1,13 @@
+## A order: /no-client-cert/ first after nginx restart (no cached session)
+  /no-client-cert/ first: 502
+  / (client cert): 200
+  /no-client-cert/ after /: 200
+2026/11/21 20:08:01 [error] 22#22: *1 SSL_read() failed (SSL: error:0A00045C:SSL routines::tlsv13 alert certificate required:SSL alert number 116) while reading response header from upstream, client: 
+## B same with proxy_ssl_session_reuse off on every location
+  / (client cert): 200
+  /no-client-cert/ after /: 502
+  latency without reuse: median 0.007817s max 0.010166s
+## C application peer allowlist: valid installation client cert with CN=projects
+peer not allowed
+  403
+  CN=nginx direct: 200

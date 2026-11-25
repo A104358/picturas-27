@@ -1,0 +1,3 @@
+PASS legacy: original WS and API methods unchanged
+PASS v2: share context belongs only to the presenting fixture token; labels grant nothing
+PASS v2 S05: connected owner presents the newly created project explicitly

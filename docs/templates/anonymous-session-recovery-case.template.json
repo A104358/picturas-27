@@ -14,7 +14,8 @@
     "trusted_provenance_basis": null,
     "independent_association_basis": null,
     "verified_by": null,
-    "verified_at": null
+    "verified_at": null,
+    "account_fingerprint": null
   },
   "approval": {
     "status": "pending",

@@ -1,0 +1,22 @@
+# B11-quota-ledger — 2026-11-25T06:18:52Z
+$ docker run --rm --network none -v users/tests:/app/tests:ro -v users/admin:/app/admin:ro --entrypoint node picturas-dev-users --test tests/quota-ledger.test.js
+
+✔ parallel admissions of one run apply one atomic debit and receipt (1.129541ms)
+✔ refund is bound to original executor/day with both image and video costs (0.440459ms)
+✔ lost refund acknowledgement or another case cannot repeat the effect (0.174375ms)
+✔ changed run binding, cost or executor is refused before mutation (0.242834ms)
+✔ unknown receipt, legacy balance changes and underflow never create credit (0.238583ms)
+✔ premium has zero financial compensation and anonymous rejects paid effects (0.205084ms)
+✔ a compensated run cannot be admitted again automatically (0.186ms)
+✔ quota context rejects malformed or missing binding fields (0.195708ms)
+✔ password changes cannot overwrite a concurrent quota snapshot (86.936209ms)
+✔ ordinary profile changes also preserve quota-owned fields (0.418125ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 202.931875
+exit: 0

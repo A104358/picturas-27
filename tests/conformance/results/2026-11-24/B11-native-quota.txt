@@ -1,0 +1,1 @@
+PASS native Mongo lost-response readback, durable event and no second financial write

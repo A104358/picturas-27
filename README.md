@@ -192,7 +192,7 @@ same worker (`Tools/video/subtitles.py`, `Tools/video/frame_extraction.py`).
 | **Docker Compose** | v2 (`docker compose`)     | The old `docker-compose` (v1) hyphenated command is not used |
 | **RAM**            | 8 GB free (16 GB advised) | ~25 containers, several with AI models loaded                |
 | **Disk**           | ~15 GB free               | AI base images (PyTorch, OpenCV) are large                   |
-| **Browser**        | Any modern browser        | Must accept a self-signed certificate                        |
+| **Browser**        | Any modern browser        | Trust this installation's local CA in a dedicated profile   |
 
 On Docker Desktop, raise the memory limit in **Settings → Resources** if the AI tools get
 OOM-killed.
@@ -221,10 +221,24 @@ OOM-killed.
    cd picturas-27
    ```
 
-2. **Build and start the whole stack**
+2. **Create this installation's secrets and certificates** (once per machine)
+
+   Secrets never live in the repository. Pick a directory outside the checkout and generate the
+   session secret, credentials and the local CA with one certificate per service:
 
    ```bash
-   docker compose up --build
+   export PICTURAS_SECRETS_DIR=$HOME/.picturas-secrets   # keep it exported in every shell you use
+   ops/secrets.sh init
+   ops/pki.sh init
+   ```
+
+   Every machine has its own secrets and CA; never copy them between machines. See
+   [HTTPS and Certificates](#-https-and-certificates).
+
+3. **Build and start the whole stack**
+
+   ```bash
+   ops/pki.sh check && docker compose up --build
    ```
 
    The **first** build downloads several GB of images and installs the Python AI dependencies —
@@ -235,15 +249,16 @@ OOM-killed.
    docker compose logs -f    # follow the logs
    ```
 
-3. **Open the application**
+4. **Open the application**
 
    👉 **<https://localhost:8080>** — note the **`https`** and the port **`8080`**.
 
-   Your browser will warn you about the self-signed certificate. Accept it
-   (Chrome: _Advanced → Proceed to localhost (unsafe)_; Firefox: _Advanced → Accept the Risk_).
+   The certificate is issued by your installation CA (`$PICTURAS_SECRETS_DIR/pki/ca/ca.crt`).
+   Import the verified CA into a dedicated browser profile before opening the site.
+   A trust, name or expiry warning must be corrected without bypassing it.
    See [HTTPS and Certificates](#-https-and-certificates) if the site does not load at all.
 
-4. **Stop the stack**
+5. **Stop the stack**
 
    ```bash
    docker compose down          # stop and remove containers
@@ -252,7 +267,7 @@ OOM-killed.
 
 ### First Steps
 
-1. Open <https://localhost:8080> and accept the certificate.
+1. Import this installation's CA into your browser profile, then open <https://localhost:8080>.
 2. Register an account, or use the anonymous mode.
 3. Create a project and upload an image or a video (samples in `samples/video/`).
 4. Build a pipeline with the toolbar (filters, geometry, AI tools) and run it.
@@ -272,108 +287,85 @@ ports are published only for **development and debugging**.
 | `https://localhost:8080/`             | Frontend (Next.js)      |
 | `https://localhost:8080/api-gateway/` | REST API (API Gateway)  |
 | `https://localhost:8080/socket.io`    | WebSocket Gateway       |
-| `https://localhost:8080/s3/`          | Object storage (S3 API) |
-| `https://localhost:8080/s3-console/`  | SeaweedFS filer web UI  |
+| `https://localhost:8080/s3/`          | Object storage (S3 API, signed GET/HEAD only) |
 
 ### Published directly on the host
 
-| Port    | Service              | URL / Credentials                               |
-| ------- | -------------------- | ----------------------------------------------- |
-| `8080`  | Nginx (HTTPS)        | <https://localhost:8080>                        |
-| `9000`  | SeaweedFS S3 API     | <http://localhost:9000> — `admin` / `admin123`  |
-| `9090`  | SeaweedFS filer UI   | <http://localhost:9090>                         |
-| `11000` | Image Storage        | <http://localhost:11000>                        |
-| `15672` | RabbitMQ Management  | <http://localhost:15672> — `user` / `password`  |
-| `5672`  | RabbitMQ AMQP        | broker endpoint used by the tools               |
-| `10001` | User Service         | <http://localhost:10001>                        |
-| `11001` | Subscription Service | <http://localhost:11001>                        |
-| `9002`  | Project Service      | <http://localhost:9002> (container port `9001`) |
-| `4000`  | WebSocket Gateway    | <http://localhost:4000>                         |
-| `7860`  | Generative mock API  | <http://localhost:7860> (used by `expand_ai`)   |
-| `27018` | MongoDB (projects)   | `mongodb://localhost:27018`                     |
-| `27019` | MongoDB (users)      | `mongodb://localhost:27019`                     |
+Only nginx publishes a port: `8080` (HTTPS). No internal service, database, broker or object
+store port is published (Phase 2, B3). Administration goes through `docker compose exec`
+(see [Inspecting data](#inspecting-data)).
 
-Make sure the ports above are free before starting; see [Troubleshooting](#-troubleshooting).
+Make sure port 8080 is free before starting; see [Troubleshooting](#-troubleshooting).
 
 ---
 
 ## 🔐 HTTPS and Certificates
 
-Nginx terminates TLS on container port `443`, published on host port `8080`. A **self-signed**
-certificate pair is committed to the repository so the stack works out of the box:
+Nginx terminates TLS on container port `443`, published on host port `8080`. Every installation
+has its **own local CA** and one certificate per service, created by `ops/pki.sh` under
+`$PICTURAS_SECRETS_DIR/pki` (outside the repository):
 
-```
-certs/selfsigned.crt      # used by Nginx — the only certificate the browser sees
-certs/selfsigned.key
-```
+| Command                     | What it does                                                                   |
+| --------------------------- | ------------------------------------------------------------------------------ |
+| `ops/pki.sh init`           | Creates the CA (365 days) and issues every service certificate (30 days)       |
+| `ops/pki.sh check`          | Verifies the CA and every certificate (chain, SAN, key match, expiry) — run it before starting |
+| `ops/pki.sh renew --project picturas-dev` | Suspends admissions, drains work, renews due certificates under the same CA and recreates all participants; verifies before reopening |
+| `ops/pki.sh retire --project picturas-dev --mode compromise` | Isolates immediately, replaces the CA and all keys; remains isolated until reconciliation and trust controls pass |
+| `ops/reconcile inventory --project picturas-dev` | Private execution/quota inventory after B10 isolation; [administrative reconciliation](docs/reconciliation-operations.md) |
+| `ops/reconcile apply --project picturas-dev --integrity-proof <private-review.json>` | Fences generations, quarantines old outputs/messages and applies proven, atomic quota corrections; `seal` is required before reopening |
+| `ops/pki.sh issue <svc>`    | Issues a certificate file; use only before deployment or within an isolated, reviewed procedure |
+| `ops/pki.sh list`           | Shows the current certificates; `pki/registry.tsv` logs every issue (no keys)  |
 
-Five further self-signed pairs are committed under `apiGateway/`, `users/`, `projects/`,
-`subscriptions/` and `frontend/`. The internal services use them to speak HTTPS to each other
-(`https://users:10001`, `https://projects:9001`, ...).
-
-The bundled certificate is issued to `CN=localhost` and is valid until **14 September 2027**, so
-it covers the whole academic year. To regenerate it (for a different hostname, or after it
-expires):
-
-```bash
-openssl req -x509 -nodes -days 365 \
-  -newkey rsa:2048 \
-  -keyout certs/selfsigned.key \
-  -out certs/selfsigned.crt \
-  -subj "/CN=localhost" \
-  -addext "subjectAltName=DNS:localhost,IP:127.0.0.1"
-
-docker compose restart nginx
-```
-
-> ⚠️ **The internal certificates are expired, and that is why nothing breaks.**
-> All five service-to-service pairs expired in **January 2026**. The stack keeps working
-> because every client is built as `https.Agent({ rejectUnauthorized: false })`, so expiry —
-> and in fact the whole certificate chain — is never checked. Internal traffic is encrypted
-> but **not authenticated**, and the client certificates passed to those agents are never
-> requested by any server. Treat this as a finding to analyse, not a pattern to copy: fixing
-> it (proper validation, or dropping internal TLS in favour of a trusted network boundary) is
-> a legitimate architectural improvement. Only `certs/`, used by Nginx, is still valid.
+There is no renewal daemon: the administrator runs `renew`. The CA key (`pki/ca/ca.key`) is never
+mounted in a container; each service mounts only its own `pki/services/<svc>/` read-only. The
+Nginx certificate covers `localhost` and `127.0.0.1`; import `pki/ca/ca.crt` into your browser to
+validate the server. Never bypass certificate warnings. Use a dedicated profile; after a CA
+withdrawal remove the old CA and import the verified new CA before reopening. See the
+[PKI operations runbook](docs/pki-operations.md) for draining, isolation, private manifests,
+browser checks and failure recovery.
 
 **Why HTTPS matters here:** the browser refuses to open a secure WebSocket (`wss://`) from a
 page served over plain HTTP, and several browser APIs used by the editor require a secure
 context. Always use `https://localhost:8080` — **not** `http://`, and **not** `localhost:3000`.
 
-**Overriding with a `.env` file.** The object-storage variables are read from the environment,
-with the defaults above applied when unset, so the stack runs with no setup. To use your own
-credentials, copy `.env.example` to `.env` and edit it — `.env` is git-ignored, and a single
-entry there updates both the storage server and the client that talks to it:
+**Secrets.** `ops/secrets.sh init` generates every secret once (it never overwrites): the HS256
+session secret, the RS256 key pair, the database, broker and object-storage credentials. It renders
+one `env/<service>.env` per service, which `docker-compose.yaml` loads with `env_file`;
+`ops/secrets.sh check` verifies them. Without `PICTURAS_SECRETS_DIR`, `docker compose` refuses to
+start. The secrets that used to be committed (`lisan_al_gaib`, `admin123`, `user/password`, the
+self-signed keys) are no longer accepted; they remain in the Git history, which is not rewritten.
 
-```bash
-cp .env.example .env     # then edit, and: docker compose up -d
-```
-
-> 🔎 **Committed secrets are a known issue.** Private keys, JWT secrets and database passwords
-> are hard-coded in this repository for convenience. That is acceptable for a local
-> setup but _unacceptable in production_ — moving them to a `.env` file (git-ignored) or a secrets
-> manager is a good first improvement.
+**Internal TLS (Phase 2, B5).** Every hop is TLS validated against the installation CA:
+nginx → `frontend`/`api_gateway`/`ws_gateway` (nginx presents its own client certificate and
+checks the expected service name), and mutual TLS between services (`api_gateway` →
+`projects`/`users`/`subscriptions`, `projects` → `users`/`img_storage`, `users` → `projects`,
+`expand_ai` → `generative-mock`). Each server accepts only the peers and operations of the D4
+matrix (a certificate from the same CA is not enough), TLS sessions are never resumed, and a
+service stops when its own certificate expires (renew with `ops/pki.sh renew --project picturas-dev`). The Node
+services share `tls/pkiTls.js` (one identical copy per service).
 
 ---
 
 ## 🔧 Configuration
 
-All configuration currently lives as `environment:` entries in `docker-compose.yaml`.
+Non-secret configuration lives as `environment:` entries in `docker-compose.yaml`. Secrets come
+from `$PICTURAS_SECRETS_DIR/env/<service>.env` (see [HTTPS and Certificates](#-https-and-certificates)).
 
 | Variable                                      | Default                       | Service(s)             | Purpose                                      |
 | --------------------------------------------- | ----------------------------- | ---------------------- | -------------------------------------------- |
-| `JWT_SECRET_KEY`                              | `lisan_al_gaib`               | users, gateway, ws     | JWT signing key — **must match everywhere**  |
-| `FIELD_ENCRYPTION_KEY`                        | `uma-frase-secreta-...`       | users                  | Key for field-level encryption in MongoDB    |
+| `JWT_SECRET_KEY`                              | secret (`ops/secrets.sh`)     | users, gateway, ws     | JWT signing key — **must match everywhere**  |
+| `FIELD_ENCRYPTION_KEY`                        | secret (`ops/secrets.sh`)     | users                  | Key for field-level encryption in MongoDB    |
 | `FREE_DAILY_OP`                               | `5`                           | users                  | Daily operation limit for free accounts      |
-| `SECRET_KEY`                                  | `card_secret_key`             | subscriptions          | Payment-data encryption key                  |
+| `SECRET_KEY`                                  | secret (`ops/secrets.sh`)     | subscriptions          | Payment-data encryption key                  |
 | `S3_ENDPOINT`                                 | `seaweedfs:9000`              | img_storage            | Object storage endpoint                      |
-| `S3_ACCESS_KEY` / `S3_SECRET_KEY`             | `admin` / `admin123`          | seaweedfs, img_storage | Object storage credentials                   |
+| `S3_ACCESS_KEY` / `S3_SECRET_KEY`             | secret (`ops/secrets.sh`)     | img_storage            | Object storage credentials                   |
 | `S3_BUCKET`                                   | `picturas`                    | img_storage            | Shared bucket for all files (`users/<id>/…`) |
-| `S3_KEK_PASSPHRASE`                           | `picturas-kek-...`            | seaweedfs              | Protects the key used for encryption at rest |
-| `RABBITMQ_DEFAULT_USER` / `_PASS`             | `user` / `password`           | rabbitmq               | Broker credentials                           |
+| `WEED_S3_SSE_KEK_PASSPHRASE`                  | secret (`ops/secrets.sh`)     | seaweedfs              | Protects the key used for encryption at rest |
+| broker users                                  | secret (`ops/secrets.sh`)     | rabbitmq               | Rendered into `rabbitmq/definitions.json`    |
 | `RABBITMQ_HOST` / `_PORT` / `_USER` / `_PASS` | `rabbitmq` / `5672` / ...     | tools, projects, ws    | Broker connection                            |
 | `FRONTEND_URL`                                | `https://localhost:8080`      | img_storage            | CORS / redirect origin                       |
 | `NEXT_PUBLIC_API_BASE_URL`                    | `/api-gateway/`               | frontend               | Relative API base (keep it relative!)        |
-| `GEN_EXPAND_URL`                              | `http://generative-mock:7860` | expand_ai              | Generative image API endpoint                |
+| `GEN_EXPAND_URL`                              | `https://generative-mock:7860` | expand_ai              | Generative image API endpoint                |
 | `VIDEO_FREE_MAX_DURATION_S` / `_MAX_SIZE_MB`  | `60` / `100`                  | projects               | Video upload limits for free accounts        |
 | `VIDEO_PREMIUM_MAX_DURATION_S` / `_SIZE_MB`   | `600` / `1024`                | projects               | Video upload limits for premium accounts     |
 | `VIDEO_PREVIEW_SECONDS`                       | `3`                           | video_tool             | Length of a video preview render             |
@@ -393,7 +385,7 @@ written to the host at `./backups/mongo` (git-ignored). `docker compose down -v`
 ### Scaling
 
 - Run more instances of a busy tool: `docker compose up -d --scale brightness_tool=3`
-- Watch queue depth in the RabbitMQ management UI (<http://localhost:15672>)
+- Watch queue depth with `docker compose exec rabbitmq rabbitmqctl list_queues`
 - Tune per-container CPU/memory limits in `docker-compose.yaml` to match your machine
 
 Containers are named `picturas-<service>-<n>` (from `name: picturas` in `docker-compose.yaml`),
@@ -430,7 +422,7 @@ picturas-27/
 ├── docs/                     # Academic references and exercise deliverables (see docs/README.md)
 ├── rabbitMQ/                 # Broker image with queue/exchange definitions
 ├── nginx/nginx.conf          # Reverse proxy, TLS, CORS, WebSocket routing
-├── certs/                    # Self-signed TLS certificate for Nginx
+├── ops/                      # pki.sh (local CA and service certificates), secrets.sh
 ├── backups/mongo/            # Generated database dumps (git-ignored)
 ├── logstash.conf, kibana.yml # ELK configuration (stack currently disabled)
 ├── docker-compose.yaml       # Service orchestration — the single source of truth
@@ -505,9 +497,17 @@ docker compose ps                         # what is running, and is it healthy?
 
 ### Live code reloading
 
-`users`, `subscriptions`, `apiGateway` and `frontend` bind-mount their source directory into
-the container, so edits on the host are visible inside it. The Node services run under
-`nodemon` and reload automatically.
+The delivered `docker-compose.yaml` runs every Node service with `node` (under `init`), a
+`restart` policy, a `healthcheck` and a memory limit, so a crashed process is restarted.
+For development, the override `docker-compose.dev.yaml` bind-mounts the source of `users`,
+`subscriptions` and `apiGateway` and runs them under `nodemon`, which reloads on edits:
+
+```bash
+docker compose -f docker-compose.yaml -f docker-compose.dev.yaml up -d --build
+```
+
+Under `nodemon` a crashed app leaves the container "Up" with the service dead: restart it by
+hand (`docker compose restart <service>`).
 
 The **frontend image is built for production** (`bun run build` / `bun start`), so a source edit
 will **not** hot-reload. For frontend development either rebuild:
@@ -566,8 +566,8 @@ docker compose exec users_mongoDB mongo --port 27019
 docker compose exec projects_mongoDB mongo --port 27018
 ```
 
-Stored objects: <http://localhost:9090> (SeaweedFS filer UI).
-Queues and message rates: <http://localhost:15672> (`user` / `password`).
+The MongoDB instances require TLS and authentication (credentials in `$PICTURAS_SECRETS_DIR`).
+Queues: `docker compose exec rabbitmq rabbitmqctl list_queues name messages consumers`.
 
 ---
 
@@ -578,8 +578,9 @@ You are probably using `http://` instead of `https://`, or port `3000` instead o
 only correct address is <https://localhost:8080>.
 
 **"Your connection is not private" / `NET::ERR_CERT_AUTHORITY_INVALID`**
-Expected — the certificate is self-signed. Accept the warning once per browser profile. If
-Chrome refuses outright, type `thisisunsafe` with the warning page focused.
+Check that the certificate is issued by your installation's CA and covers `localhost`.
+Import the verified `pki/ca/ca.crt` into a dedicated browser profile. If trust, name or
+validity is wrong, stop and correct the installation; do not bypass the warning.
 
 **Uploads or live updates fail although the page loads**
 The browser blocks mixed content and insecure WebSockets. Make sure every request goes through
@@ -602,15 +603,17 @@ but other weights are fetched at runtime — the first request needs network acc
 
 **A video upload is rejected**
 The response gives the reason: check the plan limits (free 60 s / 100 MB) and that the file
-is a valid MP4, MOV or WebM. Videos must go to `POST /:user/:project/video`; the image
-endpoint rejects them.
+is a valid MP4, MOV or WebM. The editor requests an upload, sends the video with a streamed
+PUT, then confirms it; the video appears only after confirmation. The legacy
+`POST /:user/:project/video` endpoint remains available for API clients. The image endpoint
+rejects videos.
 
 **A video stays at 0% or never finishes**
 There is a single `video_tool` with no replicas, so videos are processed one at a time. Check
 `docker compose logs -f video_tool` and the depth of `video_queue` in RabbitMQ.
 
 **`expand_ai` fails**
-It depends on `generative-mock` being healthy. Check <http://localhost:7860> and
+It depends on `generative-mock` being healthy. Check `docker compose ps generative-mock` and
 `docker compose logs generative-mock`.
 
 **Login works, then every request returns 401**

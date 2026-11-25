@@ -1,0 +1,29 @@
+## 1 listening TCP ports in the seaweedfs container (loopback mode)
+  8080   loopback
+  8888   loopback
+  9000   all-interfaces
+  9333   loopback
+  18080  loopback
+  18888  loopback
+  19000  all-interfaces
+  19333  loopback
+  39959  docker dns
+## 2 S3 end-to-end in loopback mode
+DENY   git_default list_buckets  [InvalidAccessKeyId 403]
+ALLOW  img_storage put users/u/projects/p/src/a.png
+ALLOW  img_storage get
+ALLOW  img_storage copy src->out
+DENY   img_storage create_bucket canary (B2)  [AccessDenied 403]
+DENY   img_storage get other/x  [AccessDenied 403]
+DENY   img_storage put other/y  [AccessDenied 403]
+DENY   img_storage put_bucket_policy  [AccessDenied 403]
+DENY   img_storage put_bucket_acl public-read  [AccessDenied 403]
+ALLOW  uploader put staging/att1
+DENY   uploader put users/u/projects/p/src/evil  [AccessDenied 403]
+presigned GET (img_storage) -> 200
+presigned PUT staging (uploader) -> 200
+presigned PUT outside staging (uploader) -> 403
+## 3 S3 gRPC port 19000 with client certificates (HTTP/2 gRPC request)
+  none        -> curl_rc=56
+  img_storage -> curl_rc=56
+  seaweedfs   -> HTTP/2 200  grpc-status: 0 grpc-message:  curl_rc=0

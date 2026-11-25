@@ -12,6 +12,7 @@ function stable(obj) {
 }
 
 function makePreviewCacheKey(imgSha256, tools) {
+  if (!imgSha256) return null;
   const payload = stable({
     type: "preview",
     imgSha256,

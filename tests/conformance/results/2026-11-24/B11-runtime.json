@@ -1,0 +1,36 @@
+{
+  "projects": {
+    "image_id": "sha256:9a0438af8687294e42acb77af1213e593ad1eb4fb0a43979895b2e4778fcbd17",
+    "source_sha256": {
+      "routes/projects.js": "fa11d5052be3c8a6c056167c3c187a2619b6c85de8596a7c326a25b84422e12a",
+      "utils/runLifecycle.js": "e20452873c1fd7e79b42d86efc37459501e5be567ae4e35aa367d58d5eda1ed2",
+      "controllers/project.js": "178f3bd2a6c746b9b3d59810dd6a225b4a8131af3467ccdfe0e63dd6ffa4a878",
+      "controllers/process.js": "170aab5b2dba5c9a02419dfca4013ed970edf19f9ee298bf336e4d9693adcab1",
+      "models/processingRun.js": "2ce38e547cb6abe639c9a9d562df71f742c987fd2245c6216f29a97f08a65d6e",
+      "models/processingArtifact.js": "5b116e1db1bc4e1ff5ee305c045b8b87e4d1b0d62fcbb51d15fd380ddb5f583b",
+      "models/project.js": "4faa1930d7d8f2214c933c67c38a04676c396f205bea4b7309426508c03f44d1",
+      "models/process.js": "78f7ffeb268549833639d50f8eb0432e92484154a8f68146fb7eb199e04f720b",
+      "models/result.js": "9af94ff86eeb093ca46405bfa44e434ab9616d0d2c24249a140e92d709ebc664",
+      "utils/project_msg.js": "5889f0233c2bd96b5666c2d4b945351597dfa40f04b35eb4df1531767d3b927c"
+    }
+  },
+  "users": {
+    "image_id": "sha256:68f7bf41c4bfbd770fb0abea02406b40a676a8b34f3f8f5a764f51c4a4d707ed",
+    "source_sha256": {
+      "routes/users.js": "e5d75d9ee7e7714daad31856be59bd2fb6a90746662e0aaca29ce4165f16ff0f",
+      "admin/quotaLedger.js": "b3d80bf6da5ab8e0bd1c7f3a9e4e7f9eba20643ec1a35ee42dde42189c980f66",
+      "models/user.js": "bc0e11e16c381189d848cc06790d581dd5364f9d5802add1ea067283f01d8896",
+      "controllers/user.js": "c4d19a0f4e09c93ceec445fb2d369e547d2f40944ca88d4c3a029677d2f5c37f"
+    }
+  },
+  "img_storage": {
+    "image_id": "sha256:f2187cf660d02b0dda8108ad99e8d2fce8a7581ec9374e7b20c6b428d5b4297b",
+    "source_sha256": {
+      "server.js": "952d9efb9da96e6d3bcc13ad48a37041a30e4e178273bbcefc6079cc1fb5e812",
+      "route/processingOutput.js": "7b7ec19c74558d64852c644b2f6eed8b19f55fbdbac3c5c12f850319465b7539"
+    }
+  },
+  "administrative_helper": {
+    "image_id": "sha256:dfda616d0e6bb9521594605590c44ba4f6b00625308b2432baec42b8a89e836a"
+  }
+}

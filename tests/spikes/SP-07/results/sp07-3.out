@@ -1,0 +1,7 @@
+## pika with workers on configure ^$ (passive declares only) and topic exchange
+ALLOW  passive declare exchange picturas_topic + own queue, consume
+DENY   active queue_declare own queue (configure ^$) (403, "ACCESS_REFUSED - configure access to queue 'brightness_queue' in vhost '/' refused for user 'brightness
+DENY   delete own queue (configure ^$) (403, "ACCESS_REFUSED - configure access to queue 'brightness_queue' in vhost '/' refused for user 'brightness
+ALLOW  publish picturas_topic -> project_queue
+DENY   publish picturas_topic -> ws_queue (403, "ACCESS_REFUSED - write access to topic 'ws_queue' in exchange 'picturas_topic' in vhost '/' refused for
+DENY   publish picturas (direct, no write perm now) -> project_queue (403, "ACCESS_REFUSED - write access to exchange 'picturas' in vhost '/' refused for user 'brightness_tool'")

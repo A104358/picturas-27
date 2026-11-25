@@ -1,0 +1,2 @@
+FROM prcsousa/picturas-watermark-tool-ms@sha256:534007b3904257e877f6246578a3df65e1875b477b92d9627b29e35e60c35835
+COPY message_queue_setup.py /picturas_watermark_tool_ms/core/message_queue_setup.py

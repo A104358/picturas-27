@@ -1,0 +1,22 @@
+## D1 mapped denials (403 + X-Deny-Status) with 20 MiB body at 2 MiB/s
+deny-403 -> {"error": 403} code=403 t=10.006312 up=20971520
+deny-404 -> {"error": 404} code=404 t=10.008159 up=20971520
+deny-409 -> {"error": 409} code=409 t=10.006165 up=20971520
+deny-410 -> {"error": 410} code=410 t=10.006812 up=20971520
+deny-411 -> {"error": 411} code=411 t=10.007801 up=20971520
+deny-413 -> {"error": 413} code=413 t=10.008071 up=20971520
+deny-429 -> {"error": 429} code=429 t=10.010212 up=20971520
+deny-503 -> {"error": 503} code=503 t=10.010752 up=20971520
+## D2 auth slow (5 s > proxy_read_timeout 2 s)
+code=500 t=2.014799
+## D3 client_temp during unbuffered upload (sampled at 3 s and 6 s)
+files=0 kib=4
+files=0
+## D3b client_temp during buffered control (sampled at 3 s)
+files=0 kib=4
+## D4 streaming to verified TLS upstream (mTLS)
+1795289109.194
+tls-ok peer=nginx-client
+code=200 t=10.048040
+## D5 auth service stopped
+code=500 t=1.008853

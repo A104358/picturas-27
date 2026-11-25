@@ -52,14 +52,21 @@ module.exports.create = async (user) => {
   }
 };
 
+function profileFields(user) {
+  const { operations, quotaLedger, quotaRevision, legacyQuotaRevision, ...profile } = user;
+  return profile;
+}
+
 module.exports.updatePassword = async (user_id, user) => {
   const encrypt_user = await encrypt_password(user);
 
-  return User.updateOne({ _id: user_id }, encrypt_user);
+  return User.updateOne({ _id: user_id }, profileFields(encrypt_user));
 };
 
 module.exports.update = async (user_id, user) => {
-  return User.updateOne({ _id: user_id }, user);
+  // Quota is changed only through the atomic ledger; profile updates cannot
+  // write an older operations snapshot over a concurrent admission/refund.
+  return User.updateOne({ _id: user_id }, profileFields(user));
 };
 
 module.exports.delete = (user_id) => {

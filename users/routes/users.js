@@ -9,21 +9,16 @@ const auth = require("../auth/auth");
 const User = require("../controllers/user");   
 
 // lê as chaves/certificados locais (estes ficheiros EXISTEM no api-gateway-ms)
-const key = fs.readFileSync(__dirname + "/../certs/selfsigned.key");
-const cert = fs.readFileSync(__dirname + "/../certs/selfsigned.crt");
 
 // agente HTTPS com cert + key
-const httpsAgent = new https.Agent({
-  rejectUnauthorized: false,
-  cert,
-  key,
-});
+// Own certificate, installation CA, no cached TLS sessions (B5).
+const httpsAgent = require("../tls/pkiTls").clientAgent();
 
 // hostname interno do microserviço de users
 const usersURL = "https://users:10001/";
 
 // URL interna do microserviço de projects
-const projects_ms = "https://projects:10002/projects/";
+const projects_ms = "https://projects:9001/";
 
 const max_free_daily_op = process.env.FREE_DAILY_OP || 5;
 
@@ -128,53 +123,21 @@ router.get("/:user/type/", function (req, res, next) {
 });
 
 // Test if we can process a project based on the number of advanced tools
-router.get("/:user/process/:advanced_tools", async function (req, res, next) {
+const quotaLedger = require('../admin/quotaLedger');
+router.get("/:user/process/:advanced_tools", async function (req, res) {
   try {
-    const user = await User.getOne(req.params.user);
-
-    if (!user) {
-      return res.status(404).jsonp("Error acquiring user's information.");
-    }
-
-    const op_num = parseInt(req.params.advanced_tools, 10) || 0;
-
-    const { year, month, day } = get_cur_date();
-    const process_date = new Date(year, month, day);
-
-    // procurar operações de hoje
-    let op =
-      user.operations.find((o) => o.day.getTime() === process_date.getTime()) ||
-      { day: process_date, processed: 0 };
-
-    // verificar se pode processar
-    const can_process = check_process(user, op, op_num);
-
-    if (!can_process) {
-      // aqui é o caso de ficar sem operações
-      return res.status(701).jsonp("No more daily_operations available");
-    }
-
-    // se pode processar, reservar as operações
-    op.processed += op_num;
-
-    // remover registo antigo de hoje (se existir) e voltar a pôr atualizado
-    user.operations = user.operations.filter(
-      (o) => o.day.getTime() !== process_date.getTime(),
-    );
-    user.operations.push(op);
-
-    await User.update(req.params.user, user);
-
-    return res.status(200).jsonp(true);
-  } catch (err) {
-    console.error("Error in GET /:user/process/:advanced_tools:", err);
-    return res.status(701).jsonp("Error acquiring user's information.");
-  }
+    const amount=Number(req.params.advanced_tools); const context=quotaLedger.contextFrom(req);
+    const result=context ? await quotaLedger.admit(req.params.user,amount,context) : await quotaLedger.legacy(req.params.user,amount,'admit');
+    return res.status(200).jsonp(result);
+  } catch (error) { return res.status(error.status||503).jsonp(error.status?error.message:'Quota unavailable'); }
 });
 
 
 // Create a new user
 router.post("/", function (req, res, next) {
+  if (req.body.type && !["free", "anonymous"].includes(req.body.type)) {
+    return res.status(403).jsonp("Account type not allowed at registration.");
+  }
   const user = {
     name: req.body.name || undefined,
     email: req.body.email || undefined,
@@ -190,11 +153,6 @@ router.post("/", function (req, res, next) {
     user.password = req.body.password;
   }
 
-  console.log("---- USERS-MS: REGISTER REQUEST ----");
-  console.log("BODY:", req.body);
-  console.log("USER OBJECT BEFORE SAVE:", user);
-  console.log("User object to persist:", user);
-
   User.create(user)
     .then((createdUser) => {
       const userResponse = removeSensitiveInfo(createdUser);
@@ -205,13 +163,7 @@ router.post("/", function (req, res, next) {
         jwt: auth.get_jwt(createdUser),
       });
     })
-    .catch((err) => {
-      console.error("USERS-MS ERROR CREATING USER:");
-      console.error(err);              // stack completo
-      console.error(err.message);
-      console.error(err?.errors);      // mongoose validation errors
-      console.error(err?.response?.data);
-
+    .catch(() => {
       res.status(702).jsonp("Error creating a new user.");
     });
 });
@@ -238,11 +190,19 @@ router.post("/:email/login", function (req, res, next) {
 
 // Update user info
 router.put("/:user", function (req, res, next) {
+  const identity = req.internalIdentity;
+  const subscriptionStart = identity?.originMethod === "POST" &&
+    ["/subscriptions", "/subscriptions/"].includes(identity.originPath) && req.body.type === "premium";
+  const subscriptionCancel = identity?.originMethod === "PUT" &&
+    identity.originPath === `/subscriptions/${req.params.user}/cancel` && req.body.type === "free";
+  if (req.body.type !== undefined && !subscriptionStart && !subscriptionCancel) {
+    return res.status(403).jsonp("Account type can only change through subscription");
+  }
   User.getOne(req.params.user)
     .then((user) => {
       user.name = req.body.name || user.name;
       user.email = req.body.email || user.email;
-      user.type = req.body.type || user.type;
+      if (subscriptionStart || subscriptionCancel) user.type = req.body.type;
 
       if (req.body.password != null) {
         user.password = req.body.password || user.password;
@@ -264,104 +224,18 @@ router.put("/:user", function (req, res, next) {
 });
 
 // Update number of advanced tools used
-router.put("/:user/process/:advanced_tools", function (req, res, next) {
-  User.getOne(req.params.user)
-    .then((user) => {
-      const date = get_cur_date();
-      const process_date = new Date(date.year, date.month, date.day);
-      const op_num = parseInt(req.params.advanced_tools);
-
-      let op = {};
-      let rem_prev_op = false;
-
-      if (
-        user.operations.filter(
-          (o) => o.day.getTime() === process_date.getTime(),
-        ).length > 0
-      ) {
-        op = user.operations.filter(
-          (o) => o.day.getTime() === process_date.getTime(),
-        )[0];
-        rem_prev_op = true;
-      } else {
-        op = {
-          day: process_date,
-          processed: 0,
-        };
-      }
-
-      let can_process = check_process(user, op, op_num);
-
-      if (!can_process) {
-        res.status(799).jsonp("Cannot perform desired operation");
-        return;
-      }
-
-      if (rem_prev_op) user.operations.remove(op);
-
-      let new_op = {
-        day: op.day,
-        processed: op.processed + op_num,
-      };
-
-      user.operations.push(new_op);
-
-      User.update(req.params.user, user)
-        .then((_) => res.sendStatus(204))
-        .catch((_) =>
-          res.status(704).jsonp(`Error updating user's information`),
-        );
-    })
-    .catch((_) => res.status(701).jsonp(`Error acquiring user's information.`));
+router.put("/:user/process/:advanced_tools", async function (req,res) {
+  try { await quotaLedger.legacy(req.params.user,Number(req.params.advanced_tools),'admit'); return res.sendStatus(204); }
+  catch (error) { return res.status(error.status===701?799:error.status||503).jsonp(error.status?error.message:'Quota unavailable'); }
 });
 
 // Refund de operações quando um processamento é cancelado
-router.post("/:user/process/refund/:advanced_tools", async function (req, res) {
+router.post("/:user/process/refund/:advanced_tools", async function (req,res) {
   try {
-    const user = await User.getOne(req.params.user);
-    const op_num = parseInt(req.params.advanced_tools, 10);
-
-    if (!Number.isFinite(op_num) || op_num <= 0) {
-      return res.status(400).jsonp("Invalid operations number");
-    }
-
-    // premium não precisa de refund (não tem limite diário)
-    if (user.type === "premium") {
-      return res.status(200).jsonp(true);
-    }
-
-    const { year, month, day } = get_cur_date();
-    const process_date = new Date(year, month, day);
-
-    // procurar operações de hoje
-    const opToday = user.operations.find(
-      (o) => o.day.getTime() === process_date.getTime(),
-    );
-
-    // se não havia registo para hoje, não há nada para devolver
-    if (!opToday) {
-      return res.status(200).jsonp(true);
-    }
-
-    // tirar as operações gastas, sem ir abaixo de 0
-    opToday.processed = Math.max(0, opToday.processed - op_num);
-
-    // recriar o array de operações sem o registo antigo de hoje
-    user.operations = user.operations.filter(
-      (o) => o.day.getTime() !== process_date.getTime(),
-    );
-
-    // se ainda sobrar algo processado hoje, voltamos a inserir
-    if (opToday.processed > 0) {
-      user.operations.push(opToday);
-    }
-
-    await User.update(req.params.user, user);
-    return res.status(200).jsonp(true);
-  } catch (err) {
-    console.error("Error refunding operations:", err);
-    return res.status(701).jsonp("Error acquiring user's information.");
-  }
+    const amount=Number(req.params.advanced_tools); const context=quotaLedger.contextFrom(req);
+    const result=context ? await quotaLedger.refund(req.params.user,amount,context,'cancel:'+context.run_id) : await quotaLedger.legacy(req.params.user,amount,'refund');
+    return res.status(200).jsonp(result);
+  } catch (error) { return res.status(error.status||503).jsonp(error.status?error.message:'Quota unavailable'); }
 });
 
 // Delete a user + all related data (projects, daily ops, etc.)
@@ -369,30 +243,17 @@ router.delete("/:user", async function (req, res, next) {
   const userId = req.params.user;
 
   try {
-    // Garantir que o user do token é o mesmo
-    // Se o API Gateway já valida isto, podes confiar nele.
-    if (!req.headers.authorization) {
-      return res.status(401).jsonp("Missing Authorization header");
+    if (req.internalIdentity?.sub !== userId) {
+      return res.status(403).jsonp("Account mismatch");
     }
 
-    const authHeader = req.headers.authorization;
-
-    // 1) Apagar projetos do utilizador no projects-ms
+    // Remove this account's projects before deleting the account.
     try {
       await axios.delete(projects_ms + userId, {
         httpsAgent,
-        headers: {
-          Authorization: authHeader,
-        },
       });
-    } catch (err) {
-      console.error(
-        "Error deleting user's projects:",
-        err.response?.status,
-        err.response?.data
-      );
-      // Se for para falhar logo: return res.status(502).jsonp("Error deleting user's projects");
-      // Aqui estou a continuar mesmo que dê erro, para não bloquear o delete de conta.
+    } catch (_) {
+      return res.status(502).jsonp("Error deleting user's projects");
     }
 
     // 2) Apagar o próprio utilizador

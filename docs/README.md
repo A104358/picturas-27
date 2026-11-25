@@ -42,7 +42,9 @@ pending; prior JWT/WS decisions are preserved.
 | Document | Purpose |
 |----------|---------|
 | [Refactoring plan](refactor-plano.md) | Phase 0: single working source for the implementation, blocks B0–B12 with origin decisions, dependencies, acceptance criteria, conformance tests, cuts and the answered questions D-01–D-14. |
+| [Refactoring spikes](refactor-spikes.md) | B0: results of spikes SP-01–SP-11 (supported / with limitations), with commands, evidence and notes per block; pinned images and the F01 regression baseline. |
 | [Refactoring handoff](refactor-handoff.md) | Pause/resume point: where work stopped, exact next step, block status, append-only log, environment and pitfalls. Updated at the end of every working session. |
+| [Administrative reconciliation](reconciliation-operations.md) | B11 runbook: isolation, private inventory, classification, generation fencing, quarantine, atomic original-executor/day compensation and operation-bound reopening proof; no automatic replay. |
 | [Selected metrics](metricas.md) | November 20 selection: 10 security and 11 upload metrics (principal + guards), each with rationale, minimum, target and value origin. To be confirmed by the team. |
 | [Measurement plan](planoMedicao.md) | Implementation specification of `evaluation/med.py`: isolated stack, instruments, case matrices, procedures, repetitions, outputs and criteria for BF/MF. |
 | [Ideas 1 and 2, choices and rationale](fase2-ideias-1-e-2.md) | Communicated choices, unresolved questions, alternatives, risks and presentation answers. The final section is the canonical decision rationale. |

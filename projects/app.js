@@ -3,18 +3,20 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
+var { requireInternalIdentity } = require("./utils/internalIdentity");
 const mongoose = require("mongoose");
 
 const { router: projectsRouter, process_msg } = require("./routes/projects");
 
 // Run Docker
-const mongoDB = "mongodb://projects_mongoDB:27018/project";
+const mongoDB = process.env.MONGO_URI;
 
-mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true })
+  .catch(() => console.error("MongoDB connection failed"));
 
 const db = mongoose.connection;
 
-db.on("error", console.error.bind(console, "Error connecting to Mongodb"));
+db.on("error", () => console.error("MongoDB connection error"));
 db.once("open", () => {
   console.log("Mongodb connection successful");
 });
@@ -25,12 +27,15 @@ var app = express();
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "jade");
 
-app.use(logger("dev"));
+app.use(logger(":method :status :response-time ms"));
+app.use("/internal/ws", require("./routes/wsAuth"));
+app.use(requireInternalIdentity);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
+app.use("/", require("./routes/videoUpload"));
 app.use("/", projectsRouter);
 
 // Start the message processing

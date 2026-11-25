@@ -1,0 +1,18 @@
+✔ parallel admissions of one run apply one atomic debit and receipt (1.647901ms)
+✔ refund is bound to original executor/day with both image and video costs (0.715025ms)
+✔ lost refund acknowledgement or another case cannot repeat the effect (0.295003ms)
+✔ changed run binding, cost or executor is refused before mutation (0.382156ms)
+✔ unknown receipt, legacy balance changes and underflow never create credit (0.376723ms)
+✔ premium has zero financial compensation and anonymous rejects paid effects (0.307912ms)
+✔ a compensated run cannot be admitted again automatically (0.231597ms)
+✔ quota context rejects malformed or missing binding fields (0.291761ms)
+✔ password changes cannot overwrite a concurrent quota snapshot (71.543308ms)
+✔ ordinary profile changes also preserve quota-owned fields (0.40386ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 226.211279

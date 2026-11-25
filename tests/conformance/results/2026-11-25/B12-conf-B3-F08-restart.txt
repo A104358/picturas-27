@@ -1,0 +1,11 @@
+# B3-F08-restart — 2026-11-25T06:11:00Z
+$ evaluation/.venv/bin/python tests/conformance/diagnostics/f08-restart.py picturas-dev
+
+PASS api_gateway: restart 0.4s, healthy 2.3s, served 0.7s; recovery 0.7s (target met); restart count 0->1
+PASS users: restart 0.4s, healthy 2.5s, served 0.7s; recovery 0.7s (target met); restart count 0->1
+PASS projects: restart 0.4s, healthy 2.5s, served 0.7s; recovery 0.7s (target met); restart count 0->1
+PASS subscriptions: restart 0.4s, healthy 2.5s, served 0.7s; recovery 0.7s (target met); restart count 0->1
+PASS ws_gateway: restart 0.4s, healthy 2.5s, served 0.4s; recovery 0.4s (target met); restart count 0->1
+PASS img_storage: restart 0.4s, healthy 2.4s, served n/a; recovery 2.4s (target met); restart count 0->1
+F08: 6/6 services recovered within 30 s; 6 within the 10 s target
+exit: 0

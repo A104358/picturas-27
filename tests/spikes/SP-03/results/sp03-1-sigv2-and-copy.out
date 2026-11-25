@@ -1,0 +1,36 @@
+## 1 signed Content-Length (presigned PUT with ContentLength=1000 by uploader)
+  signed headers: None
+  exact 1000 bytes -> 200 1000
+  2000 bytes (CL 2000) -> 200 2000
+  500 bytes (CL 500) -> 200 500
+  CL header 1000 but chunked body -> ('HTTP/1.1 200 OK', 1012) 1000
+  unsigned length: presigned without ContentLength, 2000 bytes -> 200 2000
+## 2 interrupted PUT (CL=100 MiB, 10 MiB sent, socket closed)
+   ('closed', 10485760)
+   after ~1s visible: absent(404)
+   after ~5s visible: absent(404)
+   after ~15s visible: absent(404)
+  same with an existing object at the key (does the interrupted PUT damage it?)
+   ('closed', 10485760)
+   cut2 after 3s: 30
+## 3 chunked bodies
+  plain HTTP chunked, presigned without CL -> ('HTTP/1.1 200 OK', 1036) 1024
+  chunked, interrupted mid-body -> ('closed', 5242930)
+   chunk2 after 3s: absent(404)
+## 4 CopyObject immutability
+  copy sha 0acea06a0e31efaa
+  after overwriting source: source cc202bd6792d0a8d copy 0acea06a0e31efaa
+  after deleting source: copy 0acea06a0e31efaa source absent(404)
+## 5 CopyObject 500 MiB timing
+  upload single PUT: 200 in 1.48s
+   copy #1: 472 ms
+   copy #2: 442 ms
+   copy #3: 487 ms
+   copy sha matches: True (read in 3.6s)
+   after deleting staging source, copy still readable: True
+  upload multipart 8 MiB: ok in 1.70s
+   copy #1: 340 ms
+   copy #2: 329 ms
+   copy #3: 523 ms
+   copy sha matches: True (read in 3.4s)
+   after deleting staging source, copy still readable: True

@@ -7,6 +7,9 @@ Callers decide admitted/refused/inconclusive from these fields plus an effect ch
 """
 from __future__ import annotations
 
+from contextlib import contextmanager
+import socket
+
 import base64
 import hashlib
 import json
@@ -139,7 +142,7 @@ def mongo(spec: dict) -> dict:
         text = repr(exc).lower()
         kind = "auth" if ("auth" in text or "unauthorized" in text or "requires authentication" in text
                           or "not authorized" in text) else classify_exception(exc)
-        return {"ok": False, "error_kind": kind, "error": repr(exc)[:300]}
+        return {"ok": False, "error_kind": kind, "error": type(exc).__name__}
 
 
 # ---------------------------------------------------------------------------
@@ -149,11 +152,16 @@ def mongo(spec: dict) -> dict:
 def amqp(spec: dict) -> dict:
     """spec: host, port, user, password, op in {connect, get, declare_delete}, queue?"""
     import pika
+    import ssl
     try:
+        ssl_options = None
+        if spec.get("tls"):
+            context = ssl.create_default_context(cafile=spec.get("ca_file") or None)
+            ssl_options = pika.SSLOptions(context, spec["server_name"])
         params = pika.ConnectionParameters(
             host=spec["host"], port=int(spec["port"]),
             credentials=pika.PlainCredentials(spec.get("user", ""), spec.get("password", "")),
-            socket_timeout=5, blocked_connection_timeout=5, connection_attempts=1)
+            ssl_options=ssl_options, socket_timeout=5, blocked_connection_timeout=5, connection_attempts=1)
         conn = pika.BlockingConnection(params)
     except Exception as exc:  # noqa: BLE001
         text = repr(exc).lower()
@@ -190,8 +198,12 @@ def amqp(spec: dict) -> dict:
 def rabbit_mgmt(spec: dict) -> dict:
     """spec: url, user, password."""
     try:
-        r = requests.get(spec["url"], auth=(spec.get("user", ""), spec.get("password", "")),
-                         timeout=10, verify=False)
+        verify = spec.get("ca_file") or (False if spec["url"].startswith("http://") else True)
+        session = requests.Session()
+        if spec.get("connect_host"):
+            session.trust_env = False
+        r = session.get(spec["url"], auth=(spec.get("user", ""), spec.get("password", "")),
+                        timeout=10, verify=verify)
     except Exception as exc:  # noqa: BLE001
         return {"ok": False, "status": None, "error_kind": classify_exception(exc)}
     return {"ok": r.status_code == 200, "status": r.status_code,
@@ -212,7 +224,9 @@ def s3(spec: dict) -> dict:
         client = boto3.client(
             "s3", endpoint_url=spec["endpoint"], aws_access_key_id=spec.get("access") or None,
             aws_secret_access_key=spec.get("secret") or None, region_name="us-east-1",
-            verify=False, config=Config(signature_version="s3v4", retries={"max_attempts": 1},
+            verify=spec.get("ca_file") or (False if spec["endpoint"].startswith("http://") else True),
+            config=Config(signature_version="s3v4", retries={"max_attempts": 1},
+                          proxies={} if spec.get("connect_host") else None,
                                         connect_timeout=5, read_timeout=20,
                                         s3={"addressing_style": "path"}))
         op = spec["op"]
@@ -261,11 +275,31 @@ ACTIONS = {
 }
 
 
+@contextmanager
+def _host_probe_dns(name: str | None):
+    """Reach a published host port while retaining the service DNS name for TLS."""
+    if not name:
+        yield
+        return
+    original = socket.getaddrinfo
+
+    def mapped(host, port, *args, **kwargs):
+        return original("127.0.0.1" if str(host).lower() == name.lower() else host,
+                        port, *args, **kwargs)
+
+    socket.getaddrinfo = mapped
+    try:
+        yield
+    finally:
+        socket.getaddrinfo = original
+
+
 def run_action(spec: dict) -> dict:
     fn = ACTIONS.get(spec.get("action"))
     if fn is None:
         return {"ok": False, "error_kind": "other", "error": "unknown action"}
-    return fn(spec)
+    with _host_probe_dns(spec.get("connect_host")):
+        return fn(spec)
 
 
 def to_files(field: str, name: str, data: bytes, ctype: str) -> dict:

@@ -1,7 +1,7 @@
 // projects/utils/presence.js
 const Presence = require("../models/presence");
 const axios = require("axios");
-const { httpsAgent } = require("../utils/httpsAgent");
+const { httpsAgent } = require("./presenceAgent");
 
 const ACTIVE_WINDOW_MS = Number(process.env.PRESENCE_ACTIVE_WINDOW_MS || 15_000);
 const USERS_MS = process.env.USERS_MS || "https://users:10001/";

@@ -1,0 +1,21 @@
+# B1-pki-check — 2026-11-25T06:10:41Z
+$ ops/pki.sh check
+
+ok   CA (Nov 22 03:59:59 2027 GMT)
+ok   nginx (Dec 22 04:00:00 2026 GMT)
+ok   frontend (Dec 23 19:39:30 2026 GMT)
+ok   api_gateway (Dec 22 04:00:00 2026 GMT)
+ok   ws_gateway (Dec 22 04:00:00 2026 GMT)
+ok   projects (Dec 22 04:00:00 2026 GMT)
+ok   users (Dec 22 04:00:00 2026 GMT)
+ok   subscriptions (Dec 22 04:00:01 2026 GMT)
+ok   img_storage (Dec 22 04:00:01 2026 GMT)
+ok   seaweedfs (Dec 22 04:00:01 2026 GMT)
+ok   rabbitmq (Dec 22 04:00:01 2026 GMT)
+ok   projects_mongoDB (Dec 22 04:00:01 2026 GMT)
+ok   users_mongoDB (Dec 22 04:00:02 2026 GMT)
+ok   subscriptions_mongoDB (Dec 22 04:00:02 2026 GMT)
+ok   generative-mock (Dec 23 19:39:30 2026 GMT)
+ok   expand_ai_tool (Dec 22 04:00:02 2026 GMT)
+pki check: passed
+exit: 0

@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# OPS-C1: administrative inventory and reconciliation. No automatic work replay.
+set -euo pipefail
+: "${PICTURAS_SECRETS_DIR:?Set the private installation directory outside the checkout}"
+exec python3 "$(dirname "$0")/reconcile.py" "$@"

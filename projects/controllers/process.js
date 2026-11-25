@@ -21,6 +21,10 @@ module.exports.getOne = async (user_id, project_id, process_id) => {
 module.exports.getOneByMsgId = async (msg_id) => {
   return await Process.findOne({ msg_id }).exec();
 };
+module.exports.claimReply = async (msg_id) => {
+  return Process.findOneAndUpdate({msg_id,replyClaimed:{$ne:true},reconciled:{$ne:true}},
+    {$set:{replyClaimed:true}},{new:true}).exec();
+};
 
 module.exports.create = async (process) => {
   return await Process.create(process);

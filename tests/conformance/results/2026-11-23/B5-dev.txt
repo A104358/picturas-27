@@ -1,0 +1,228 @@
+# B5 verification on picturas-dev — 2026-11-23T19:49:06Z
+commit: 7c476a3 + uncommitted B5 changes
+
+## health (services with an HTTPS healthcheck)
+nginx running
+frontend healthy
+api_gateway healthy
+ws_gateway healthy
+projects healthy
+users healthy
+subscriptions healthy
+img_storage healthy
+generative-mock healthy
+
+## public entry through nginx (TLS on every hop)
+/ -> 200
+/login -> 200
+/api-gateway/users/x -> 401
+/socket.io/?EIO=4&transport=polling -> 200
+
+## tests/conformance/in-network.sh picturas-dev mtls-pki/b5-mtls.py (S08, D4 matrix, S09 per peer, resumption, static)
+PASS S08 frontend no client certificate: TLS
+PASS S08 frontend other CA certificate (CN=nginx): TLS
+PASS S08 frontend expired certificate (CN=nginx): TLS
+PASS S08 frontend server-only certificate (EKU, rabbitmq): TLS
+PASS S08 frontend plaintext HTTP gets no HTTP answer: CLOSED
+PASS S09 frontend allowed peer nginx GET /: 200
+PASS RES frontend session offered by nginx not resumed: full handshake
+PASS D4 frontend peer frontend refused (valid CA is not enough): 403
+PASS D4 frontend peer api_gateway refused (valid CA is not enough): 403
+PASS D4 frontend peer ws_gateway refused (valid CA is not enough): 403
+PASS D4 frontend peer projects refused (valid CA is not enough): 403
+PASS D4 frontend peer users refused (valid CA is not enough): 403
+PASS D4 frontend peer subscriptions refused (valid CA is not enough): 403
+PASS D4 frontend peer img_storage refused (valid CA is not enough): 403
+PASS D4 frontend peer seaweedfs refused (valid CA is not enough): 403
+PASS D4 frontend peer generative-mock refused (valid CA is not enough): 403
+PASS D4 frontend peer expand_ai_tool refused (valid CA is not enough): 403
+PASS S08 api_gateway no client certificate: TLS
+PASS S08 api_gateway other CA certificate (CN=nginx): TLS
+PASS S08 api_gateway expired certificate (CN=nginx): TLS
+PASS S08 api_gateway server-only certificate (EKU, rabbitmq): TLS
+PASS S08 api_gateway plaintext HTTP gets no HTTP answer: CLOSED
+PASS S09 api_gateway allowed peer nginx GET /users/x: 401
+PASS RES api_gateway session offered by nginx not resumed: full handshake
+PASS D4 api_gateway peer frontend refused (valid CA is not enough): 403
+PASS D4 api_gateway peer api_gateway refused (valid CA is not enough): 403
+PASS D4 api_gateway peer ws_gateway refused (valid CA is not enough): 403
+PASS D4 api_gateway peer projects refused (valid CA is not enough): 403
+PASS D4 api_gateway peer users refused (valid CA is not enough): 403
+PASS D4 api_gateway peer subscriptions refused (valid CA is not enough): 403
+PASS D4 api_gateway peer img_storage refused (valid CA is not enough): 403
+PASS D4 api_gateway peer seaweedfs refused (valid CA is not enough): 403
+PASS D4 api_gateway peer generative-mock refused (valid CA is not enough): 403
+PASS D4 api_gateway peer expand_ai_tool refused (valid CA is not enough): 403
+PASS S08 ws_gateway no client certificate: TLS
+PASS S08 ws_gateway other CA certificate (CN=nginx): TLS
+PASS S08 ws_gateway expired certificate (CN=nginx): TLS
+PASS S08 ws_gateway server-only certificate (EKU, rabbitmq): TLS
+PASS S08 ws_gateway plaintext HTTP gets no HTTP answer: CLOSED
+PASS S09 ws_gateway allowed peer nginx GET /socket.io/: 200
+PASS RES ws_gateway session offered by nginx not resumed: full handshake
+PASS D4 ws_gateway peer frontend refused (valid CA is not enough): 403
+PASS D4 ws_gateway peer api_gateway refused (valid CA is not enough): 403
+PASS D4 ws_gateway peer ws_gateway refused (valid CA is not enough): 403
+PASS D4 ws_gateway peer projects refused (valid CA is not enough): 403
+PASS D4 ws_gateway peer users refused (valid CA is not enough): 403
+PASS D4 ws_gateway peer subscriptions refused (valid CA is not enough): 403
+PASS D4 ws_gateway peer img_storage refused (valid CA is not enough): 403
+PASS D4 ws_gateway peer seaweedfs refused (valid CA is not enough): 403
+PASS D4 ws_gateway peer generative-mock refused (valid CA is not enough): 403
+PASS D4 ws_gateway peer expand_ai_tool refused (valid CA is not enough): 403
+PASS S08 projects no client certificate: TLS
+PASS S08 projects other CA certificate (CN=api_gateway): TLS
+PASS S08 projects expired certificate (CN=api_gateway): TLS
+PASS S08 projects server-only certificate (EKU, rabbitmq): TLS
+PASS S08 projects plaintext HTTP gets no HTTP answer: CLOSED
+PASS D4 projects peer nginx refused (valid CA is not enough): 403
+PASS D4 projects peer frontend refused (valid CA is not enough): 403
+PASS S09 projects allowed peer api_gateway GET /000000000000000000000000: 401
+PASS RES projects session offered by api_gateway not resumed: full handshake
+PASS D4 projects peer ws_gateway refused (valid CA is not enough): 403
+PASS D4 projects peer projects refused (valid CA is not enough): 403
+PASS S09 projects allowed peer users DELETE /000000000000000000000000: 204
+PASS RES projects session offered by users not resumed: full handshake
+PASS D4 projects peer subscriptions refused (valid CA is not enough): 403
+PASS D4 projects peer img_storage refused (valid CA is not enough): 403
+PASS D4 projects peer seaweedfs refused (valid CA is not enough): 403
+PASS D4 projects peer generative-mock refused (valid CA is not enough): 403
+PASS D4 projects peer expand_ai_tool refused (valid CA is not enough): 403
+PASS S08 users no client certificate: TLS
+PASS S08 users other CA certificate (CN=api_gateway): TLS
+PASS S08 users expired certificate (CN=api_gateway): TLS
+PASS S08 users server-only certificate (EKU, rabbitmq): TLS
+PASS S08 users plaintext HTTP gets no HTTP answer: CLOSED
+PASS D4 users peer nginx refused (valid CA is not enough): 403
+PASS D4 users peer frontend refused (valid CA is not enough): 403
+PASS S09 users allowed peer api_gateway GET /000000000000000000000000: 401
+PASS RES users session offered by api_gateway not resumed: full handshake
+PASS D4 users peer ws_gateway refused (valid CA is not enough): 403
+PASS S09 users allowed peer projects GET /000000000000000000000000/process/0: 404
+PASS RES users session offered by projects not resumed: full handshake
+PASS D4 users peer users refused (valid CA is not enough): 403
+PASS D4 users peer subscriptions refused (valid CA is not enough): 403
+PASS D4 users peer img_storage refused (valid CA is not enough): 403
+PASS D4 users peer seaweedfs refused (valid CA is not enough): 403
+PASS D4 users peer generative-mock refused (valid CA is not enough): 403
+PASS D4 users peer expand_ai_tool refused (valid CA is not enough): 403
+PASS S08 subscriptions no client certificate: TLS
+PASS S08 subscriptions other CA certificate (CN=api_gateway): TLS
+PASS S08 subscriptions expired certificate (CN=api_gateway): TLS
+PASS S08 subscriptions server-only certificate (EKU, rabbitmq): TLS
+PASS S08 subscriptions plaintext HTTP gets no HTTP answer: CLOSED
+PASS D4 subscriptions peer nginx refused (valid CA is not enough): 403
+PASS D4 subscriptions peer frontend refused (valid CA is not enough): 403
+PASS S09 subscriptions allowed peer api_gateway GET /000000000000000000000000: 401
+PASS RES subscriptions session offered by api_gateway not resumed: full handshake
+PASS D4 subscriptions peer ws_gateway refused (valid CA is not enough): 403
+PASS D4 subscriptions peer projects refused (valid CA is not enough): 403
+PASS D4 subscriptions peer users refused (valid CA is not enough): 403
+PASS D4 subscriptions peer subscriptions refused (valid CA is not enough): 403
+PASS D4 subscriptions peer img_storage refused (valid CA is not enough): 403
+PASS D4 subscriptions peer seaweedfs refused (valid CA is not enough): 403
+PASS D4 subscriptions peer generative-mock refused (valid CA is not enough): 403
+PASS D4 subscriptions peer expand_ai_tool refused (valid CA is not enough): 403
+PASS S08 img_storage no client certificate: TLS
+PASS S08 img_storage other CA certificate (CN=projects): TLS
+PASS S08 img_storage expired certificate (CN=projects): TLS
+PASS S08 img_storage server-only certificate (EKU, rabbitmq): TLS
+PASS S08 img_storage plaintext HTTP gets no HTTP answer: CLOSED
+PASS D4 img_storage peer nginx refused (valid CA is not enough): 403
+PASS D4 img_storage peer frontend refused (valid CA is not enough): 403
+PASS D4 img_storage peer api_gateway refused (valid CA is not enough): 403
+PASS D4 img_storage peer ws_gateway refused (valid CA is not enough): 403
+PASS S09 img_storage allowed peer projects GET /b5-not-a-route: 404
+PASS RES img_storage session offered by projects not resumed: full handshake
+PASS D4 img_storage peer users refused (valid CA is not enough): 403
+PASS D4 img_storage peer subscriptions refused (valid CA is not enough): 403
+PASS D4 img_storage peer img_storage refused (valid CA is not enough): 403
+PASS D4 img_storage peer seaweedfs refused (valid CA is not enough): 403
+PASS D4 img_storage peer generative-mock refused (valid CA is not enough): 403
+PASS D4 img_storage peer expand_ai_tool refused (valid CA is not enough): 403
+PASS S08 generative-mock no client certificate: TLS
+PASS S08 generative-mock other CA certificate (CN=expand_ai_tool): TLS
+PASS S08 generative-mock expired certificate (CN=expand_ai_tool): TLS
+PASS S08 generative-mock server-only certificate (EKU, rabbitmq): TLS
+PASS S08 generative-mock plaintext HTTP gets no HTTP answer: CLOSED
+PASS D4 generative-mock peer nginx refused (valid CA is not enough): 403
+PASS D4 generative-mock peer frontend refused (valid CA is not enough): 403
+PASS D4 generative-mock peer api_gateway refused (valid CA is not enough): 403
+PASS D4 generative-mock peer ws_gateway refused (valid CA is not enough): 403
+PASS D4 generative-mock peer projects refused (valid CA is not enough): 403
+PASS D4 generative-mock peer users refused (valid CA is not enough): 403
+PASS D4 generative-mock peer subscriptions refused (valid CA is not enough): 403
+PASS D4 generative-mock peer img_storage refused (valid CA is not enough): 403
+PASS D4 generative-mock peer seaweedfs refused (valid CA is not enough): 403
+PASS D4 generative-mock peer generative-mock refused (valid CA is not enough): 403
+PASS S09 generative-mock allowed peer expand_ai_tool GET /sdapi/v1/samplers: 200
+PASS RES generative-mock session offered by expand_ai_tool not resumed: full handshake
+PASS RES control public nginx entry resumes a session (detector works): resumed
+PASS STATIC no disabled TLS verification in product code: none
+PASS STATIC every Node https.Agent without cached sessions: none
+PASS STATIC nginx: no plaintext upstream: none
+PASS STATIC nginx: upstream verification and no session reuse: True
+PASS STATIC nginx: expected name for frontend: True
+PASS STATIC nginx: expected name for api_gateway: True
+PASS STATIC nginx: expected name for ws_gateway: True
+PASS STATIC nginx: expected name for seaweedfs: True
+B5 mTLS: 147/147 checks passed
+
+## tests/conformance/mtls-pki/b5-guard.sh picturas-dev (validity guard, client server-identity)
+PASS node guard: expired at start-up: exit=1
+PASS node guard: not yet valid: exit=1
+PASS node guard: valid certificate keeps running (timeout): exit=124
+PASS node guard: stops when the certificate expires: exit=1
+PASS node guard: stops within 3 s of expiry (12 s certificate): yes
+PASS python guard: expired at start-up: exit=1
+PASS python guard: not yet valid: exit=1
+PASS python guard: valid certificate keeps running (timeout): exit=124
+PASS python guard: stops when the certificate expires: exit=1
+PASS python guard: stops within 3 s of expiry (12 s certificate): yes
+PASS projects client: expected name users: http
+PASS projects client: server name img_storage on the users server: ERR_TLS_CERT_ALTNAME_INVALID
+PASS expand_ai client: generative-mock by name: 200
+PASS expand_ai client: generative-mock by IP (name mismatch): SSLError
+B5 guard and client identity: 14/14 checks passed
+
+## tests/conformance/in-network.sh picturas-dev mtls-pki/b5-functional.py (wss, expand_ai->generative-mock, users->projects)
+PASS W1 wss through nginx connects (websocket transport): True
+PASS E1 upload image: 204
+PASS E1 add expand_ai (generative): 201
+PASS E1 apply (free account, one advanced operation): 201
+PASS E1 generative outpainting result is the padded PNG (48x32 -> 64x40): (64, 40)
+PASS W1 processing events received over wss: True
+PASS D1 projects listed before deletion: True
+PASS D1 holder deletes the account: 204
+PASS D1 no project left for the deleted account: []
+B5 functional: 9/9 checks passed
+
+## tests/conformance/in-network.sh picturas-dev users-quota.py
+users quota: 10/10 checks passed
+
+## tests/conformance/in-network.sh picturas-dev b4-identity.py
+B4 identity: 92/92 checks passed
+
+## tests/conformance/in-network.sh picturas-dev b4-routes.py
+B4 routes: 552/552 checks passed
+
+## tests/conformance/in-network.sh picturas-dev b4-functional.py
+B4: owner/share/D7, profile isolation, premium lifecycle and direct services passed
+
+## python3 tests/conformance/b4-route-matrix.py
+AssertionError: Routes missing from matrix: [('apiGateway/routes/projects.js', 95), ('apiGateway/routes/projects.js', 107), ('apiGateway/routes/projects.js', 135), ('apiGateway/routes/projects.js', 143), ('apiGateway/routes/projects.js', 161), ('apiGateway/routes/projects.js', 190), ('apiGateway/routes/projects.js', 210), ('apiGateway/routes/projects.js', 233), ('apiGateway/routes/projects.js', 259), ('apiGateway/routes/projects.js', 282), ('apiGateway/routes/projects.js', 305), ('apiGateway/routes/projects.js', 337), ('apiGateway/routes/projects.js', 364), ('apiGateway/routes/projects.js', 378), ('apiGateway/routes/projects.js', 416), ('apiGateway/routes/projects.js', 466), ('apiGateway/routes/projects.js', 515), ('apiGateway/routes/projects.js', 547), ('apiGateway/routes/projects.js', 583), ('apiGateway/routes/projects.js', 626), ('apiGateway/routes/projects.js', 655), ('apiGateway/routes/projects.js', 697), ('apiGateway/routes/projects.js', 726), ('apiGateway/routes/projects.js', 763), ('apiGateway/routes/projects.js', 796), ('apiGateway/routes/projects.js', 826), ('apiGateway/routes/projects.js', 858), ('apiGateway/routes/projects.js', 880), ('apiGateway/routes/projects.js', 897), ('apiGateway/routes/subscriptions.js', 57), ('apiGateway/routes/subscriptions.js', 70), ('apiGateway/routes/subscriptions.js', 86), ('apiGateway/routes/subscriptions.js', 118), ('apiGateway/routes/subscriptions.js', 167), ('apiGateway/routes/subscriptions.js', 183), ('apiGateway/routes/subscriptions.js', 222), ('apiGateway/routes/users.js', 46), ('apiGateway/routes/users.js', 61), ('apiGateway/routes/users.js', 73), ('apiGateway/routes/users.js', 92), ('apiGateway/routes/users.js', 113), ('apiGateway/routes/users.js', 126), ('apiGateway/routes/users.js', 153), ('apiGateway/routes/users.js', 164), ('apiGateway/routes/users.js', 175), ('apiGateway/routes/users.js', 186), ('apiGateway/routes/users.js', 197), ('apiGateway/routes/users.js', 208), ('projects/routes/projects.js', 573), ('projects/routes/projects.js', 593), ('projects/routes/projects.js', 645), ('projects/routes/projects.js', 679), ('projects/routes/projects.js', 775), ('projects/routes/projects.js', 815), ('projects/routes/projects.js', 834), ('projects/routes/projects.js', 902), ('projects/routes/projects.js', 928), ('projects/routes/projects.js', 965), ('projects/routes/projects.js', 1025), ('projects/routes/projects.js', 1050), ('projects/routes/projects.js', 1061), ('projects/routes/projects.js', 1075), ('projects/routes/projects.js', 1378), ('projects/routes/projects.js', 1384), ('projects/routes/projects.js', 1390), ('projects/routes/projects.js', 1462), ('projects/routes/projects.js', 1514), ('projects/routes/projects.js', 1804), ('projects/routes/projects.js', 1838), ('projects/routes/projects.js', 1904), ('projects/routes/projects.js', 1917), ('projects/routes/projects.js', 1936), ('projects/routes/projects.js', 2017), ('projects/routes/projects.js', 2156), ('projects/routes/projects.js', 2238), ('projects/routes/projects.js', 2526), ('projects/routes/projects.js', 2592), ('projects/routes/projects.js', 2627), ('projects/routes/projects.js', 2648), ('projects/routes/projects.js', 2668), ('projects/routes/projects.js', 2679), ('users/routes/users.js', 73), ('users/routes/users.js', 79), ('users/routes/users.js', 106), ('users/routes/users.js', 117), ('users/routes/users.js', 126), ('users/routes/users.js', 172), ('users/routes/users.js', 207), ('users/routes/users.js', 227), ('users/routes/users.js', 262), ('users/routes/users.js', 319), ('users/routes/users.js', 368)]
+
+## python3 tests/conformance/mtls-pki/b1-smoke.py (smoke)
+B1 smoke: 12/12 passed
+
+## python3 tests/conformance/data-channels/b2-functional.py (F02)
+B2 F02: image and video batch output; PNG changed; MP4/H.264/AAC, duration and brighter frame passed
+
+## python3 tests/conformance/diagnostics/f08-restart.py picturas-dev (F08, HTTPS healthchecks)
+F08: 6/6 services recovered within 30 s; 6 within the 10 s target
+
+## F01: tests/conformance/run-f01.sh picturas-dev -> F01-194817.txt (projects node --test 8/8; Tools/video 74 passed)
+
+## latency through nginx, dev, 100 requests after 10 warm-up (BF S21 medians: get_project 6.12 ms, get_user 3.46 ms): get_project 11.08 ms, get_user 5.81 ms
+
+## dev container logs: 3803 lines, 0 JWT, 0 X-Amz-Signature, 0 of 41 secret values

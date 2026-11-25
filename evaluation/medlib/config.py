@@ -69,6 +69,14 @@ class Settings:
     base_commit: str = field(default_factory=lambda: env("MED_BASE_COMMIT", "0523102"))
     s3_bucket: str = field(default_factory=lambda: env("MED_S3_BUCKET", "picturas"))
     min_free_gib: int = field(default_factory=lambda: int(env("MED_MIN_FREE_GIB", "60")))
+    s3_scheme: str = field(default_factory=lambda: env("MED_S3_SCHEME", "http"))
+    s3_ca_file: str = field(default_factory=lambda: env("MED_S3_CA_FILE", ""))
+    amqp_port: int = field(default_factory=lambda: int(env("MED_AMQP_PORT", "5672")))
+    amqp_ca_file: str = field(default_factory=lambda: env("MED_AMQP_CA_FILE", ""))
+    rabbit_mgmt_scheme: str = field(default_factory=lambda: env("MED_RABBIT_MGMT_SCHEME", "http"))
+    rabbit_mgmt_port: int = field(default_factory=lambda: int(env("MED_RABBIT_MGMT_PORT", "15672")))
+    rabbit_mgmt_ca_file: str = field(default_factory=lambda: env("MED_RABBIT_MGMT_CA_FILE", ""))
+    mongo_ca_file: str = field(default_factory=lambda: env("MED_MONGO_TLS_CA_FILE", ""))
     probe_image: str = "picturas-med-probe"
 
     @property
@@ -117,6 +125,13 @@ class Settings:
 
     def client_cert_dir(self) -> str:
         return env("MED_CLIENT_CERT_DIR", "")
+
+    def data_ca(self, channel: str, surface: str = "rede") -> str:
+        path = getattr(self, f"{channel}_ca_file")
+        return f"/med-certs/{channel}.crt" if path and surface == "rede" else path
+
+    def s3_endpoint(self, host: str = "seaweedfs", port: int = 9000) -> str:
+        return f"{self.s3_scheme}://{host}:{port}"
 
 
 def _pair(value: str) -> tuple[str, str]:

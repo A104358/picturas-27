@@ -14,7 +14,7 @@ async function copyFile(userId, projectId, fromStage, toStage, fileName) {
 
     return { from: sourceKey, to: destKey };
   } catch (error) {
-    console.error("Erro ao copiar ficheiro:", error.message);
+    console.error("S3 copy failed");
     throw error;
   }
 }

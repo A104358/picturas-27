@@ -30,7 +30,6 @@ const Project = require("../controllers/project");
 const Process = require("../controllers/process");
 const Result = require("../controllers/result");
 const Preview = require("../controllers/preview");
-const jwt = require("jsonwebtoken");
 const { getCallerId } = require("../utils/caller");
 const { ensureEditorSlot, releaseEditorSlot } = require("../utils/presence");
 const { extractImageFeatures } = require("../utils/imageFeatures");
@@ -67,19 +66,20 @@ const {
   insertPipelineTool,
 } = require("../utils/video");
 const { persistFrameResults } = require("../utils/frameResults");
+const runLifecycle = require("../utils/runLifecycle");
 const { dispatchProcessBatch } = require("../utils/processBatch");
 
 const storage = multer.memoryStorage();
-var upload = multer({ storage: storage });
+var upload = multer({ storage: storage, limits: { fileSize: 25 * 1024 * 1024, files: 1 } });
 
-const key = fs.readFileSync(__dirname + "/../certs/selfsigned.key");
-const cert = fs.readFileSync(__dirname + "/../certs/selfsigned.crt");
 
 const https = require("https");
-const httpsAgent = new https.Agent({
-  rejectUnauthorized: false, // (NOTE: this will disable client verification)
-  cert: cert,
-  key: key,
+// Own certificate, installation CA, no cached TLS sessions (B5).
+const httpsAgent = require("../tls/pkiTls").clientAgent();
+const s3Agent = new https.Agent({
+  ca: fs.readFileSync("/run/secrets/pki/ca.crt"),
+  servername: "seaweedfs",
+  maxCachedSessions: 0,
 });
 
 const users_ms = "https://users:10001/";
@@ -107,6 +107,12 @@ function requireOwner(req, res, next) {
   if (String(caller) !== String(req.params.user)) {
     return res.status(403).jsonp("Not allowed");
   }
+  next();
+}
+
+function requireSettledRun(req, res, next) {
+  if (req.projectDoc?.processingRunId || req.projectDoc?.reconciliationHold)
+    return res.status(409).jsonp("Cancel or reconcile the current execution first");
   next();
 }
 
@@ -175,15 +181,18 @@ function process_msg() {
     // variáveis “seguras” para usar no catch
     let runnerIdSafe = null;
     let ownerIdSafe = null;
+    let projectIdSafe = null;
 
     try {
       const msg_content = JSON.parse(msg.content.toString());
       const msg_id = msg_content.correlationId;
+      if (typeof msg_id !== "string" || msg_id.length > 256) return;
 
-      const process = await Process.getOneByMsgId(msg_id);
+      const process = await Process.claimReply(msg_id);
       if (!process) return;
 
       ownerIdSafe = process.user_id;
+      projectIdSafe = String(process.project_id);
       runnerIdSafe = process.runner_id || process.user_id;
 
        console.log(
@@ -201,17 +210,20 @@ function process_msg() {
       const img_id = process.img_id;
       
       const project = await Project.getOne(process.user_id, process.project_id);
+      if (!project || (project.activeToken || 0) !== (process.token || 0)) return;
+      const run = await runLifecycle.liveRun(process, project);
+      if (!/preview/.test(msg_id) && !run) return;
       const sourceIsVideo = project.imgs.some((img) => String(img._id) === String(img_id) && isVideoMedia(img));
       // In extraction runs keep every source job visible until its output is
       // persisted, including ordinary images in mixed projects. Failed jobs stay
       // as barriers so another source cannot commit a partial run.
-      const holdsRunCommit = project.tools.some((tool) => tool.procedure === "extract_frames") && !/preview/.test(msg_id);
+      const holdsRunCommit = !/preview/.test(msg_id);
       if (!holdsRunCommit) await Process.delete(process.user_id, process.project_id, process._id);
       
       if (msg_content.status === "error") {
         console.log(JSON.stringify(msg_content));
         if (/preview/.test(msg_id)) {
-          send_msg_client_preview_error(`update-client-preview-${uuidv4()}`, timestamp, runnerId, msg_content.error.code, msg_content.error.msg)
+          send_msg_client_preview_error(`update-client-preview-${uuidv4()}`, timestamp, runnerId, msg_content.error.code, msg_content.error.msg, String(process.project_id))
         }
         
         else {
@@ -220,7 +232,8 @@ function process_msg() {
             timestamp,
             runnerId,   
             msg_content.error.code,
-            msg_content.error.msg
+            msg_content.error.msg,
+            String(process.project_id)
           );
         }
         return;
@@ -248,7 +261,7 @@ function process_msg() {
       // Images only go through the image tools (trim is video-only);
       // a video is processed in one go by the video worker, so its reply is
       // always the last one of the chain.
-      const imgTools = imageTools(project);
+      const imgTools = imageTools(run ? {tools: run.tools} : project);
       // A video worker also returns an image for extraction previews, or frames
       // for full extraction. Neither should enter the image-effect chain.
       const chainEnd = sourceIsVideo || type === "video" || type === "frames" || next_pos >= imgTools.length;
@@ -365,7 +378,8 @@ if (/preview/.test(msg_id) && isLast) {
       `update-client-preview-${uuidv4()}`,
       timestamp,
       runnerId,
-      JSON.stringify(urls)
+      JSON.stringify(urls),
+      String(process.project_id)
     );
   }
 }
@@ -374,51 +388,22 @@ if (/preview/.test(msg_id) && isLast) {
 
       if (!/preview/.test(msg_id) && isLast && type === "frames") {
         if (!holdsRunCommit || !sourceIsVideo) throw new Error("Unexpected extracted frames for this job");
+        const artifacts = new Map();
+        let frame = 0;
         await persistFrameResults(msg_content.output, process, {
           upload: async (file, name) => {
-            const data = new FormData();
-            data.append("file", fs.createReadStream(file), { filename: name, contentType: mime.lookup(name) });
-            const response = await post_image(process.user_id, process.project_id, "out", data);
-            return response.data.data.imageKey.split("/").pop();
+            const artifact = await runLifecycle.uploadArtifact(process, file, name, "image", `${process._id}-${++frame}`);
+            artifacts.set(artifact.img_key, artifact);
+            return artifact.img_key;
           },
-          create: (result) => Result.create(result),
-          removeResult: (id) => Result.deleteById(process.user_id, process.project_id, id),
-          removeImage: (key) => delete_image(process.user_id, process.project_id, "out", key),
+          create: result => runLifecycle.storeResult(process, artifacts.get(result.img_key)),
+          removeResult: id => Result.deleteById(process.user_id, process.project_id, id),
+          removeImage: key => delete_image(process.user_id, process.project_id, "out", key),
         });
       } else if (!/preview/.test(msg_id) && isLast) {
-        const file_path = path.resolve(__dirname, "..", output_file_uri);
-        const file_name = path.basename(file_path);
-        const fileStream = fs.createReadStream(file_path); // Use createReadStream for efficiency
-
-        const data = new FormData();
-        await data.append(
-          "file",
-          fileStream,
-          path.basename(file_path),
-          mime.lookup(file_path)
-        );
-
-        const resp = await post_image(
-          process.user_id,
-          process.project_id,
-          "out",
-          data
-        );
-
-        const og_key_tmp = resp.data.data.imageKey.split("/");
-        const og_key = og_key_tmp[og_key_tmp.length - 1];
-
-        const result = {
-          type: type,
-          file_name: file_name,
-          img_key: og_key,
-          img_id: img_id,
-          project_id: process.project_id,
-          user_id: process.user_id,
-          token: process.token || 0, 
-        };
-
-        await Result.create(result);
+        const file = path.resolve(__dirname, "..", output_file_uri);
+        const artifact = await runLifecycle.uploadArtifact(process, file, path.basename(file), type);
+        await runLifecycle.storeResult(process, artifact);
       }
 
       // Se esta imagem acabou o pipeline, pode ser que a execução tenha terminado
@@ -436,35 +421,7 @@ if (/preview/.test(msg_id) && isLast) {
           // re-fetch do projeto (já tens project) mas garante que está fresh
           const freshProject = await Project.getOne(process.user_id, process.project_id);
 
-          // só commita se ainda for a execução ativa (não foi cancelada entretanto)
-          if ((freshProject.activeToken || 0) === (process.token || 0)) {
-            freshProject.committedToken = process.token || 0;
-
-            //  guardar também resultsToken se ainda uso noutros sítios
-            freshProject.resultsToken = freshProject.committedToken;
-
-            const toolsSnapshot = [...(freshProject.tools || [])]
-              .sort((a,b) => (a.position ?? 0) - (b.position ?? 0))
-              .map(t => ({
-                _id: t._id,
-                position: t.position,
-                procedure: t.procedure,
-                params: t.params,
-              }));
-
-            const committed = await Project.commitRunIfActive(
-              process.user_id, process.project_id, process.token || 0, toolsSnapshot
-            );
-            if (!committed) return;
-
-            console.log(`[COMMIT] project=${process.project_id} committedToken=${process.token || 0}`);
-
-          } else {
-            console.log(
-              `[COMMIT-SKIP] project=${process.project_id} token=${process.token} activeToken=${freshProject.activeToken}`
-            );
-            return;
-          }
+          if (!freshProject || !await runLifecycle.commit(process, freshProject)) return;
         }
       }
 
@@ -478,7 +435,8 @@ if (/preview/.test(msg_id) && isLast) {
         send_msg_client(
           user_msg_id,
           timestamp,
-          runnerId
+          runnerId,
+          String(process.project_id)
         );
 
       if (chainEnd) return;
@@ -509,9 +467,11 @@ if (/preview/.test(msg_id) && isLast) {
         new_img_uri: output_img,
         cancelToken: processToken,
         token: process.token,
+        run_id: process.run_id,
       };
 
       // Making sure database entry is created before sending message to avoid conflicts
+      if (run) await runLifecycle.trackMessage(run._id, new_msg_id);
       await Process.create(new_process);
       if (holdsRunCommit) await Process.delete(process.user_id, process.project_id, process._id);
       send_msg_tool(
@@ -524,7 +484,11 @@ if (/preview/.test(msg_id) && isLast) {
       );
     } catch (err) {
 
-      console.error("[process_msg] error:", err);
+      // Axios errors can include the TLS agent's private material. Log only a
+      // bounded error class/status, never request/agent/config objects.
+      console.error("[process_msg] callback failed", {
+        name: err.name, status: Number(err.response?.status) || null,
+      });
 
       const target = runnerIdSafe || ownerIdSafe;
 
@@ -533,7 +497,8 @@ if (/preview/.test(msg_id) && isLast) {
         timestamp,
         target,
         "30000",
-        "An error happened while processing the project"
+        "An error happened while processing the project",
+        projectIdSafe
       );
       return;
     }
@@ -813,7 +778,7 @@ router.delete("/:user/:project/share/:shareId", requireOwner, enforcePresenceLim
 // ================== FIM SHARING ==================
 
 // Get list of all projects from a user
-router.get("/:user", (req, res, next) => {
+router.get("/:user", requireOwner, (req, res, next) => {
   Project.getAll(req.params.user)
     .then((projects) => {
       const ans = [];
@@ -840,12 +805,6 @@ router.get("/:user/:project", checkSharePermission, async (req, res, next) => {
     if (canEdit) {
       const ownerId = req.params.user;
       const projectId = req.params.project;
-      console.log("[GET /:user/:project headers]", {
-        hasAuth: !!req.headers.authorization,
-        authStart: req.headers.authorization?.slice(0, 20),
-        caller: getCallerId(req),
-      });
-
       const callerId = getCallerId(req);
       if (!callerId) {
         return res.status(401).jsonp("Authentication required");
@@ -993,7 +952,7 @@ router.get("/:user/:project/process", checkSharePermission, (req, res, next) => 
         );
         const url = resp.data.url;
 
-        const file_resp = await axios.get(url, { responseType: "stream" });
+        const file_resp = await axios.get(url, { responseType: "stream", httpsAgent: s3Agent });
         const writer = fs.createWriteStream(res_path);
 
         // Use a Promise to handle the stream completion
@@ -1065,7 +1024,7 @@ router.get("/:user/:project/advanced_tools", checkSharePermission, (req, res, ne
 });
 
 // Create new project
-router.post("/:user", (req, res, next) => {
+router.post("/:user", requireOwner, (req, res, next) => {
   const project = {
     name: req.body.name,
     user_id: req.params.user,
@@ -1138,10 +1097,10 @@ router.post("/:user/:project/preview/:img", checkSharePermission, requireEditPer
       const cacheKey = makePreviewCacheKey(img.og_sha256, orderedTools);
 
       console.log(
-        `[T-03][PREVIEW] req user=${ownerId} project=${req.params.project} img=${req.params.img} key=${cacheKey.slice(0,8)} tools=${orderedTools.length}`
+        `[T-03][PREVIEW] req user=${ownerId} project=${req.params.project} img=${req.params.img} key=${(cacheKey || "").slice(0,8)} tools=${orderedTools.length}`
       );
 
-      const cached = await PreviewCache.getByKey(ownerId, cacheKey);
+      const cached = cacheKey ? await PreviewCache.getByKey(ownerId, cacheKey) : null;
       if (cached) {
         // gerar URLs atuais (assinadas) a partir das keys guardadas
         const urls = { imageUrl: "", textResults: [] };
@@ -1168,13 +1127,14 @@ router.post("/:user/:project/preview/:img", checkSharePermission, requireEditPer
           `update-client-preview-${uuidv4()}`,
           new Date().toISOString(),
           runnerUserId,
-          JSON.stringify(urls)
+          JSON.stringify(urls),
+          req.params.project
         );
         return res.sendStatus(200);
       }
 
       console.log(
-        `[T-03][PREVIEW][MISS] key=${cacheKey.slice(0,8)} -> processing`
+        `[T-03][PREVIEW][MISS] key=${(cacheKey || "").slice(0,8)} -> processing`
       );
 
       const prev_preview = await Preview.getAll(
@@ -1214,7 +1174,7 @@ router.post("/:user/:project/preview/:img", checkSharePermission, requireEditPer
       );
       const url = resp.data.url;
 
-      const img_resp = await axios.get(url, { responseType: "stream" });
+      const img_resp = await axios.get(url, { responseType: "stream", httpsAgent: s3Agent });
       const writer = fs.createWriteStream(og_img_uri);
 
       await new Promise((resolve, reject) => {
@@ -1387,12 +1347,6 @@ router.post(
   addProjectMedia("image")
 );
 
-// Add new video to a project
-router.post(
-  "/:user/:project/video", checkSharePermission, requireEditPermission, enforcePresenceLimit, requireProjectVersion, upload.single("video"),
-  addProjectMedia("video")
-);
-
 // Add new tool to a project
 router.post("/:user/:project/tool", checkSharePermission, requireEditPermission, enforcePresenceLimit, requireProjectVersion, (req, res, next) => {
   // Reject posts to tools that don't fullfil the requirements
@@ -1517,302 +1471,9 @@ router.post(
   }
 );
 
-// Process a specific project
-router.post("/:user/:project/process", checkSharePermission, requireEditPermission, enforcePresenceLimit, requireProjectVersion, (req, res) => {
-  const ownerId = req.params.user;
-  const runnerUserId = getCallerId(req); // <-- agora pode vir do body
-  
-  console.log("[CALLER]", {
-  userParam: req.params.user,
-  forwarded: req.headers["x-caller-id"],
-  hasAuth: !!req.headers["authorization"],
-  caller: getCallerId(req),
-});
-
-  Project.getOne(ownerId, req.params.project)
-    .then(async (project) => {
-      try {
-
-      } catch (_) {
-        res.status(400).jsonp("Error deleting previous results");
-        return;
-      }
-
-      if (project.tools.length == 0) {
-        res.status(400).jsonp("No tools selected");
-        return;
-      }
-
-      const pipelineError = validateFrameExtraction(project.tools);
-      if (pipelineError) return res.status(400).jsonp(pipelineError);
-
-      // Video
-      const hasVideos = project.imgs.some(isVideoMedia);
-      if (hasVideos) {
-        const bad = unsupportedVideoTools(project);
-        if (bad.length > 0) {
-          res
-            .status(400)
-            .jsonp(`Effects not available for video: ${[...new Set(bad)].join(", ")}`);
-          return;
-        }
-      } else if (imageTools(project).length === 0) {
-        res.status(400).jsonp("The pipeline only has video effects and the project has no videos");
-        return;
-      }
-      // Each effect applied to a video counts as one operation
-      const vid_ops = videoOps(project);
-
-      const { adv_ops, totalAdv, charged, newTools } = advanced_tool_num(project);
-
-      console.log(
-        "[ADV DEBUG] project:",
-        req.params.project,
-        "adv_ops:", adv_ops,
-        "totalAdv:", totalAdv,
-        "charged:", charged,
-        "newTools:", newTools,
-        "tools:", project.tools.map((t) => t.procedure)
-      );
-
-      let runToken = null;
-
-      // função local com a lógica de "arrancar processamento"
-      const startProcessing = async () => {
-        const source_path = `/../images/users/${ownerId}/projects/${req.params.project}/src`;
-        const result_path = `/../images/users/${ownerId}/projects/${req.params.project}/out`;
-
-        if (fs.existsSync(path.join(__dirname, source_path)))
-          fs.rmSync(path.join(__dirname, source_path), {
-            recursive: true,
-            force: true,
-          });
-
-        fs.mkdirSync(path.join(__dirname, source_path), { recursive: true });
-
-        if (fs.existsSync(path.join(__dirname, result_path)))
-          fs.rmSync(path.join(__dirname, result_path), {
-            recursive: true,
-            force: true,
-          });
-
-        fs.mkdirSync(path.join(__dirname, result_path), { recursive: true });
-
-        const pendingJobs = [];
-
-        for (let img of project.imgs) {
-          let url = "";
-          try {
-            const resp = await get_image_internal_url(
-              ownerId,
-              req.params.project,
-              "src",
-              img.og_img_key
-            );
-            url = resp.data.url;
-
-            const img_resp = await axios.get(url, { responseType: "stream" });
-            const writer = fs.createWriteStream(img.og_uri);
-
-            await new Promise((resolve, reject) => {
-              writer.on("finish", resolve);
-              writer.on("error", reject);
-              img_resp.data.pipe(writer);
-            });
-          } catch (_) {
-            res.status(400).jsonp("Error acquiring source images");
-            return;
-          }
-
-          const msg_id = `request-${uuidv4()}`;
-          const timestamp = new Date().toISOString();
-
-          const og_img_uri = img.og_uri;
-          const new_img_uri = img.new_uri;
-          let tool_name;
-          let params;
-          if (isVideoMedia(img)) {
-            // video: the whole pipeline in a single message to the video worker
-            tool_name = "video";
-            params = {
-              tools: videoPipeline(project, img._id),
-              preview: false,
-              progress: { user: runnerUserId, projectId: req.params.project, imgId: String(img._id) },
-            };
-          } else {
-            const tool = imageTools(project)[0];
-            if (!tool) continue; // only video effects: images are left as they are
-            tool_name = tool.procedure;
-            params = tool.params;
-          }
-
-          const process = {
-            user_id: ownerId,
-            runner_id: runnerUserId,
-            project_id: req.params.project,
-            img_id: img._id,
-            msg_id: msg_id,
-            cur_pos: 0,
-            og_img_uri: og_img_uri,
-            new_img_uri: new_img_uri,
-            cancelToken: project.cancelToken || 0,
-            token: runToken,
-          };
-
-          pendingJobs.push({ process, msg_id, timestamp, og_img_uri, new_img_uri, tool_name, params });
-        }
-
-        // Register the complete batch before dispatching anything. Otherwise a
-        // short first video can commit while a later source is still downloading.
-        try {
-          await dispatchProcessBatch(pendingJobs, {
-            create: (job) => Process.create(job),
-            remove: (job) => Process.delete(job.user_id, job.project_id, job._id),
-            send: (job) => send_msg_tool(job.msg_id, job.timestamp, job.og_img_uri, job.new_img_uri, job.tool_name, job.params),
-          });
-        } catch (error) {
-          return res.status(603).jsonp("Could not start all processing requests. Please try again.");
-        }
-        res.sendStatus(201);
-      };
-
-      // Caso 1: sem advanced tools -> não é preciso falar com users-ms
-      if (adv_ops === 0 && vid_ops === 0) {
-        try {
-
-          // T-03 short-circuit: se nada mudou desde o último commit, não reprocessar
-          const hasCommit = (project.committedToken || 0) > 0;
-          const fpNow = makeToolsFingerprint(project.tools || []);
-          const fpCommitted = makeToolsFingerprint(project.committedTools || []);
-
-          if (hasCommit && fpNow === fpCommitted) {
-            console.log(
-              `[T-03][PROCESS][SKIP] user=${ownerId} project=${req.params.project} token=${project.committedToken}`
-            );
-
-            // No worker events will follow: complete explicitly in the HTTP response.
-            // A synthetic single step cannot complete multi-image/tool pipelines.
-            return res.status(201).json({ completed: true });
-          }
-
-          // antes de abrir execução nova
-          project.prevCommittedToken = project.committedToken || 0;
-
-          // snapshot do último commit (fallback: tools atuais se nunca houve commit)
-          project.prevCommittedTools =
-            Array.isArray(project.committedTools) && project.committedTools.length > 0
-              ? project.committedTools
-              : (project.tools || []);
-
-          // abrir uma execução nova SEMPRE
-          project.activeToken = (project.activeToken || 0) + 1;
-
-          // coerência de counters
-          if (charged !== project.chargedAdvancedTools) {
-            project.chargedAdvancedTools = charged;
-          }
-          project.pendingAdvancedOps = 0;
-
-          const updated = await Project.updateIfVersion(
-            ownerId,
-            req.params.project,
-            project,
-            req.expectedVersion
-          );
-
-          if (!updated) {
-            const fresh = await Project.getOne(ownerId, req.params.project);
-            return res.status(409).jsonp({
-              message: "Project version conflict",
-              serverVersion: fresh?.version ?? null,
-            });
-          }
-
-          res.set("X-Project-Version", String(updated.version));
-
-          // token desta execução
-          runToken = updated.activeToken;
-
-          await startProcessing();
-        } catch (e) {
-          console.error("Error starting processing (no advanced tools):", e);
-          res.status(500).jsonp("Error processing project");
-        }
-        return;
-      }
-
-      // Caso 2: com advanced tools -> verificar quota no users-ms
-      const callerId = getCallerId(req);
-      axios
-        .get(users_ms + `${callerId}/process/${adv_ops + vid_ops}`, { httpsAgent: httpsAgent })
-        .then(async (resp) => {
-          const can_process = resp.data;
-
-          if (!can_process) {
-            res.status(404).jsonp("No more daily_operations available");
-            return;
-          }
-
-          try {
-            // Marcamos que já pagámos todas as tools avançadas atuais
-            // (charged + newTools === totalAdv)
-            project.chargedAdvancedTools = charged + newTools;
-            project.pendingAdvancedOps = adv_ops;
-
-            project.prevCommittedToken = project.committedToken || 0;
-
-            // abrir uma execução nova
-            project.activeToken = (project.activeToken || 0) + 1;
-
-            const updated = await Project.updateIfVersion(
-              ownerId,
-              req.params.project,
-              project,
-              req.expectedVersion
-            );
-
-            if (!updated) {
-              const fresh = await Project.getOne(ownerId, req.params.project);
-              return res.status(409).jsonp({
-                message: "Project version conflict",
-                serverVersion: fresh?.version ?? null,
-              });
-            }
-
-            res.set("X-Project-Version", String(updated.version));
-
-            runToken = updated.activeToken; // token desta execução
-
-            await startProcessing();
-          } catch (e) {
-            console.error("Error starting processing (advanced tools):", e);
-            res.status(500).jsonp("Error processing project");
-          }
-        })
-        .catch((err) => {
-          console.error("Error calling users-ms /process:", {
-            message: err.message,
-            status: err.response?.status,
-            data: err.response?.data,
-            url: users_ms + `${callerId}/process/${adv_ops + vid_ops}`,
-            callerId,
-            adv_ops,
-          });
-
-          if (err.response) {
-            // users-ms answers 701 when there are no operations left; 7xx is not a
-            // valid HTTP status and the proxy drops the message, so map it to 403
-            const raw = err.response.status || 500;
-            const status = raw >= 600 ? 403 : raw;
-            const data = err.response.data || "Error checking if can process";
-            return res.status(status).jsonp(data);
-          }
-
-          return res.status(500).jsonp("Error checking if can process");
-        });
-    })
-    .catch((_) => res.status(501).jsonp(`Error acquiring user's project`));
-});
+// Every real Apply has durable executor, quota and output evidence before dispatch.
+router.post("/:user/:project/process", checkSharePermission, requireEditPermission,
+  enforcePresenceLimit, requireProjectVersion, runLifecycle.applyHandler({advancedToolNum: advanced_tool_num}));
 
 // Update a specific project
 router.put(
@@ -1915,7 +1576,7 @@ router.put(
 );
 
 // Delete a project
-router.delete( "/:user/:project", checkSharePermission, requireEditPermission, enforcePresenceLimit, requireProjectVersion, async (req, res) => {
+router.delete( "/:user/:project", requireOwner, checkSharePermission, enforcePresenceLimit, requireProjectVersion, requireSettledRun, async (req, res) => {
 
     const ok = await Project.deleteIfVersion(req.params.user, req.params.project, req.expectedVersion);
     if (!ok) {
@@ -1947,7 +1608,7 @@ router.delete("/:user", async (req, res, next) => {
 
 
 // Delete an image from a project
-router.delete("/:user/:project/img/:img", checkSharePermission, requireEditPermission, enforcePresenceLimit, requireProjectVersion, (req, res, next) => {
+router.delete("/:user/:project/img/:img", checkSharePermission, requireEditPermission, enforcePresenceLimit, requireProjectVersion, requireSettledRun, (req, res, next) => {
   // Get project and delete specified image
   Project.getOne(req.params.user, req.params.project)
     .then(async (project) => {
@@ -2033,7 +1694,7 @@ router.delete(
   checkSharePermission,
   requireEditPermission,
   enforcePresenceLimit,
-  requireProjectVersion,
+  requireProjectVersion, requireSettledRun,
   async (req, res) => {
     try {
       const project = await Project.getOne(req.params.user, req.params.project);
@@ -2085,6 +1746,7 @@ router.delete(
           updated.committedToken = rollbackTok;
           updated.resultsToken = rollbackTok;
           updated.committedTools = updated.prevCommittedTools;
+          updated.committedRun = updated.prevCommittedRun;
 
           // opcional (mas normalmente boa ideia): como já voltaste ao "commit anterior",
           // podes limpar o prevCommitted* para evitar encadear rollbacks errados
@@ -2102,7 +1764,7 @@ router.delete(
           const processes = await Process.getProject(req.params.user, req.params.project);
           if (processes && processes.length > 0) {
             for (const p of processes) {
-              await Process.delete(p.user_id, p.project_id, p._id);
+              if (!p.run_id) await Process.delete(p.user_id, p.project_id, p._id);
             }
           }
         } catch (err) {
@@ -2128,11 +1790,14 @@ router.delete(
           // results por token (como no cancel):
           const resultsOld = await Result.getAllByToken(req.params.user, req.params.project, oldTok);
           for (const r of resultsOld) {
+            // New runs retain their immutable result evidence. The committed
+            // pointer controls visibility; undo is not administrative cleanup.
+            if (r.run_id) continue;
             try {
               await delete_image(req.params.user, req.params.project, "out", r.img_key);
             } catch (_) {}
+            await Result.deleteById(req.params.user, req.params.project, r._id);
           }
-          await Result.deleteByToken(req.params.user, req.params.project, oldTok);
 
           console.log(`[UNDO-ROLLBACK][RESULTS-CLEAN] token=${oldTok} deleted=${resultsOld.length}`);
         } catch (err) {
@@ -2172,7 +1837,7 @@ router.post(
   checkSharePermission,
   requireEditPermission,
   enforcePresenceLimit,
-  requireProjectVersion,
+  requireProjectVersion, requireSettledRun,
   async (req, res) => {
     const ownerId = req.params.user;
     const projectId = req.params.project;
@@ -2207,6 +1872,11 @@ router.post(
 
       // 3) limpar tools + coerência advanced counters
       project.tools = [];
+      project.committedRun = null;
+      project.prevCommittedRun = null;
+      project.committedToken = 0;
+      project.resultsToken = 0;
+      project.committedTools = [];
       project.pendingAdvancedOps = 0;
       project.chargedAdvancedTools = 0;
 
@@ -2214,7 +1884,7 @@ router.post(
         ownerId,
         projectId,
         project,
-        req.expectedVersion
+        req.expectedVersion, true
       );
 
       if (!updated) {
@@ -2249,110 +1919,8 @@ router.post(
 );
 
 // Cancelar processamento de um projeto
-router.delete(
-  "/:user/:project/process",
-  checkSharePermission,
-  requireEditPermission,
-  enforcePresenceLimit,
-  requireProjectVersion,
-  async (req, res) => {
-    try {
-      const ownerId = req.params.user;
-      const projectId = req.params.project;
-
-      const project = await Project.getOne(ownerId, projectId);
-      if (!project) return res.status(404).jsonp("Project not found");
-
-      const callerId = getCallerId(req);
-      const adv_ops = project.pendingAdvancedOps || 0;
-
-      const cancelTok = project.activeToken || 0;
-
-      // invalidar sempre execução atual
-      project.activeToken = (project.activeToken || 0) + 1;
-
-      // reset pending
-      project.pendingAdvancedOps = 0;
-
-      // rollback committed antes de persistir 
-      const prev = project.prevCommittedToken ?? (project.committedToken || 0);
-      const prevTools = project.prevCommittedTools ?? project.tools;
-
-      if ((project.committedToken || 0) === cancelTok) {
-        project.committedToken = prev;
-        project.resultsToken = prev;
-
-          // rollback tools para o último estado “consistente”
-          project.tools = Array.isArray(prevTools) ? prevTools : [];
-  
-          // opcional: manter committedTools coerente com o rollback
-          project.committedTools = Array.isArray(prevTools) ? prevTools : [];
-      }
-
-      // refund se necessário
-      if (adv_ops > 0) {
-        try {
-          await axios.post(
-            users_ms + `${callerId}/process/refund/${adv_ops}`,
-            {},
-            { httpsAgent }
-          );
-        } catch (err) {
-          console.error("Error refunding operations on cancel:", err);
-        }
-      }
-
-      // persistir alterações (inclui committedToken rollback)
-      const updated = await Project.updateIfVersion(
-        ownerId,
-        projectId,
-        project,
-        req.expectedVersion
-      );
-
-      if (!updated) {
-        const fresh = await Project.getOne(ownerId, projectId);
-        return res.status(409).jsonp({
-          message: "Project version conflict",
-          serverVersion: fresh?.version ?? null,
-        });
-      }
-
-      // apagar apenas resultados da execução cancelada
-      try {
-        const toDelete = await Result.getAllByToken(ownerId, projectId, cancelTok);
-        for (const r of toDelete) {
-          try { await delete_image(ownerId, projectId, "out", r.img_key); } catch (_) {}
-        }
-        await Result.deleteByToken(ownerId, projectId, cancelTok);
-
-        console.log(`[CANCEL][RESULTS-CLEAN] token=${cancelTok} deleted=${toDelete.length}`);
-      } catch (err) {
-        console.error("Error deleting cancelled run results:", err);
-      }
-
-      res.set("X-Project-Version", String(updated.version));
-
-      // limpar processos em curso
-      const processes = await Process.getProject(ownerId, projectId);
-      for (const p of (processes || [])) {
-        await Process.delete(p.user_id, p.project_id, p._id);
-      }
-
-      // limpar dirs temporários (opcional)
-      const basePath = `/../images/users/${ownerId}/projects/${projectId}`;
-      for (const dir of ["src", "preview"]) {
-        const full = path.join(__dirname, `${basePath}/${dir}`);
-        if (fs.existsSync(full)) fs.rmSync(full, { recursive: true, force: true });
-      }
-
-      return res.sendStatus(204);
-    } catch (err) {
-      console.error("Error cancelling project processing:", err);
-      return res.status(500).jsonp("Error cancelling project processing");
-    }
-  }
-);
+router.delete("/:user/:project/process", checkSharePermission, requireEditPermission,
+  enforcePresenceLimit, requireProjectVersion, runLifecycle.cancel);
 
 // ================== AI ASSISTANT (SUGGEST) ==================
 
@@ -2567,7 +2135,7 @@ router.post(
       const resp = await get_image_internal_url(ownerId, req.params.project, "src", img.og_img_key);
       const url = resp.data.url;
 
-      const imgResp = await axios.get(url, { responseType: "arraybuffer" });
+      const imgResp = await axios.get(url, { responseType: "arraybuffer", httpsAgent: s3Agent });
       const buffer = Buffer.from(imgResp.data);
 
       // 3) extrair features
@@ -2662,7 +2230,8 @@ router.delete(
 router.post("/:owner/:project/presence", async (req, res) => {
   const ownerId = req.params.owner;
   const projectId = req.params.project;
-  const callerId = req.headers["x-caller-id"] || ownerId;
+  const callerId = getCallerId(req);
+  if (callerId !== ownerId) return res.status(403).jsonp("Project owner mismatch");
 
   const result = await ensureEditorSlot({ ownerId, projectId, callerId });
 
@@ -2681,7 +2250,8 @@ router.post("/:owner/:project/presence", async (req, res) => {
 router.delete("/:owner/:project/presence", async (req, res) => {
   const ownerId = req.params.owner;
   const projectId = req.params.project;
-  const callerId = req.headers["x-caller-id"] || ownerId;
+  const callerId = getCallerId(req);
+  if (callerId !== ownerId) return res.status(403).jsonp("Project owner mismatch");
 
   await releaseEditorSlot({ ownerId, projectId, callerId });
   return res.sendStatus(204);

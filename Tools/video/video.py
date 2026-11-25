@@ -15,8 +15,10 @@ import time
 import uuid
 
 import pika
+import ssl
+import hashlib
+from utils.work_state import active_work
 import pytz
-from pika.exchange_type import ExchangeType
 
 import utils.env as env
 from effects import UnsupportedEffect
@@ -46,18 +48,23 @@ class VideoWorker:
     def __init__(self):
         self._connection = self._connect()
         self._channel = self._connection.channel()
-        self._channel.exchange_declare(exchange=EXCHANGE,
-                                       exchange_type=ExchangeType.direct, durable=True)
-        self._channel.queue_declare(queue=VIDEO_QUEUE, durable=True)
-        self._channel.queue_bind(queue=VIDEO_QUEUE, exchange=EXCHANGE, routing_key=VIDEO_QUEUE)
+        self._channel.exchange_declare(exchange=EXCHANGE, passive=True)
+        self._channel.queue_declare(queue=VIDEO_QUEUE, passive=True)
         # one video at a time per replica; parallelism comes from replicas
         self._channel.basic_qos(prefetch_count=1)
 
     @staticmethod
     def _connect():
         credentials = pika.PlainCredentials(env.RABBITMQ_USERNAME, env.RABBITMQ_PASSWORD)
+        context = ssl.create_default_context(cafile="/run/secrets/pki/ca.crt")
+        loaded_cas = sorted(hashlib.sha256(c).hexdigest() for c in context.get_ca_certs(binary_form=True))
+        os.makedirs("/run/picturas", mode=0o700, exist_ok=True)
+        with open(f"/run/picturas/pki-loaded-{os.getpid()}.json", "w") as record:
+            json.dump({"pid": os.getpid(), "ca": loaded_cas[0], "trusted_cas": loaded_cas}, record)
+        os.chmod(f"/run/picturas/pki-loaded-{os.getpid()}.json", 0o600)
         params = pika.ConnectionParameters(
             env.RABBITMQ_HOST, int(env.RABBITMQ_PORT), "/", credentials,
+            ssl_options=pika.SSLOptions(context, env.RABBITMQ_HOST),
             # processing a video blocks this thread for minutes; without a
             # heartbeat the broker does not drop the connection midway
             heartbeat=0,
@@ -123,6 +130,10 @@ class VideoWorker:
             "percent": percent,
         })
 
+    def observed_callback(self, *args):
+        with active_work():
+            return self.callback(*args)
+
     def callback(self, ch, method, properties, body):
         started = now()
         info = {}
@@ -170,7 +181,7 @@ class VideoWorker:
         ch.basic_ack(delivery_tag=method.delivery_tag)
 
     def run(self):
-        self._channel.basic_consume(queue=VIDEO_QUEUE, on_message_callback=self.callback,
+        self._channel.basic_consume(queue=VIDEO_QUEUE, on_message_callback=self.observed_callback,
                                     auto_ack=False)
         print("[video] waiting for jobs on video_queue", flush=True)
         self._channel.start_consuming()

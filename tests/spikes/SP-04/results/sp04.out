@@ -1,0 +1,26 @@
+## 1 B7 shape (Host seaweedfs:9000, Authorization cleared), 1000 bytes
+  200  
+## 2 key with spaces, +, ç and parentheses
+  200  
+## 3 signed length 1000, client sends 2000
+  403  <Code>SignatureDoesNotMatch
+## 4 20 MiB at 4 MiB/s, streamed
+  200  
+## 5 client Authorization forwarded to S3
+  200  
+## 6 public Host forwarded
+  403  <Code>SignatureDoesNotMatch
+## 7 no JWT
+  401  
+## 8 presigned GET (signed for seaweedfs:9000) through /s3/ with Host seaweedfs:9000 and through /s3-publichost/
+  /s3/ GET: 200  
+  /s3/ Range GET: 206 bytes=100
+  /s3/ HEAD: 403
+  /s3/ PUT (limit_except): 403  
+  /s3-publichost/ GET: 403  <Code>SignatureDoesNotMatch
+## 9 objects written (admin listing)
+   staging/sp04 a b+ç(1).mp4 1000
+   staging/sp04-plain 1000
+   staging/sp04-t20 20971520
+   staging/sp04-t5 1000
+/s3/ HEAD with HEAD-signed URL: 200

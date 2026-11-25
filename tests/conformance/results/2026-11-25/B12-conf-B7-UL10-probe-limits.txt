@@ -1,0 +1,22 @@
+# B7-UL10-probe-limits — 2026-11-25T07:45:26Z
+$ evaluation/.venv/bin/python tests/conformance/upload/ul10-probe-limits.py
+
+baseline loopbackListeners=0
+PASS control: decided limits accept a valid video on both transports
+  fast upstream {"budget": 24548086, "duration": 10, "elapsedMs": 64, "error": null, "mode": "fast", "requests": 3, "served": 7782739, "upstreamClosed": 3, "width": 1280}
+PASS harness control: same upstream, served quickly, probes the sample
+  slow upstream {"budget": 24548086, "duration": null, "elapsedMs": 15022, "error": "Unreadable or corrupted video file", "mode": "slow", "requests": 3, "served": 14989, "upstreamClosed": 3, "width": null}
+PASS default 15 s deadline: refused at 15022 ms, upstream closed, 14989 bytes read, no ffprobe or relay left
+  bytes: legacy 400 in 0.20 s, direct confirm 400 in 0.09 s
+  attempt {"cleanup": "cleaned", "error": "Unreadable or corrupted video file", "name": "bytes-legacy.mp4", "objects": {"src": 404, "staging": 404}, "state": "failed", "transport": "legacy"}
+  attempt {"cleanup": "cleaned", "error": "Unreadable or corrupted video file", "name": "bytes-direct.mp4", "objects": {"src": 404, "staging": 404}, "state": "rejected", "transport": "direct"}
+  media=2 (before 2) busySlots=0 ffprobe=0 loopbackListeners=0 (baseline 0)
+PASS byte limit (8192 B) alone: both transports refused, no orphan, no slot, no process
+  time: legacy 400 in 0.16 s, direct confirm 400 in 0.05 s
+  attempt {"cleanup": "cleaned", "error": "Unreadable or corrupted video file", "name": "time-legacy.mp4", "objects": {"src": 404, "staging": 404}, "state": "failed", "transport": "legacy"}
+  attempt {"cleanup": "cleaned", "error": "Unreadable or corrupted video file", "name": "time-direct.mp4", "objects": {"src": 404, "staging": 404}, "state": "rejected", "transport": "direct"}
+  media=2 (before 2) busySlots=0 ffprobe=0 loopbackListeners=0 (baseline 0)
+PASS time limit (10 ms) alone: both transports refused, no orphan, no slot, no process
+PASS restored decided limits: valid video accepted again
+UL-10 probe limits: all checks passed
+exit: 0

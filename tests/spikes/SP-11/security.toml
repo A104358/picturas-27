@@ -1,0 +1,47 @@
+[grpc]
+ca = "/pki/ca.crt"
+
+[grpc.master]
+cert = "/pki/seaweedfs.crt"
+key = "/pki/seaweedfs.key"
+allowed_commonNames = "seaweedfs"
+
+[grpc.volume]
+cert = "/pki/seaweedfs.crt"
+key = "/pki/seaweedfs.key"
+allowed_commonNames = "seaweedfs"
+
+[grpc.filer]
+cert = "/pki/seaweedfs.crt"
+key = "/pki/seaweedfs.key"
+allowed_commonNames = "seaweedfs"
+
+[grpc.s3]
+cert = "/pki/seaweedfs.crt"
+key = "/pki/seaweedfs.key"
+allowed_commonNames = "seaweedfs"
+
+[grpc.client]
+cert = "/pki/seaweedfs.crt"
+key = "/pki/seaweedfs.key"
+
+[https.client]
+enabled = true
+cert = "/pki/seaweedfs.crt"
+key = "/pki/seaweedfs.key"
+ca = "/pki/ca.crt"
+
+[https.volume]
+cert = "/pki/seaweedfs.crt"
+key = "/pki/seaweedfs.key"
+ca = "/pki/ca.crt"
+
+[https.master]
+cert = "/pki/seaweedfs.crt"
+key = "/pki/seaweedfs.key"
+ca = "/pki/ca.crt"
+
+[https.filer]
+cert = "/pki/seaweedfs.crt"
+key = "/pki/seaweedfs.key"
+ca = "/pki/ca.crt"

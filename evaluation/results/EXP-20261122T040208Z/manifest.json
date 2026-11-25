@@ -1,0 +1,229 @@
+{
+ "campaign": "EXP",
+ "started_at": "2026-11-22T04:02:08Z",
+ "med_version": "1.0.0",
+ "git": {
+  "head": "02623a4e08d5f5582b36aca3b49b104ccee9eef4",
+  "app_dirty": "M Tools/utils/env.py\n D apiGateway/certs/selfsigned.crt\n D apiGateway/certs/selfsigned.key\n M apiGateway/routes/projects.js\n M apiGateway/routes/subscriptions.js\n M docker-compose.yaml\n M frontend/.dockerignore\n D frontend/certs/selfsigned.crt\n D frontend/certs/selfsigned.key\n M imageStorageService/services/s3Client.js\n M nginx/nginx.conf\n M projects/bin/www\n D projects/certs/selfsigned.crt\n D projects/certs/selfsigned.key\n M projects/routes/projects.js\n M projects/utils/httpsAgent.js\n M projects/utils/imageStorage.js\n M rabbitMQ/definitions.json\n M subscriptions/bin/www\n D subscriptions/certs/selfsigned.crt\n D subscriptions/certs/selfsigned.key\n M users/bin/www\n D users/certs/selfsigned.crt\n D users/certs/selfsigned.key\n M users/routes/users.js\n M wsGateway/.dockerignore\n?? Tools/.dockerignore\n?? apiGateway/.dockerignore\n?? generative-mock/.dockerignore\n?? imageStorageService/.dockerignore\n?? projects/.dockerignore\n?? rabbitMQ/.dockerignore\n?? subscriptions/.dockerignore\n?? users/.dockerignore",
+  "base_commit": "0523102",
+  "diff_stat_vs_base": "Tools/utils/env.py                       |  7 ++--\n apiGateway/Dockerfile                    |  2 +-\n apiGateway/certs/selfsigned.crt          | 22 ------------\n apiGateway/certs/selfsigned.key          | 28 ---------------\n apiGateway/routes/projects.js            |  4 +--\n apiGateway/routes/subscriptions.js       |  4 +--\n docker-compose.yaml                      | 62 ++++++++++++++++----------------\n frontend/.dockerignore                   | 17 ++++++++-\n frontend/certs/selfsigned.crt            | 21 -----------\n frontend/certs/selfsigned.key            | 28 ---------------\n imageStorageService/Dockerfile           |  2 +-\n imageStorageService/services/s3Client.js |  5 +--\n nginx/nginx.conf                         |  4 +--\n projects/Dockerfile                      |  2 +-\n projects/bin/www                         |  4 +--\n projects/certs/selfsigned.crt            | 22 ------------\n projects/certs/selfsigned.key            | 28 ---------------\n projects/routes/projects.js              |  4 +--\n projects/utils/httpsAgent.js             |  4 +--\n projects/utils/imageStorage.js           |  4 +--\n rabbitMQ/definitions.json                | 30 ++--------------\n subscriptions/Dockerfile                 |  2 +-\n subscriptions/bin/www                    |  4 +--\n subscriptions/certs/selfsigned.crt       | 21 -----------\n subscriptions/certs/selfsigned.key       | 28 ---------------\n users/Dockerfile                         |  2 +-\n users/bin/www                            |  4 +--\n users/certs/selfsigned.crt               | 22 ------------\n users/certs/selfsigned.key               | 28 ---------------\n users/routes/users.js                    |  4 +--\n wsGateway/.dockerignore                  | 17 ++++++++-\n 31 files changed, 98 insertions(+), 338 deletions(-)"
+ },
+ "instrumento": {
+  "ficheiros": {
+   "med.py": "997cdeb315257def13854e8da501af424310810b9fa9da1a6cdc5c737b3d1ea2",
+   "criteria.yaml": "99f6facdf2c1da7791a48361281ec169e8e0c980f2455a0c1506f5b697f96a88",
+   "cases/security.yaml": "e7daa0a3e80fbdf910416e7a08ea8ce17257ab102d7a7842b93c881c2f1ad5bd",
+   "probe.Dockerfile": "6adebc5704b2003c6a75e540bed7782022ef5939837e5c93250c40cffc6073f1",
+   "requirements.txt": "bdbedd671205746962c7d6d8b259221622fe4d892edc0f46b16bf692a737bd5f",
+   "medlib/__init__.py": "d25e012528e9920c08d137130d1c6903a9fb74919a3564b225c726f8f094015f",
+   "medlib/actions.py": "270f385f102fde35569e47a6bf42e3ccf6f0369af012acb74d1bea154acb96a3",
+   "medlib/api.py": "88df29b4e5e88a9f857490836f5496a0ce74eb097855e3021aecb535e3374891",
+   "medlib/config.py": "826159277822d1724d310bf227aee43ca381046c1f29477a38c08b2c2a90b91c",
+   "medlib/corpus.py": "678cf6e38855d30acf26d3bc525bd0e69a0879731784e3cbdacf952e6b13de56",
+   "medlib/dockerctl.py": "e8e5fa1dbc8da2e4c7ddc36100d7da8467b0ca6e276cda65c1b0c2dbc1b040f8",
+   "medlib/monitor.py": "0358ad3f73a4e50074bd2e6050d59abbe14ca34ebbe32184d39e32033c803732",
+   "medlib/probe.py": "31ef9b90439557e76d34e4317b193bf2e1c1a6a4dac4ae50e94565a5a29812f5",
+   "medlib/report.py": "9ddd10f17f28bb5424b1e56e4b5eeeb87e5c1b74b7eb235e6b1736e9643d7156",
+   "medlib/security.py": "87b473050ea93620d693d3bd451d340aff0a01a9a1241856049f25c6269876e9",
+   "medlib/upload.py": "1d04393fa829955c869a4cddc2f675b40c544d7d6c441983f0ed236697d6f1a7",
+   "medlib/uploads.py": "e3fcdd203d19858e14aae484fc5213005ada538c6772cef73259c03fda137308",
+   "medlib/util.py": "da7f2ac7f46c2a2fa923766768b857eb5e7a70394cdc604f7b65d64050a4ad4c",
+   "medlib/ws.py": "dde6bc170a914921650ab38d9127a5002ed5d2f82ae48c681bc329c9913deb9a"
+  },
+  "total": "638516104ae9c1bd6e0f80bf1e14f2b0b8d855b8c50ace98e9b4c3958a51445a"
+ },
+ "hashes": {
+  "med_py": "997cdeb315257def13854e8da501af424310810b9fa9da1a6cdc5c737b3d1ea2",
+  "medlib": "c324082f2937d30a661d1760e2099cc05fbe481ac85327d05a7812ee7b054a3a",
+  "criteria": "99f6facdf2c1da7791a48361281ec169e8e0c980f2455a0c1506f5b697f96a88",
+  "cases": "e7daa0a3e80fbdf910416e7a08ea8ce17257ab102d7a7842b93c881c2f1ad5bd",
+  "compose": "2e17db922b5d32e3b2991b3f9c4d9a02a88e2e299a585ea787be3bbd32fc5321",
+  "override": "2aa6516deb2c453e9186ea5600054d371acc114d513bb674854048686edef40b",
+  "override_limits": "cbcd6f4ac0e32b4bef9b30717dcb096e9af6dd01049edfca7018844215693075"
+ },
+ "host": {
+  "uname": "Darwin Mac.Home 24.6.0 Darwin Kernel Version 24.6.0: Mon Jul 14 11:30:40 PDT 2025; root:xnu-11417.140.69~1/RELEASE_ARM64_T6041 arm64 arm",
+  "machine": "arm64",
+  "cpu": "Apple M4 Pro",
+  "python": "3.13.9",
+  "disk_free_gib": 80.4
+ },
+ "docker": {
+  "ncpu": 12,
+  "mem_total": 8217751552,
+  "kernel": "6.10.14-linuxkit",
+  "cgroup_version": "2",
+  "driver": "overlayfs",
+  "server_version": "28.5.1",
+  "os": "Docker Desktop"
+ },
+ "images": {
+  "picturas-nfr-border_tool-1": "sha256:09810e86394f4a35cf922fe3dbea342cf0e98169f02d12c8cc81118bc66025cf",
+  "picturas-nfr-upgrade_ai_tool-1": "sha256:0b923327f15609e61de086750538d40be146ed0245f102f2825907319506a075",
+  "picturas-nfr-frontend-1": "sha256:34089a8542e92f328280bea0d6abeb17b6038df964d2a3cd612f699da1fd9342",
+  "picturas-nfr-ws_gateway-1": "sha256:8fb88356515f97db0c1cc83202385bd0563231ccd70aae721f83d298e91fbe3d",
+  "picturas-nfr-contrast_tool-1": "sha256:96424df57a78878c67dfbfe795d13f34f64167953bd8f57ca556152a046d3fdd",
+  "picturas-nfr-cut_ai_tool-1": "sha256:02d54ce59ed1caa656d74562a32133cd9d9c4d598d5e8453a3eb6cf9f6e12f61",
+  "picturas-nfr-people_ai_tool-1": "sha256:086c92defff88215587772d4baf8ead259fb7823f54882cb6b500e64fc6a5119",
+  "picturas-nfr-rotate_tool-1": "sha256:1bee689c1b66dc21fd0340b7333afe31540db68d372457907b9dd5b7927d46aa",
+  "picturas-nfr-users_mongoDB-1": "sha256:4be76f674fc4b27859816811b8baa3c51830eb1dbf4ca81a51e26b79edd662ef",
+  "picturas-nfr-projects_mongoDB-1": "sha256:4be76f674fc4b27859816811b8baa3c51830eb1dbf4ca81a51e26b79edd662ef",
+  "picturas-nfr-expand_ai_tool-1": "sha256:37b92ad3a61b100e32256b9abc415d040bd6bf617092e3773dd7f9ede837938a",
+  "picturas-nfr-brightness_tool-1": "sha256:d253a288974f63ba184e4748f510b68ab2616245aff10ebef32bcd33f198c63b",
+  "picturas-nfr-mongo-backup-1": "sha256:4be76f674fc4b27859816811b8baa3c51830eb1dbf4ca81a51e26b79edd662ef",
+  "picturas-nfr-cut_tool-1": "sha256:c7119a01a63e1c8c7c22435911940baaf501732995fd566691eabfef3dcde21e",
+  "picturas-nfr-video_tool-1": "sha256:89f3006582eb826b55d686844f59f3e30069e8e63b8d9782d76c2f39e6bc0a35",
+  "picturas-nfr-subscriptions-1": "sha256:91d2607b076eb99935aacf89e4d14aa464856fdb54e640ee342c78a75546bf0f",
+  "picturas-nfr-subscriptions_mongoDB-1": "sha256:4be76f674fc4b27859816811b8baa3c51830eb1dbf4ca81a51e26b79edd662ef",
+  "picturas-nfr-projects-1": "sha256:5d6f906d7d4e4442bc0c2984e302d8fc31565207e69165e63b4fbd0c7f528423",
+  "picturas-nfr-rabbitmq-1": "sha256:d9794ba670fc46fcceaa6d1785d904af22f3f2372cfef3f44f41a2beedcdb1d2",
+  "picturas-nfr-generative-mock-1": "sha256:70bc6408a8581ac3da91068d6d2a852d8c7fb4880e0c49c9b79dfde1f9d1f19c",
+  "picturas-nfr-users-1": "sha256:32ddca45b7d8459ab47770c3c14f4d1835023130b354399c3b0630732d950fb1",
+  "picturas-nfr-nginx-1": "sha256:84f7876d21d154885f99554d7ae325d8c2213f9169726ea7ab60642f2573a787",
+  "picturas-nfr-resize_tool-1": "sha256:6e0fdba35f6e66122d30cac46618fc2680537f55fa5f97ae26fcc42fc105cf87",
+  "picturas-nfr-saturation_tool-1": "sha256:f751f6fb75dbfa1c5bbd94135f20b986b6a45bb0f2298d36072a496bc7b20f21",
+  "picturas-nfr-binarization_tool-1": "sha256:bf64dfe70820e26c0040a96ffd3876188c1daad5254d741f8928058ed512b754",
+  "picturas-nfr-obj_ai_tool-1": "sha256:69973e306cae877b4041db7aaa30ac25904a57e981adb6fbecf758e3cacceb3f",
+  "picturas-nfr-img_storage-1": "sha256:00324f10a4189290584b1422b1740828f04502c06a0463429284f59c9aefb781",
+  "picturas-nfr-seaweedfs-1": "sha256:ce9e796f1fe6f06968f4c04bdaf8f678dad9c8acdfef3d244133d71bfa6bf882",
+  "picturas-nfr-text_ai_tool-1": "sha256:ed931d90c85ce00c4bb2385fe522ee82c799715a20068364fba97f02261aeeec",
+  "picturas-nfr-api_gateway-1": "sha256:247e88bf808e11ea3107de95a90ca5860cadb906ab768ba55a4cfb7715165d06",
+  "picturas-nfr-watermark_tool_ms-1": "sha256:534007b3904257e877f6246578a3df65e1875b477b92d9627b29e35e60c35835",
+  "picturas-nfr-bg_remove_ai_tool-1": "sha256:7785c0176240f7ec3c4df9278dbb7982a36c46f4a356a5a4845cca1385fa2b64"
+ },
+ "corpus": {
+  "pad_10MiB_H.mp4": {
+   "bytes": 10485760,
+   "sha256": "e017f8fe200c37fe99627a29784efa81cc0a43dc84aed5ccc7a15676e6fc8d82",
+   "kind": "pad",
+   "moov": "H"
+  },
+  "pad_10MiB_T.mp4": {
+   "bytes": 10485760,
+   "sha256": "168670ac41481b00115cc376024fc1f0c73f6ce50ae66c3a6702382bbf30836d",
+   "kind": "pad",
+   "moov": "T"
+  },
+  "pad_100MiB_H.mp4": {
+   "bytes": 104857600,
+   "sha256": "1d595e32d50338199dc0dbb93ce6cbe2b15e58111e7d73fe6bbc564202f5a3ba",
+   "kind": "pad",
+   "moov": "H"
+  },
+  "pad_100MiB_T.mp4": {
+   "bytes": 104857600,
+   "sha256": "4c02582e1585b82d7ec0c867b2f0a8a92dada777c929f244493a2d721ebd73af",
+   "kind": "pad",
+   "moov": "T"
+  },
+  "pad_500MiB_H.mp4": {
+   "bytes": 524288000,
+   "sha256": "91df69364f2a26b4d8a352825d6db876e0f53a833b302b5b834be6ab3dba4615",
+   "kind": "pad",
+   "moov": "H"
+  },
+  "pad_500MiB_T.mp4": {
+   "bytes": 524288000,
+   "sha256": "a48006dea1bf8a80de16b600bd049a4180784efbb8e232c174a6f538470dde42",
+   "kind": "pad",
+   "moov": "T"
+  },
+  "pad_1024MiB_plus1_H.mp4": {
+   "bytes": 1073741825,
+   "sha256": "a6697a673b7753fcd53216fa2bb4be912514775306d4acb285c17ada6830e4e8",
+   "kind": "pad_over_limit",
+   "moov": "H"
+  },
+  "sample_6s.mov": {
+   "bytes": 63600,
+   "sha256": "dfae0d1fe6387c792c8e94700927deb8e282a15c449f4f6fabdcedd72940c4be",
+   "kind": "sample",
+   "moov": null
+  },
+  "speech_mandela_177s_1080p.webm": {
+   "bytes": 17467748,
+   "sha256": "3a58e266d7552d700846b362933d1649b384493dc4a68db22df12d0bd3c1db3f",
+   "kind": "sample",
+   "moov": null
+  },
+  "too_long_90s.mp4": {
+   "bytes": 305128,
+   "sha256": "3ebbdf2febda6635ec2483ad05176cb2c9db9299b3f19eba47e54c154a4adb31",
+   "kind": "sample",
+   "moov": null
+  },
+  "corrupted.mp4": {
+   "bytes": 200000,
+   "sha256": "d2ac1ad31b409ab1bf9a94a222a55e6bb036861da13ccc0064ef30f17dbe2864",
+   "kind": "sample",
+   "moov": null
+  },
+  "empty.mp4": {
+   "bytes": 0,
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "kind": "empty",
+   "moov": null
+  },
+  "image.png": {
+   "bytes": 152,
+   "sha256": "8c75ea479ea0ef783a321702243fb09f4d71d748e3f30e3cfd2e0e2a24bca941",
+   "kind": "png",
+   "moov": null
+  }
+ },
+ "corpus_sha": "407122e3f68c39cd7d4af0873e4dd3217ecf1a85df923747fa2caded1d8e83ad",
+ "nginx": {
+  "client_max_body_size": [
+   "1100m"
+  ],
+  "proxy_request_buffering": [
+   "on (omissão)"
+  ],
+  "client_body_temp_path": "/var/cache/nginx/client_temp"
+ },
+ "tls_client_verification": "desligada (nginx autoassinado)",
+ "compose_project": "picturas-nfr",
+ "preflight": {
+  "ok": true,
+  "failed": [],
+  "checks": {
+   "projeto_isolado": {
+    "ok": true,
+    "detail": "picturas-nfr",
+    "fatal": true
+   },
+   "disco_livre": {
+    "ok": true,
+    "detail": "80.4 GiB (mínimo 60)",
+    "fatal": true
+   },
+   "docker": {
+    "ok": true,
+    "detail": "docker info",
+    "fatal": true
+   },
+   "docker_cpus": {
+    "ok": true,
+    "detail": "12 CPUs",
+    "fatal": true
+   },
+   "docker_mem": {
+    "ok": true,
+    "detail": "7.7 GiB",
+    "fatal": true
+   },
+   "ffmpeg": {
+    "ok": true,
+    "detail": "ffmpeg/ffprobe no PATH",
+    "fatal": true
+   },
+   "arvore_limpa": {
+    "ok": false,
+    "detail": "M Tools/utils/env.py\n D apiGateway/certs/selfsigned.crt\n D apiGateway/certs/selfsigned.key\n M apiGateway/routes/projects.js\n M apiGateway/routes/subscriptions.js\n M docker-compose.yaml\n M frontend/.dockerignore\n D frontend/certs/selfsigned.crt\n D frontend/certs/selfsigned.key\n M imageStorageService/",
+    "fatal": false
+   }
+  }
+ },
+ "finished_at": "2026-11-22T04:02:19Z",
+ "duration_s": 10
+}

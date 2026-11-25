@@ -1,0 +1,1 @@
+PASS presence agent: idle 4s < server 5s; active timeout policy restored; TLS-session cache disabled

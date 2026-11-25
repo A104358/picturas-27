@@ -1,0 +1,2 @@
+PASS simultaneous uploads publish exactly one media and one version
+PASS interrupted body leaves no media and a later upload succeeds

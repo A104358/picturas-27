@@ -1,0 +1,13 @@
+PASS AR-02 actual users issuer creates private delivery for the existing account
+PASS AR-12 journal/status/stdout contain no bearer or HS256 secret
+PASS S06 actual emitted JWT validates for the same anonymous subject
+PASS AR-09 recovery mount has no registration, old validation or socket (absent)
+PASS AR-05 candidate remains in memory until explicit confirmation
+PASS AR-02/06 import preserves subject, server profile and original issuance expiry
+PASS AR-11 normal bootstrap resumes with the imported identity
+PASS AR-09 recovery mount has no registration, old validation or socket (invalid)
+PASS AR-05 candidate remains in memory until explicit confirmation
+PASS AR-02/06 import preserves subject, server profile and original issuance expiry
+PASS AR-11 normal bootstrap resumes with the imported identity
+FAIL B9 browser: Error at 158
+Browser diagnostic: Locator.wait_for: Error: strict mode violation: get_by_role("alert") resolved to 2 elements:

@@ -1,0 +1,17 @@
+DENY   no TLS, no creds: ServerSelectionTimeoutError: projects_mongodb:27017: connection closed (configured timeouts: socketTimeoutMS: 20000.0ms, connectTimeoutMS: 
+DENY   no TLS, service creds: ServerSelectionTimeoutError: projects_mongodb:27017: connection closed (configured timeouts: socketTimeoutMS: 20000.0ms, connectTimeoutMS: 
+DENY   TLS, wrong CA: ServerSelectionTimeoutError: projects_mongodb:27017: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in
+DENY   TLS, no creds find: OperationFailure: command find requires authentication
+DENY   TLS, git creds root/example? (none in Git for mongo) -> wrong pw: OperationFailure: Authentication failed.
+ALLOW  TLS, svc find own: {'_id': 'fixture-1', 'name': 'fixture', 'user_id': 'u1'}
+ALLOW  TLS, svc insert own: 6b01f4aa490d7067334af85b
+ALLOW  TLS, svc listDatabases (names): ['projects']
+DENY   TLS, svc insert other DB (users): OperationFailure: not authorized on users to execute command { insert: "user", ordered: true, lsid: { id: UUID("507efeb2-7932-47
+DENY   TLS, svc read admin.system.users: OperationFailure: not authorized on admin to execute command { find: "system.users", filter: {}, limit: 1, singleBatch: true, ls
+DENY   TLS, svc createUser: OperationFailure: not authorized on projects to execute command { createUser: "evil", pwd: "xxx", roles: [ "root" ], lsid: { id:
+DENY   TLS, svc dropDatabase own: OperationFailure: not authorized on projects to execute command { dropDatabase: 1, lsid: { id: UUID("0695ecca-377c-46bc-8cde-dc7
+DENY   TLS, svc serverStatus: OperationFailure: not authorized on admin to execute command { serverStatus: 1, lsid: { id: UUID("266471d3-50b6-4784-8628-c2cd74
+ALLOW  TLS, backup_ro find: {'_id': 'fixture-1', 'name': 'fixture', 'user_id': 'u1'}
+DENY   TLS, backup_ro insert: OperationFailure: not authorized on projects to execute command { insert: "project", ordered: true, lsid: { id: UUID("b0084140-4
+ALLOW  TLS, verify hostname: connect by IP alias 't' not in SAN: 0
+DENY connect by IP: 172.19.0.2:27017: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: IP address mismatch, certificate is not valid for '172.19.0.2'

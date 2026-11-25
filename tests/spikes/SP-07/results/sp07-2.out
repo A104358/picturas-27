@@ -1,0 +1,13 @@
+DENY   amqp:// plaintext 5672: connect ECONNREFUSED 172.19.0.3:5672
+DENY   amqps wrong CA: self-signed certificate in certificate chain
+DENY   amqps by IP (name not in SAN): The property 'options.servername' Setting the TLS ServerName to an IP address is not permitted.. Received '172.19.0.3'
+ALLOW  amqps rejectUnauthorized default + CA (no servername override)
+DENY   amqps user/password: Handshake terminated by server: 403 (ACCESS-REFUSED) with message "ACCESS_REFUSED - Login was refused using authenticati
+       TLS: authorized=true protocol=TLSv1.3 peerCN=rabbitmq
+ALLOW  projects checkExchange picturas (passive)
+DENY   projects assertExchange picturas (active, as today): Operation failed: ExchangeDeclare; 403 (ACCESS-REFUSED) with message "ACCESS_REFUSED - configure access to exchange 'pic
+ALLOW  projects publish picturas -> brightness_queue (confirm)
+ALLOW  projects consume project_queue: amq.ctag-jp7nXnXi1KBQFQP4obo3WA
+DENY   projects get ws_queue: [object Object]
+       connection still usable after channel 403s: true
+DENY   amqps servername=projects (not in SAN): Hostname/IP does not match certificate's altnames: Host: projects. is not in the cert's altnames: DN

@@ -1,0 +1,1 @@
+{"metric": "S12", "campaign": "EXP", "rep": 1, "revoke_status": 204, "pre_revocation_events_A": 7, "emitted_after_ack": 31, "received_after_ack_A": 2, "lower_ms": 708.0, "upper_ms": 998.1, "censored_gt_ms": null, "uncertainty_ms": 250.0, "eventos_apos_limite": 0, "disconnect_A_ms": null, "controlos_ok": true, "valida": true, "t_utc": "2026-11-23T23:35:02Z"}

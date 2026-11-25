@@ -1,0 +1,4 @@
+PASS reconnect: revalidates the same token and user; multiple consumers share one connection
+PASS network outage: no logout/identity replacement; retry resumes the same session
+PASS rejected session: explicit invalid-session signal, no anonymous account or automatic reconnect
+PASS React remount during validation: stale completion cannot connect and the live consumer still reconnects

@@ -260,7 +260,8 @@ class Victim:
 def s3_admin_keys(prefix: str) -> list[str]:
     """Verification channel (admin credentials, inside the network)."""
     access, secret = SETTINGS.s3_admin()
-    res = dockerctl.probe({"action": "s3", "endpoint": "http://seaweedfs:9000", "access": access,
+    res = dockerctl.probe({"action": "s3", "endpoint": SETTINGS.s3_endpoint(),
+                           "ca_file": SETTINGS.data_ca("s3"), "access": access,
                            "secret": secret, "bucket": SETTINGS.s3_bucket, "op": "list_prefix",
                            "prefix": prefix})
     if not res.get("ok"):
@@ -270,7 +271,8 @@ def s3_admin_keys(prefix: str) -> list[str]:
 
 def s3_admin_exists(key: str) -> bool | None:
     access, secret = SETTINGS.s3_admin()
-    res = dockerctl.probe({"action": "s3", "endpoint": "http://seaweedfs:9000", "access": access,
+    res = dockerctl.probe({"action": "s3", "endpoint": SETTINGS.s3_endpoint(),
+                           "ca_file": SETTINGS.data_ca("s3"), "access": access,
                            "secret": secret, "bucket": SETTINGS.s3_bucket, "op": "head", "key": key})
     return res.get("exists") if res.get("ok") else None
 

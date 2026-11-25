@@ -49,6 +49,7 @@ export default function ProjectItem({ p }: { p: Project }) {
 
   const ownerId = searchParams.get("owner") ?? session.user._id;
   const shareId = searchParams.get("share") ?? undefined;
+  const isOwner = p.user_id === session.user._id;
 
   const projectKey = ["project", session.user._id, p._id, session.token, ownerId, shareId];
 
@@ -120,15 +121,17 @@ export default function ProjectItem({ p }: { p: Project }) {
                 <Pencil className="size-[1em]" />
               </DialogTrigger>
             </DropdownMenuItem>
-            <DropdownMenuItem>
-              <DialogTrigger
-                className="flex justify-between w-full items-center"
-                onClick={() => setOption("delete")}
-              >
-                <span>Delete</span>
-                <Trash className="size-[1em]" />
-              </DialogTrigger>
-            </DropdownMenuItem>
+            {isOwner && (
+              <DropdownMenuItem>
+                <DialogTrigger
+                  className="flex justify-between w-full items-center"
+                  onClick={() => setOption("delete")}
+                >
+                  <span>Delete</span>
+                  <Trash className="size-[1em]" />
+                </DialogTrigger>
+              </DropdownMenuItem>
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
         <DialogContent>

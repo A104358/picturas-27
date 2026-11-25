@@ -1,0 +1,13 @@
+# B12-hash-orphan — 2026-11-25T07:46:00Z
+$ evaluation/.venv/bin/python tests/conformance/upload/b12-hash-orphan.py
+
+PASS cycle 1: upload accepted, project deleted before its hash: upload 204, delete 204
+PASS cycle 2: upload accepted, project deleted before its hash: upload 204, delete 204
+PASS cycle 3: upload accepted, project deleted before its hash: upload 204, delete 204
+PASS cycle 4: upload accepted, project deleted before its hash: upload 204, delete 204
+PASS account cycle: upload accepted, account deleted before its hash: upload 204, delete 204
+PASS later upload after the orphans (no 429)
+PASS orphaned attempts finished, no slot held: states ['ready'], slots held 0
+PASS later video gets its hash (pump not blocked by orphans): ['ready']
+B12 hash orphan: all checks passed
+exit: 0

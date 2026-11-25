@@ -1,0 +1,3 @@
+PASS pre-existing authenticated WS
+PASS buffered request body defers maintenance without killing participants
+FAIL planned renewal: AttributeError

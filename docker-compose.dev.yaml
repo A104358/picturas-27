@@ -1,0 +1,27 @@
+# Development override (B3, D-04). Not loaded by default and never used by evaluation/med.py:
+#
+#   docker compose -f docker-compose.yaml -f docker-compose.dev.yaml up -d --build
+#
+# users, subscriptions and api_gateway run their source from a bind mount under nodemon,
+# so edits reload without a rebuild. Under nodemon a crashed app leaves the container
+# "Up" with the service dead: restart it by hand (`docker compose restart <service>`).
+# The delivered docker-compose.yaml runs `node` directly, so a dead process is restarted.
+# No ports are published here either (D-05): use `docker compose exec`.
+services:
+  users:
+    command: ["npm", "start"]
+    volumes:
+      - ./users:/app
+      - /app/node_modules
+
+  subscriptions:
+    command: ["npm", "start"]
+    volumes:
+      - ./subscriptions:/app
+      - /app/node_modules
+
+  api_gateway:
+    command: ["npm", "start"]
+    volumes:
+      - ./apiGateway:/app
+      - /app/node_modules

@@ -1,0 +1,19 @@
+# B9-issuer — 2026-11-25T06:18:43Z
+$ docker run --rm --network none -v /Users/miguelsantos/Documents/GitHub/picturas-27F2:/repo:ro -w /repo -e NODE_PATH=/app/node_modules --entrypoint node picturas-dev-users --test tests/conformance/sessions/issuer.test.js
+
+✔ AR-01 evidence/template/approval gates preserve case and issue nothing (5.895917ms)
+✔ AR-02 same identity, private exclusive delivery and journal contains no token (4.905875ms)
+✔ AR-03 missing/registered/changed account and wrong destination fail before issuance (2.055417ms)
+✔ AR-04 existing output, concurrent lock and ambiguous crash are reconciliable (2.426416ms)
+✔ AR-12 unsafe permissions, symlink and path traversal are refused (0.526667ms)
+✔ AR-04 real concurrent attempts serialize and post-output crash keeps durable ambiguity (6.388791ms)
+✔ AR-12 case storage in the application or repository is refused (0.1535ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 79.865125
+exit: 0

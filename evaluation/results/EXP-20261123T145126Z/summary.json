@@ -1,0 +1,95 @@
+{
+ "updated_at": "2026-11-23T14:52:04Z",
+ "metrics": {
+  "S16": {
+   "tentativas": 54,
+   "admitidos": 0,
+   "recusados": 54,
+   "inconclusivos": 0,
+   "nao_aplicaveis": 0,
+   "por_resultado": {
+    "RECUSADO_DOMINIO": 54
+   },
+   "por_superficie": {
+    "rede": {
+     "tentativas": 27,
+     "admitidos": 0,
+     "inconclusivos": 0
+    },
+    "host": {
+     "tentativas": 27,
+     "admitidos": 0,
+     "inconclusivos": 0
+    }
+   },
+   "casos_admitidos": [],
+   "casos_inconclusivos": [],
+   "controlos_ok": 2,
+   "controlos_total": 2,
+   "credenciais_git_encontradas": 5
+  },
+  "S17": {
+   "tentativas": 15,
+   "admitidos": 0,
+   "recusados": 15,
+   "inconclusivos": 0,
+   "nao_aplicaveis": 0,
+   "por_resultado": {
+    "RECUSADO_DOMINIO": 15
+   },
+   "por_superficie": {
+    "rede": {
+     "tentativas": 7,
+     "admitidos": 0,
+     "inconclusivos": 0
+    },
+    "host": {
+     "tentativas": 7,
+     "admitidos": 0,
+     "inconclusivos": 0
+    },
+    "publica": {
+     "tentativas": 1,
+     "admitidos": 0,
+     "inconclusivos": 0
+    }
+   },
+   "casos_admitidos": [],
+   "casos_inconclusivos": [],
+   "controlos_ok": 1,
+   "controlos_total": 1
+  },
+  "S05": {
+   "total": 15,
+   "ok": 15,
+   "fracao": 1.0,
+   "falhas": [],
+   "politica_acl_editor_elimina": [
+    true
+   ]
+  }
+ },
+ "estados": {
+  "S01": "NAO_MEDIDA",
+  "S02": "NAO_MEDIDA",
+  "S03": "NAO_MEDIDA",
+  "S04": "NAO_MEDIDA",
+  "S12": "NAO_MEDIDA",
+  "S16": "CUMPRE_ALVO",
+  "S17": "CUMPRE_ALVO",
+  "S18": "NAO_MEDIDA",
+  "S05": "CUMPRE_ALVO",
+  "S21": "NAO_MEDIDA",
+  "U01": "NAO_MEDIDA",
+  "U20": "NAO_MEDIDA",
+  "U19": "NAO_MEDIDA",
+  "U18": "NAO_MEDIDA",
+  "U04": "NAO_MEDIDA",
+  "U08": "NAO_MEDIDA",
+  "U09": "NAO_MEDIDA",
+  "U25": "NAO_MEDIDA",
+  "U15": "NAO_MEDIDA",
+  "U17": "NAO_MEDIDA",
+  "U10": "NAO_MEDIDA"
+ }
+}

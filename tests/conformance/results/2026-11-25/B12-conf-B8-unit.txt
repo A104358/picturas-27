@@ -1,4 +1,4 @@
-# B8-unit — 2026-11-25T06:19:27Z
+# B8-unit — 2026-11-25T13:14:04Z
 $ docker run --rm --network none -v /Users/miguelsantos/Documents/GitHub/picturas-27F2:/repo:ro -w /repo -e NODE_PATH=/usr/src/app/node_modules --entrypoint node picturas-dev-ws_gateway --test tests/conformance/websocket/authorization.test.js tests/conformance/websocket/protocol.test.js tests/conformance/websocket/ws-route.test.js tests/conformance/websocket/presence-agent.test.js
 
 TAP version 13
@@ -9,84 +9,89 @@ TAP version 13
 # Subtest: WS-T01: verified connection identity, fresh joins, canonical contexts and callbacks
 ok 1 - WS-T01: verified connection identity, fresh joins, canonical contexts and callbacks
   ---
-  duration_ms: 3.943125
+  duration_ms: 2.72925
   ...
 # Subtest: WS-T02/T03/T04/E1: outage denies fresh join; failures never renew; emission checks deadline without timers
 ok 2 - WS-T02/T03/T04/E1: outage denies fresh join; failures never renew; emission checks deadline without timers
   ---
-  duration_ms: 1.105583
+  duration_ms: 2.110583
+  ...
+# Subtest: WS-T02/T04 (decision 53): suspension keeps limits, resumes only on a fresh allow, deny removes
+ok 3 - WS-T02/T04 (decision 53): suspension keeps limits, resumes only on a fresh allow, deny removes
+  ---
+  duration_ms: 1.497958
   ...
 # Subtest: WS-T05/E1: leave, disconnect and rejoin invalidate delayed evaluations; replacements acknowledge
-ok 3 - WS-T05/E1: leave, disconnect and rejoin invalidate delayed evaluations; replacements acknowledge
+ok 4 - WS-T05/E1: leave, disconnect and rejoin invalidate delayed evaluations; replacements acknowledge
   ---
-  duration_ms: 0.745917
+  duration_ms: 0.47525
   ...
 # Subtest: WS-T06: only presented paths survive individual denial; all denied removes room
-ok 4 - WS-T06: only presented paths survive individual denial; all denied removes room
+ok 5 - WS-T06: only presented paths survive individual denial; all denied removes room
   ---
-  duration_ms: 0.756
+  duration_ms: 0.597417
   ...
 # Subtest: WS-T07: absolute JWT expiry gates every event and terminates connection
-ok 5 - WS-T07: absolute JWT expiry gates every event and terminates connection
+ok 6 - WS-T07: absolute JWT expiry gates every event and terminates connection
   ---
-  duration_ms: 0.180708
+  duration_ms: 0.152542
   ...
 # Subtest: WS-T08: partial, duplicate, swapped, oversized and truncated responses grant nothing
-ok 6 - WS-T08: partial, duplicate, swapped, oversized and truncated responses grant nothing
+ok 7 - WS-T08: partial, duplicate, swapped, oversized and truncated responses grant nothing
   ---
-  duration_ms: 1.48875
+  duration_ms: 1.85325
   ...
 # Subtest: WS-T10: 4 active + 16 pending; 17th refused; replacement keeps deadline and acknowledges
-ok 7 - WS-T10: 4 active + 16 pending; 17th refused; replacement keeps deadline and acknowledges
+ok 8 - WS-T10: 4 active + 16 pending; 17th refused; replacement keeps deadline and acknowledges
   ---
-  duration_ms: 1.197708
+  duration_ms: 0.400584
   ...
 # Subtest: WS-B1: exact 4 KiB multibyte join and 64 KiB batch; +1 rejected explicitly
-ok 8 - WS-B1: exact 4 KiB multibyte join and 64 KiB batch; +1 rejected explicitly
+ok 9 - WS-B1: exact 4 KiB multibyte join and 64 KiB batch; +1 rejected explicitly
   ---
-  duration_ms: 0.90375
+  duration_ms: 0.910917
   ...
 # Subtest: WS-N1/J1/P1: bounded scheduler renews normal, 500+5+5 and 40x5 workloads fairly
-ok 9 - WS-N1/J1/P1: bounded scheduler renews normal, 500+5+5 and 40x5 workloads fairly
+ok 10 - WS-N1/J1/P1: bounded scheduler renews normal, 500+5+5 and 40x5 workloads fairly
   ---
-  duration_ms: 317.281042
+  duration_ms: 186.483917
   ...
 # Subtest: WS-L1/L2: live 512 connections/4096 contexts; controlled refusal at 513/4097 and cleanup
-ok 10 - WS-L1/L2: live 512 connections/4096 contexts; controlled refusal at 513/4097 and cleanup
+ok 11 - WS-L1/L2: live 512 connections/4096 contexts; controlled refusal at 513/4097 and cleanup
   ---
-  duration_ms: 1128.538043
+  duration_ms: 1182.578501
   ...
 # Subtest: WS-L3/R1: 32 rooms, 4 paths, per-subject bursts across reconnects, global burst and bucket retention
-ok 11 - WS-L3/R1: 32 rooms, 4 paths, per-subject bursts across reconnects, global burst and bucket retention
+ok 12 - WS-L3/R1: 32 rooms, 4 paths, per-subject bursts across reconnects, global burst and bucket retention
   ---
-  duration_ms: 2.117416
+  duration_ms: 2.56175
   ...
 # Subtest: WS-R1: global burst 200, subject-map cap 2048 and two-second retention
-ok 12 - WS-R1: global burst 200, subject-map cap 2048 and two-second retention
+ok 13 - WS-R1: global burst 200, subject-map cap 2048 and two-second retention
   ---
-  duration_ms: 24.968042
+  duration_ms: 26.02525
   ...
 # Subtest: WS-T04: positive result at/after total deadline never grants or renews
-ok 13 - WS-T04: positive result at/after total deadline never grants or renews
+ok 14 - WS-T04: positive result at/after total deadline never grants or renews
   ---
-  duration_ms: 0.247208
+  duration_ms: 0.231333
   ...
 # Subtest: WS-B1/T10: wide UTF-8 contexts split before 64 KiB even below 50 evaluations
-ok 14 - WS-B1/T10: wide UTF-8 contexts split before 64 KiB even below 50 evaluations
+ok 15 - WS-B1/T10: wide UTF-8 contexts split before 64 KiB even below 50 evaluations
   ---
-  duration_ms: 2.7065
+  duration_ms: 3.111
   ...
 # PASS presence agent: idle 4s < server 5s; active timeout policy restored; TLS-session cache disabled
 # Subtest: /repo/tests/conformance/websocket/presence-agent.test.js
 ok 2 - /repo/tests/conformance/websocket/presence-agent.test.js
   ---
-  duration_ms: 38.900417
+  duration_ms: 44.504584
   ...
 # PASS wire parser: exact handshake, +1, UTF-8 escapes/whitespace, no metadata serialization, no binary reconstruction queue
 # Subtest: /repo/tests/conformance/websocket/protocol.test.js
 ok 3 - /repo/tests/conformance/websocket/protocol.test.js
   ---
-  duration_ms: 45.686666
+  duration_ms: 47.825959
   ...
 # PASS WS-C1: other peer cannot delegate to the route
 # PASS WS-T08: one primary read, independent owner/read/invalid decisions
@@ -95,15 +100,15 @@ ok 3 - /repo/tests/conformance/websocket/protocol.test.js
 # Subtest: /repo/tests/conformance/websocket/ws-route.test.js
 ok 4 - /repo/tests/conformance/websocket/ws-route.test.js
   ---
-  duration_ms: 35.622583
+  duration_ms: 42.677209
   ...
-1..17
-# tests 17
+1..18
+# tests 18
 # suites 0
-# pass 17
+# pass 18
 # fail 0
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 1546.472376
+# duration_ms 1479.462084
 exit: 0

@@ -46,6 +46,7 @@ declare -a SUITES=(
   "B8-unit|$IMG -e NODE_PATH=/usr/src/app/node_modules --entrypoint node $P-ws_gateway --test tests/conformance/websocket/authorization.test.js tests/conformance/websocket/protocol.test.js tests/conformance/websocket/ws-route.test.js tests/conformance/websocket/presence-agent.test.js"
   "B8-client|$IMG -e B8_TS_COMPILER=/usr/src/app/node_modules/typescript --entrypoint node $P-frontend tests/conformance/websocket/client-reconnect.test.js frontend/lib/project-socket.ts"
   "B8-functional|$NET websocket/b8-functional.py"
+  "B8-outage|$PY tests/conformance/websocket/b8-outage.py $P"
   "B8-wire-limits|$NET websocket/b8-wire-limits.py 10"
   "B8-load|$NET websocket/b8-load.py"
   "B9-issuer|$IMG -e NODE_PATH=/app/node_modules --entrypoint node $P-users --test tests/conformance/sessions/issuer.test.js"

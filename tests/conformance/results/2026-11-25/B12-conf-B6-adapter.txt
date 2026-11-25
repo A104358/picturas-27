@@ -1,4 +1,4 @@
-# B6-adapter — 2026-11-25T07:43:09Z
+# B6-adapter — 2026-11-25T13:13:58Z
 $ tests/conformance/in-network.sh picturas-dev upload/b6-adapter.py
 
 PASS unauthenticated upload refused

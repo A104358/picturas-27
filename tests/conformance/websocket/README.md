@@ -12,7 +12,7 @@ tests/conformance/in-network.sh picturas-dev websocket/b8-load.py
 ```
 
 `b8-functional.py outage` anuncia `READY_STOP_PROJECTS` e `READY_START_PROJECTS`;
-no host, parar/iniciar apenas `projects` nesses pontos. Não reiniciar nginx até o
+no host, parar/iniciar apenas `projects` nesses pontos (`b8-outage.py [projeto]` faz isso). Não reiniciar nginx até o
 teste acabar, para manter o socket existente e provar a expiração sem revalidação.
 O contentor de teste não recebe o socket Docker. F01/F02, smoke e as suítes B4/B5
 continuam a correr separadamente. Os resultados ficam em `results/<data>/B8-*`.
@@ -30,6 +30,11 @@ Recebe o caminho de `frontend/lib/project-socket.ts` como argumento e a variáve
 do JWT verificado da ligação. A confirmação distingue `joined`, `denied`,
 `unavailable`, `invalid_request`, `session_expired` e `rate_limited`.
 
+Desde a decisão 53 (D-30 A), uma autorização que expira **suspende** o contexto em vez
+de o remover: não recebe eventos, conta nos limites 512/4096, continua a ser revalidado
+(250 ms enquanto falha) e retoma só com um allow novo, sem join; o cliente recebe
+`project-access` `suspended`. `deny` remove e o JWT expirado fecha a ligação.
+
 A nova rota `POST /internal/ws/projects/:projectId/authorize` é montada antes do
 middleware de identidade do gateway e tem a sua própria lista mTLS: só
 `ws_gateway`. O gateway e os restantes certificados da mesma CA recebem 403.
@@ -42,6 +47,7 @@ override Compose); o código recusa alargar os máximos de protocolo/segurança.
 | Ambiente | Valor inicial |
 |----------|---------------|
 | `WS_TIMEOUT_MS`, `WS_REVALIDATE_MS`, `WS_LEASE_MS` | 1000, 1000, 5000 |
+| `WS_RETRY_MS` (≤ `WS_REVALIDATE_MS`) | 250 |
 | `WS_ACTIVE`, `WS_PENDING`, `WS_BATCH_SIZE`, `WS_BODY_BYTES` | 4, 16, 50, 65536 |
 | `WS_CONNECTIONS`, `WS_CONTEXTS`, `WS_ROOMS`, `WS_PATHS` | 512, 4096, 32, 4 |
 | `WS_SUBJECT_RATE`, `WS_SUBJECT_BURST` | 5/s, 10 |

@@ -3,7 +3,7 @@ const { performance } = require("node:perf_hooks");
 
 const DEFAULTS = Object.freeze({
   timeoutMs: 1000, batchSize: 50, bodyBytes: 65536, active: 4, pending: 16,
-  revalidateMs: 1000, leaseMs: 5000, connections: 512, contexts: 4096,
+  revalidateMs: 1000, retryMs: 250, leaseMs: 5000, connections: 512, contexts: 4096,
   rooms: 32, paths: 4, subjectRate: 5, subjectBurst: 10,
   globalRate: 100, globalBurst: 200, buckets: 2048, retentionMs: 2000,
 });
@@ -23,7 +23,8 @@ function configuration(env = process.env) {
   // The receiving endpoint's protocol ceilings and the security deadlines cannot
   // be weakened through deployment configuration.
   if (config.bodyBytes > 65536 || config.batchSize > 50 || config.leaseMs > 5000 ||
-      config.timeoutMs > 1000 || config.revalidateMs > 1000) throw new Error("Unsafe WS configuration");
+      config.timeoutMs > 1000 || config.revalidateMs > 1000 ||
+      config.retryMs > config.revalidateMs) throw new Error("Unsafe WS configuration");
   return config;
 }
 
@@ -254,6 +255,21 @@ class Authorization {
       if (context.ever) record.socket.emit("project-access", { projectId: room.id, status });
     }
   }
+  // Decision 53 (D-30 A): a lease that lapses suspends the context instead of removing it.
+  // It receives nothing (emit() checks the lease), keeps its slot in the 512/4096 limits and
+  // keeps being revalidated (every retryMs while it fails); only a fresh allow, valid for at
+  // most leaseMs after its admission, resumes it without a new join. A deny still removes it
+  // and an expired JWT still closes the socket.
+  suspend(context) {
+    if (!this.live(context) || context.suspended) return;
+    context.suspended = true;
+    this.count("suspended");
+    const { record, room } = context;
+    if (!this.allowed(record, room)) {
+      record.socket.leave(`project:${room.id}`);
+      record.socket.emit("project-access", { projectId: room.id, status: "suspended" });
+    }
+  }
   leaveRecord(record, room) {
     for (const context of [...room.paths.values()]) this.remove(context);
     record.socket.leave(`project:${room.id}`);
@@ -288,7 +304,7 @@ class Authorization {
     if (!room) { room = { id: payload.projectId, paths: new Map() }; record.rooms.set(room.id, room); }
     if (!context) {
       context = { record, room, key, access: { ...access }, ref: randomUUID(),
-        generation: ++this.generation, sequence: 0, until: 0, ever: false, pending: false, due: Infinity };
+        generation: ++this.generation, sequence: 0, until: 0, ever: false, suspended: false, retried: false, pending: false, due: Infinity };
       room.paths.set(key, context);
       this.contexts++;
       if (!this.projects.has(room.id)) this.projects.set(room.id, { members: new Set(), cursor: 0 });
@@ -318,11 +334,13 @@ class Authorization {
         ack?.({ status: "denied" }); this.remove(context, "denied"); return;
       }
       if (decision?.decision === "allow" && this.now() < at + this.config.timeoutMs) {
-        if (context.ever) this.cadence.renewalGapMaxMs = Math.max(this.cadence.renewalGapMaxMs, at - context.lastPositive);
+        if (context.ever && !context.suspended) this.cadence.renewalGapMaxMs = Math.max(this.cadence.renewalGapMaxMs, at - context.lastPositive);
         context.lastPositive = at;
         context.until = Math.min(at + this.config.leaseMs, context.record.deadline,
           this.now() + Math.max(0, context.record.exp * 1000 - this.wall()));
         context.ever = true;
+        context.suspended = false;
+        context.retried = false;
         context.due = at + this.config.revalidateMs;
         context.record.socket.join(`project:${context.room.id}`);
         ack?.({ status: "joined" });
@@ -330,7 +348,12 @@ class Authorization {
         this.count(reason || "unavailable");
         ack?.({ status: "unavailable", reason: reason || "unavailable" });
         if (!context.ever) this.remove(context);
-        else if (!["superseded", "batch_full", "queue_full"].includes(reason)) context.due = this.now() + this.config.revalidateMs;
+        else if (!["superseded", "batch_full", "queue_full"].includes(reason)) {
+          // One quick retry after a failure, and quick retries while suspended, so a context
+          // resumes soon after projects answers again. A failure never extends the lease.
+          context.due = this.now() + (context.retried && !context.suspended ? this.config.revalidateMs : this.config.retryMs);
+          context.retried = true;
+        }
       }
     } };
   }
@@ -344,7 +367,7 @@ class Authorization {
       if (!this.sessionValid(record)) { this.expireSession(record); continue; }
       for (const room of [...record.rooms.values()]) {
         for (const context of [...room.paths.values()]) {
-          if (context.ever && context.until <= this.now()) this.remove(context);
+          if (context.ever && context.until <= this.now()) this.suspend(context);
         }
       }
     }

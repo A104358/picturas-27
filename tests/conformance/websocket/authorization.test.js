@@ -65,10 +65,56 @@ test("WS-T02/T03/T04/E1: outage denies fresh join; failures never renew; emissio
     f.auth.emit(id(100), "preview-ready", "late", id(2));
     f.auth.emit(undefined, "process-update", "missing context", id(2));
     assert.equal(socket.events.filter((e) => e.event === "preview-ready").length, 1);
-    f.auth.tick();
-    assert.equal(f.auth.contexts, 0);
+    f.auth.tick(); await flush();
+    // Decision 53 (D-30 A): the lapsed context is suspended, not removed, and receives nothing.
+    assert.equal(f.auth.contexts, 1);
+    assert.deepEqual(socket.events.filter((e) => e.event === "project-access").map((e) => e.data.status), ["suspended"]);
+    f.auth.emit(id(100), "preview-ready", "suspended", id(2));
+    assert.equal(socket.events.filter((e) => e.event === "preview-ready").length, 1);
     available = true;
+    f.advance(250); f.auth.tick(); await flush();
+    f.auth.emit(id(100), "preview-ready", "resumed without a new join", id(2));
+    assert.equal(socket.events.filter((e) => e.event === "preview-ready").length, 2);
     assert.equal((await f.join(socket))[0].status, "joined");
+  } finally { f.auth.close(); }
+});
+
+test("WS-T02/T04 (decision 53): suspension keeps limits, resumes only on a fresh allow, deny removes", async () => {
+  let mode = "allow";
+  const calls = [];
+  const f = fixture(async (body) => {
+    calls.push(f.now());
+    return mode === "down" ? null : response(body, () => mode);
+  });
+  try {
+    const { socket } = f.connect(1);
+    await f.join(socket);
+    mode = "down";
+    f.advance(1000); f.auth.tick(); await flush();          // first failure at 1000
+    f.advance(250); f.auth.tick(); await flush();           // one quick retry at 1250
+    f.advance(250); f.auth.tick(); await flush();           // nothing due at 1500
+    assert.deepEqual(calls, [0, 1000, 1250]);
+    f.advance(750); f.auth.tick(); await flush();           // back to the 1 s cadence at 2250
+    assert.deepEqual(calls, [0, 1000, 1250, 2250]);
+    f.advance(2750); f.auth.tick(); await flush();          // lease from admission at 0 lapses at 5000
+    assert.equal(f.auth.stats().reasons.suspended, 1);
+    f.advance(250); f.auth.tick(); await flush();           // suspended: retries every 250 ms
+    assert.deepEqual(calls.slice(-2), [5000, 5250]);
+    assert.equal(f.auth.contexts, 1, "a suspended context still counts in the 4096 limit");
+    f.auth.emit(id(100), "project-op", "while suspended");
+    assert.equal(socket.events.filter((e) => e.event === "project-op").length, 0);
+    mode = "allow";
+    f.advance(250); f.auth.tick(); await flush();
+    const context = [...f.auth.sockets.get(socket.id).rooms.get(id(100)).paths.values()][0];
+    assert.equal(context.until, 5500 + DEFAULTS.leaseMs, "lease counted from the new admission");
+    f.auth.emit(id(100), "project-op", "resumed");
+    assert.equal(socket.events.filter((e) => e.event === "project-op").length, 1);
+    mode = "down";
+    f.advance(5000); f.auth.tick(); await flush();
+    mode = "deny";
+    f.advance(250); f.auth.tick(); await flush();
+    assert.equal(f.auth.contexts, 0, "a deny removes a suspended context");
+    assert.equal(socket.events.at(-1).data.status, "denied");
   } finally { f.auth.close(); }
 });
 

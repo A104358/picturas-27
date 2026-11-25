@@ -148,6 +148,13 @@ try:
             except Exception:
                 pass
             time.sleep(0.2)
+        # Decision 53 (D-30 A): the suspended context resumes on its own fresh allow, without a join.
+        time.sleep(1.0)
+        since = time.monotonic()
+        publish(pid)
+        time.sleep(0.5)
+        res.check("WS-T02", "recovery resumes the suspended context without a new join",
+                  any(t >= since and e == "project-op" for t, e, _ in own.received), True)
         res.check("WS-T02", "recovery allows a fresh join", join(own, pid, {"kind": "owner"}), "joined")
         res.finish()
         sys.exit(0)

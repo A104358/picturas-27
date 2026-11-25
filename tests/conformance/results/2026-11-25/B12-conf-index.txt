@@ -72,3 +72,11 @@ B12-hash-orphan          exit=0   20s B12 hash orphan: all checks passed
 B7-browser               exit=0    7s PASS UI cancellation before commit
 # B12 conformance — 2026-11-25T07:46:31Z — commit ad86ce9 (+ uncommitted changes)
 B12-regression           exit=0  139s B12 regression: 105/105 checks passed
+# B12 conformance — 2026-11-25T13:13:58Z — commit c2d2022 (+ uncommitted changes)
+B6-adapter               exit=0    6s PASS premium video upload accepted
+B8-unit                  exit=0    2s # fail 0
+B8-client                exit=0    0s PASS React remount during validation: stale completion cannot connect and the live consume
+B8-functional            exit=0   32s B8 WebSocket: 33/33 checks passed
+B8-outage                exit=0   11s B8 WebSocket: 5/5 checks passed
+B8-wire-limits           exit=0    1s B8 raw wire limits: 36/36 passed
+B8-load                  exit=0  155s

@@ -1,8 +1,8 @@
-# B8-load — 2026-11-25T06:16:10Z
+# B8-load — 2026-11-25T13:14:51Z
 $ tests/conformance/in-network.sh picturas-dev websocket/b8-load.py
 
-{"case": "WS-N1", "projects": 10, "connections": 50, "contexts_before_revocation": 50, "preload_and_cut_seconds": 10.14, "join_max_ms": 8.87, "cut_last_event_max_ms": 873.15, "events_after_5s": 0, "nonrevoked_controls_complete": true}
-{"case": "WS-J1", "projects": 3, "connections": 510, "contexts_before_revocation": 510, "preload_and_cut_seconds": 20.37, "join_max_ms": 12.37, "cut_last_event_max_ms": 859.68, "events_after_5s": 0, "nonrevoked_controls_complete": true}
-{"case": "WS-P1", "projects": 40, "connections": 200, "contexts_before_revocation": 200, "preload_and_cut_seconds": 14.48, "join_max_ms": 11.28, "cut_last_event_max_ms": 973.32, "events_after_5s": 0, "nonrevoked_controls_complete": true}
-{"case": "WS-L1/L2", "connections_live": 512, "contexts_live": 4096, "excess_connection": "refused", "excess_context": "context_limit", "preload_seconds": 96.25, "join_max_ms": 42.39, "unintended_removals": 0}
+{"case": "WS-N1", "projects": 10, "connections": 50, "contexts_before_revocation": 50, "preload_and_cut_seconds": 10.1, "join_max_ms": 7.82, "cut_last_event_max_ms": 876.73, "events_after_5s": 0, "nonrevoked_controls_complete": true}
+{"case": "WS-J1", "projects": 3, "connections": 510, "contexts_before_revocation": 510, "preload_and_cut_seconds": 20.73, "join_max_ms": 14.41, "cut_last_event_max_ms": 860.95, "events_after_5s": 0, "nonrevoked_controls_complete": true}
+{"case": "WS-P1", "projects": 40, "connections": 200, "contexts_before_revocation": 200, "preload_and_cut_seconds": 14.43, "join_max_ms": 14.27, "cut_last_event_max_ms": 962.19, "events_after_5s": 0, "nonrevoked_controls_complete": true}
+{"case": "WS-L1/L2", "connections_live": 512, "contexts_live": 4096, "excess_connection": "refused", "excess_context": "context_limit", "preload_seconds": 97.78, "join_max_ms": 48.44, "unintended_removals": 0}
 exit: 0

@@ -1,0 +1,19 @@
+✔ an editor snapshot cannot roll back a worker commit with the same public version (2.151116ms)
+✔ a worker commit between read and CAS is preserved when the editor retries (0.472945ms)
+✔ extraction is project-wide and terminal, with ordinary effects inserted before it (1.463643ms)
+✔ extraction validates active mode parameters and disallows targeted/potentially unbounded inputs (0.246699ms)
+✔ manifest validation rejects escaped, duplicate and oversized frame output before upload (3.924201ms)
+✔ all extracted images retain the source ID and run token; upload failure rolls back only this batch (1.09643ms)
+✔ a fast first worker cannot commit while later sources are still being scheduled (1.095847ms)
+✔ registration failure starts no workers and rolls back only newly registered jobs (0.705808ms)
+✔ a cancelled run cannot overwrite the committed results with a delayed commit (1.038934ms)
+✔ tool parameters cannot replace the input or output bound to the run (1.714226ms)
+✔ captions apply to all videos, while images skip them and trim stays targeted (1.151067ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 82.733069

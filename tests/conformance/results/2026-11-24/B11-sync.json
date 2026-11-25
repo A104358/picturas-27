@@ -1,0 +1,9 @@
+{
+  "head_before": "ec3b689b6db1449779d905d6b2b4bb2c69a485af",
+  "head_after": "ec3b689b6db1449779d905d6b2b4bb2c69a485af",
+  "complete": true,
+  "merged_wip_files": [],
+  "remote_changed": false,
+  "conflicts": false,
+  "own_stash_restored_and_removed": true
+}

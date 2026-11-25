@@ -9,6 +9,7 @@ import concurrent.futures
 import contextlib
 import datetime as dt
 import hashlib
+import fcntl
 import json
 import os
 from pathlib import Path
@@ -50,6 +51,20 @@ def durable(file, value):
     fd = os.open(file.parent, os.O_RDONLY)
     try: os.fsync(fd)
     finally: os.close(fd)
+
+def acquire_lock(base):
+    # Kernel ownership is released even on SIGKILL. Keep the inode: unlinking it
+    # could let another process lock a different file while a waiter owns this one.
+    fd=os.open(base/'operation.lock',os.O_CREAT|os.O_RDWR|os.O_NOFOLLOW,0o600)
+    try:
+        if os.fstat(fd).st_uid!=os.getuid() or os.fstat(fd).st_mode&0o077:fail('operation_lock_not_private')
+        fcntl.flock(fd,fcntl.LOCK_EX|fcntl.LOCK_NB)
+    except Exception:
+        os.close(fd);fail('operation_locked_review_before_retry')
+    return fd
+
+def release_lock(fd):
+    fcntl.flock(fd,fcntl.LOCK_UN);os.close(fd)
 
 def certificate(file):
     der = command(['openssl','x509','-in',str(file),'-outform','DER']).stdout
@@ -335,7 +350,28 @@ class Maintenance:
         self.fixture_reconciliation()
         if self.state['interrupted_work'] and not self.state.get('reconciliation'):
             fail('interrupted_work_requires_reconciliation_before_consumers_restart')
+        proof=self.state.get('reconciliation') or {}
+        if proof.get('type')=='business_runs':
+            case=self.base/self.state['operation']/'reconciliation'
+            if proof.get('operation')!=self.state['operation'] or proof.get('case')!=str(case):
+                fail('reconciliation_operation_mismatch')
+            seal_path=case/'seal.json'
+            if hashlib.sha256(seal_path.read_bytes()).hexdigest()!=proof.get('seal_sha256'):
+                fail('reconciliation_seal_changed')
+            seal=json.loads(seal_path.read_text())
+            if seal.get('operation')!=self.state['operation'] or seal.get('project')!=self.args.project or seal.get('complete') is not True or seal.get('pending')!=0:
+                fail('reconciliation_not_complete')
+            files={str(p.relative_to(case)) for p in case.rglob('*') if p.is_file() and p.name!='seal.json'}
+            if files!=set(seal.get('files',{})):fail('reconciliation_inventory_changed')
+            for name,digest in seal['files'].items():
+                file=case/name
+                if file.is_symlink() or file.stat().st_uid!=os.getuid() or file.stat().st_mode&0o077 or hashlib.sha256(file.read_bytes()).hexdigest()!=digest:
+                    fail('reconciliation_evidence_changed')
+            report=json.loads((case/'report.json').read_text())
+            if report.get('sealed') is not True or report.get('unknown') or any(c['state']=='indeterminate' for c in report['cases']):
+                fail('reconciliation_pending_remains_isolated')
         if not self.gate.exists(): fail('admission_gate_missing')
+        if json.loads(self.gate.read_text())!=self.state['operation']:fail('admission_gate_operation_mismatch')
         if any(p['State']['Running'] for p in self.containers()):
             self.stop_partial('unexpected_running_participant'); fail('unexpected_running_participant_stopped')
         command([str(REPO/'ops/pki.sh'),'check'])
@@ -505,12 +541,10 @@ def main():
     parser.add_argument('--cut-proof')
     args=parser.parse_args()
     maintenance=Maintenance(args)
-    lock=maintenance.base/'operation.lock'
     if args.action=='status': print(json.dumps(maintenance.run())); return
-    try: fd=os.open(lock,os.O_CREAT|os.O_EXCL|os.O_WRONLY,0o600)
-    except FileExistsError: fail('operation_locked_reconcile_before_retry')
+    fd=acquire_lock(maintenance.base)
     try: print(json.dumps(maintenance.run()))
-    finally: os.close(fd); lock.unlink()
+    finally: release_lock(fd)
 
 if __name__=='__main__':
     try: main()

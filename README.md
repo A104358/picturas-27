@@ -311,6 +311,8 @@ has its **own local CA** and one certificate per service, created by `ops/pki.sh
 | `ops/pki.sh check`          | Verifies the CA and every certificate (chain, SAN, key match, expiry) — run it before starting |
 | `ops/pki.sh renew --project picturas-dev` | Suspends admissions, drains work, renews due certificates under the same CA and recreates all participants; verifies before reopening |
 | `ops/pki.sh retire --project picturas-dev --mode compromise` | Isolates immediately, replaces the CA and all keys; remains isolated until reconciliation and trust controls pass |
+| `ops/reconcile inventory --project picturas-dev` | Private execution/quota inventory after B10 isolation; [administrative reconciliation](docs/reconciliation-operations.md) |
+| `ops/reconcile apply --project picturas-dev --integrity-proof <private-review.json>` | Fences generations, quarantines old outputs/messages and applies proven, atomic quota corrections; `seal` is required before reopening |
 | `ops/pki.sh issue <svc>`    | Issues a certificate file; use only before deployment or within an isolated, reviewed procedure |
 | `ops/pki.sh list`           | Shows the current certificates; `pki/registry.tsv` logs every issue (no keys)  |
 

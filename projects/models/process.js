@@ -12,6 +12,9 @@ var processSchema = new mongoose.Schema({
   cache_key: { type: String, required: false },
   cancelToken: { type: Number, required: false },
   token: { type: Number, required: true },
+  run_id: { type: String, index: true },
+  replyClaimed: { type: Boolean, default: false },
+  reconciled: { type: Boolean, default: false },
 }, { timestamps: true });
 
 module.exports = mongoose.model("process", processSchema);

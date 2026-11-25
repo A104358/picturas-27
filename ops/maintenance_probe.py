@@ -61,7 +61,7 @@ def work():
         authSource='admin',tls=True,tlsCAFile=str(ROOT/'pki/ca/ca.crt'),directConnection=True,
         serverSelectionTimeoutMS=2000,connectTimeoutMS=2000,socketTimeoutMS=2000)
     try:
-        records=list(client.project.processes.find({}, {'_id':1,'project_id':1,'img_id':1,'msg_id':1,'token':1,'user_id':1}))
+        records=list(client.project.processes.find({'reconciled':{'$ne':True}}, {'_id':1,'project_id':1,'img_id':1,'msg_id':1,'token':1,'user_id':1}))
     finally:client.close()
     session=__import__('requests').Session();session.trust_env=False
     r=session.get('https://rabbitmq:15671/api/queues',verify=str(ROOT/'pki/ca/ca.crt'),

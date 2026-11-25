@@ -1,0 +1,53 @@
+{
+ "updated_at": "2026-11-24T22:15:51Z",
+ "metrics": {
+  "S05": {
+   "total": 15,
+   "ok": 15,
+   "fracao": 1.0,
+   "falhas": [],
+   "politica_acl_editor_elimina": [
+    false
+   ]
+  },
+  "S21": {
+   "get_project": {
+    "mediana_ms": 15.358,
+    "max_ms": 21.234,
+    "min_ms": 12.995,
+    "erros": 0,
+    "n": 20
+   },
+   "get_user": {
+    "mediana_ms": 13.582,
+    "max_ms": 22.165,
+    "min_ms": 11.925,
+    "erros": 0,
+    "n": 20
+   }
+  }
+ },
+ "estados": {
+  "S01": "NAO_MEDIDA",
+  "S02": "NAO_MEDIDA",
+  "S03": "NAO_MEDIDA",
+  "S04": "NAO_MEDIDA",
+  "S12": "NAO_MEDIDA",
+  "S16": "NAO_MEDIDA",
+  "S17": "NAO_MEDIDA",
+  "S18": "NAO_MEDIDA",
+  "S05": "CUMPRE_ALVO",
+  "S21": "COMPARATIVA",
+  "U01": "NAO_MEDIDA",
+  "U20": "NAO_MEDIDA",
+  "U19": "NAO_MEDIDA",
+  "U18": "NAO_MEDIDA",
+  "U04": "NAO_MEDIDA",
+  "U08": "NAO_MEDIDA",
+  "U09": "NAO_MEDIDA",
+  "U25": "NAO_MEDIDA",
+  "U15": "NAO_MEDIDA",
+  "U17": "NAO_MEDIDA",
+  "U10": "NAO_MEDIDA"
+ }
+}

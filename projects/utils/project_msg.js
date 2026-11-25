@@ -30,9 +30,10 @@ function send_msg_tool(msg_id, timestamp, og_img_uri, new_img_uri, tool, params)
         "timestamp": timestamp,
         "procedure": tool,
         "parameters": {
+            ...params,
+            // Tool parameters cannot override the server-owned run namespace.
             "inputImageURI": og_img_uri,
-            "outputImageURI": new_img_uri,
-            ... params
+            "outputImageURI": new_img_uri
         }
     };
 

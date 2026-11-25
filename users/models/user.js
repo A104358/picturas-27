@@ -34,6 +34,9 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
   operations: { type: [daySchema], required: true, default: [] },
+  quotaLedger: { type: [mongoose.Schema.Types.Mixed], default: [], select: false },
+  quotaRevision: { type: Number, default: 0, select: false },
+  legacyQuotaRevision: { type: Number, default: 0, select: false },
 });
 
 // Virtual "email" para aceder ao valor desencriptado
@@ -62,6 +65,9 @@ userSchema.set("toJSON", {
     delete ret.email_encrypted;
     delete ret.email_hash;
     delete ret.password_hash;
+    delete ret.quotaLedger;
+    delete ret.quotaRevision;
+    delete ret.legacyQuotaRevision;
     return ret;
   },
 });

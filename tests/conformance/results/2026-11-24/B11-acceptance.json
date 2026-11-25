@@ -1,0 +1,129 @@
+{
+  "complete": true,
+  "required_checks": {
+    "real-image-autoack-worker-stopped-during-active-callback": true,
+    "crash-generation_after_commit-remains-isolated": true,
+    "crash-object_before_delete-remains-isolated": true,
+    "crash-object_after_delete-remains-isolated": true,
+    "crash-quota_before_commit-remains-isolated": true,
+    "crash-quota_after_commit-remains-isolated": true,
+    "B10-cut-after-real-video-replies-before-domain-commit": true,
+    "lost-quota-response-reads-atomic-marker": true,
+    "message-before-ack-helper-exited-at-target": true,
+    "cleanup-precondition-failure": true,
+    "cleanup-failure-blocks-seal": true,
+    "crash-before-seal-remains-isolated": true,
+    "business-case-sealed-without-technical-fixture-bypass": true,
+    "B10-reopens-only-after-business-proof-and-channel-controls": true,
+    "real-video-stopped-with-active-callback-and-partial-output": true,
+    "quota-helper-exited-86-before-any-journal": true,
+    "native-existing-marker-readback-after-helper-exit": true,
+    "real-video-interruption-before-completion-reconciled": true,
+    "late-reply-does-not-affect-explicit-new-generation": true,
+    "missing-receipt-blocks-seal": true,
+    "missing-receipt-blocks-consumers": true,
+    "indeterminate-case-kept-isolated-with-zero-financial-effect": true,
+    "fixture-stopped-with-volumes-and-private-evidence-preserved": true
+  },
+  "attempts": 34,
+  "failed_attempts_retained": [
+    "real-project-consumer-stopped-after-admission",
+    "real-image-autoack-worker-stopped-during-active-callback",
+    "crash-message-before-ack-remains-isolated"
+  ],
+  "operations": [
+    {
+      "reference": "947b27b8ee7f",
+      "classification": {
+        "confirmed": 2,
+        "lost": 5,
+        "indeterminate": 0
+      },
+      "unknown": 0,
+      "sealed": true,
+      "maintenance_phase": "reopened",
+      "isolation_ms": 3628.737379,
+      "analysis_and_reconciliation_seconds": 1013.616378,
+      "protected_objects": 10,
+      "archived_messages": 2,
+      "helper_hard_exits": 2,
+      "lost_response_marker_observations": 0
+    },
+    {
+      "reference": "62227407863e",
+      "classification": {
+        "confirmed": 3,
+        "lost": 0,
+        "indeterminate": 1
+      },
+      "unknown": 0,
+      "sealed": false,
+      "maintenance_phase": "isolated",
+      "isolation_ms": 3551.104328,
+      "analysis_and_reconciliation_seconds": null,
+      "protected_objects": 11,
+      "archived_messages": 0,
+      "helper_hard_exits": 0,
+      "lost_response_marker_observations": 0
+    },
+    {
+      "reference": "4becea57edd5",
+      "classification": {
+        "confirmed": 2,
+        "lost": 2,
+        "indeterminate": 0
+      },
+      "unknown": 0,
+      "sealed": true,
+      "maintenance_phase": "reopened",
+      "isolation_ms": 3614.780502,
+      "analysis_and_reconciliation_seconds": 340.585462,
+      "protected_objects": 10,
+      "archived_messages": 0,
+      "helper_hard_exits": 2,
+      "lost_response_marker_observations": 0
+    }
+  ],
+  "native_assertion_receipts": [
+    {
+      "no_undue_charges": true,
+      "no_undue_compensations": true,
+      "no_partial_visibility": true,
+      "confirmed_preserved": true,
+      "original_day_balances_verified": true,
+      "balance_before": 5,
+      "balance_after": 0
+    },
+    {
+      "no_undue_charges": true,
+      "no_undue_compensations": true,
+      "no_partial_visibility": true,
+      "confirmed_preserved": true,
+      "original_day_balances_verified": null,
+      "balance_before": null,
+      "balance_after": null
+    }
+  ],
+  "native_quota_component": {
+    "native_mongo": true,
+    "shipped_users_admission": true,
+    "mixed_cost": 5,
+    "before": 5,
+    "after": 0,
+    "lost_response_rereads_marker": true,
+    "no_second_financial_write": true,
+    "private_readback_event_preserved": true,
+    "component_fixture_only": true
+  },
+  "application_apply_cancel_and_server_path_binding": {
+    "passed": true,
+    "checks": 21
+  },
+  "scope": "Synthetic fixtures only. No automatic replay. Unknown evidence stays isolated.",
+  "inherited_limitations": [
+    "Early image ack",
+    "Projects ack before async callback completion",
+    "Non-persistent worker replies can be lost on broker termination"
+  ],
+  "test_distinction": "Real image/video workers; controlled mixed-cost admission, clock dependency, commit boundary and persistent obsolete-message fixtures."
+}

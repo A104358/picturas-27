@@ -1,0 +1,30 @@
+{
+  "result": "evaluation/results/EXP-20261124T221536Z",
+  "metrics": {
+    "S05": {
+      "total": 15,
+      "ok": 15,
+      "fracao": 1.0,
+      "falhas": [],
+      "politica_acl_editor_elimina": [
+        false
+      ]
+    },
+    "S21": {
+      "get_project": {
+        "mediana_ms": 15.358,
+        "max_ms": 21.234,
+        "min_ms": 12.995,
+        "erros": 0,
+        "n": 20
+      },
+      "get_user": {
+        "mediana_ms": 13.582,
+        "max_ms": 22.165,
+        "min_ms": 11.925,
+        "erros": 0,
+        "n": 20
+      }
+    }
+  }
+}

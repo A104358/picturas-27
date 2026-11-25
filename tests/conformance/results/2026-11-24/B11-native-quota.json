@@ -1,0 +1,11 @@
+{
+  "native_mongo": true,
+  "shipped_users_admission": true,
+  "mixed_cost": 5,
+  "before": 5,
+  "after": 0,
+  "lost_response_rereads_marker": true,
+  "no_second_financial_write": true,
+  "private_readback_event_preserved": true,
+  "component_fixture_only": true
+}

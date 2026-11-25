@@ -1,0 +1,244 @@
+{
+ "updated_at": "2026-11-25T00:47:52Z",
+ "metrics": {
+  "S18": {
+   "todas": 0,
+   "loopback": 0,
+   "servicos": [],
+   "alcancaveis_lan": 0,
+   "lan_ip_testado": true,
+   "lista": []
+  },
+  "S01": {
+   "tentativas": 15,
+   "admitidos": 0,
+   "recusados": 15,
+   "inconclusivos": 0,
+   "nao_aplicaveis": 0,
+   "por_resultado": {
+    "RECUSADO_DOMINIO": 15
+   },
+   "por_superficie": {
+    "publica": {
+     "tentativas": 15,
+     "admitidos": 0,
+     "inconclusivos": 0
+    }
+   },
+   "casos_admitidos": [],
+   "casos_inconclusivos": [],
+   "controlos_ok": 1,
+   "controlos_total": 1
+  },
+  "S02": {
+   "tentativas": 20,
+   "admitidos": 0,
+   "recusados": 20,
+   "inconclusivos": 0,
+   "nao_aplicaveis": 0,
+   "por_resultado": {
+    "RECUSADO_REDE": 10,
+    "RECUSADO_TLS": 10
+   },
+   "por_superficie": {
+    "host": {
+     "tentativas": 10,
+     "admitidos": 0,
+     "inconclusivos": 0
+    },
+    "rede": {
+     "tentativas": 10,
+     "admitidos": 0,
+     "inconclusivos": 0
+    }
+   },
+   "casos_admitidos": [],
+   "casos_inconclusivos": [],
+   "controlos_ok": 1,
+   "controlos_total": 1
+  },
+  "S03": {
+   "tentativas": 8,
+   "admitidos": 0,
+   "recusados": 8,
+   "inconclusivos": 0,
+   "nao_aplicaveis": 0,
+   "por_resultado": {
+    "RECUSADO_REDE": 4,
+    "RECUSADO_TLS": 4
+   },
+   "por_superficie": {
+    "host": {
+     "tentativas": 4,
+     "admitidos": 0,
+     "inconclusivos": 0
+    },
+    "rede": {
+     "tentativas": 4,
+     "admitidos": 0,
+     "inconclusivos": 0
+    }
+   },
+   "casos_admitidos": [],
+   "casos_inconclusivos": [],
+   "controlos_ok": 1,
+   "controlos_total": 1
+  },
+  "S04": {
+   "tentativas": 5,
+   "admitidos": 0,
+   "recusados": 5,
+   "inconclusivos": 0,
+   "nao_aplicaveis": 0,
+   "por_resultado": {
+    "RECUSADO_DOMINIO": 5
+   },
+   "por_superficie": {
+    "ws": {
+     "tentativas": 5,
+     "admitidos": 0,
+     "inconclusivos": 0
+    }
+   },
+   "casos_admitidos": [],
+   "casos_inconclusivos": [],
+   "controlos_ok": 5,
+   "controlos_total": 5
+  },
+  "S16": {
+   "tentativas": 24,
+   "admitidos": 0,
+   "recusados": 24,
+   "inconclusivos": 0,
+   "nao_aplicaveis": 6,
+   "por_resultado": {
+    "RECUSADO_DOMINIO": 12,
+    "RECUSADO_REDE": 12
+   },
+   "por_superficie": {
+    "rede": {
+     "tentativas": 12,
+     "admitidos": 0,
+     "inconclusivos": 0
+    },
+    "host": {
+     "tentativas": 12,
+     "admitidos": 0,
+     "inconclusivos": 0
+    }
+   },
+   "casos_admitidos": [],
+   "casos_inconclusivos": [],
+   "controlos_ok": 2,
+   "controlos_total": 2,
+   "credenciais_git_encontradas": 0
+  },
+  "S17": {
+   "tentativas": 15,
+   "admitidos": 0,
+   "recusados": 15,
+   "inconclusivos": 0,
+   "nao_aplicaveis": 0,
+   "por_resultado": {
+    "RECUSADO_DOMINIO": 8,
+    "RECUSADO_REDE": 7
+   },
+   "por_superficie": {
+    "rede": {
+     "tentativas": 7,
+     "admitidos": 0,
+     "inconclusivos": 0
+    },
+    "host": {
+     "tentativas": 7,
+     "admitidos": 0,
+     "inconclusivos": 0
+    },
+    "publica": {
+     "tentativas": 1,
+     "admitidos": 0,
+     "inconclusivos": 0
+    }
+   },
+   "casos_admitidos": [],
+   "casos_inconclusivos": [],
+   "controlos_ok": 1,
+   "controlos_total": 1
+  },
+  "S12": {
+   "repeticoes": [
+    {
+     "metric": "S12",
+     "campaign": "EXP",
+     "rep": 1,
+     "revoke_status": 204,
+     "pre_revocation_events_A": 7,
+     "emitted_after_ack": 34,
+     "received_after_ack_A": 2,
+     "lower_ms": 802.3,
+     "upper_ms": 1089.5,
+     "censored_gt_ms": null,
+     "uncertainty_ms": 250.0,
+     "eventos_apos_limite": 0,
+     "disconnect_A_ms": null,
+     "controlos_ok": true,
+     "valida": true,
+     "t_utc": "2026-11-25T00:47:41Z"
+    }
+   ],
+   "limite_superior_max_ms": 1089.5,
+   "censurado": false,
+   "eventos_apos_limite": 0,
+   "controlos_ok": true,
+   "invalidas": 0
+  },
+  "S05": {
+   "total": 15,
+   "ok": 15,
+   "fracao": 1.0,
+   "falhas": [],
+   "politica_acl_editor_elimina": [
+    false
+   ]
+  },
+  "S21": {
+   "get_project": {
+    "mediana_ms": 11.343,
+    "max_ms": 16.977,
+    "min_ms": 9.723,
+    "erros": 0,
+    "n": 20
+   },
+   "get_user": {
+    "mediana_ms": 10.607,
+    "max_ms": 16.006,
+    "min_ms": 9.006,
+    "erros": 0,
+    "n": 20
+   }
+  }
+ },
+ "estados": {
+  "S01": "CUMPRE_ALVO",
+  "S02": "CUMPRE_ALVO",
+  "S03": "CUMPRE_ALVO",
+  "S04": "CUMPRE_ALVO",
+  "S12": "CUMPRE_ALVO",
+  "S16": "CUMPRE_ALVO",
+  "S17": "CUMPRE_ALVO",
+  "S18": "CUMPRE_ALVO",
+  "S05": "CUMPRE_ALVO",
+  "S21": "COMPARATIVA",
+  "U01": "NAO_MEDIDA",
+  "U20": "NAO_MEDIDA",
+  "U19": "NAO_MEDIDA",
+  "U18": "NAO_MEDIDA",
+  "U04": "NAO_MEDIDA",
+  "U08": "NAO_MEDIDA",
+  "U09": "NAO_MEDIDA",
+  "U25": "NAO_MEDIDA",
+  "U15": "NAO_MEDIDA",
+  "U17": "NAO_MEDIDA",
+  "U10": "NAO_MEDIDA"
+ }
+}

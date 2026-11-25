@@ -61,7 +61,10 @@ and activates the new tree while participants remain stopped. The archived CA is
 evidence, never application trust or a rollback. Do not manually start consumers.
 Interrupted business work requires the B11 reconciliation procedure; B10 refuses
 to reopen a normal compromised installation before that reconciliation exists.
-It provides no replay, compensation or quota refund.
+Use [`ops/reconcile`](reconciliation-operations.md) to inventory, classify and
+quarantine affected runs and apply only proven quota compensation. B10 checks the
+operation-bound business seal before starting consumers; PKI maintenance itself
+provides no replay, compensation or quota refund.
 
 The D-33 exception is restricted to the marked technical pilot installation and
 an operation-bound private receipt. Its harness quarantines only the identified

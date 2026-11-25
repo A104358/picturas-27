@@ -17,6 +17,7 @@ app.use((req, res, next) => {
 });
 
 app.use("/upload", uploadRoutes);
+app.use('/processing-output', require('./route/processingOutput'));
 app.use("/image", imageRoutes);
 app.use("/delete", deleteRoutes);
 app.use("/copy", copyRoutes); 

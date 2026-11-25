@@ -57,6 +57,10 @@ const projectSchema = new mongoose.Schema({
   // nº de operações avançadas reservadas numa execução em curso
   // (serve só para saber quanto refund fazer em caso de cancel)
   pendingAdvancedOps: { type: Number, default: 0 },
+  processingRunId: { type: String, default: null },
+  reconciliationHold: { type: Boolean, default: false },
+  committedRun: { type: mongoose.Schema.Types.Mixed, default: null },
+  prevCommittedRun: { type: mongoose.Schema.Types.Mixed, default: null },
   
   // campo de partilhas
   sharedLinks: [
@@ -73,4 +77,8 @@ const projectSchema = new mongoose.Schema({
   ],
 });
 
+projectSchema.set('toJSON',{transform:(_,ret)=>{
+  delete ret.processingRunId;delete ret.reconciliationHold;delete ret.committedRun;delete ret.prevCommittedRun;
+  return ret;
+}});
 module.exports = mongoose.model("project", projectSchema);

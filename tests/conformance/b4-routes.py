@@ -428,6 +428,13 @@ for rid, method, path in (("B4-R121", "GET", video_object.replace("/src/", "/sta
         check(rid, f"{peer} certificate", direct("img_storage", method, path, peer=peer), 403)
     check(rid, "projects certificate admitted; invalid key rejected", direct("img_storage", method, path, peer="projects"), 400)
 
+# B11 processing artifacts use a distinct path, with the same projects-only mTLS boundary.
+artifact_path = f"/processing-output/{oid}/{P1}/{uuid.uuid4()}/{uuid.uuid4().hex}"
+check("B4-R122", "no client certificate", direct("img_storage", "POST", artifact_path), TLS)
+for peer in ("api_gateway", "ws_gateway", "users"):
+    check("B4-R122", f"{peer} certificate", direct("img_storage", "POST", artifact_path, peer=peer), 403)
+check("B4-R122", "projects admitted; missing artifact rejected", direct("img_storage", "POST", artifact_path, peer="projects"), 400)
+
 # ======================================================================= F05 end: cancel -> free
 check("B4-R035", "holder cancels (F05)", status("PUT", f"subscriptions/{oid}/cancel", O["token"], body={}), 200)
 check("F05", "profile returns to free", call("GET", f"users/{oid}", O["token"]).json().get("type"), "free")

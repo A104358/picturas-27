@@ -75,6 +75,28 @@ Os volumes `image_data`, `whisper_models` e dados persistentes são acessos a fi
 
 ## Imagens e versões efetivas
 
+### Adição administrativa B11 (25/11)
+
+O [runbook OPS-C1](reconciliation-operations.md) acrescenta um helper finito, com
+rede apenas durante ações administrativas sob isolamento. Não é um serviço da
+aplicação nem um novo par mTLS. Recebe só cinco credenciais administrativas de
+dados e o certificado público da CA; não recebe chaves de CA, JWT/gateway ou
+certificados privados da aplicação. O mover de ficheiros não tem rede nem estas
+credenciais. Evidência: [aceitação B11](../tests/conformance/results/2026-11-24/B11-acceptance.json),
+[quota nativa](../tests/conformance/results/2026-11-24/B11-native-quota.json) e
+[imagens/fontes verificadas](../tests/conformance/results/2026-11-24/B11-runtime.json).
+
+| Canal B11 | Controlo | Evidência |
+|-----------|----------|-----------|
+| Helper → Mongo projects/users | TLS validado, CA/nome e credencial administrativa por instância; atualizações condicionais de geração/quota | Dois casos de negócio selados, hard-exit 86 e releitura; caso sem recibo recusado |
+| Helper → RabbitMQ AMQPS/management HTTPS | TLS validado, CA/nome, administrador da instalação; arquivo durável individual antes de ack | Mensagem persistente controlada, crash exato antes de ack e reaplicação |
+| Helper → SeaweedFS S3 HTTPS | TLS validado, CA/nome e principal admin; cópia/hash/delete de chaves exatas | Quarentena com falhas entre cópia e eliminação; fontes/últimos commits preservados |
+| Mover → image_data | Sem rede, volume gravável, plano privado só de leitura; rename e manifesto; symlinks recusados | Falha de limpeza impede selo; reaplicação verifica destino |
+| projects → img_storage `/processing-output` | Par mTLS projects existente; namespace Run/Artifact e SHA-256 obrigatórios | B4-R122 e pipelines B11/F02 |
+
+Os manifestos e resultados B10 abaixo continuam a referir a sua execução original;
+os novos image IDs dos três serviços alterados estão no manifesto B11 acima.
+
 [Manifesto integral](../tests/conformance/results/2026-11-24/B10-runtime-manifest.json): `image_id` é o identificador SHA-256 imutável local; `repo_digests` preserva os digests de registo quando existem. Imagens construídas localmente podem não ter RepoDigest; não se inventa um digest de registo. O mesmo image_id foi usado na dev/EXP. As bibliotecas e OpenSSL completos constam do JSON por serviço.
 
 ### I-api_gateway

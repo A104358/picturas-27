@@ -1,0 +1,10 @@
+{"metric": "S04", "campaign": "EXP", "case": "W01", "surface": "ws", "rep": 1, "result": "RECUSADO_DOMINIO", "reason": "ligação WS recusada", "t_utc": "2026-11-25T00:46:24Z", "connected": false, "eventos": 0, "edicoes": 3, "controlo_dono": 3, "controlo_leitor": 3}
+{"metric": "S04", "campaign": "EXP", "control": "W01_dono_e_leitor_recebem", "rep": 1, "ok": true, "note": "", "t_utc": "2026-11-25T00:46:24Z"}
+{"metric": "S04", "campaign": "EXP", "case": "W02", "surface": "ws", "rep": 1, "result": "RECUSADO_DOMINIO", "reason": "sem eventos protegidos", "t_utc": "2026-11-25T00:46:29Z", "connected": true, "eventos": 0, "edicoes": 3, "controlo_dono": 3, "controlo_leitor": 3}
+{"metric": "S04", "campaign": "EXP", "control": "W02_dono_e_leitor_recebem", "rep": 1, "ok": true, "note": "", "t_utc": "2026-11-25T00:46:29Z"}
+{"metric": "S04", "campaign": "EXP", "case": "W03", "surface": "ws", "rep": 1, "result": "RECUSADO_DOMINIO", "reason": "ligação WS recusada", "t_utc": "2026-11-25T00:46:44Z", "connected": false, "eventos": 0, "edicoes": 3, "controlo_dono": 3, "controlo_leitor": 3}
+{"metric": "S04", "campaign": "EXP", "control": "W03_dono_e_leitor_recebem", "rep": 1, "ok": true, "note": "", "t_utc": "2026-11-25T00:46:44Z"}
+{"metric": "S04", "campaign": "EXP", "case": "W04", "surface": "ws", "rep": 1, "result": "RECUSADO_DOMINIO", "reason": "ligação WS recusada", "t_utc": "2026-11-25T00:47:00Z", "connected": false, "eventos": 0, "edicoes": 3, "controlo_dono": 3, "controlo_leitor": 3}
+{"metric": "S04", "campaign": "EXP", "control": "W04_dono_e_leitor_recebem", "rep": 1, "ok": true, "note": "", "t_utc": "2026-11-25T00:47:00Z"}
+{"metric": "S04", "campaign": "EXP", "case": "W05", "surface": "ws", "rep": 1, "result": "RECUSADO_DOMINIO", "reason": "sem eventos protegidos", "t_utc": "2026-11-25T00:47:09Z", "connected": true, "eventos": 0, "edicoes": 3, "controlo_dono": 3, "controlo_leitor": 3}
+{"metric": "S04", "campaign": "EXP", "control": "W05_dono_e_leitor_recebem", "rep": 1, "ok": true, "note": "", "t_utc": "2026-11-25T00:47:09Z"}

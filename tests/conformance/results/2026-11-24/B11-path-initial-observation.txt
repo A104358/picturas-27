@@ -1,0 +1,20 @@
+PASS AP01 video admitted without a quota debit: 204
+PASS AP02 owner quota unchanged by upload: 5
+PASS AP03 video effect configured: 201
+PASS AP04 editor explicitly starts the run: 201
+PASS AP05 actual editor is debited: 4
+PASS AP06 owner is not debited for editor work: 5
+PASS AP07 owner cancels the editor run: 204
+PASS AP08 cancellation compensates the original editor: 5
+PASS AP09 cancellation never credits the owner: 5
+PASS AP10 repeated explicit cancel does not repeat compensation: 204
+PASS AP11 editor balance stays unchanged on repeated cancellation: 5
+PASS AP12 cancelled output is not visible: 0
+PASS AP13 new user Apply is required and admitted: 201
+PASS AP14 exactly one new video result is committed: 1
+PASS AP15 new Apply has exactly one new debit: 4
+PASS AP16 owner balance remains unchanged: 5
+PASS AP17 forged path parameters do not change Apply admission: 201
+PASS AP18 worker uses its own run paths despite forged parameters: 1
+FAIL AP19 result comes from the legitimate resized source: (16, 16)
+B11 Apply and cancellation: 18/19 checks passed

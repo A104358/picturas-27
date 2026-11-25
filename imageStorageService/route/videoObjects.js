@@ -51,15 +51,16 @@ function target(req, res) {
 const PART_MIB = Math.max(5, Number(process.env.VIDEO_S3_PART_MIB) || 5);
 const PART_QUEUE = Math.max(1, Number(process.env.VIDEO_S3_PART_QUEUE) || 1);
 
-// Each multipart part is a 5 MiB buffer outside the V8 heap; V8 frees them only at its next
+// Each multipart part is a buffer outside the V8 heap; V8 frees them only at its next
 // collection, so a fresh process grows by several parts per upload (U01). With --expose-gc
-// (docker-compose.yaml), collect after every 16 MiB sent so at most a few parts are alive.
-function releasePartBuffers(task) {
+// (docker-compose.yaml), collect after every part sent so at most one or two parts are alive
+// (decision 35: every 16 MiB left the cold 500 MiB peak at ~60 MiB; every part, ~42 MiB).
+function releasePartBuffers(task, partBytes) {
   if (typeof global.gc !== "function") return;
-  let next = 16 * 1024 * 1024;
+  let next = partBytes;
   task.on("httpUploadProgress", (progress) => {
     if (progress.loaded < next) return;
-    next = progress.loaded + 16 * 1024 * 1024;
+    next = progress.loaded + partBytes;
     setImmediate(() => global.gc());
   });
 }
@@ -73,7 +74,7 @@ router.put("/:userId/:projectId/:stage/:fileName", async (req, res) => {
     const task = s3.upload({ ...location, Body: req, ContentType: req.headers["content-type"] || "application/octet-stream" },
       { partSize: partSize * 1024 * 1024, queueSize: PART_QUEUE });
     req.on("aborted", () => task.abort());
-    releasePartBuffers(task);
+    releasePartBuffers(task, partSize * 1024 * 1024);
     await task.promise();
     res.sendStatus(201);
   } catch (_) {

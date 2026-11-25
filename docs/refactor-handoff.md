@@ -22,13 +22,13 @@ estamos**.
 | Campo | Valor |
 |-------|-------|
 | Bloco em curso | **B12** (verificação final e MF). B0–B11 com commit; B7 FEITO (UL-10 fechado no passo 1) |
-| Passo do bloco | Passos 1–5 feitos; D-30 (A, decisão 53) e D-32 (A, decisão 55) aplicadas; B8 repetido. A seguir: EXP focada S04/S12/S05/S21, depois 6) commit de congelamento; 7) MF; 8) notas para o relatório |
-| Estado deixado | `picturas-dev` parada sem `-v` (volume SeaweedFS novo e vazio depois da D-32); `picturas-nfr-exp` a reconstruir para a EXP focada; `picturas-nfr` com os contentores da BF parados; `warracker-teste` intocada. 70 GiB livres depois da D-32 |
-| **Próximo passo exato** | EXP focada S04/S12/S05/S21 (`MED_WS_JOIN_FORMAT=v2`); se o W05 passar e nada regredir: `git fetch` sem integrar, commit de congelamento e MF (§6) |
+| Passo do bloco | Passos 1–6 feitos (6 = este commit de congelamento, depois da EXP focada `EXP-20261125T132130Z` que passou S04/S12/S05/S21). A seguir: 7) MF na `picturas-nfr`; 8) notas para o relatório |
+| Estado deixado | Todas as stacks do PictuRAS paradas sem `-v`; `picturas-nfr` ainda com os contentores da BF; `warracker-teste` intocada. 54 GiB livres (a reconstrução da EXP voltou a gastar ~15 GB) |
+| **Próximo passo exato** | MF segundo o §6: `med.py stack up` com `MED_COMPOSE_PROJECT=picturas-nfr`, preflight `--campaign MF` (≥60 GiB à letra), `run --campaign MF` com `MED_WS_JOIN_FORMAT=v2`, `compare` com `BF-20261121T013224Z` |
 | Coisas meio feitas | Nenhuma no código. Observação U20 (passo 5) para as notas do relatório |
-| Testes a falhar neste momento | Nenhum. B8 depois da decisão 53: unitários 18/18, cliente, rede 33/33, indisponibilidade 5/5, wire 36/36, cargas N1/J1/P1/L1/L2 |
-| Último commit com o trabalho | `c2d2022` (`[B12] full EXP; free upload slot when media is gone before hash`) e o commit `[B12] D-30 A ...` deste passo (ver `git log`) |
-| Atualizado em | 2026-11-25 13:30 (B12, D-30/D-32 aplicadas) |
+| Testes a falhar neste momento | Nenhum |
+| Último commit com o trabalho | o commit de congelamento `[B12] freeze ...` (ver `git log`); antes `1091f87` |
+| Atualizado em | 2026-11-25 13:50 (B12 passo 6, congelamento) |
 
 ## 2. Contexto comum (o que já está decidido)
 
@@ -543,6 +543,12 @@ U16 e U21–U24 (verificação, sem base): adaptador (leitor, quota 0/5, anónim
 - D-30 A (decisão 53) em `wsGateway/authorization.js`; testes: novo caso unitário de suspensão em `authorization.test.js` e o caso WS-T02/T03/T04 ajustado (contexto suspenso em vez de removido; retoma sem join); `b8-functional.py outage` verifica a retoma sem join; driver novo `tests/conformance/websocket/b8-outage.py` (para/inicia só a `projects` quando o teste pede) e entrada `B8-outage` no `run-b12.sh`. Todas as suítes B8 passaram na dev (`B12-conf-index.txt`, secção 13:1x).
 - Observação U20 do passo 5: fica só como observação nas notas do relatório (decisão do utilizador); se repetir na MF, guardar os logs da `projects`/`api_gateway` sem segredos e referenciá-los.
 - Correção da imprecisão do §1: o commit do passo 5 é `c2d2022` (`[B12] full EXP; free upload slot when media is gone before hash`).
+
+### 2026-11-25 13:50 — B12 — passo 6 (congelamento)
+- EXP focada depois da decisão 53, na `picturas-nfr-exp` reconstruída com o commit `1091f87` (`MED_WS_JOIN_FORMAT=v2`, `MED_MIN_FREE_GIB=40` porque a reconstrução deixou 54,9 GiB; o `--force` não foi usado): `evaluation/results/EXP-20261125T132130Z/`. **S04 CUMPRE_ALVO** (0 admitidos em 15; W05 recusado nas 3 repetições com controlos dono/leitor 3/3), S12 1164 ms (antes 1155), S05 100%, S21 Δ get_project −0,1 ms e get_user +1,9 ms contra a BF (diagnóstico). Nada regrediu.
+- Por engano a `picturas-dev` ainda estava ativa quando o `med.py stack up` da EXP arrancou; foi parada sem `-v` antes de qualquer medição (a EXP correu só com a sua stack).
+- `git fetch`: `origin/fase2-refactor` sem commits novos (nada do Luís por integrar). A MF corre sobre este commit local.
+- MF: não existe `.env.med` próprio; usa o mesmo ficheiro da instalação com `MED_COMPOSE_PROJECT=picturas-nfr` no ambiente (as variáveis do ambiente prevalecem; mesmas credenciais, CA e URL base `https://localhost:28080`).
 
 ## 5. Dúvidas surgidas durante a implementação
 

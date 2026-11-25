@@ -1,0 +1,139 @@
+{
+ "updated_at": "2026-11-25T13:26:53Z",
+ "metrics": {
+  "S04": {
+   "tentativas": 15,
+   "admitidos": 0,
+   "recusados": 15,
+   "inconclusivos": 0,
+   "nao_aplicaveis": 0,
+   "por_resultado": {
+    "RECUSADO_DOMINIO": 15
+   },
+   "por_superficie": {
+    "ws": {
+     "tentativas": 15,
+     "admitidos": 0,
+     "inconclusivos": 0
+    }
+   },
+   "casos_admitidos": [],
+   "casos_inconclusivos": [],
+   "controlos_ok": 15,
+   "controlos_total": 15
+  },
+  "S12": {
+   "repeticoes": [
+    {
+     "metric": "S12",
+     "campaign": "EXP",
+     "rep": 1,
+     "revoke_status": 204,
+     "pre_revocation_events_A": 7,
+     "emitted_after_ack": 101,
+     "received_after_ack_A": 2,
+     "lower_ms": 880.7,
+     "upper_ms": 1164.3,
+     "censored_gt_ms": null,
+     "uncertainty_ms": 250.0,
+     "eventos_apos_limite": 0,
+     "disconnect_A_ms": null,
+     "controlos_ok": true,
+     "valida": true,
+     "t_utc": "2026-11-25T13:25:17Z"
+    },
+    {
+     "metric": "S12",
+     "campaign": "EXP",
+     "rep": 2,
+     "revoke_status": 204,
+     "pre_revocation_events_A": 7,
+     "emitted_after_ack": 102,
+     "received_after_ack_A": 2,
+     "lower_ms": 861.5,
+     "upper_ms": 1153.3,
+     "censored_gt_ms": null,
+     "uncertainty_ms": 250.0,
+     "eventos_apos_limite": 0,
+     "disconnect_A_ms": null,
+     "controlos_ok": true,
+     "valida": true,
+     "t_utc": "2026-11-25T13:25:53Z"
+    },
+    {
+     "metric": "S12",
+     "campaign": "EXP",
+     "rep": 3,
+     "revoke_status": 204,
+     "pre_revocation_events_A": 7,
+     "emitted_after_ack": 103,
+     "received_after_ack_A": 0,
+     "lower_ms": 0.0,
+     "upper_ms": 309.0,
+     "censored_gt_ms": null,
+     "uncertainty_ms": 250.0,
+     "eventos_apos_limite": 0,
+     "disconnect_A_ms": null,
+     "controlos_ok": true,
+     "valida": true,
+     "t_utc": "2026-11-25T13:26:29Z"
+    }
+   ],
+   "limite_superior_max_ms": 1164.3,
+   "censurado": false,
+   "eventos_apos_limite": 0,
+   "controlos_ok": true,
+   "invalidas": 0
+  },
+  "S05": {
+   "total": 45,
+   "ok": 45,
+   "fracao": 1.0,
+   "falhas": [],
+   "politica_acl_editor_elimina": [
+    false,
+    false,
+    false
+   ]
+  },
+  "S21": {
+   "get_project": {
+    "mediana_ms": 5.976,
+    "max_ms": 8.644,
+    "min_ms": 4.813,
+    "erros": 0,
+    "n": 100
+   },
+   "get_user": {
+    "mediana_ms": 5.354,
+    "max_ms": 19.393,
+    "min_ms": 4.468,
+    "erros": 0,
+    "n": 100
+   }
+  }
+ },
+ "estados": {
+  "S01": "NAO_MEDIDA",
+  "S02": "NAO_MEDIDA",
+  "S03": "NAO_MEDIDA",
+  "S04": "CUMPRE_ALVO",
+  "S12": "CUMPRE_ALVO",
+  "S16": "NAO_MEDIDA",
+  "S17": "NAO_MEDIDA",
+  "S18": "NAO_MEDIDA",
+  "S05": "CUMPRE_ALVO",
+  "S21": "COMPARATIVA",
+  "U01": "NAO_MEDIDA",
+  "U20": "NAO_MEDIDA",
+  "U19": "NAO_MEDIDA",
+  "U18": "NAO_MEDIDA",
+  "U04": "NAO_MEDIDA",
+  "U08": "NAO_MEDIDA",
+  "U09": "NAO_MEDIDA",
+  "U25": "NAO_MEDIDA",
+  "U15": "NAO_MEDIDA",
+  "U17": "NAO_MEDIDA",
+  "U10": "NAO_MEDIDA"
+ }
+}

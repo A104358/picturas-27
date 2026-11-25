@@ -22,13 +22,13 @@ estamos**.
 | Campo | Valor |
 |-------|-------|
 | Bloco em curso | **B12** (verificação final e MF). B0–B11 com commit; B7 FEITO (UL-10 fechado no passo 1) |
-| Passo do bloco | Passos 1–6 feitos (congelamento `9b4e87d`). Passo 7: MF `MF-20261125T135356Z` corrida (preflight 63,0 GiB, todo OK) e comparada com a BF. **Parado na D-36**: todas as métricas principais e guardas cumprem, **exceto a guarda U10** (NAO_CUMPRE: razão máx. 1,22 em `free-10-H-frio`, mínimo 1,10). Falta 8) tabela BF→MF final e notas para o relatório |
-| Estado deixado | Todas as stacks do PictuRAS paradas sem `-v`: `picturas-nfr` com os volumes da MF (`picturas-nfr_seaweedfs_data` 30,5 GB) e `picturas-nfr-medprobe` parado (`docker stop`, não removido); a rede `picturas-nfr_elk` ficou. `warracker-teste` intocada. 34 GiB livres |
-| **Próximo passo exato** | Decisão 59: segunda MF completa (`stack up`, preflight ≥60 GiB, `run --campaign MF`, `compare`). Depois tabela BF→MF1→MF2, notas do relatório (passo 8), commit local |
-| Coisas meio feitas | Nenhuma no código. Resultados da MF e `compare.md` no commit de paragem. Tabela BF→MF e notas do relatório por escrever (dependem da D-36). A observação U20 do passo 5 **não se repetiu** na MF (3/3 rondas) |
-| Testes a falhar neste momento | Guarda U10 da MF (D-36); nenhum teste de conformidade |
-| Último commit com o trabalho | o commit de paragem `[B12] MF run and compare; stopped on D-36 (U10)` (ver `git log`); antes `7d1fcc3` (commit do utilizador durante a MF, com parte dos resultados) |
-| Atualizado em | 2026-11-25 14:55 (B12, parado na D-36) |
+| Passo do bloco | **B12 FEITO.** Passos 1–8 feitos. MF oficial: `MF-20261125T153646Z` (decisão 59), todas as métricas e guardas cumprem (alvo, exceto U01 e U04 no mínimo). A MF1 `MF-20261125T135356Z` fica reportada (U10 1,22, D-36). Tabela BF→MF1→MF2 e notas do relatório no diário de 25/11 16:35 |
+| Estado deixado | Todas as stacks do PictuRAS paradas sem `-v`: `picturas-nfr` com os volumes da MF2; `picturas-nfr-medprobe` parado (não removido); a rede `picturas-nfr_elk` ficou. Imagens `picturas-nfr-exp-*` removidas (decisão 61): a EXP tem de ser reconstruída para voltar a ser usada. `warracker-teste` intocada. 33 GiB livres |
+| **Próximo passo exato** | Push do utilizador (`git log origin/fase2-refactor..HEAD`); escrever o relatório a partir da tabela e das notas do diário de 25/11 16:35 |
+| Coisas meio feitas | Nenhuma |
+| Testes a falhar neste momento | Nenhum |
+| Último commit com o trabalho | o commit final `[B12] second MF official; BF→MF table and report notes` (ver `git log`); antes `c8a5e3d` |
+| Atualizado em | 2026-11-25 16:35 (B12 FEITO) |
 
 ## 2. Contexto comum (o que já está decidido)
 
@@ -239,7 +239,7 @@ dependências estiverem `FEITO`.
 | B10 — Operação da PKI | B1, B2, B5 | FEITO | `tests/conformance/results/2026-11-24/B10-acceptance.json`; `docs/refactor-piloto-pki.md`; `docs/refactor-matriz-canais.md`; `EXP-20261124T190201Z` | 3 pilotos finais <4 s; 19 principais; 121 controlos; dev/EXP passaram; D-33/decisão 42; aguarda commit humano |
 | B11 — Reconciliação (OPS-C1) | B2, B10 | FEITO (commit `5d6419d`) | `tests/conformance/results/2026-11-24/B11-acceptance.json` (23/23 + quota nativa); `EXP-20261125T005737Z` | Geração, inventário privado, quarentena e quota atómica por executor/dia; 0 efeitos financeiros indevidos nas fixtures; indeterminado mantém isolamento; sem replay |
 | §5 — Testes de conformidade | cresce com cada bloco | EM CURSO | `tests/conformance/results/2026-11-21/F01-202134.txt`, `…/2026-11-22/` | F01 registado; grupo `mtls-pki/` com `s19-markers.sh`, `s19-git-grep.sh` e `b1-smoke.py` |
-| B12 — Verificação final e MF | B0–B11 | EM CURSO (passos 1–5 feitos; parado em D-30/D-32 antes do congelamento) | `tests/conformance/results/2026-11-25/B12-UL10-*.txt` | **Primeiro passo, antes da MF: ajuste da U01** (decisão 35): pico do `img_storage` ≤50 MiB com margem no estrato frio de 500 MiB, medindo a U10; critério da U01 inalterado |
+| B12 — Verificação final e MF | B0–B11 | FEITO | `tests/conformance/results/2026-11-25/B12-*.txt`; `evaluation/results/EXP-20261125T062132Z/`, `EXP-20261125T132130Z/`, `MF-20261125T135356Z/` (MF1, reportada), **`MF-20261125T153646Z/` (MF oficial, `compare.md`)** | UL-10, U01, F01–F05, conformidade completa, EXP, congelamento `9b4e87d`, MF (decisões 51–61). Tabela BF→MF e notas do relatório no diário de 25/11 16:35 |
 
 ## 4. Diário (só se acrescenta; nunca se apaga)
 
@@ -562,6 +562,55 @@ U16 e U21–U24 (verificação, sem base): adaptador (leitor, quota 0/5, anónim
 - `compare` com a BF: tudo CUMPRE (S21 Δ +1,4/+3,0 ms) **exceto U10: NAO_CUMPRE, razão máx. 1,22** (D-36). Varrimento de segredos dos resultados: sem JWT, URLs assinados, caminho de segredos nem valores secretos (só o nome do projeto e os nomes de utilizador do broker, iguais aos já publicados na BF/EXP).
 - Logs da janela da U10 (13:59–14:08, JWT redigidos) em `~/picturas-b12-diagnostico/mf-u10-window/`: sem 5xx nem erros, só avisos de depreciação do driver Mongo.
 - `picturas-nfr` parada sem `-v`; `picturas-nfr-medprobe` parado. Durante a MF o utilizador fez o commit `7d1fcc3` com o handoff e parte dos resultados; o resto vai no commit de paragem.
+
+### 2026-11-25 16:35 — B12 — FEITO (passos 7 e 8: MF oficial, tabela e notas)
+- D-36 B → decisão 59 (regra com commit `e1ee41b` **antes** de correr): a segunda MF completa é a oficial para todas as métricas. D-38 A → decisão 61 (só as imagens `picturas-nfr-exp-*`, sem prune). `med.py stack up` da `picturas-nfr` (`down -v` só desse projeto; log `~/picturas-b12-diagnostico/mf2-stack-up.log`), preflight MF todo OK com 60,4 GiB. Código da aplicação igual ao congelamento `9b4e87d`; critérios inalterados; host em repouso.
+- MF2 `MF-20261125T153646Z` (commit `c8a5e3d`, 3239 s, exit 0; log `~/picturas-b12-diagnostico/mf2.log`). `compare` com `BF-20261121T013224Z` sem avisos: **todas as métricas e guardas cumprem**. Varrimento de segredos: sem JWT, URLs assinados, caminho de segredos nem valores secretos (só o nome do projeto e os nomes de utilizador do broker, como na BF/EXP). `picturas-nfr` parada sem `-v`, `picturas-nfr-medprobe` parado.
+
+**Tabela BF → MF** (alvo/mínimo de `criteria.yaml`; “cumpre” = estado do `compare` da MF oficial; S21 e U10 são comparativas à BF):
+
+| Métrica | Tipo | Alvo | Mínimo | BF | MF1 (`…135356Z`, reportada) | MF2 (`…153646Z`, **oficial**) | Cumpre (MF2) |
+|---|---|---|---|---|---|---|---|
+| S01 | principal | 0 | 0 | 36 admitidos | 0 admitidos em 45 tentativas (alvo) | 0 admitidos em 45 tentativas | alvo |
+| S02 | principal | 0 | 0 | 54 admitidos | 0 admitidos em 60 tentativas (alvo) | 0 admitidos em 60 tentativas | alvo |
+| S03 | principal | 0 | 0 | 24 admitidos | 0 admitidos em 24 tentativas (alvo) | 0 admitidos em 24 tentativas | alvo |
+| S04 | principal | 0 | 0 | 15 admitidos | 0 admitidos em 15 tentativas (alvo) | 0 admitidos em 15 tentativas | alvo |
+| S12 | principal | 2000 | 5000 | sem corte durante a janela de observação | 1168 ms (alvo) | 1125 ms | alvo |
+| S16 | principal | 0 | 0 | 63 admitidos | 0 admitidos em 72 tentativas (alvo) | 0 admitidos em 72 tentativas | alvo |
+| S17 | principal | 0 | 0 | 42 admitidos | 0 admitidos em 45 tentativas (alvo) | 0 admitidos em 45 tentativas | alvo |
+| S18 | principal | todas=0, loopback=0 | todas=0 | 12 bindings em todas as interfaces | nenhuma porta interna publicada (alvo) | nenhuma porta interna publicada | alvo |
+| S05 | guarda | 1.0 | 1.0 | 100% | 100% (alvo) | 100% | alvo |
+| S21 | guarda | 5 | 10 | get_project 6.1 ms, get_user 3.5 ms | get_project 7.6 ms (Δ +1.4), get_user 6.4 ms (Δ +3.0) (alvo) | get_project 5.5 ms (Δ -0.7), get_user 5.3 ms (Δ +1.9) | alvo |
+| U01 | principal | 32 | 64 | pico 1976 MiB (limite do contentor 2 GiB); processo morreu: api_gateway 12× | 44.3 MiB (mínimo) | 45.4 MiB | mínimo |
+| U20 | principal | rondas_3de3=3, oom=0 | rondas_3de3=1, oom=0 | 0/3 rondas; 3 rondas com OOM | 3/3 rondas (alvo) | 3/3 rondas | alvo |
+| U19 | principal | resposta_ms=100 | status=[401, 403], gateway_delta_mib=8 | gateway +965.7 MiB | +0.0 MiB, 26 ms (alvo) | +0.1 MiB, 26 ms | alvo |
+| U18 | principal | 1.0 | 1.0 | 6 OOM durante recusas | 100% (alvo) | 100% | alvo |
+| U04 | principal | nginx=64, seaweedfs=128 | nginx=128, seaweedfs=256 | nginx +0.4 MiB, seaweedfs +619.2 MiB (máx.); 5/38 amostras válidas | nginx +0.5 MiB, seaweedfs +134.6 MiB (máx.); 5/5 amostras válidas (mínimo) | nginx +0.5 MiB, seaweedfs +142.6 MiB (máx.); 5/5 amostras válidas | mínimo |
+| U08 | principal | pico_mib=16, residuos=0 | pico=F+16MiB por componente, residuos=0 | pico máx. 500.0 MiB | pico máx. 0.0 MiB (alvo) | pico máx. 0.0 MiB | alvo |
+| U09 | guarda | 1000 | 3000 | 14/20 uploads de 500 MiB falharam; aceites: máx. 15776 ms, mediana 6171 ms | 843 ms (alvo) | 806 ms | alvo |
+| U25 | guarda | erros=0, razao=1.0 | erros=0, razao=1.1 | 6 erros | 0.72 (alvo) | 0.58 | alvo |
+| U15 | guarda | 1.0 | 1.0 | 100% | 100% (alvo) | 100% | alvo |
+| U17 | guarda | 1.0 | 1.0 | 86.0% | 100% (alvo) | 100% | alvo |
+| U10 | guarda | 1.0 | 1.1 | 18 estratos comparados (2 estratos sem base: nenhum upload aceite na BF) | razão máx. 1.22 (**não**) | razão máx. 0.89 | alvo |
+
+**Notas para o relatório (passo 8)**
+
+*Limitações (além das da §10 do plano):*
+- **PUT direto sem corte absoluto de 600 s (decisão 39, D-28 B).** O nginx desta imagem só limita a inatividade, não a duração de um corpo contínuo. Compensações: 3 ligações simultâneas por IP no `location` do PUT; inatividade de 30 s; confirmação recusada depois de 900 s; segunda remoção da chave candidata de tentativas terminais em `deadline + 120 s` (1020 s desde a reserva), com nova tentativa se falhar; teste de PUT tardio (`b7-late-cleanup.py`). As métricas oficiais medem o POST antigo (D-06); o fluxo novo é provado pela conformidade (U11–U14, S22–S24, UL-01–UL-12).
+- **`mem_limit` do `ws_gateway` = 512m (decisão 26).** O corpus de carga L1/L2 (512 ligações, 4096 contextos), J1 (510), P1 e N1 passou dentro desse limite neste host (`B12-conf-B8-load.txt`), mas não há medição de memória a mais carga nem noutro host. Os outros limites: `api_gateway`, `projects` e `img_storage` 2g (iguais aos do `med.py`), `users` 512m, `subscriptions` 256m.
+- **Tetos testados não são capacidade universal** (plano §10, WS-C2–C5). 512/4096 WS, filas de revalidação (1 lote por projeto, 4 ativos, 16 pendentes), 3 vagas globais de upload de vídeo e os limites de taxa são valores configurados e exercitados por um corpus num Apple M4 Pro com 7,7 GiB para o Docker, não capacidade demonstrada.
+- **U01 e U04 só no mínimo.** U01: 45,4 MiB (alvo 32, mínimo 64). U04: SeaweedFS +142,6 MiB (alvo 128, mínimo 256); a memória viva do SeaweedFS 4.47 domina (D-24, decisão 33: janelas de 4 MiB + `GOGC=25`).
+- **Contrato WS alterado no B12 (decisão 53, D-30 A).** O contexto cuja autorização expira fica suspenso (sem eventos; conta nos limites; volta só com um allow novo ≤5 s desde a admissão, sem novo join), em vez de ser removido; `deny` remove; JWT expirado fecha; nova tentativa a 250 ms. A segurança não muda (nenhuma emissão sem allow válido); muda o contrato WS-T02/T04.
+- **Defeito corrigido no B12 (decisão 51).** O hash em segundo plano ficava preso quando o projeto, a media ou a conta eram apagados antes dele: a vaga não se libertava e, a partir de três órfãos, todo o upload de vídeo dava 429. Corrigido e coberto por `b12-hash-orphan.py`; vale como nota de risco do desenho “vaga até ao fim do hash”.
+- **Observação U20 da EXP completa (passo 5).** Na ronda 2 da `EXP-20261125T062132Z` um dos três POST de 500 MiB recebeu 500 aos 111 s (pedido abortado; tentativa `failed`, objeto apagado, vaga libertada; `socket hang up` no `api_gateway`), sem OOM nem reinício. Não reproduzida (24/24 na dev) e **não se repetiu** nas duas MF (3/3 e 3/3). Causa não determinada; sem logs adicionais a guardar.
+- **Duas MF (decisão 59).** A MF1 `MF-20261125T135356Z` cumpriu tudo exceto a guarda U10 (razão 1,22 em `free-10-H-frio`, 310 vs 254 ms; 1,12 em `free-10-T-aquecido`). Diagnóstico na D-36: o mesmo código deu 0,94 na EXP; nessa janela todos os estratos de 10 MiB vieram mais lentos, incluindo o envio do lado do cliente, com amostras fora da curva e logs sem erros. Leitura: ruído do host, inferido e não provado. A regra “a segunda MF é a oficial para todas as métricas” foi fixada e posta em commit antes de correr a MF2 (U10 0,89). As duas ficam no repositório e no relatório.
+- **Desvios de preparação.** As EXP do B12 correram com `MED_MIN_FREE_GIB=40` (D-32; a MF não). Antes das MF foram apagados, com aprovação, volumes e imagens de outras stacks e a cache de build (decisões 55, 57, 61); os dados apagados eram de teste e os resultados estão no Git. Durante a MF1 o utilizador fez um commit (só handoff e resultados).
+
+*O que ficou de fora:*
+- Os três pilotos B10 (instalação separada `picturas-pki-pilot-b10`) e os testes B2 de acesso direto (`b2-mongo`, `b2-broker`, `b2-s3-auth`, `b2-signed-url`; portas retiradas no B3) não foram repetidos no B12 (decisão 49). Ficam as aceitações do B10/B2 e a S16/S17 da MF.
+- O fluxo novo de upload (PUT direto) não entra nas métricas oficiais BF→MF (D-06); é provado pela conformidade e pela EXP do B7.
+- Nenhum corte da §7 do plano foi aplicado (K1–K4).
+- Os limites da §10 do plano mantêm-se como estão escritos (D1, histórico Git, links, JWT-C1, SESS-C1, OPS-C1, PKI-C2 B, U08 a 100 ms, mTLS só na matriz D4, custo do hash).
 
 ## 5. Dúvidas surgidas durante a implementação
 

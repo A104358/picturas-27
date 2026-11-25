@@ -104,7 +104,7 @@ def main():
   helper('publish',trial)
   deadline=time.monotonic()+15
   while time.monotonic()<deadline:
-   active=run(['docker','exec',video,'sh','-c','cat /tmp/picturas-work-*.json'],allow=True)
+   active=run(['docker','exec',video,'sh','-c','cat /run/picturas/picturas-work-*.json'],allow=True)
    partial=run(['docker','exec',video,'test','-s',data['output']+'.part.mp4'],allow=True)
    if b'"active_count": 1' in active.stdout and partial.returncode==0:break
    time.sleep(.1)
@@ -122,7 +122,7 @@ def main():
   expected=json.loads((ROOT/'maintenance'/PROJECT/'state.json').read_text())['registered_consumers']
   if not all(before['principals'].get(u,{}).get('consumers',0)>0 for u in expected):raise RuntimeError('required_principal_not_observed_before_incident')
   write(trial/'broker-before.json',before)
-  active=run(['docker','exec',video,'sh','-c','cat /tmp/picturas-work-*.json'],allow=True)
+  active=run(['docker','exec',video,'sh','-c','cat /run/picturas/picturas-work-*.json'],allow=True)
   if b'"active_count": 1' not in active.stdout:raise RuntimeError('job_finished_before_incident_do_not_claim_live_load')
   write(trial/'job-active.json',{'at_ns':time.time_ns(),'active_marker':True,'partial_output_observed':True,'brightness_steps':4,'message_id':mid})
   detection=__import__('datetime').datetime.now(__import__('datetime').timezone.utc).isoformat()

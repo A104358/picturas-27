@@ -24,9 +24,10 @@ def message_queue_connect() -> tuple[pika.BlockingConnection, BlockingChannel]:
     # Verifies the certificate chain against the CA and the server name.
     context = ssl.create_default_context(cafile=RABBITMQ_TLS_CA_FILE)
     loaded_cas = sorted(hashlib.sha256(c).hexdigest() for c in context.get_ca_certs(binary_form=True))
-    with open(f"/tmp/pki-loaded-{os.getpid()}.json", "w") as record:
+    os.makedirs("/run/picturas", mode=0o700, exist_ok=True)
+    with open(f"/run/picturas/pki-loaded-{os.getpid()}.json", "w") as record:
         json.dump({"pid": os.getpid(), "ca": loaded_cas[0], "trusted_cas": loaded_cas}, record)
-    os.chmod(f"/tmp/pki-loaded-{os.getpid()}.json", 0o600)
+    os.chmod(f"/run/picturas/pki-loaded-{os.getpid()}.json", 0o600)
 
     parameters = pika.ConnectionParameters(
         host=RABBITMQ_HOST,
@@ -44,7 +45,7 @@ def message_queue_connect() -> tuple[pika.BlockingConnection, BlockingChannel]:
     from .message_processor import MessageProcessor
     if not getattr(MessageProcessor, "_picturas_observed_work", False):
         original_handle = MessageProcessor.handle_request_message
-        marker = f"/tmp/picturas-work-{os.getpid()}.json"
+        marker = f"/run/picturas/picturas-work-{os.getpid()}.json"
         lock = Lock()
         active = 0
         try:

@@ -200,7 +200,7 @@ elif action=='interrupt':
  watch='''import glob,json,os,signal,time,sys
 print('READY',flush=True)
 for _ in range(20000):
- for file in glob.glob('/tmp/picturas-work-*.json'):
+ for file in glob.glob('/run/picturas/picturas-work-*.json'):
   try: state=json.load(open(file))
   except (ValueError,FileNotFoundError):continue
   if state.get('active_count',0)>0:
@@ -209,7 +209,7 @@ for _ in range(20000):
 sys.exit(1)
 '''
  stopped=command(['docker','exec',cid('resize_tool'),'python','-c',
-  "import glob,json;print(any(json.load(open(f)).get('active_count')==1 for f in glob.glob('/tmp/picturas-work-*.json')) and 'State:\\tT' in open('/proc/1/status').read())"]).stdout.strip()==b'True'
+  "import glob,json;print(any(json.load(open(f)).get('active_count')==1 for f in glob.glob('/run/picturas/picturas-work-*.json')) and 'State:\\tT' in open('/proc/1/status').read())"]).stdout.strip()==b'True'
  if not stopped:
   watcher=subprocess.Popen(['docker','exec',cid('resize_tool'),'python','-u','-c',watch],stdout=subprocess.PIPE,stderr=subprocess.PIPE,env=ENV)
   if watcher.stdout.readline()!=b'READY\n':raise RuntimeError('image_observer_not_ready')
@@ -218,7 +218,7 @@ sys.exit(1)
   if active:command(['docker','kill','--signal','STOP',cid('resize_tool')])
   watcher.communicate(timeout=30)
   stopped=active and watcher.returncode==0 and command(['docker','exec',cid('resize_tool'),'python','-c',
-   "import glob,json;print(any(json.load(open(f)).get('active_count')==1 for f in glob.glob('/tmp/picturas-work-*.json')) and 'State:\\tT' in open('/proc/1/status').read())"]).stdout.strip()==b'True'
+   "import glob,json;print(any(json.load(open(f)).get('active_count')==1 for f in glob.glob('/run/picturas/picturas-work-*.json')) and 'State:\\tT' in open('/proc/1/status').read())"]).stdout.strip()==b'True'
  check('real-image-autoack-worker-stopped-during-active-callback',stopped)
  stop='''const fs=require('fs');for(const pid of fs.readdirSync('/proc').filter(x=>/^\\d+$/.test(x))){try{
 const a=fs.readFileSync('/proc/'+pid+'/cmdline','utf8').split('\\0');if(a[0]?.endsWith('node')&&a.slice(1).some(x=>/^(\\.\\/)?bin\\/www$/.test(x))){
@@ -300,7 +300,7 @@ elif action in ('video-interrupt','video-finish'):
   headers={'X-Project-Version':version(p,owner)},json={})
  watch="""import glob,json,sys,time,os
 for _ in range(3000):
- active=any(json.load(open(f)).get('active_count')==1 for f in glob.glob('/tmp/picturas-work-*.json'))
+ active=any(json.load(open(f)).get('active_count')==1 for f in glob.glob('/run/picturas/picturas-work-*.json'))
  parts=glob.glob('/app/images/runs/*/out/*.part.mp4')
  if active and any(os.path.getsize(f)>0 for f in parts):print('ACTIVE_PARTIAL',flush=True);sys.exit(0)
  time.sleep(.005)
@@ -309,7 +309,7 @@ sys.exit(1)
  observed=command(['docker','exec',cid('video_tool'),'python','-u','-c',watch],timeout=30)
  command(['docker','kill','--signal','STOP',cid('video_tool')])
  active=command(['docker','exec',cid('video_tool'),'python','-c',
-  "import glob,json;print(any(json.load(open(f)).get('active_count')==1 for f in glob.glob('/tmp/picturas-work-*.json')) and 'State:\\tT' in open('/proc/1/status').read())"]).stdout.strip()==b'True'
+  "import glob,json;print(any(json.load(open(f)).get('active_count')==1 for f in glob.glob('/run/picturas/picturas-work-*.json')) and 'State:\\tT' in open('/proc/1/status').read())"]).stdout.strip()==b'True'
  check('real-video-stopped-with-active-callback-and-partial-output',active and b'ACTIVE_PARTIAL' in observed.stdout)
  helper('seed-readback')
  helper('before');command(['ops/maintenance.sh','isolate','--project',PROJECT,'--mode','compromise'],timeout=90)

@@ -54,7 +54,7 @@ must(['docker','cp',str(ROOT/'source.mp4'),video+':'+fixture['input']])
 must(['docker','run','--rm','--user',str(os.getuid())+':'+str(os.getgid()),'--network',PROJECT+'_elk',
  '-v',str(ROOT)+':/installation:ro','-v',str(trial)+':/proof:rw',
  '-v',str(REPO/'tests/conformance/pki-operations')+':/tests:ro','picturas-pki-observer','python','/tests/technical_job.py','publish'])
-def active():return b'"active_count": 1' in run(['docker','exec',video,'sh','-c','cat /tmp/picturas-work-*.json']).stdout
+def active():return b'"active_count": 1' in run(['docker','exec',video,'sh','-c','cat /run/picturas/picturas-work-*.json']).stdout
 deadline=time.monotonic()+10
 while not active() and time.monotonic()<deadline:time.sleep(.1)
 assert active()

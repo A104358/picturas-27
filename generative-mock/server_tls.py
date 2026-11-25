@@ -57,9 +57,10 @@ if __name__ == "__main__":
     ctx.load_cert_chain(CERT, KEY)
     ctx.load_verify_locations(CA)
     loaded_cas = sorted(hashlib.sha256(c).hexdigest() for c in ctx.get_ca_certs(binary_form=True))
-    with open(f"/tmp/pki-loaded-{os.getpid()}.json", "w") as record:
+    os.makedirs("/run/picturas", mode=0o700, exist_ok=True)
+    with open(f"/run/picturas/pki-loaded-{os.getpid()}.json", "w") as record:
         json.dump({"pid": os.getpid(), "ca": loaded_cas[0], "trusted_cas": loaded_cas,
                    "certificate": hashlib.sha256(ssl.PEM_cert_to_DER_cert(open(CERT).read())).hexdigest()}, record)
-    os.chmod(f"/tmp/pki-loaded-{os.getpid()}.json", 0o600)
+    os.chmod(f"/run/picturas/pki-loaded-{os.getpid()}.json", 0o600)
     ctx.verify_mode = ssl.CERT_REQUIRED
     app.run(host="0.0.0.0", port=7860, debug=False, ssl_context=ctx)

@@ -149,3 +149,17 @@ busy slot, ffprobe process or relay listener left. Out-of-range requests to the 
 answered 416 by code but are not reachable through ffprobe. D-28 B also leaves continuous direct PUT
 bodies without a 600-second absolute limit; its 900 + 120 second sweep was tested for
 a writer finishing between the first and second cleanup.
+
+## B12 — regression and full suite
+
+- `regression/b12-regression.py` (in-network) walks the product end to end: accounts and
+  anonymous session, the 8 PIL tools in one batch, watermark, the 7 AI tools (`expand_ai`
+  generative through `generative-mock`), video by legacy POST and direct flow with trim/speed,
+  3 s preview and WS events, mixed project, subtitles, frame extraction, quota (debit only on
+  Apply, refund on cancellation), shares/presence/409/revocation, presets, subscription and
+  account deletion.
+- `regression/b12-browser-export.py` (host, Playwright) downloads ZIP and the client-side PDF
+  from the real frontend and checks that video projects hide the PDF entry.
+- `run-b12.sh [label ...]` runs every suite of §5 against `picturas-dev`, one raw file per
+  suite (`results/<date>/B12-conf-<label>.txt`) plus `B12-conf-index.txt`; the secrets
+  directory path is redacted.

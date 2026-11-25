@@ -202,7 +202,7 @@ class Maintenance:
         for participant in self.containers():
             service=participant['Config']['Labels']['com.docker.compose.service']
             if not (service.endswith('_tool') or service=='watermark_tool_ms' or service=='projects'): continue
-            script='for f in /tmp/picturas-work-*.json; do [ -f "$f" ] || continue; cat "$f"; printf "\\n"; done'
+            script='for f in /run/picturas/picturas-work-*.json; do [ -f "$f" ] || continue; cat "$f"; printf "\\n"; done'
             result=command(['docker','exec',participant['Id'],'sh','-c',script])
             for line in result.stdout.splitlines():
                 if line.strip():
@@ -298,7 +298,7 @@ class Maintenance:
                 continue
             # Read records only for live processes. A short-lived CLI cannot attest the
             # application process, and a dead process's old file is not evidence.
-            script='for f in /tmp/pki-loaded-*.json; do [ -f "$f" ] || continue; p=${f##*/pki-loaded-}; p=${p%.json}; [ -d "/proc/$p" ] && cat "$f" && printf "\\n"; done'
+            script='for f in /run/picturas/pki-loaded-*.json; do [ -f "$f" ] || continue; p=${f##*/pki-loaded-}; p=${p%.json}; [ -d "/proc/$p" ] && cat "$f" && printf "\\n"; done'
             result=command(['docker','exec',item['id'],'sh','-c',script],allowed=True)
             values=[]
             for line in result.stdout.splitlines():

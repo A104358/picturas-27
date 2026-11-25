@@ -58,9 +58,10 @@ class VideoWorker:
         credentials = pika.PlainCredentials(env.RABBITMQ_USERNAME, env.RABBITMQ_PASSWORD)
         context = ssl.create_default_context(cafile="/run/secrets/pki/ca.crt")
         loaded_cas = sorted(hashlib.sha256(c).hexdigest() for c in context.get_ca_certs(binary_form=True))
-        with open(f"/tmp/pki-loaded-{os.getpid()}.json", "w") as record:
+        os.makedirs("/run/picturas", mode=0o700, exist_ok=True)
+        with open(f"/run/picturas/pki-loaded-{os.getpid()}.json", "w") as record:
             json.dump({"pid": os.getpid(), "ca": loaded_cas[0], "trusted_cas": loaded_cas}, record)
-        os.chmod(f"/tmp/pki-loaded-{os.getpid()}.json", 0o600)
+        os.chmod(f"/run/picturas/pki-loaded-{os.getpid()}.json", 0o600)
         params = pika.ConnectionParameters(
             env.RABBITMQ_HOST, int(env.RABBITMQ_PORT), "/", credentials,
             ssl_options=pika.SSLOptions(context, env.RABBITMQ_HOST),

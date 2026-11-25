@@ -4,7 +4,8 @@ const amqp = require('amqplib/callback_api');
 const exchange = 'picturas';
 const retryMs = 3000;
 let activeCallbacks = 0;
-const workMarker = `/tmp/picturas-work-${process.pid}.json`;
+const workMarker = `/run/picturas/picturas-work-${process.pid}.json`;
+fs.mkdirSync("/run/picturas", { recursive: true, mode: 0o700 });
 function recordWork() {
     fs.writeFileSync(`${workMarker}.tmp`, JSON.stringify({ pid: process.pid, active_count: activeCallbacks }), { mode: 0o600 });
     fs.renameSync(`${workMarker}.tmp`, workMarker);

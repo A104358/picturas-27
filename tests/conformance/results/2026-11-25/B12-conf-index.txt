@@ -1,0 +1,13 @@
+# B12 conformance — 2026-11-25T05:46:16Z — commit 383561e (+ uncommitted changes)
+F01                      exit=0   30s 74 passed in 27.69s
+B12-regression           exit=1  325s PASS R06 video upload, direct flow: 204
+B12-browser-export       exit=1    5s B12 browser export: FAILED X1,X2
+# B12 conformance — 2026-11-25T05:52:52Z — commit 383561e (+ uncommitted changes)
+B12-regression           exit=1  505s FAIL R12 own preset created: 400
+B12-browser-export       exit=0    6s B12 browser export: all checks passed
+# B12 conformance — 2026-11-25T06:02:25Z — commit 383561e (+ uncommitted changes)
+B12-regression           exit=1  135s PASS R12 own preset created: 201
+# B12 conformance — 2026-11-25T06:04:49Z — commit 383561e (+ uncommitted changes)
+B12-regression           exit=1  135s B12 regression: 104/105 checks passed
+# B12 conformance — 2026-11-25T06:07:12Z — commit 383561e (+ uncommitted changes)
+B12-regression           exit=0  135s B12 regression: 105/105 checks passed

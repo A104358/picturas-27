@@ -4,7 +4,8 @@ import json
 import os
 from pathlib import Path
 
-MARKER = Path(f"/tmp/picturas-work-{os.getpid()}.json")
+MARKER = Path(f"/run/picturas/picturas-work-{os.getpid()}.json")
+MARKER.parent.mkdir(mode=0o700, parents=True, exist_ok=True)
 MARKER.unlink(missing_ok=True)
 
 @contextmanager

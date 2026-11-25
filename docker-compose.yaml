@@ -625,7 +625,7 @@ services:
     networks:
       - elk
     volumes:
-      - image_data:/images
+      - image_data:/app/images
       - ${PICTURAS_SECRETS_DIR:?PICTURAS_SECRETS_DIR is not set (see ops/secrets.sh)}/pki/services/rabbitmq/ca.crt:/run/secrets/pki/ca.crt:ro
     depends_on:
       rabbitmq:

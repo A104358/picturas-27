@@ -1,0 +1,9 @@
+# B12-browser-export — 2026-11-25T06:01:17Z
+$ /Users/miguelsantos/picturas-b7-diagnostico/.venv/bin/python tests/conformance/regression/b12-browser-export.py
+
+PASS X1 edit-mode PDF with one page per image: 2
+PASS X2 results-mode PDF with one page per result: 2
+PASS X3 results-mode ZIP: 492
+PASS X4 video project hides the PDF entry
+B12 browser export: all checks passed
+exit: 0

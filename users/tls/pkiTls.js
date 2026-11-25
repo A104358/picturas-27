@@ -22,7 +22,8 @@ const ca = fs.readFileSync(`${DIR}/ca.crt`);
 // Public fingerprints of the material actually loaded by this live process (B10).
 // Per-process files keep command-line probes and healthchecks out of application output.
 const trustedCAs = ca.toString().match(/-----BEGIN CERTIFICATE-----[\s\S]+?-----END CERTIFICATE-----/g) || [];
-fs.writeFileSync(`/tmp/pki-loaded-${process.pid}.json`, JSON.stringify({ pid: process.pid,
+fs.mkdirSync("/run/picturas", { recursive: true, mode: 0o700 });
+fs.writeFileSync(`/run/picturas/pki-loaded-${process.pid}.json`, JSON.stringify({ pid: process.pid,
   ca: new crypto.X509Certificate(ca).fingerprint256.replace(/:/g, "").toLowerCase(),
   trusted_cas: trustedCAs.map((value) => new crypto.X509Certificate(value).fingerprint256.replace(/:/g, "").toLowerCase()).sort(),
   certificate: new crypto.X509Certificate(cert).fingerprint256.replace(/:/g, "").toLowerCase(),

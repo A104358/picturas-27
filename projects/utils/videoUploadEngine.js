@@ -175,10 +175,17 @@ function rangedStream(url, start, end, { deadline, onBytes } = {}) {
   return out;
 }
 
+// UP-C8 limits. The environment can only tighten them (conformance fault injection, UL-10);
+// a missing, invalid or larger value keeps the decided limit.
+function tightened(name, limit) {
+  const value = Number(process.env[name]);
+  return Number.isSafeInteger(value) && value > 0 ? Math.min(value, limit) : limit;
+}
+
 async function probe(url, size) {
   // ffprobe can issue several Range requests. Count bytes across all of them.
-  const budget = size * 2 + 16 * 1024 * 1024;
-  const deadline = Date.now() + 15000;
+  const budget = tightened("VIDEO_PROBE_MAX_BYTES", size * 2 + 16 * 1024 * 1024);
+  const deadline = Date.now() + tightened("VIDEO_PROBE_TIMEOUT_MS", 15000);
   let used = 0;
   const server = http.createServer((req, res) => {
     if (req.url !== "/probe" || !["GET", "HEAD"].includes(req.method) || Date.now() >= deadline) {
@@ -423,4 +430,4 @@ mongoose.connection.asPromise().then(async () => {
   await maintain();
 }).catch(() => {});
 
-module.exports = { reserve, claim, store, finalize, fail, release, active, isServerError, serverError, storage, agent, objectPath };
+module.exports = { reserve, claim, store, finalize, fail, release, active, isServerError, serverError, storage, agent, objectPath, probe };

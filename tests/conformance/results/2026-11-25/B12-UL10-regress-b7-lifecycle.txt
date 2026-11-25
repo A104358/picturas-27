@@ -1,0 +1,10 @@
+PASS UL-04 expired token refused before body
+PASS UL-05 version change fences direct PUT and confirmation
+PASS UL-01/03 incomplete PUT claims once and cannot confirm
+PASS UL-03 complete PUT remains confirmable and idempotent
+PASS UL-06/10 staging is private; invalid video cannot publish
+PASS UL-07/09 restart before confirmation and durable hash completion
+PASS UL-11 storage outage retains cleanup failure, then removes staging on retry
+PASS UL-07/08 promoting crash cleans unpublished copy; committing marker keeps published media
+PASS UL-10 probe rejects foreign authority and wrong S3 object before I/O
+exit=0

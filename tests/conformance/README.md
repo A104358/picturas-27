@@ -120,6 +120,9 @@ explicit allowlist; private installation material and browser profiles stay outs
   video rejection. It also restarts `projects` across direct receive, copy and commit markers,
   checks durable hash completion, and retries cleanup after a controlled `img_storage` outage.
   It advances only its own fixture records in the dev MongoDB.
+- `upload/ul10-probe-limits.py` injects the probe relay's byte and time limits independently
+  (UL-10). Run it on the host with `picturas-dev` up; it recreates `projects` with
+  `ul10-probe.override.yaml` and restores the decided limits at the end.
 
 | Lifecycle case | Evidence |
 |---|---|
@@ -132,13 +135,17 @@ explicit allowlist; private installation material and browser profiles stay outs
 | UL-07 | `b7-lifecycle.py` restart at receive, copy, commit and hash markers; `b6-races.py` single commit |
 | UL-08 | `b7-lifecycle.py` unpublished copy cleanup and original preservation; `b7-late-cleanup.py` late writer |
 | UL-09 | `b7-lifecycle.py` hash completion after restart; B6 adapter's ready/media checks |
-| UL-10 | `b7-lifecycle.py` invalid format, private staging, foreign authority and wrong S3 object; B5 mTLS checks and B6 valid probe |
+| UL-10 | `b7-lifecycle.py` invalid format, private staging, foreign authority and wrong S3 object; `ul10-probe-limits.py` byte and time limits injected independently; B5 mTLS checks and B6 valid probe |
 | UL-11 | `b7-lifecycle.py` storage outage, cleanup retry and published original preservation |
 | UL-12 | `b6-capacity.py`, `b7-browser.py` and EXP quick resource/latency guards |
 
 The crash markers in UL-07/08 are fixture state injection followed by a real process
-restart; they do not pause the process at every instruction. UL-10's remaining byte/time
-limits are enforced by the B6 bounded relay, but this suite does not independently inject
-each violation. D-28 B also leaves continuous direct PUT
+restart; they do not pause the process at every instruction. `ul10-probe-limits.py` injects
+the probe relay's limits one at a time on the development stack: the default 15 s deadline
+through the real `probe()` with a trickling local upstream, then the byte and the time limit
+alone in the real `projects` server (`ul10-probe.override.yaml`; the engine only accepts
+values that tighten UP-C8). Both transports are refused with no staging/src object, media,
+busy slot, ffprobe process or relay listener left. Out-of-range requests to the relay are
+answered 416 by code but are not reachable through ffprobe. D-28 B also leaves continuous direct PUT
 bodies without a 600-second absolute limit; its 900 + 120 second sweep was tested for
 a writer finishing between the first and second cleanup.

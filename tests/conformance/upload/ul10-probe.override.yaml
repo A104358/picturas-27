@@ -1,0 +1,7 @@
+# UL-10 fault injection for the development stack only (never used by med.py or the MF).
+# The engine accepts these values only when they tighten the UP-C8 limits; empty = decided limits.
+services:
+  projects:
+    environment:
+      VIDEO_PROBE_MAX_BYTES: ${UL10_PROBE_MAX_BYTES:-}
+      VIDEO_PROBE_TIMEOUT_MS: ${UL10_PROBE_TIMEOUT_MS:-}

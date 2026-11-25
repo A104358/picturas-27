@@ -1,0 +1,8 @@
+# B8-client — 2026-11-25T06:19:54Z
+$ docker run --rm --network none -v /Users/miguelsantos/Documents/GitHub/picturas-27F2:/repo:ro -w /repo -e B8_TS_COMPILER=/usr/src/app/node_modules/typescript --entrypoint node picturas-dev-frontend tests/conformance/websocket/client-reconnect.test.js frontend/lib/project-socket.ts
+
+PASS reconnect: revalidates the same token and user; multiple consumers share one connection
+PASS network outage: no logout/identity replacement; retry resumes the same session
+PASS rejected session: explicit invalid-session signal, no anonymous account or automatic reconnect
+PASS React remount during validation: stale completion cannot connect and the live consumer still reconnects
+exit: 0

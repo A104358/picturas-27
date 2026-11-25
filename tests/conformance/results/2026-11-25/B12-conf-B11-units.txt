@@ -1,0 +1,9 @@
+# B11-units — 2026-11-25T06:18:51Z
+$ docker run --rm --network none -v /Users/miguelsantos/Documents/GitHub/picturas-27F2:/repo:ro -w /repo -e PYTHONDONTWRITEBYTECODE=1 --entrypoint python picturas-conformance-runner -m unittest discover -s tests/conformance/operations -p test_*.py
+
+..........................
+----------------------------------------------------------------------
+Ran 26 tests in 0.072s
+
+OK
+exit: 0

@@ -1,0 +1,14 @@
+# B1-S19-git-grep — 2026-11-25T06:10:49Z
+$ tests/conformance/mtls-pki/s19-git-grep.sh
+
+checked 58 current secrets
+## formerly committed secrets (information; not valid any more)
+  lisan_al_gaib                            README.md ops/secrets.sh tests/conformance/results/2026-11-22/B1-S19-git-grep.txt
+  admin123                                 README.md ops/secrets.sh rabbitMQ/Dockerfile tests/conformance/data-channels/b2-s3-auth.py tests/conformance/results/2026-11-22/B1-S19-git-grep.txt tests/conformance/results/2026-11-22/B1-old-credentials.txt
+  card_secret_key                          tests/conformance/results/2026-11-22/B1-S19-git-grep.txt
+  uma-frase-secreta-bem-grande-ou-64-hex   tests/conformance/results/2026-11-22/B1-S19-git-grep.txt
+  picturas-kek-passphrase-change-me        tests/conformance/results/2026-11-22/B1-S19-git-grep.txt
+  RABBITMQ_DEFAULT_PASS: "password"        tests/conformance/results/2026-11-22/B1-S19-git-grep.txt
+  "password": "password"                   tests/conformance/results/2026-11-22/B1-S19-git-grep.txt
+S19 git grep: passed (no current secret in the repository)
+exit: 0

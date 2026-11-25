@@ -1,0 +1,5 @@
+# B9-session-profile — 2026-11-25T06:18:44Z
+$ docker run --rm --network none -v tests/conformance/sessions:/t:ro --entrypoint node picturas-dev-users /t/session-profile.test.js
+
+PASS S06/SEC-02: normal profile, same subject, absolute 7 days, exact expiry/+1 and different installation refusal
+exit: 0

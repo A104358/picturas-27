@@ -1,0 +1,9 @@
+# B10-maintenance-unit — 2026-11-25T06:18:50Z
+$ docker run --rm --network none -v /Users/miguelsantos/Documents/GitHub/picturas-27F2:/repo:ro -w /repo -e PYTHONDONTWRITEBYTECODE=1 --entrypoint python picturas-conformance-runner -m unittest discover -s tests/conformance/pki-operations -p test_maintenance.py
+
+.........
+----------------------------------------------------------------------
+Ran 9 tests in 0.003s
+
+OK
+exit: 0

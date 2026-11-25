@@ -1,0 +1,5 @@
+# B2-F02-functional — 2026-11-25T06:10:54Z
+$ evaluation/.venv/bin/python tests/conformance/data-channels/b2-functional.py
+
+B2 F02: image and video batch output; PNG changed; MP4/H.264/AAC, duration and brighter frame passed
+exit: 0

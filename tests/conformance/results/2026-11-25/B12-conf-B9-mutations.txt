@@ -1,0 +1,8 @@
+# B9-mutations — 2026-11-25T06:18:44Z
+$ docker run --rm --network none -v /Users/miguelsantos/Documents/GitHub/picturas-27F2:/repo:ro -w /repo -e B9_TS_COMPILER=/usr/src/app/node_modules/typescript --entrypoint node picturas-dev-frontend tests/conformance/sessions/mutations.test.js
+
+PASS AR-10: delayed validation cannot replace or invalidate a newer saved session
+PASS AR-09/10: empty query never registers; an active recovery lock rejects registration before its request
+PASS SEC-01/02: rejected/network validation never logs out or creates an identity
+PASS SEC-02: voluntary logout removes only the local session, without registration
+exit: 0

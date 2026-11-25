@@ -1,0 +1,16 @@
+# B6-adapter — 2026-11-25T06:12:31Z
+$ tests/conformance/in-network.sh picturas-dev upload/b6-adapter.py
+
+PASS unauthenticated upload refused
+PASS another account refused
+PASS invalid video leaves no media
+PASS video committed once with project version
+PASS stale project version refused without a second media
+PASS stored original retains its bytes
+PASS duplicate name refused
+PASS read share refused
+PASS edit share accepted
+PASS free upload at zero quota neither refused nor charged
+PASS anonymous video upload refused
+PASS premium video upload accepted
+exit: 0

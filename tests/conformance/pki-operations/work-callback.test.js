@@ -4,7 +4,7 @@ let record, handler, ack=0, resolve;
 const channel={on(){},checkExchange(n,cb){cb();},checkQueue(n,cb){cb();},consume(n,cb){handler=cb;},ack(){ack++;}};
 const connection={on(){},createChannel(cb){cb(null,channel);}};
 const moduleFixture={exports:{}};
-const fakeFS={readFileSync:()=>Buffer.from('SYNTHETIC-CA'),writeFileSync:(p,b)=>{record=JSON.parse(b);},renameSync(){}};
+const fakeFS={readFileSync:()=>Buffer.from('SYNTHETIC-CA'),writeFileSync:(p,b)=>{record=JSON.parse(b);},renameSync(){},mkdirSync(){}};
 vm.runInNewContext(fs.readFileSync('projects/utils/rabbit_mq.js','utf8'),{
  module:moduleFixture,exports:moduleFixture.exports,Buffer,process:{pid:123,env:{}},console,setTimeout(){},
  require:name=>name==='fs'?fakeFS:{connect:(url,opts,cb)=>cb(null,connection)},

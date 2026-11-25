@@ -1,0 +1,23 @@
+# B6-capacity — 2026-11-25T06:12:59Z
+$ evaluation/.venv/bin/python tests/conformance/upload/b6-capacity.py
+
+PASS upload 1/10 premium 100 MiB T (HTTP 204 933 ms)
+PASS upload 2/10 premium 100 MiB T (HTTP 204 873 ms)
+PASS upload 3/10 premium 100 MiB T (HTTP 204 960 ms)
+PASS upload 4/10 premium 100 MiB T (HTTP 204 928 ms)
+PASS upload 5/10 premium 100 MiB T (HTTP 204 884 ms)
+PASS upload 6/10 premium 100 MiB T (HTTP 204 920 ms)
+PASS upload 7/10 premium 100 MiB T (HTTP 204 861 ms)
+PASS upload 8/10 premium 100 MiB T (HTTP 204 969 ms)
+PASS upload 9/10 premium 100 MiB T (HTTP 204 1170 ms)
+PASS upload 10/10 premium 100 MiB T (HTTP 204 1246 ms)
+PASS aborted upload 1 ended without a server answer (ConnectionError)
+PASS aborted upload 2 ended without a server answer (ConnectionError)
+PASS aborted upload 3 ended without a server answer (ConnectionError)
+PASS stalled upload 4 ended without a server answer (ConnectionError)
+PASS interrupted uploads published nothing
+PASS 3 simultaneous uploads after the interruptions admitted (all slots free) (HTTP [204, 409, 409])
+slot refusals (429, retried): 1
+accepted 11 uploads; project media 11
+RESULT PASS
+exit: 0

@@ -42,7 +42,8 @@ declare -a SUITES=(
   "B7-late-cleanup|$PY tests/conformance/upload/b7-late-cleanup.py"
   "B7-UL10-probe-limits|$PY tests/conformance/upload/ul10-probe-limits.py"
   "B7-browser|$BROWSER_PY tests/conformance/upload/b7-browser.py"
-  "B8-unit|$IMG -e NODE_PATH=/usr/src/app/node_modules --entrypoint node $P-ws_gateway --test tests/conformance/websocket/authorization.test.js tests/conformance/websocket/protocol.test.js tests/conformance/websocket/ws-route.test.js tests/conformance/websocket/presence-agent.test.js tests/conformance/websocket/client-reconnect.test.js"
+  "B8-unit|$IMG -e NODE_PATH=/usr/src/app/node_modules --entrypoint node $P-ws_gateway --test tests/conformance/websocket/authorization.test.js tests/conformance/websocket/protocol.test.js tests/conformance/websocket/ws-route.test.js tests/conformance/websocket/presence-agent.test.js"
+  "B8-client|$IMG -e B8_TS_COMPILER=/usr/src/app/node_modules/typescript --entrypoint node $P-frontend tests/conformance/websocket/client-reconnect.test.js frontend/lib/project-socket.ts"
   "B8-functional|$NET websocket/b8-functional.py"
   "B8-wire-limits|$NET websocket/b8-wire-limits.py 10"
   "B8-load|$NET websocket/b8-load.py"
@@ -73,5 +74,5 @@ for entry in "${SUITES[@]}"; do
     bash -c "$cmd" 2>&1; echo "exit: $?"; } | sed "s#$PICTURAS_SECRETS_DIR#<secrets-dir>#g" > "$file"
   code=$(tail -1 "$file" | sed 's/exit: //')
   printf '%-24s exit=%s %4ss %s\n' "$label" "$code" "$(( $(date +%s) - start ))" \
-    "$(grep -E 'checks passed|passed|PASS|FAIL|^ok |^not ok|# (pass|fail)' "$file" | tail -1 | cut -c1-90)" | tee -a "$INDEX"
+    "$(grep -E 'checks passed|passed|PASS|FAIL|^ok |^not ok|# (pass|fail)|^OK|pass [0-9]' "$file" | tail -1 | cut -c1-90)" | sed -E 's/[[:space:]]+$//' | tee -a "$INDEX"
 done

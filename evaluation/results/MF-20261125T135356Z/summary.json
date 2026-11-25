@@ -1,0 +1,169 @@
+{
+ "updated_at": "2026-11-25T13:58:37Z",
+ "metrics": {
+  "S18": {
+   "todas": 0,
+   "loopback": 0,
+   "servicos": [],
+   "alcancaveis_lan": 0,
+   "lan_ip_testado": true,
+   "lista": []
+  },
+  "S01": {
+   "tentativas": 45,
+   "admitidos": 0,
+   "recusados": 45,
+   "inconclusivos": 0,
+   "nao_aplicaveis": 0,
+   "por_resultado": {
+    "RECUSADO_DOMINIO": 45
+   },
+   "por_superficie": {
+    "publica": {
+     "tentativas": 45,
+     "admitidos": 0,
+     "inconclusivos": 0
+    }
+   },
+   "casos_admitidos": [],
+   "casos_inconclusivos": [],
+   "controlos_ok": 3,
+   "controlos_total": 3
+  },
+  "S02": {
+   "tentativas": 60,
+   "admitidos": 0,
+   "recusados": 60,
+   "inconclusivos": 0,
+   "nao_aplicaveis": 0,
+   "por_resultado": {
+    "RECUSADO_REDE": 30,
+    "RECUSADO_TLS": 30
+   },
+   "por_superficie": {
+    "host": {
+     "tentativas": 30,
+     "admitidos": 0,
+     "inconclusivos": 0
+    },
+    "rede": {
+     "tentativas": 30,
+     "admitidos": 0,
+     "inconclusivos": 0
+    }
+   },
+   "casos_admitidos": [],
+   "casos_inconclusivos": [],
+   "controlos_ok": 3,
+   "controlos_total": 3
+  },
+  "S03": {
+   "tentativas": 24,
+   "admitidos": 0,
+   "recusados": 24,
+   "inconclusivos": 0,
+   "nao_aplicaveis": 0,
+   "por_resultado": {
+    "RECUSADO_REDE": 12,
+    "RECUSADO_TLS": 12
+   },
+   "por_superficie": {
+    "host": {
+     "tentativas": 12,
+     "admitidos": 0,
+     "inconclusivos": 0
+    },
+    "rede": {
+     "tentativas": 12,
+     "admitidos": 0,
+     "inconclusivos": 0
+    }
+   },
+   "casos_admitidos": [],
+   "casos_inconclusivos": [],
+   "controlos_ok": 3,
+   "controlos_total": 3
+  },
+  "S04": {
+   "tentativas": 15,
+   "admitidos": 0,
+   "recusados": 15,
+   "inconclusivos": 0,
+   "nao_aplicaveis": 0,
+   "por_resultado": {
+    "RECUSADO_DOMINIO": 15
+   },
+   "por_superficie": {
+    "ws": {
+     "tentativas": 15,
+     "admitidos": 0,
+     "inconclusivos": 0
+    }
+   },
+   "casos_admitidos": [],
+   "casos_inconclusivos": [],
+   "controlos_ok": 15,
+   "controlos_total": 15
+  },
+  "S16": {
+   "tentativas": 72,
+   "admitidos": 0,
+   "recusados": 72,
+   "inconclusivos": 0,
+   "nao_aplicaveis": 18,
+   "por_resultado": {
+    "RECUSADO_DOMINIO": 36,
+    "RECUSADO_REDE": 36
+   },
+   "por_superficie": {
+    "rede": {
+     "tentativas": 36,
+     "admitidos": 0,
+     "inconclusivos": 0
+    },
+    "host": {
+     "tentativas": 36,
+     "admitidos": 0,
+     "inconclusivos": 0
+    }
+   },
+   "casos_admitidos": [],
+   "casos_inconclusivos": [],
+   "controlos_ok": 6,
+   "controlos_total": 6,
+   "credenciais_git_encontradas": 0
+  },
+  "S17": {
+   "tentativas": 45,
+   "admitidos": 0,
+   "recusados": 45,
+   "inconclusivos": 0,
+   "nao_aplicaveis": 0,
+   "por_resultado": {
+    "RECUSADO_DOMINIO": 24,
+    "RECUSADO_REDE": 21
+   },
+   "por_superficie": {
+    "rede": {
+     "tentativas": 21,
+     "admitidos": 0,
+     "inconclusivos": 0
+    },
+    "host": {
+     "tentativas": 21,
+     "admitidos": 0,
+     "inconclusivos": 0
+    },
+    "publica": {
+     "tentativas": 3,
+     "admitidos": 0,
+     "inconclusivos": 0
+    }
+   },
+   "casos_admitidos": [],
+   "casos_inconclusivos": [],
+   "controlos_ok": 3,
+   "controlos_total": 3
+  }
+ }
+}

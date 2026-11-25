@@ -8,9 +8,11 @@ const uploadSchema = new mongoose.Schema({
   transport: { type: String, enum: ["legacy", "direct"], required: true },
   state: { type: String, required: true },
   cleanup: { type: String, default: "none" },
+  lateCleanupDone: { type: Boolean, default: false },
   generation: { type: Number, default: 1 },
   deadline: { type: Date, required: true },
   tokenExpiresAt: Date,
+  tokenHash: { type: String, index: { unique: true, sparse: true } },
   slot: Number,
   name: String,
   mime: String,
@@ -23,6 +25,10 @@ const uploadSchema = new mongoose.Schema({
   barrier: Number,
   mediaId: mongoose.Schema.Types.ObjectId,
   resultVersion: Number,
+  declaredDuration: Number,
+  declaredWidth: Number,
+  declaredHeight: Number,
+  cancelRequested: { type: Boolean, default: false },
   error: String,
 }, { timestamps: true });
 

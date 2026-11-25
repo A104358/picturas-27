@@ -603,8 +603,10 @@ but other weights are fetched at runtime — the first request needs network acc
 
 **A video upload is rejected**
 The response gives the reason: check the plan limits (free 60 s / 100 MB) and that the file
-is a valid MP4, MOV or WebM. Videos must go to `POST /:user/:project/video`; the image
-endpoint rejects them.
+is a valid MP4, MOV or WebM. The editor requests an upload, sends the video with a streamed
+PUT, then confirms it; the video appears only after confirmation. The legacy
+`POST /:user/:project/video` endpoint remains available for API clients. The image endpoint
+rejects videos.
 
 **A video stays at 0% or never finishes**
 There is a single `video_tool` with no replicas, so videos are processed one at a time. Check

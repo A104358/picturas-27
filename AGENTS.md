@@ -60,8 +60,10 @@ Behind the gateway:
 
 ### Media types
 
-- Images are uploaded to `POST /:user/:project/img`, videos to `POST /:user/:project/video`;
-  each endpoint rejects the other kind. Videos are stored with `media_type: "video"`.
+- Images are uploaded to `POST /:user/:project/img`. The frontend uploads videos with
+  request → streamed PUT through nginx → confirmation; the legacy
+  `POST /:user/:project/video` remains for API compatibility and official upload metrics.
+  Each media endpoint rejects the other kind. Videos are stored with `media_type: "video"`.
 - Video validation (container, codec, duration, size, resolution) and the orchestrator's video
   logic live in `projects/utils/video.js`. Limits are env vars of `projects`
   (`VIDEO_FREE_*`, `VIDEO_PREMIUM_*`): free 60 s / 100 MB, premium 600 s / 1 GB.

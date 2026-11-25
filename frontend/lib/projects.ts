@@ -451,6 +451,8 @@ export const addProjectImages = async ({
   ownerId,
   shareId,
   projectVersion,
+  signal,
+  onProgress,
 }: {
   uid: string;
   pid: string;
@@ -459,18 +461,29 @@ export const addProjectImages = async ({
   ownerId?: string;
   shareId?: string;
   projectVersion: number;
+  signal?: AbortSignal;
+  onProgress?: (percent: number) => void;
 }) => {
   const query = buildQuery({ ownerId, shareId });
 
   let lastVersion: string | undefined;
 
   for (const image of images) {
+    if (signal?.aborted) throw new DOMException("Upload cancelled", "AbortError");
     // Videos go to their own endpoint
     const video = isVideo({ name: image.name }) || image.type.startsWith("video/");
+    if (video) {
+      const { uploadVideo } = await import("./video-upload");
+      lastVersion = await uploadVideo({ path: `/projects/${ownerId || uid}/${pid}/video`, query,
+        file: image, token, version: projectVersion, signal, onProgress });
+      if (lastVersion) projectVersion = Number(lastVersion);
+      continue;
+    }
     const formData = new FormData();
     formData.append(video ? "video" : "image", image);
 
     const response = await api.post(`/projects/${uid}/${pid}/${video ? "video" : "img"}${query}`, formData, {
+      signal,
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "multipart/form-data",

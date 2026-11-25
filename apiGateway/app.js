@@ -26,6 +26,7 @@ app.use(cookieParser());
 app.use(requestContext);
 app.use(express.static(path.join(__dirname, "public")));
 
+app.use(require("./routes/directUploads"));
 app.use("/projects", projectsRouter);
 app.use("/users", usersRouter);
 app.use("/subscriptions", subscriptionsRouter);

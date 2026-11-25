@@ -237,6 +237,19 @@ check("B4-R048", "unknown shared preset", status("GET", f"users/presets/share/{u
 # ======================================================================= direct service calls
 PATH_OTHER = "/b4-other-route"
 
+# B7 gateway routes: authentication precedes metadata and the PUT body.
+for rid, method, route in (
+    ("B4-R123", "GET", "uploads/auth"),
+    ("B4-R124", "POST", f"projects/{oid}/{P1}/video/uploads"),
+    ("B4-R125", "POST", f"projects/{oid}/{P1}/video/uploads/" + "0" * 64 + "/confirm"),
+    ("B4-R129", "POST", f"projects/{oid}/{P1}/video/uploads/" + "0" * 64 + "/cancel"),
+):
+    check(rid, "no session" if rid != "B4-R123" else "internal route hidden by nginx",
+          status(method, route), 404 if rid == "B4-R123" else 401)
+    if rid != "B4-R123":
+        check(rid, "another account", status(method, route, X["token"]), 403)
+    res.note(rid, "valid session and domain behavior proven by B7 public flow")
+
 
 def family(rid, service, method, path, *, query=None, body=None, bound=True, share="",
            public=False, positive=None):
@@ -279,6 +292,13 @@ family("B4-R060", "projects", "GET", f"{pb}/advanced_tools", positive=("direct",
 family("B4-R061", "projects", "POST", f"/{oid}", positive=("via", "B4-R013"))
 family("B4-R062", "projects", "POST", f"{pb}/preview/{I1}", positive=("via", "B4-R014"))
 family("B4-R063", "projects", "POST", f"{pb}/img", positive=("via", "B4-R015"))
+family("B4-R126", "projects", "POST", f"{pb}/video/uploads", positive=("via", "B4-R124"))
+family("B4-R127", "projects", "POST", "/video/uploads/" + "0" * 64 + "/authorize",
+       bound=False, positive=("via", "B4-R123"))
+family("B4-R128", "projects", "POST", f"{pb}/video/uploads/" + "0" * 64 + "/confirm",
+       bound=False, positive=("via", "B4-R125"))
+family("B4-R130", "projects", "POST", f"{pb}/video/uploads/" + "0" * 64 + "/cancel",
+       bound=False, positive=("via", "B4-R129"))
 family("B4-R064", "projects", "POST", f"{pb}/video", positive=("via", "B4-R016"))
 family("B4-R114", "projects", "POST", f"{pb}/video/preflight", positive=("via", "B4-R016"))
 family("B4-R115", "projects", "POST", f"{pb}/video/cancel", positive=("via", "B4-R016"))

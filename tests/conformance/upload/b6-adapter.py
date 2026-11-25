@@ -107,7 +107,14 @@ reserved = http.get(f"https://users:10001/{quota_user}/process/5",
 assert reserved.status_code == 200
 assert call("GET", f"users/{quota_user}", quota_token).json()["remaining_operations"] == 0
 quota_version = call("GET", quota_path, quota_token).json()["version"]
-assert upload(quota_path, quota_token, quota_version, "zero-balance.mp4").status_code == 204
+# Completed uploads keep their slots until the asynchronous hash finishes. A 429
+# during this fixture is capacity backpressure, so wait for a slot before checking quota.
+for _ in range(30):
+    zero_balance = upload(quota_path, quota_token, quota_version, "zero-balance.mp4")
+    if zero_balance.status_code != 429:
+        break
+    time.sleep(1)
+assert zero_balance.status_code == 204, zero_balance.status_code
 assert call("GET", f"users/{quota_user}", quota_token).json()["remaining_operations"] == 0
 print("PASS free upload at zero quota neither refused nor charged")
 

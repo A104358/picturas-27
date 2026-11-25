@@ -63,6 +63,9 @@ async function reserve(ownerId, projectId, callerId, maxBytes, userType, expecte
   try {
     await ensureSlots();
     if (await Upload.countDocuments() >= 4096) return null;
+    const pending = { state: { $in: ["created", "receiving", "promoting", "received", "validating", "committing", "failed", "expired", "cancelled"] }, cleanup: { $nin: ["cleaned"] } };
+    if (await Upload.countDocuments(pending) >= 16 ||
+        await Upload.countDocuments({ ...pending, callerId }) >= 3) return null;
     const id = new mongoose.Types.ObjectId();
     const deadline = new Date(Date.now() + 900000);
     const slot = await UploadSlot.findOneAndUpdate({ uploadId: null },
@@ -224,7 +227,12 @@ async function finalize(attempt, userType) {
   attempt = await Upload.findOneAndUpdate({ _id: attempt._id, state: "received", deadline: { $gt: new Date() } },
     { $set: { state: "validating" } }, { new: true });
   if (!attempt) throw new Error("Upload expired or already used");
-  if (typeof probeUrl !== "string" || !probeUrl.startsWith("https://seaweedfs:9000/")) {
+  let readUrl;
+  try { readUrl = new URL(probeUrl); } catch (_) { /* fail closed below */ }
+  const expectedPath = `/picturas/users/${attempt.ownerId}/projects/${attempt.projectId}/${attempt.stage}/${attempt.objectName}`;
+  if (!readUrl || readUrl.protocol !== "https:" || readUrl.hostname !== "seaweedfs" ||
+      readUrl.port !== "9000" || readUrl.username || readUrl.password ||
+      readUrl.pathname !== expectedPath) {
     throw serverError("Video read URL unavailable");
   }
   const meta = await probe(probeUrl, attempt.size);
@@ -279,15 +287,54 @@ async function cleanupOne(attempt) {
     const published = await Project.findOne({ _id: attempt.projectId, user_id: attempt.ownerId,
       "imgs.og_img_key": attempt.objectName }, { "imgs.$": 1, version: 1 });
     if (published?.imgs?.[0]) {
-      await Upload.updateOne({ _id: attempt._id }, { $set: { state: "ready_hash_pending",
+      if (attempt.transport === "direct") {
+        try {
+          await axios.delete(`${storage}/${attempt.ownerId}/${attempt.projectId}/staging/${attempt.objectName}`,
+            { httpsAgent: agent, timeout: 10000 });
+        } catch (_) {
+          await Upload.updateOne({ _id: attempt._id }, { $set: { cleanup: "cleanup_failed" } });
+          return;
+        }
+      }
+      await Upload.updateOne({ _id: attempt._id }, { $set: { state: attempt.state === "ready" ? "ready" : "ready_hash_pending",
         mediaId: published.imgs[0]._id, resultVersion: published.version, cleanup: "cleaned" } });
       return;
     }
-    try { await axios.delete(objectPath(attempt), { httpsAgent: agent, timeout: 10000 }); }
+    try {
+      await axios.delete(objectPath(attempt), { httpsAgent: agent, timeout: 10000 });
+      if (attempt.transport === "direct" && attempt.stage === "src") {
+        await axios.delete(`${storage}/${attempt.ownerId}/${attempt.projectId}/staging/${attempt.objectName}`,
+          { httpsAgent: agent, timeout: 10000 });
+      }
+    }
     catch (_) { await Upload.updateOne({ _id: attempt._id }, { $set: { cleanup: "cleanup_failed" } }); return; }
   }
   await Upload.updateOne({ _id: attempt._id }, { $set: { cleanup: "cleaned" } });
   await release(attempt);
+}
+
+// A direct PUT may still finish after the attempt's 900-second deadline: nginx's
+// 30-second body timeout is an idle timeout, not an absolute upload timer. Revisit
+// terminal candidates after 120 seconds so an object created after initial cleanup
+// cannot remain orphaned. A failed delete remains eligible for the next sweep.
+async function cleanupLateDirect(attempt) {
+  if (!attempt.objectName) {
+    await Upload.updateOne({ _id: attempt._id }, { $set: { lateCleanupDone: true } });
+    return;
+  }
+  const published = await Project.exists({ _id: attempt.projectId, user_id: attempt.ownerId,
+    "imgs.og_img_key": attempt.objectName });
+  try {
+    await axios.delete(`${storage}/${attempt.ownerId}/${attempt.projectId}/staging/${attempt.objectName}`,
+      { httpsAgent: agent, timeout: 10000 });
+    if (!published && attempt.stage === "src") {
+      await axios.delete(objectPath(attempt), { httpsAgent: agent, timeout: 10000 });
+    }
+    await Upload.updateOne({ _id: attempt._id, state: { $in: ["failed", "rejected", "expired", "cancelled"] } },
+      { $set: { lateCleanupDone: true } });
+  } catch (_) {
+    await Upload.updateOne({ _id: attempt._id }, { $set: { cleanup: "cleanup_failed" } });
+  }
 }
 
 async function hashOne(attempt) {
@@ -314,7 +361,7 @@ async function maintain() {
           resultVersion: project.version } });
     }
   }
-  const expired = await Upload.find({ state: { $in: ["created", "receiving", "received", "validating", "committing"] }, deadline: { $lte: new Date() } }).limit(50);
+  const expired = await Upload.find({ state: { $in: ["created", "receiving", "promoting", "received", "validating", "committing"] }, deadline: { $lte: new Date() } }).limit(50);
   for (const attempt of expired) {
     if (active.has(String(attempt._id))) continue;
     await fail(attempt, "Upload expired", "expired");
@@ -327,9 +374,18 @@ async function maintain() {
   for (const attempt of dirty) {
     if (!active.has(String(attempt._id))) await cleanupOne(attempt);
   }
+  const late = await Upload.find({ transport: "direct", objectName: { $exists: true },
+    state: { $in: ["failed", "rejected", "expired", "cancelled"] },
+    lateCleanupDone: { $ne: true },
+    deadline: { $lte: new Date(Date.now() - 1020000) } }).limit(50);
+  for (const attempt of late) {
+    if (!active.has(String(attempt._id))) await cleanupLateDirect(attempt);
+  }
   // Keep the asynchronous hash outside the ready response's resource window.
   await Upload.deleteMany({ state: { $in: ["ready", "failed", "rejected", "expired", "cancelled"] },
-    cleanup: { $in: ["cleaned", "none"] }, updatedAt: { $lt: new Date(Date.now() - 24 * 3600000) } });
+    cleanup: { $in: ["cleaned", "none"] },
+    $or: [{ transport: "legacy" }, { state: "ready" }, { lateCleanupDone: true }],
+    updatedAt: { $lt: new Date(Date.now() - 24 * 3600000) } });
 }
 
 async function pumpHash() {
@@ -356,11 +412,15 @@ setInterval(() => maintain().catch((error) => {
 }), 5000).unref();
 
 mongoose.connection.asPromise().then(async () => {
-  const interrupted = await Upload.find({ state: { $in: ["receiving", "validating", "committing"] } }).limit(100);
+  const interrupted = await Upload.find({ state: { $in: ["receiving", "promoting", "validating", "committing"] } }).limit(100);
   for (const attempt of interrupted) {
+    // A direct writer is outside this process. After a projects restart its staging
+    // object may already be complete, and the client must still be able to confirm
+    // it before the original deadline. Incomplete bodies stay claimed until expiry.
+    if (attempt.transport === "direct" && attempt.state === "receiving") continue;
     if (!active.has(String(attempt._id))) await fail(attempt, "Upload interrupted");
   }
   await maintain();
 }).catch(() => {});
 
-module.exports = { reserve, claim, store, finalize, fail, release, active, isServerError };
+module.exports = { reserve, claim, store, finalize, fail, release, active, isServerError, serverError, storage, agent, objectPath };

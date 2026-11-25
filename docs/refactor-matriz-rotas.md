@@ -6,10 +6,14 @@ Cada caso `B4-Rnnn` é um identificador de teste de conformidade a implementar: 
 
 As exceções públicas são fechadas: registo, login, sessão anónima, validação de sessão, resolução de link e leitura de preset partilhado. “Partilha” exige um link válido, não revogado, para o mesmo projeto, e uma sessão autenticada para o conteúdo do projeto. `?owner=` segue D7. Nenhuma rota interna aceita um cabeçalho de identidade fornecido diretamente pelo browser.
 
-## apiGateway (48 rotas/verbo)
+## apiGateway (52 rotas/verbo)
 
 | ID | Verbo e caminho | Código | Quem pode chamar | Regra alvo e decisor | Antes do B4 | Teste |
 |----|----------------|--------|------------------|----------------------|-------|-------|
+| B4-R123 | `GET /uploads/auth` | [directUploads.js](../apiGateway/routes/directUploads.js#L12) | Subpedido interno do nginx com JWT | Gateway: sessão e método original PUT; projects: token, sujeito e tentativa | Rota nova do B7 | B4-R123; S22/S23 |
+| B4-R124 | `POST /projects/:user/:project/video/uploads` | [directUploads.js](../apiGateway/routes/directUploads.js#L29) | Dono ou partilha edit | Gateway: sessão e contexto; projects: perfil, limites, posse e versão | Rota nova do B7 | B4-R124; S22/U11 |
+| B4-R125 | `POST /projects/:user/:project/video/uploads/:token/confirm` | [directUploads.js](../apiGateway/routes/directUploads.js#L38) | Criador da tentativa | Gateway: sessão e contexto; projects: token e commit condicional | Rota nova do B7 | B4-R125; S23/U13 |
+| B4-R129 | `POST /projects/:user/:project/video/uploads/:token/cancel` | [directUploads.js](../apiGateway/routes/directUploads.js#L47) | Criador da tentativa | Gateway: sessão e contexto; projects: cancelamento com barreira | Rota nova do B7 | B4-R129; U21/U22 |
 | B4-R001 | `GET /projects/:user/:project/share` | [projects.js](../apiGateway/routes/projects.js#L95) | Dono | Gateway: JWT e dono do caminho; projects: posse | JWT local; reenvia bearer/X-Caller-Id; sem vínculo de rota | B4-R001; S01/S02; F04 |
 | B4-R002 | `POST /projects/:user/:project/share` | [projects.js](../apiGateway/routes/projects.js#L107) | Dono | Gateway: JWT e dono do caminho; projects: posse | JWT local; reenvia bearer/X-Caller-Id; sem vínculo de rota | B4-R002; S01/S02; F04 |
 | B4-R003 | `GET /projects/share/:shareId` | [projects.js](../apiGateway/routes/projects.js#L135) | Público (portador do link) | Gateway: público; projects: link válido e não revogado | Sem checkToken; proxy direto | B4-R003; S01/S02; F04 |
@@ -59,7 +63,7 @@ As exceções públicas são fechadas: registo, login, sessão anónima, valida�
 | B4-R047 | `POST /users/:user/presets/:presetId/share` | [users.js](../apiGateway/routes/users.js#L197) | Titular autenticado | Gateway: JWT e titular; users: identidade interna + posse | JWT local; reenvia bearer/X-Caller-Id; sem vínculo de rota | B4-R047; S01/S02; S14; F04 |
 | B4-R048 | `GET /users/presets/share/:shareId` | [users.js](../apiGateway/routes/users.js#L208) | Público (portador do shareId) | Gateway: público; users: só preset partilhado | Sem checkToken; proxy direto | B4-R048; S05; S14 |
 
-## projects (35 rotas/verbo)
+## projects (40 rotas/verbo)
 
 | ID | Verbo e caminho | Código | Quem pode chamar | Regra alvo e decisor | Antes do B4 | Teste |
 |----|----------------|--------|------------------|----------------------|-------|-------|
@@ -78,9 +82,13 @@ As exceções públicas são fechadas: registo, login, sessão anónima, valida�
 | B4-R061 | `POST /:user` | [projects.js](../projects/routes/projects.js#L1027) | Dono via gateway | Projects: identidade RS256 e titular do caminho | requireOwner usa getCallerId de cabeçalho; sem identidade assinada | B4-R061; S01/S02; S05 |
 | B4-R062 | `POST /:user/:project/preview/:img` | [projects.js](../projects/routes/projects.js#L1041) | Dono ou partilha edit via gateway | Projects: identidade RS256 e posse/partilha | checkSharePermission só valida share; sem share confia em X-Caller-Id/body | B4-R062; S01/S02; F04 |
 | B4-R063 | `POST /:user/:project/img` | [projects.js](../projects/routes/projects.js#L1345) | Dono ou partilha edit via gateway | Projects: identidade RS256 e posse/partilha | checkSharePermission só valida share; sem share confia em X-Caller-Id/body | B4-R063; S01/S02; F04 |
-| B4-R114 | `POST /:user/:project/video/preflight` | [videoUpload.js](../projects/routes/videoUpload.js#L26) | Dono ou partilha edit via gateway | Projects: identidade RS256, posse/partilha, perfil e versão antes do corpo | Rota nova do B6 | B4-R114; U19; S01/S02 |
-| B4-R115 | `POST /:user/:project/video/cancel` | [videoUpload.js](../projects/routes/videoUpload.js#L36) | Dono ou partilha edit via gateway | Projects: identidade RS256, posse/partilha e tentativa do próprio sujeito | Rota nova do B6 | B4-R115; S01/S02 |
-| B4-R064 | `POST /:user/:project/video` | [videoUpload.js](../projects/routes/videoUpload.js#L105) | Dono ou partilha edit via gateway | Projects: identidade RS256 e posse/partilha antes do corpo | Adaptador novo do B6 | B4-R064; S01/S02; F04 |
+| B4-R126 | `POST /:user/:project/video/uploads` | [videoUpload.js](../projects/routes/videoUpload.js#L55) | Dono ou partilha edit via gateway | Projects: perfil, limites, posse e versão antes da reserva | Rota nova do B7 | B4-R126; S22/U11 |
+| B4-R127 | `POST /video/uploads/:token/authorize` | [videoUpload.js](../projects/routes/videoUpload.js#L84) | Só gateway com sujeito da tentativa | Projects: token de uso único, tamanho e contexto antes do corpo | Rota nova do B7 | B4-R127; S22/S23 |
+| B4-R128 | `POST /:user/:project/video/uploads/:token/confirm` | [videoUpload.js](../projects/routes/videoUpload.js#L117) | Criador da tentativa via gateway | Projects: tamanho real, promoção e commit condicional | Rota nova do B7 | B4-R128; S23/U13 |
+| B4-R130 | `POST /:user/:project/video/uploads/:token/cancel` | [videoUpload.js](../projects/routes/videoUpload.js#L169) | Criador da tentativa via gateway | Projects: terminal imediato se ainda não houve claim; durante PUT, impede confirmação e aguarda limpeza segura | Rota nova do B7 | B4-R130; U21/U22 |
+| B4-R114 | `POST /:user/:project/video/preflight` | [videoUpload.js](../projects/routes/videoUpload.js#L200) | Dono ou partilha edit via gateway | Projects: identidade RS256, posse/partilha, perfil e versão antes do corpo | Rota nova do B6 | B4-R114; U19; S01/S02 |
+| B4-R115 | `POST /:user/:project/video/cancel` | [videoUpload.js](../projects/routes/videoUpload.js#L210) | Dono ou partilha edit via gateway | Projects: identidade RS256, posse/partilha e tentativa do próprio sujeito | Rota nova do B6 | B4-R115; S01/S02 |
+| B4-R064 | `POST /:user/:project/video` | [videoUpload.js](../projects/routes/videoUpload.js#L279) | Dono ou partilha edit via gateway | Projects: identidade RS256 e posse/partilha antes do corpo | Adaptador novo do B6 | B4-R064; S01/S02; F04 |
 | B4-R065 | `POST /:user/:project/tool` | [projects.js](../projects/routes/projects.js#L1351) | Dono ou partilha edit via gateway | Projects: identidade RS256 e posse/partilha | checkSharePermission só valida share; sem share confia em X-Caller-Id/body | B4-R065; S01/S02; F04 |
 | B4-R066 | `POST /:user/:project/reorder` | [projects.js](../projects/routes/projects.js#L1423) | Dono ou partilha edit via gateway | Projects: identidade RS256 e posse/partilha | checkSharePermission só valida share; sem share confia em X-Caller-Id/body | B4-R066; S01/S02; F04 |
 | B4-R067 | `POST /:user/:project/process` | [projects.js](../projects/routes/projects.js#L1475) | Dono ou partilha edit via gateway | Projects: identidade RS256 e posse/partilha | checkSharePermission só valida share; sem share confia em X-Caller-Id/body | B4-R067; S01/S02; F04 |
@@ -144,16 +152,16 @@ As exceções públicas são fechadas: registo, login, sessão anónima, valida�
 | B4-R110 | `DELETE /delete/:userId/:projectId/:stage/:fileName` | [delete.js](../imageStorageService/route/delete.js#L6) | Serviço projects, objeto/estágio do projeto admitido | Img_storage: par projects→img_storage e operação/escopo | Sem autenticação/autorização no serviço | B4-R110; S01/S02; F04; S05 |
 | B4-R111 | `GET /image/:access/:userId/:projectId/:stage/:imageName` | [images.js](../imageStorageService/route/images.js#L10) | Serviço projects, objeto/estágio do projeto admitido | Img_storage: par projects→img_storage e operação/escopo | Sem autenticação/autorização no serviço | B4-R111; S01/S02; F04; S05 |
 | B4-R112 | `POST /upload/:userId/:projectId/:stage` | [upload.js](../imageStorageService/route/upload.js#L8) | Serviço projects, objeto/estágio do projeto admitido | Img_storage: par projects→img_storage e operação/escopo | Sem autenticação/autorização no serviço | B4-R112; S01/S02; F04; S05 |
-| B4-R121 | `GET /video-objects/:userId/:projectId/staging/:fileName/put-url` | [videoObjects.js](../imageStorageService/route/videoObjects.js#L8) | Serviço projects | Img_storage: só par projects e metadados válidos | Rota nova do B6, usada no B7 | B4-R121; S01/S02 |
-| B4-R116 | `POST /video-objects/:userId/:projectId/:fileName/promote` | [videoObjects.js](../imageStorageService/route/videoObjects.js#L25) | Serviço projects | Img_storage: só par projects e chave válida | Rota nova do B6 | B4-R116; S01/S02 |
-| B4-R117 | `PUT /video-objects/:userId/:projectId/:stage/:fileName` | [videoObjects.js](../imageStorageService/route/videoObjects.js#L65) | Serviço projects | Img_storage: só par projects e chave válida | Rota nova do B6 | B4-R117; S01/S02 |
-| B4-R118 | `HEAD /video-objects/:userId/:projectId/:stage/:fileName` | [videoObjects.js](../imageStorageService/route/videoObjects.js#L82) | Serviço projects | Img_storage: só par projects e chave válida | Rota nova do B6 | B4-R118; S01/S02 |
-| B4-R119 | `DELETE /video-objects/:userId/:projectId/:stage/:fileName` | [videoObjects.js](../imageStorageService/route/videoObjects.js#L95) | Serviço projects | Img_storage: só par projects e chave válida | Rota nova do B6 | B4-R119; S01/S02 |
-| B4-R120 | `GET /video-objects/:userId/:projectId/:stage/:fileName/url` | [videoObjects.js](../imageStorageService/route/videoObjects.js#L123) | Serviço projects | Img_storage: só par projects e chave válida | Rota nova do B6 | B4-R120; S01/S02 |
+| B4-R121 | `GET /video-objects/:userId/:projectId/staging/:fileName/put-url` | [videoObjects.js](../imageStorageService/route/videoObjects.js#L9) | Serviço projects | Img_storage: só par projects e metadados válidos | Rota nova do B6, usada no B7 | B4-R121; S01/S02 |
+| B4-R116 | `POST /video-objects/:userId/:projectId/:fileName/promote` | [videoObjects.js](../imageStorageService/route/videoObjects.js#L27) | Serviço projects | Img_storage: só par projects e chave válida | Rota nova do B6 | B4-R116; S01/S02 |
+| B4-R117 | `PUT /video-objects/:userId/:projectId/:stage/:fileName` | [videoObjects.js](../imageStorageService/route/videoObjects.js#L67) | Serviço projects | Img_storage: só par projects e chave válida | Rota nova do B6 | B4-R117; S01/S02 |
+| B4-R118 | `HEAD /video-objects/:userId/:projectId/:stage/:fileName` | [videoObjects.js](../imageStorageService/route/videoObjects.js#L84) | Serviço projects | Img_storage: só par projects e chave válida | Rota nova do B6 | B4-R118; S01/S02 |
+| B4-R119 | `DELETE /video-objects/:userId/:projectId/:stage/:fileName` | [videoObjects.js](../imageStorageService/route/videoObjects.js#L97) | Serviço projects | Img_storage: só par projects e chave válida | Rota nova do B6 | B4-R119; S01/S02 |
+| B4-R120 | `GET /video-objects/:userId/:projectId/:stage/:fileName/url` | [videoObjects.js](../imageStorageService/route/videoObjects.js#L125) | Serviço projects | Img_storage: só par projects e chave válida | Rota nova do B6 | B4-R120; S01/S02 |
 
 | B4-R122 | `POST /processing-output/:userId/:projectId/:runId/:artifactId` | [processingOutput.js](../imageStorageService/route/processingOutput.js#L6) | Serviço projects | Img_storage: só projects por mTLS; namespace de execução e SHA-256 obrigatórios | Inexistente; B11 | B4-R122; OPS-C1 |
 
-**Cobertura:** 122 declarações de rota/verbo: apiGateway 48, projects 36 (inclui a autorização WS do B8 e o preflight/cancelamento de vídeo do B6), users 17, subscriptions 10, imageStorageService 11.
+**Cobertura:** 130 declarações de rota/verbo: apiGateway 52, projects 40 (inclui a autorização WS do B8 e os uploads B6/B7), users 17, subscriptions 10, imageStorageService 11.
 
 ## Autorização WebSocket (B8)
 

@@ -101,3 +101,44 @@ B9 session and assisted-recovery commands: [`sessions/README.md`](sessions/READM
 B10 applied PKI, pilot and fault-injection commands:
 [`pki-operations/README.md`](pki-operations/README.md). Public evidence uses an
 explicit allowlist; private installation material and browser profiles stay outside Git.
+
+## B7 — direct video upload
+
+- `upload/b7-flow.py` runs against nginx on the host: request, early refusals, one-use PUT,
+  confirmation, cancellation and concurrent claims.
+- `upload/b7-signature.py` runs in the stack network with `in-network.sh`: it verifies that
+  the signed S3 PUT binds length, content type and internal Host, then removes its fixture.
+- `upload/b7-browser.py` uses a real Chromium and the production UI. It checks image and video
+  upload, invalid file, free/premium duration limits and cancellation while the PUT is in progress.
+  It needs Playwright with Chromium and the installation CA; private fixtures stay in a
+  temporary directory outside the repository.
+- `upload/b7-late-cleanup.py` holds a real PUT open across the first expiry cleanup, lets it
+  finish, advances only that fixture's deadline to the 900 + 120 second safety sweep, and
+  checks that no staging object or media remains. Run it on the host with `picturas-dev` up.
+- `upload/b7-lifecycle.py` exercises token expiry, version changes between request and PUT,
+  interrupted versus complete bodies, idempotent confirmation, private staging and invalid
+  video rejection. It also restarts `projects` across direct receive, copy and commit markers,
+  checks durable hash completion, and retries cleanup after a controlled `img_storage` outage.
+  It advances only its own fixture records in the dev MongoDB.
+
+| Lifecycle case | Evidence |
+|---|---|
+| UL-01 | `b7-flow.py` concurrent claims and replay; `b7-lifecycle.py` interrupted claim |
+| UL-02 | `b6-adapter.py` auth, ACL, quota and byte preservation; `b7-browser.py` new UI |
+| UL-03 | `b7-lifecycle.py` incomplete versus complete PUT and repeat confirmation |
+| UL-04 | `b7-lifecycle.py` expired token; `b6-capacity.py` idle/slots; `b7-late-cleanup.py` deadline/safety sweep |
+| UL-05 | `b7-lifecycle.py` version fence; B4 share/revocation and `b6-races.py` conflicting commit |
+| UL-06 | `b7-lifecycle.py` private staging; `b7-signature.py` bound PUT; `b7-flow.py` immutable one-use candidate |
+| UL-07 | `b7-lifecycle.py` restart at receive, copy, commit and hash markers; `b6-races.py` single commit |
+| UL-08 | `b7-lifecycle.py` unpublished copy cleanup and original preservation; `b7-late-cleanup.py` late writer |
+| UL-09 | `b7-lifecycle.py` hash completion after restart; B6 adapter's ready/media checks |
+| UL-10 | `b7-lifecycle.py` invalid format, private staging, foreign authority and wrong S3 object; B5 mTLS checks and B6 valid probe |
+| UL-11 | `b7-lifecycle.py` storage outage, cleanup retry and published original preservation |
+| UL-12 | `b6-capacity.py`, `b7-browser.py` and EXP quick resource/latency guards |
+
+The crash markers in UL-07/08 are fixture state injection followed by a real process
+restart; they do not pause the process at every instruction. UL-10's remaining byte/time
+limits are enforced by the B6 bounded relay, but this suite does not independently inject
+each violation. D-28 B also leaves continuous direct PUT
+bodies without a 600-second absolute limit; its 900 + 120 second sweep was tested for
+a writer finishing between the first and second cleanup.

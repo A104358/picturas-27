@@ -1,6 +1,7 @@
 const express = require("express");
 const s3 = require("../services/s3Client");
 const { BUCKET, objectKey, ensureBucket } = require("../services/storage");
+const signVideoPut = require("../services/signVideoPut");
 
 const router = express.Router();
 const stages = new Set(["staging", "src"]);
@@ -15,11 +16,12 @@ router.get("/:userId/:projectId/staging/:fileName/put-url", async (req, res) => 
     return res.status(400).json({ error: "Invalid upload metadata" });
   }
   try {
-    const url = await s3.getSignedUrlPromise("putObject", {
-      ...location, Expires: 300, ContentLength: size, ContentType: type,
-    });
+    const url = signVideoPut({ ...location, size, type });
     res.json({ url });
-  } catch (_) { res.status(502).json({ error: "Video upload URL failed" }); }
+  } catch (error) {
+    console.error("Video upload URL failed", error.code || error.name);
+    res.status(502).json({ error: "Video upload URL failed" });
+  }
 });
 
 router.post("/:userId/:projectId/:fileName/promote", async (req, res) => {

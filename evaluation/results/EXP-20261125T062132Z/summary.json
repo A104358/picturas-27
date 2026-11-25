@@ -1,0 +1,578 @@
+{
+ "updated_at": "2026-11-25T07:17:53Z",
+ "metrics": {
+  "S18": {
+   "todas": 0,
+   "loopback": 0,
+   "servicos": [],
+   "alcancaveis_lan": 0,
+   "lan_ip_testado": true,
+   "lista": []
+  },
+  "S01": {
+   "tentativas": 45,
+   "admitidos": 0,
+   "recusados": 45,
+   "inconclusivos": 0,
+   "nao_aplicaveis": 0,
+   "por_resultado": {
+    "RECUSADO_DOMINIO": 45
+   },
+   "por_superficie": {
+    "publica": {
+     "tentativas": 45,
+     "admitidos": 0,
+     "inconclusivos": 0
+    }
+   },
+   "casos_admitidos": [],
+   "casos_inconclusivos": [],
+   "controlos_ok": 3,
+   "controlos_total": 3
+  },
+  "S02": {
+   "tentativas": 60,
+   "admitidos": 0,
+   "recusados": 60,
+   "inconclusivos": 0,
+   "nao_aplicaveis": 0,
+   "por_resultado": {
+    "RECUSADO_REDE": 30,
+    "RECUSADO_TLS": 30
+   },
+   "por_superficie": {
+    "host": {
+     "tentativas": 30,
+     "admitidos": 0,
+     "inconclusivos": 0
+    },
+    "rede": {
+     "tentativas": 30,
+     "admitidos": 0,
+     "inconclusivos": 0
+    }
+   },
+   "casos_admitidos": [],
+   "casos_inconclusivos": [],
+   "controlos_ok": 3,
+   "controlos_total": 3
+  },
+  "S03": {
+   "tentativas": 24,
+   "admitidos": 0,
+   "recusados": 24,
+   "inconclusivos": 0,
+   "nao_aplicaveis": 0,
+   "por_resultado": {
+    "RECUSADO_REDE": 12,
+    "RECUSADO_TLS": 12
+   },
+   "por_superficie": {
+    "host": {
+     "tentativas": 12,
+     "admitidos": 0,
+     "inconclusivos": 0
+    },
+    "rede": {
+     "tentativas": 12,
+     "admitidos": 0,
+     "inconclusivos": 0
+    }
+   },
+   "casos_admitidos": [],
+   "casos_inconclusivos": [],
+   "controlos_ok": 3,
+   "controlos_total": 3
+  },
+  "S04": {
+   "tentativas": 15,
+   "admitidos": 0,
+   "recusados": 14,
+   "inconclusivos": 1,
+   "nao_aplicaveis": 0,
+   "por_resultado": {
+    "RECUSADO_DOMINIO": 14,
+    "INCONCLUSIVO": 1
+   },
+   "por_superficie": {
+    "ws": {
+     "tentativas": 15,
+     "admitidos": 0,
+     "inconclusivos": 1
+    }
+   },
+   "casos_admitidos": [],
+   "casos_inconclusivos": [
+    "W05[ws]"
+   ],
+   "controlos_ok": 14,
+   "controlos_total": 15
+  },
+  "S16": {
+   "tentativas": 72,
+   "admitidos": 0,
+   "recusados": 72,
+   "inconclusivos": 0,
+   "nao_aplicaveis": 18,
+   "por_resultado": {
+    "RECUSADO_DOMINIO": 36,
+    "RECUSADO_REDE": 36
+   },
+   "por_superficie": {
+    "rede": {
+     "tentativas": 36,
+     "admitidos": 0,
+     "inconclusivos": 0
+    },
+    "host": {
+     "tentativas": 36,
+     "admitidos": 0,
+     "inconclusivos": 0
+    }
+   },
+   "casos_admitidos": [],
+   "casos_inconclusivos": [],
+   "controlos_ok": 6,
+   "controlos_total": 6,
+   "credenciais_git_encontradas": 0
+  },
+  "S17": {
+   "tentativas": 45,
+   "admitidos": 0,
+   "recusados": 45,
+   "inconclusivos": 0,
+   "nao_aplicaveis": 0,
+   "por_resultado": {
+    "RECUSADO_DOMINIO": 24,
+    "RECUSADO_REDE": 21
+   },
+   "por_superficie": {
+    "rede": {
+     "tentativas": 21,
+     "admitidos": 0,
+     "inconclusivos": 0
+    },
+    "host": {
+     "tentativas": 21,
+     "admitidos": 0,
+     "inconclusivos": 0
+    },
+    "publica": {
+     "tentativas": 3,
+     "admitidos": 0,
+     "inconclusivos": 0
+    }
+   },
+   "casos_admitidos": [],
+   "casos_inconclusivos": [],
+   "controlos_ok": 3,
+   "controlos_total": 3
+  },
+  "S12": {
+   "repeticoes": [
+    {
+     "metric": "S12",
+     "campaign": "EXP",
+     "rep": 1,
+     "revoke_status": 204,
+     "pre_revocation_events_A": 7,
+     "emitted_after_ack": 102,
+     "received_after_ack_A": 2,
+     "lower_ms": 862.2,
+     "upper_ms": 1154.8,
+     "censored_gt_ms": null,
+     "uncertainty_ms": 250.0,
+     "eventos_apos_limite": 0,
+     "disconnect_A_ms": null,
+     "controlos_ok": true,
+     "valida": true,
+     "t_utc": "2026-11-25T06:26:48Z"
+    },
+    {
+     "metric": "S12",
+     "campaign": "EXP",
+     "rep": 2,
+     "revoke_status": 204,
+     "pre_revocation_events_A": 7,
+     "emitted_after_ack": 102,
+     "received_after_ack_A": 2,
+     "lower_ms": 849.3,
+     "upper_ms": 1127.2,
+     "censored_gt_ms": null,
+     "uncertainty_ms": 250.0,
+     "eventos_apos_limite": 0,
+     "disconnect_A_ms": null,
+     "controlos_ok": true,
+     "valida": true,
+     "t_utc": "2026-11-25T06:27:24Z"
+    },
+    {
+     "metric": "S12",
+     "campaign": "EXP",
+     "rep": 3,
+     "revoke_status": 204,
+     "pre_revocation_events_A": 7,
+     "emitted_after_ack": 102,
+     "received_after_ack_A": 2,
+     "lower_ms": 839.8,
+     "upper_ms": 1107.1,
+     "censored_gt_ms": null,
+     "uncertainty_ms": 250.0,
+     "eventos_apos_limite": 0,
+     "disconnect_A_ms": null,
+     "controlos_ok": true,
+     "valida": true,
+     "t_utc": "2026-11-25T06:28:00Z"
+    }
+   ],
+   "limite_superior_max_ms": 1154.8,
+   "censurado": false,
+   "eventos_apos_limite": 0,
+   "controlos_ok": true,
+   "invalidas": 0
+  },
+  "S05": {
+   "total": 45,
+   "ok": 45,
+   "fracao": 1.0,
+   "falhas": [],
+   "politica_acl_editor_elimina": [
+    false,
+    false,
+    false
+   ]
+  },
+  "S21": {
+   "get_project": {
+    "mediana_ms": 5.832,
+    "max_ms": 8.163,
+    "min_ms": 5.131,
+    "erros": 0,
+    "n": 100
+   },
+   "get_user": {
+    "mediana_ms": 6.009,
+    "max_ms": 11.87,
+    "min_ms": 4.957,
+    "erros": 0,
+    "n": 100
+   }
+  },
+  "U01": {
+   "por_servico": {
+    "api_gateway": {
+     "max_mib": 14.6,
+     "por_tamanho": {
+      "10": {
+       "max_mib": 7.1,
+       "mediana_mib": 3.4000000000000004,
+       "n": 40,
+       "processo_morreu": 0
+      },
+      "100": {
+       "max_mib": 12.4,
+       "mediana_mib": 6.949999999999999,
+       "n": 40,
+       "processo_morreu": 0
+      },
+      "500": {
+       "max_mib": 14.6,
+       "mediana_mib": 6.8,
+       "n": 20,
+       "processo_morreu": 0
+      }
+     },
+     "reset_hwm_ok": true
+    },
+    "projects": {
+     "max_mib": 23.3,
+     "por_tamanho": {
+      "10": {
+       "max_mib": 17.4,
+       "mediana_mib": 10.55,
+       "n": 40,
+       "processo_morreu": 0
+      },
+      "100": {
+       "max_mib": 21.1,
+       "mediana_mib": 9.299999999999999,
+       "n": 40,
+       "processo_morreu": 0
+      },
+      "500": {
+       "max_mib": 23.3,
+       "mediana_mib": 12.45,
+       "n": 20,
+       "processo_morreu": 0
+      }
+     },
+     "reset_hwm_ok": true
+    },
+    "img_storage": {
+     "max_mib": 45.9,
+     "por_tamanho": {
+      "10": {
+       "max_mib": 34.8,
+       "mediana_mib": 25.4,
+       "n": 40,
+       "processo_morreu": 0
+      },
+      "100": {
+       "max_mib": 43.3,
+       "mediana_mib": 22.65,
+       "n": 40,
+       "processo_morreu": 0
+      },
+      "500": {
+       "max_mib": 45.9,
+       "mediana_mib": 23.5,
+       "n": 20,
+       "processo_morreu": 0
+      }
+     },
+     "reset_hwm_ok": true
+    }
+   },
+   "oom": 0
+  },
+  "U08": {
+   "por_componente": {
+    "nginx": {
+     "pico_max_mib": 0.0,
+     "max_razao_pico_sobre_F_mais_16MiB": 0.0,
+     "residuo_max_kib": 0,
+     "residuo_max_ficheiros": 0
+    },
+    "api_gateway": {
+     "pico_max_mib": 0.0,
+     "max_razao_pico_sobre_F_mais_16MiB": 0.0,
+     "residuo_max_kib": 0,
+     "residuo_max_ficheiros": 0
+    },
+    "projects": {
+     "pico_max_mib": 0.0,
+     "max_razao_pico_sobre_F_mais_16MiB": 0.0,
+     "residuo_max_kib": 0,
+     "residuo_max_ficheiros": 0
+    },
+    "img_storage": {
+     "pico_max_mib": 0.0,
+     "max_razao_pico_sobre_F_mais_16MiB": 0.0,
+     "residuo_max_kib": 0,
+     "residuo_max_ficheiros": 0
+    }
+   },
+   "concorrencia": 1
+  },
+  "U09": {
+   "amostras_500_ms": [
+    421.93437507376075,
+    403.2331670168787,
+    614.8375410120934,
+    715.4232498724014,
+    639.9085838347673,
+    472.24941686727107,
+    583.6512499954551,
+    427.59358300827444,
+    565.7933750189841,
+    466.41708398237824,
+    499.7872500680387,
+    706.9712080992758,
+    555.8555419556797,
+    630.6073749437928,
+    458.03891704417765,
+    381.9165409076959,
+    449.0075840149075,
+    434.3802079092711,
+    478.5183749627322,
+    483.4887501783669
+   ],
+   "max_500_ms": 715.4232498724014,
+   "mediana_500_ms": 481.00356257054955,
+   "tentativas_500": 20,
+   "falhas_500": 0,
+   "estados_falhas_500": [],
+   "mediana_por_tamanho_ms": {
+    "10": 178.95464599132538,
+    "100": 372.2583125345409,
+    "500": 481.00356257054955
+   }
+  },
+  "U10": {
+   "mediana_total_ms_por_estrato": {
+    "free-10-H-aquecido": 223.7570839934051,
+    "free-10-H-frio": 238.79866697825491,
+    "free-10-T-aquecido": 221.2469580117613,
+    "free-10-T-frio": 278.0588329769671,
+    "free-100-H-aquecido": 920.5594579689205,
+    "free-100-H-frio": 1022.9565419722348,
+    "free-100-T-aquecido": 886.0732920002192,
+    "free-100-T-frio": 1014.6188749931753,
+    "premium-10-H-aquecido": 223.92212506383657,
+    "premium-10-H-frio": 262.56645913235843,
+    "premium-10-T-aquecido": 232.97866620123386,
+    "premium-10-T-frio": 256.9462079554796,
+    "premium-100-H-aquecido": 886.6674159653485,
+    "premium-100-H-frio": 962.9172498825938,
+    "premium-100-T-aquecido": 968.882457818836,
+    "premium-100-T-frio": 1008.3067500963807,
+    "premium-500-H-aquecido": 4092.408624943346,
+    "premium-500-H-frio": 4340.592791093513,
+    "premium-500-T-aquecido": 4058.879500022158,
+    "premium-500-T-frio": 4319.372541969642
+   },
+   "aceites_por_estrato": {
+    "free-10-H-aquecido": "5/5",
+    "free-10-H-frio": "5/5",
+    "free-10-T-aquecido": "5/5",
+    "free-10-T-frio": "5/5",
+    "free-100-H-aquecido": "5/5",
+    "free-100-H-frio": "5/5",
+    "free-100-T-aquecido": "5/5",
+    "free-100-T-frio": "5/5",
+    "premium-10-H-aquecido": "5/5",
+    "premium-10-H-frio": "5/5",
+    "premium-10-T-aquecido": "5/5",
+    "premium-10-T-frio": "5/5",
+    "premium-100-H-aquecido": "5/5",
+    "premium-100-H-frio": "5/5",
+    "premium-100-T-aquecido": "5/5",
+    "premium-100-T-frio": "5/5",
+    "premium-500-H-aquecido": "5/5",
+    "premium-500-H-frio": "5/5",
+    "premium-500-T-aquecido": "5/5",
+    "premium-500-T-frio": "5/5"
+   }
+  },
+  "U15": {
+   "verificados": 100,
+   "iguais": 100,
+   "aceites": 100,
+   "fracao": 1.0
+  },
+  "U17": {
+   "tentativas": 100,
+   "aceites_corretamente": 100,
+   "fracao": 1.0
+  },
+  "U04": {
+   "tentativas": 5,
+   "validas": 5,
+   "pedidas": 5,
+   "estado_inicial": "reiniciado",
+   "nginx": {
+    "max_delta_anon_mib": 0.4,
+    "mediana_delta_anon_mib": 0.4,
+    "n": 5,
+    "idle_min_mib": 9.6,
+    "idle_max_mib": 9.6
+   },
+   "seaweedfs": {
+    "max_delta_anon_mib": 134.4,
+    "mediana_delta_anon_mib": 130.1,
+    "n": 5,
+    "idle_min_mib": 101.5,
+    "idle_max_mib": 146.4
+   }
+  },
+  "U18": {
+   "casos": 21,
+   "corretos": 21,
+   "fracao": 1.0,
+   "oom": 0,
+   "falhas": []
+  },
+  "U19": {
+   "tentativas": 8,
+   "status": [
+    "401"
+   ],
+   "todas_401_403": true,
+   "gateway_delta_max_mib": 0.0,
+   "resposta_apos_cabecalhos_max_ms": 29.909334145486355,
+   "bytes_enviados_ate_resposta_max": 1048721,
+   "nginx_delta_anon_max_mib": 1.1,
+   "nginx_disco_pico_max_kib": 0.0,
+   "oom": 0
+  },
+  "U20": {
+   "rondas": [
+    {
+     "round": 1,
+     "sucessos": 3,
+     "oom": false,
+     "reinicios": false
+    },
+    {
+     "round": 2,
+     "sucessos": 2,
+     "oom": false,
+     "reinicios": false
+    },
+    {
+     "round": 3,
+     "sucessos": 3,
+     "oom": false,
+     "reinicios": false
+    }
+   ],
+   "rondas_3de3_sem_oom": 2,
+   "oom_total": 0,
+   "pico_agregado_anon_mib": 1079.6
+  },
+  "U25": {
+   "pares": [
+    {
+     "pair": 1,
+     "razao": 0.5912225705669688,
+     "erros_carga": 0,
+     "n_carga": 150,
+     "suficiente": true,
+     "gateway_oom": false
+    },
+    {
+     "pair": 2,
+     "razao": 0.5648294099755964,
+     "erros_carga": 0,
+     "n_carga": 113,
+     "suficiente": true,
+     "gateway_oom": false
+    },
+    {
+     "pair": 3,
+     "razao": 0.5081835124638543,
+     "erros_carga": 0,
+     "n_carga": 112,
+     "suficiente": true,
+     "gateway_oom": false
+    }
+   ],
+   "razao_max": 0.5912225705669688,
+   "erros_total": 0,
+   "pares_insuficientes": 0
+  }
+ },
+ "estados": {
+  "S01": "CUMPRE_ALVO",
+  "S02": "CUMPRE_ALVO",
+  "S03": "CUMPRE_ALVO",
+  "S04": "INCONCLUSIVO",
+  "S12": "CUMPRE_ALVO",
+  "S16": "CUMPRE_ALVO",
+  "S17": "CUMPRE_ALVO",
+  "S18": "CUMPRE_ALVO",
+  "S05": "CUMPRE_ALVO",
+  "S21": "COMPARATIVA",
+  "U01": "CUMPRE_MINIMO",
+  "U20": "CUMPRE_MINIMO",
+  "U19": "CUMPRE_ALVO",
+  "U18": "CUMPRE_ALVO",
+  "U04": "CUMPRE_MINIMO",
+  "U08": "CUMPRE_ALVO",
+  "U09": "CUMPRE_ALVO",
+  "U25": "CUMPRE_ALVO",
+  "U15": "CUMPRE_ALVO",
+  "U17": "CUMPRE_ALVO",
+  "U10": "COMPARATIVA"
+ }
+}

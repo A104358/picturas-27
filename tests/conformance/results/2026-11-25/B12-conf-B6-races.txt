@@ -1,4 +1,4 @@
-# B6-races — 2026-11-25T06:12:36Z
+# B6-races — 2026-11-25T07:43:16Z
 $ evaluation/.venv/bin/python tests/conformance/upload/b6-races.py
 
 PASS simultaneous uploads publish exactly one media and one version

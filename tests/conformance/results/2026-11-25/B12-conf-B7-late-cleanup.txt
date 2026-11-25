@@ -1,4 +1,4 @@
-# B7-late-cleanup — 2026-11-25T06:14:36Z
+# B7-late-cleanup — 2026-11-25T07:45:11Z
 $ evaluation/.venv/bin/python tests/conformance/upload/b7-late-cleanup.py
 
 PASS late direct PUT: first cleanup, safety sweep, zero staging objects or published media

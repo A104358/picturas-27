@@ -41,6 +41,7 @@ declare -a SUITES=(
   "B7-lifecycle|$PY tests/conformance/upload/b7-lifecycle.py"
   "B7-late-cleanup|$PY tests/conformance/upload/b7-late-cleanup.py"
   "B7-UL10-probe-limits|$PY tests/conformance/upload/ul10-probe-limits.py"
+  "B12-hash-orphan|$PY tests/conformance/upload/b12-hash-orphan.py"
   "B7-browser|$BROWSER_PY tests/conformance/upload/b7-browser.py"
   "B8-unit|$IMG -e NODE_PATH=/usr/src/app/node_modules --entrypoint node $P-ws_gateway --test tests/conformance/websocket/authorization.test.js tests/conformance/websocket/protocol.test.js tests/conformance/websocket/ws-route.test.js tests/conformance/websocket/presence-agent.test.js"
   "B8-client|$IMG -e B8_TS_COMPILER=/usr/src/app/node_modules/typescript --entrypoint node $P-frontend tests/conformance/websocket/client-reconnect.test.js frontend/lib/project-socket.ts"

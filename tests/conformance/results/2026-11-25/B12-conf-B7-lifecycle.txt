@@ -1,4 +1,4 @@
-# B7-lifecycle — 2026-11-25T06:14:04Z
+# B7-lifecycle — 2026-11-25T07:44:43Z
 $ evaluation/.venv/bin/python tests/conformance/upload/b7-lifecycle.py
 
 PASS UL-04 expired token refused before body

@@ -345,6 +345,16 @@ async function cleanupLateDirect(attempt) {
 }
 
 async function hashOne(attempt) {
+  // The project, the media item or the account may be deleted before the hash runs. The
+  // attempt is then finished: keeping it pending would hold its slot forever and block
+  // every later hash behind it.
+  const pendingMedia = await Project.exists({ _id: attempt.projectId, user_id: attempt.ownerId,
+    imgs: { $elemMatch: { _id: attempt.mediaId, hash_state: "ready_hash_pending" } } });
+  if (!pendingMedia) {
+    await Upload.updateOne({ _id: attempt._id, state: "ready_hash_pending" }, { $set: { state: "ready" } });
+    await release(attempt);
+    return;
+  }
   const urlResponse = await axios.get(`${objectPath(attempt)}/url`, { httpsAgent: agent, timeout: 5000 });
   const hash = crypto.createHash("sha256");
   for await (const chunk of rangedStream(urlResponse.data.url, 0, attempt.size - 1)) hash.update(chunk);

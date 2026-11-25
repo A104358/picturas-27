@@ -120,6 +120,10 @@ explicit allowlist; private installation material and browser profiles stay outs
   video rejection. It also restarts `projects` across direct receive, copy and commit markers,
   checks durable hash completion, and retries cleanup after a controlled `img_storage` outage.
   It advances only its own fixture records in the dev MongoDB.
+- `upload/b12-hash-orphan.py` (decision 51) uploads short videos and deletes their project, or
+  the whole account, before the background hash runs; it checks that no attempt stays
+  `ready_hash_pending`, no slot stays held and a later video still gets its hash. Run it on the
+  host with `picturas-dev` up; it reads the dev MongoDB through `docker compose exec projects`.
 - `upload/ul10-probe-limits.py` injects the probe relay's byte and time limits independently
   (UL-10). Run it on the host with `picturas-dev` up; it recreates `projects` with
   `ul10-probe.override.yaml` and restores the decided limits at the end.
@@ -129,12 +133,12 @@ explicit allowlist; private installation material and browser profiles stay outs
 | UL-01 | `b7-flow.py` concurrent claims and replay; `b7-lifecycle.py` interrupted claim |
 | UL-02 | `b6-adapter.py` auth, ACL, quota and byte preservation; `b7-browser.py` new UI |
 | UL-03 | `b7-lifecycle.py` incomplete versus complete PUT and repeat confirmation |
-| UL-04 | `b7-lifecycle.py` expired token; `b6-capacity.py` idle/slots; `b7-late-cleanup.py` deadline/safety sweep |
+| UL-04 | `b7-lifecycle.py` expired token; `b6-capacity.py` idle/slots; `b7-late-cleanup.py` deadline/safety sweep; `b12-hash-orphan.py` slot release when the media is deleted before its hash |
 | UL-05 | `b7-lifecycle.py` version fence; B4 share/revocation and `b6-races.py` conflicting commit |
 | UL-06 | `b7-lifecycle.py` private staging; `b7-signature.py` bound PUT; `b7-flow.py` immutable one-use candidate |
 | UL-07 | `b7-lifecycle.py` restart at receive, copy, commit and hash markers; `b6-races.py` single commit |
 | UL-08 | `b7-lifecycle.py` unpublished copy cleanup and original preservation; `b7-late-cleanup.py` late writer |
-| UL-09 | `b7-lifecycle.py` hash completion after restart; B6 adapter's ready/media checks |
+| UL-09 | `b7-lifecycle.py` hash completion after restart; `b12-hash-orphan.py` hash pump not blocked by deleted media; B6 adapter's ready/media checks |
 | UL-10 | `b7-lifecycle.py` invalid format, private staging, foreign authority and wrong S3 object; `ul10-probe-limits.py` byte and time limits injected independently; B5 mTLS checks and B6 valid probe |
 | UL-11 | `b7-lifecycle.py` storage outage, cleanup retry and published original preservation |
 | UL-12 | `b6-capacity.py`, `b7-browser.py` and EXP quick resource/latency guards |

@@ -1,5 +1,13 @@
 # PictuRAS — Fase 2: ideias 1 e 2, escolhas comunicadas e decisões em aberto
 
+> **Leitura na entrega (27/11/2026):** este documento preserva o diagnóstico/planeamento
+> da data indicada. A implementação B0–B12 está concluída; estados «pendente» ou
+> «por executar» no texto não descrevem o fecho da fase. Consultar o
+> [relatório final](src-doc-fase2-template/README.md), os
+> [resultados oficiais](README.md#resultados-oficiais) e as decisões posteriores no
+> [handoff](refactor-handoff.md). O original é mantido para rastreabilidade.
+
+
 Extrato das ideias 1 e 2 do catálogo de upgrades não funcionais
 (`memory-bank/intents/001-phase-2-quality-improvements/upgrade-ideas.md`), já com as soluções
 propostas e as escolhas assinaladas no documento de 16/11/2026. Estas escolhas não equivalem

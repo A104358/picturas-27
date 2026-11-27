@@ -5,116 +5,96 @@
 
 = Instruções de execução
 
-#orientacao[
-  Indiquem os passos mínimos para lançar a solução a partir do repositório (pré-requisitos, comandos, projeto de teste) e
-  para repetir as medições (antes e depois do _refactoring_) (_scripts_, dados, ambiente). Quem avalia, ou a equipa na fase seguinte, deve
-  conseguir repetir o que descrevem sem ajuda. No glossário, definam os termos específicos do projeto ou da disciplina
-  usados no relatório.
-]
-
-Os comandos estão em _shell_ POSIX (macOS ou Linux, no Windows, Git Bash ou WSL). Todos partem da raiz do
-repositório entregue.
+Os comandos partem da raiz do repositório entregue, em macOS/Linux. Usar uma instalação descartável própria: os exemplos de desenvolvimento usam `picturas-dev`; a campanha oficial usou `picturas-nfr`. Os resultados oficiais já estão arquivados e podem ser consultados sem arrancar serviços.
 
 == Pré-requisitos
 
 #tabela-campos(
-  [Docker], [Docker Desktop ou Docker Engine com Compose v2. Pelo menos 8 CPU e 8 GiB de RAM atribuídos ao Docker. A primeira construção ocupa cerca de 15 GiB de disco e demora 15 a 30 minutos.],
-  [Medição], [Python 3 com `venv`, `ffmpeg`/`ffprobe` no PATH e pelo menos 60 GiB livres (corpus de teste e imagens da _stack_ isolada).],
-  [Portas], [`8080` livre (entrada única por nginx). A _stack_ de medição usa a `28080`.],
-  [Dados de teste], [Vídeos de exemplo em `samples/video/` (com fala, sem fala, `.mov`, corrompido e acima do limite _free_), descritos no respetivo `README.md`.],
+  [Aplicação], [Docker com Compose v2 ou posterior, pelo menos 8 CPU e cerca de 8 GiB atribuídos ao Docker. Primeira construção: aproximadamente 15–30 minutos e 15 GiB de disco. Só o nginx publica a porta 8080.],
+  [Medição], [Python 3 com venv, dependências de `evaluation/requirements.txt`, ffmpeg/ffprobe no PATH e pelo menos 60 GiB livres. A comparação oficial exige o host e os limites da BF: Apple M4 Pro, 12 CPU e 8217751552 bytes de RAM atribuída ao Docker.],
+  [Credenciais e confiança], [Diretório privado fora do checkout, indicado por `PICTURAS_SECRETS_DIR`. Gerar uma CA por instalação e importar a CA verificada apenas num perfil dedicado do navegador. Nunca ultrapassar avisos de certificado.],
 )
 
-== Lançar a solução
+== Lançar a solução final
 
-*Solução de base (BF, _commit_ `0523102`).* Não precisa de segredos externos:
+A versão entregue contém o merge `e0a880a`; o código da aplicação medido corresponde ao congelamento `9b4e87d`, também presente em `c8a5e3d`. Numa instalação nova:
 
 ```bash
-git switch --detach 0523102
-docker compose up -d --build
+export PICTURAS_SECRETS_DIR="$HOME/.picturas-phase2-dev-secrets"
+ops/secrets.sh init
+ops/pki.sh init
+ops/pki.sh check
+docker compose -p picturas-dev up -d --build
 ```
 
-*Solução refatorada (branch `fase2-refactor`).* Os segredos e os certificados deixaram de estar no repositório
-(DA-1, B1): cada instalação gera os seus, num diretório fora do repositório, que nunca se copia entre
-computadores.
+Seguir `docs/pki-operations.md` para verificar a CA local e estabelecer a confiança do navegador; depois abrir `https://localhost:8080`. Não publicar portas internas para administração: usar `docker compose -p picturas-dev exec`. Depois de reconstruir o frontend, reiniciar o nginx do mesmo projeto. Para parar preservando os volumes, usar `docker compose -p picturas-dev stop`.
+
+A entrega assume uma instalação nova, sem migração de dados da fase 1 (D-15). Um checkout antigo pode ter volumes incompatíveis; aplicar o procedimento específico do README à instalação identificada, sem apagar outros projetos Docker. A solução de base `0523102` não usa esta PKI e só deve ser executada numa instalação de ensaio isolada.
+
+*Ensaio funcional.* Registar uma conta, criar um projeto e carregar uma imagem e um vídeo curto de `samples/video/`. Montar efeitos comuns e aplicar ao lote; verificar progresso e ZIP. Ensaiar trim/speed num vídeo; legendas e extração terminal em projetos próprios. O anónimo só carrega imagens, o perfil free tem os limites de vídeo e cinco operações diárias, e a subscrição mock permite testar o premium. PDF apenas em projetos sem vídeo. Não aplicar legendas e extração indiscriminadamente ao mesmo ensaio sem considerar a ordem e as operações disponíveis.
+
+== Regressão e conformidade
 
 ```bash
-git switch fase2-refactor
-export PICTURAS_SECRETS_DIR=$HOME/.picturas-secrets   # exportado em todas as shells usadas
-ops/secrets.sh init                                   # segredos por serviço
-ops/pki.sh init                                       # CA da instalação e certificado por serviço
-ops/pki.sh check && docker compose up -d --build
+# Regressão Node/vídeo nas imagens da instalação já montada
+tests/conformance/run-f01.sh picturas-dev
+
+# Casos internos a partir de um contentor não confiável na rede
+tests/conformance/in-network.sh picturas-dev b4-identity.py
+tests/conformance/in-network.sh picturas-dev b4-routes.py
 ```
 
-Sem `PICTURAS_SECRETS_DIR` exportado, o `docker compose` recusa arrancar (intencional). Em ambos os casos, a
-aplicação fica em `https://localhost:8080` (aceitar o certificado local). Depois de reconstruir o _frontend_,
-correr `docker compose restart nginx` para evitar um 502.
+A suíte conjunta `tests/conformance/run-b12.sh` usa por definição `picturas-dev`, Python de `evaluation/.venv` e um Python com Playwright para os testes de navegador. Ajustar `B12_PYTHON` e `B12_BROWSER_PYTHON` aos ambientes locais; preparar a confiança TLS dos perfis conforme os READMEs de `tests/conformance/`. Instalar as dependências de navegador descritas nesses testes antes de executar a suíte. Os caminhos pessoais no harness refletem o host da execução original e não são pré-requisitos universais. O índice de 25/11 mantém tentativas iniciais falhadas e repetições corrigidas; o estado final de cada suíte corresponde à última execução registada.
 
-*Projeto de teste.* Registar uma conta (ou usar o modo anónimo), criar um projeto, carregar imagens e vídeos de
-`samples/video/`, montar um _pipeline_ com efeitos comuns, `trim`/`speed`, legendas e extração de fotogramas, e
-aplicar. O progresso chega pelo WebSocket e os resultados descarregam-se em ZIP.
+Os testes do worker também podem correr no host com o ambiente de `Tools/video/requirements-dev.txt`, ffmpeg e ffprobe. A regressão oficial F01 foi executada nas imagens do produto, onde está disponível o suporte de legendas exigido; o resultado num ffmpeg diferente não substitui essa evidência.
 
-== Testes de regressão e de conformidade
+== Medições e comparação dos resultados
 
-```bash
-# Worker de vídeo no host (precisa de ffmpeg/ffprobe)
-cd Tools/video && python3 -m venv .venv && .venv/bin/pip install -r requirements-dev.txt
-.venv/bin/python -m pytest -q tests && cd ../..
+*Consulta imediata.* As três campanhas estão em `evaluation/results/`: `BF-20261121T013224Z`, `MF-20261125T135356Z` e `MF-20261125T153646Z`. Cada uma inclui manifesto, brutos JSONL, resumo e relatório. As MF incluem `compare.md`. A primeira MF falha U10; a segunda é oficial por regra registada antes de a executar. O código da aplicação não mudou entre as duas.
 
-# Regressão F01 (testes Node e de vídeo) nas imagens do produto, numa stack já montada
-tests/conformance/run-f01.sh <projeto-compose>
-```
+*Instrumento.* O hash final comum é `12c60c7f7695` (SHA-256 completo no manifesto). O histórico da BF regista `638516104ae9` → `2dfe2a7ad06c` → `12c60c7f7695`, devido às duas extensões autorizadas com comportamento legado por omissão (TLS e protocolo WS). Os critérios não se alteram para passar a MF. O Anexo C identifica as evidências e o capítulo 10 discute esta condição de comparabilidade.
 
-Os testes de conformidade das decisões estão em `tests/conformance/<grupo>/` e guardam o resultado bruto em
-`tests/conformance/results/<AAAA-MM-DD>/`. Correm sempre contra uma _stack_ própria (`picturas-dev` ou
-`picturas-nfr-exp`) e só com _fixtures_.
-
-== Repetir as medições (BF e MF)
-
-O instrumento é `evaluation/med.py`, congelado na versão `638516104ae9`. Não se altera `med.py`, `medlib/`,
-`criteria.yaml` nem `cases/` entre a BF e a MF. As únicas alterações permitidas são as do plano §6 (formato do
-_join_ WS e TLS nos canais de dados, por variáveis `MED_*` com o valor por omissão igual ao da BF), registadas
-com `med.py freeze`. O `manifest.json` de cada campanha guarda os _hashes_ do instrumento. O
-`med.py` monta a sua própria _stack_ isolada (`picturas-nfr`), sem tocar nos volumes nem nas portas da
-instalação de desenvolvimento.
+*Nova execução na versão final.* Gerar segredos e PKI próprios para o ensaio, exportando um diretório diferente do desenvolvimento. A partir da raiz, preparar o ficheiro privado de ambiente sem imprimir credenciais:
 
 ```bash
+export PICTURAS_SECRETS_DIR="$HOME/.picturas-phase2-eval-secrets"
+ops/secrets.sh init
+ops/pki.sh init
+ops/secrets.sh med-render
 cd evaluation
-python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
-cp .env.med.example .env.med
-.venv/bin/python med.py preflight --campaign BF   # verifica Docker, CPU, RAM e disco
-.venv/bin/python med.py corpus                    # gera o corpus (~2,5 GiB, guardar até à MF)
-.venv/bin/python med.py stack up                  # build e arranque da stack isolada
-.venv/bin/python med.py run --campaign BF         # campanha completa (~2-3 h)
-.venv/bin/python med.py stack down                # ATENÇÃO: down -v (apaga os volumes da stack isolada)
+python3 -m venv .venv
+.venv/bin/pip install -r requirements.txt
+# Numa preparação nova, sem .env.med existente:
+ln -s "$PICTURAS_SECRETS_DIR/med-exp.env" .env.med
+export MED_WS_JOIN_FORMAT=v2
+export MED_CLIENT_CERT_DIR="$PICTURAS_SECRETS_DIR/pki/services/api_gateway"
+.venv/bin/python med.py corpus
+.venv/bin/python med.py stack up
+.venv/bin/python med.py preflight --campaign EXP
+.venv/bin/python med.py run --campaign EXP
 ```
 
-O `med.py stack up` e o `stack down` fazem `docker compose down -v` do projeto isolado marcado em
-`evaluation/.run/stack.json`. Para parar uma _stack_ sem perder dados usa-se `docker compose -p <projeto> down`,
-sem `-v`.
+O ficheiro gerado seleciona `picturas-nfr-exp`, TLS e os certificados/credenciais por serviço. Confirmar `MED_WS_JOIN_FORMAT=v2` nesse ambiente. Num computador diferente do host oficial, a campanha é sempre EXP e não entra na comparação. O corpus PAD é regenerável; os hashes de todos os ficheiros, incluindo os exemplos reais, têm de coincidir com o manifesto. H/T significam a posição do moov no início/fim do MP4; frio/aquecido distinguem o estado dos processos.
 
-*Medição final (MF).* No *mesmo computador* da BF, com o código refatorado e `PICTURAS_SECRETS_DIR` exportado. O
-`.env.med` não se copia do exemplo: `ops/secrets.sh med-render` escreve-o fora do repositório (em
-`$PICTURAS_SECRETS_DIR/med-exp.env`) e `evaluation/.env.med` é uma ligação simbólica para esse ficheiro
-(`ops/secrets.sh med-env` só imprime as credenciais `MED_*`). Sem as credenciais de administração e
-por serviço, esses casos ficam `INCONCLUSIVO`. As variáveis de ambiente prevalecem sobre o ficheiro:
+*Reprodução formal.* No mesmo host da BF, com o corpus e limites originais, a versão final e uma árvore de aplicação limpa, selecionar a stack oficial antes de a criar:
 
 ```bash
 export MED_COMPOSE_PROJECT=picturas-nfr MED_WS_JOIN_FORMAT=v2
-.venv/bin/python med.py stack up                  # down -v só da picturas-nfr, build e arranque
-.venv/bin/python med.py preflight --campaign MF   # exige >=60 GiB livres e árvore sem alterações
-.venv/bin/python med.py run --campaign MF         # ~1 h
+.venv/bin/python med.py stack up
+.venv/bin/python med.py preflight --campaign MF
+.venv/bin/python med.py run --campaign MF
 .venv/bin/python med.py compare results/BF-20261121T013224Z results/MF-<UTC>
 ```
 
-A MF oficial é `MF-20261125T153646Z`. A primeira, `MF-20261125T135356Z`, fica no repositório e é reportada no
-capítulo 10 (decisão 59).
+O instrumento só reconhece uma stack de cada vez. Não iniciar a MF com a EXP ainda registada. `stack up`, `stack down` e `stack purge` podem apagar os volumes do projeto de ensaio cuja posse verificam; não são comandos de simples pausa. Para preservar dados, usar Compose com o projeto e a configuração exatos registados em `evaluation/.run/stack.json` e executar stop. Não correr prune global.
 
-O `compare` só classifica se o _host_, os limites, o corpus, os critérios, os casos e a versão do instrumento
-forem iguais aos da BF. Caso contrário, todas as métricas ficam `COMPARACAO_INVALIDA`. Medições noutros
-computadores usam `--campaign EXP` (com `MED_COMPOSE_PROJECT=picturas-nfr-exp`) e nunca entram no `compare`.
-Cada campanha fica em `evaluation/results/<CAMPANHA>-<UTC>/`: `manifest.json` (commit, _host_, Docker, imagens,
-corpus), `raw/<métrica>.jsonl` (uma linha por tentativa, sem segredos), `summary.json` e `report.md`.
+A BF arquivada mede a aplicação equivalente a `0523102`, num checkout de avaliação `d6b4497`. Para a voltar a recolher é necessário repor essa aplicação e a configuração histórica de avaliação numa instalação isolada; não basta executar `--campaign BF` sobre a aplicação refatorada. Não se deve substituir a BF entregue por uma nova medição de outro computador. O compare recusa diferenças de host, limites, corpus, critérios, casos ou instrumento, e verifica denominadores das matrizes.
 
+== Operação e recuperação
+
+A renovação de certificados aos sete dias restantes usa `ops/pki.sh renew --project picturas-dev`. Retirar confiança exige isolamento, nova CA e novas chaves de todos os participantes, sem CRL/OCSP. O piloto B10 e os seus tempos constam de `docs/refactor-piloto-pki.md`. Depois de interrupção de trabalho de domínio, só reabrir segundo `docs/reconciliation-operations.md`, com inventário/quarentena e compensação comprovada, sem replay automático. A recuperação de anónimos segue `docs/architecture/fase2-recuperacao-anonima.md` e `ops/session-recovery.sh`, com prova independente, sem criar uma identidade substituta silenciosa.
+
+#pagebreak()
 = Glossário
 
 #tabela(
@@ -149,17 +129,18 @@ corpus), `raw/<métrica>.jsonl` (uma linha por tentativa, sem segredos), `summar
   [Tentativa de _upload_], [Registo, numa coleção própria, de um carregamento em curso (pedido, PUT, validação, confirmação), com prazos e limites.],
 )
 
+#pagebreak()
+#paisagem[
 = Registo de Evidências e Hipóteses
 
-As evidências (`EV-01` a `EV-55`) e hipóteses (`H-01` a `H-18`) citadas ao longo deste relatório têm origem na análise de arquitetura, inspeção de código, dados de execução e literatura dos Exercícios 6 e 7. O catálogo seguinte identifica a sua localização exata e o facto factual ou previsão técnica que sustentam.
+As evidências (`EV-01` a `EV-55`) e hipóteses (`H-01` a `H-18`) citadas ao longo deste relatório têm origem na análise de arquitetura, inspeção de código, dados de execução e literatura dos Exercícios 6 e 7. O catálogo seguinte identifica a sua localização exata e o facto observado ou a previsão técnica que sustentam.
 
-#paisagem[
 #tab([Registo de Evidências (EV-01 a EV-55)],
   tabela(
     colunas: (1.8cm, 3.4cm, 6.2cm, 1fr),
     tamanho: 7.5pt,
     [ID], [Tipo], [Localização / Fonte], [O que demonstra / Registo],
-    [EV-01], [Histórico/configuração], [`git rev-parse HEAD`, `git rev-parse 0523102`, `git log -6`, `git diff --name-only 0523102 HEAD`, registo], [Identifica checkout e base da aplicação. Mudanças locais anteriores limitadas a documentos e infraestrutura de agentes.],
+    [EV-01], [Histórico/configuração (diagnóstico)], [`git rev-parse HEAD`, `git rev-parse 0523102`, `git log -6`, `git diff --name-only 0523102 HEAD`, registo], [Identifica o checkout e a base na análise inicial dos exercícios; nessa data, as diferenças eram documentais e de agentes. O estado final é registado por EV-52–EV-55.],
     [EV-02], [Documento], [Enunciado HTML, v1.1: Objetivo, Contexto, tarefas 0–3 e Resultado Esperado], [Exige análise global/vídeo, sequência completa, evidências, alternativas, matriz e preservação funcional. Bloco 2 trata escolhas de RNF.],
     [EV-03], [Documento], [HTML de apoio, introdução e padrões 1–7], [Distingue níveis de análise. Identifica Pipeline Monolith local e Competing Consumers como alternativa.],
     [EV-04], [Documento], [PDF PL1-G4, v2.0, pp.1–10, 11–33, 34–46, 49–61, 62–67, 70–76], [Domínio, casos de uso, 83 requisitos, 15 entradas de qualidade em §5.2, RNF herdados, decisões e limitações. DA-01/06 explicam concentração e duplicação, números de desempenho são históricos.],
@@ -186,7 +167,7 @@ As evidências (`EV-01` a `EV-55`) e hipóteses (`H-01` a `H-18`) citadas ao lon
     [EV-25], [Código], [`users/routes/users.js:46–73,130–171`, `projects/utils/video.js:205–209`, `routes/projects.js:1744–1808,2252–2353`], [Quota gratuita/premium, soma por vídeo, mapeamento 701→403, invalidação ao cancelar e reembolso só de `pendingAdvancedOps`.],
     [EV-26], [Código], [`projects/routes/projects.js:1082–1164,257–369`, `utils/cacheKey.js`], [Preview sem reserva de operações, chave por hash/ferramentas, cache persistente e seleção de tipo de media.],
     [EV-27], [Testes], [`Tools/video/tests/`, `projects/tests/`, `Tools/video/tests/test_subtitles.py:1–20,23–85`, `tests/conftest.py:11–30`], [Testes de efeitos, áudio, ordem, determinismo, falhas tratadas, legendas simuladas, extração e barreiras/tokens. Não cobrem todos os RNF.],
-    [EV-28], [Execução], [Registo de 2026-11-09 e script], [Ambiente/serviços/hashes, 8 testes Node e 74 Python aprovados, ensaio misto por API, exportação MP4/ZIP e extração. Limitações e comandos de reprodução registados.],
+    [EV-28], [Execução], [`docs/exercises/06-architectural-patterns/evidence/validacao-2026-11-09.txt` e `preparacao.cjs`], [Ambiente/serviços/hashes, 8 testes Node e 74 Python aprovados, ensaio misto por API, exportação MP4/ZIP e extração. Limitações e comandos de reprodução registados.],
     [EV-29], [Inventário/documento], [Inventário da leitura inicial com `rg --files docs`, `memory-bank/README.md`, `project.yaml`, `.specsmd/aidlc/context-config.yaml`, PDF PL1-G4, p.1, enunciado], [Regista a indisponibilidade inicial dos documentos anteriores, *resolvida nesta revisão por EV-34–EV-36*. O ID é preservado para rastreabilidade. Não representa uma fonte atualmente em falta nem requisitos Fase 2 já aprovados.],
     [EV-30], [Referência técnica], [RabbitMQ: confirmações, consulta 2026-11-09, secções de acknowledgements, requeue e publisher confirms], [Ack de consumo e confirmação de publicação são garantias distintas. Reentrega de pedidos não confirmados não demonstra processamento exatamente uma vez.],
     [EV-31], [Literatura], [Hohpe/Woolf: Pipes and Filters, Competing Consumers, consulta 2026-11-09], [Decomposição em etapas ligadas por canais. Múltiplos consumidores concorrentes numa fila, sem distribuição por broadcast.],
@@ -199,11 +180,11 @@ As evidências (`EV-01` a `EV-55`) e hipóteses (`H-01` a `H-18`) citadas ao lon
     [EV-38], [Material fornecido], [Enunciado Bloco 2 e template, 1.1, 2026-11-04], [Secções 4–7, seis elementos dos cenários, dois candidatos, continuação de IDs e quantificação final após baseline. Originais organizados sem alterar bytes.],
     [EV-39], [Material fornecido], [Enunciado Ex. 7 e template, 3.0, 2026-11-17, incluindo Anexos A/B], [Cenários vêm do Bloco 2 sem redefinição. Pelo menos três táticas por cenário, classes A/B/C, duas DA, duas alternativas por DA, vistas/trade-offs/medição/regressão/IA. A versão 3.0 remove revisão cruzada.],
     [EV-40], [Verificação estática], [Manifesto de organização/comparação, `git diff --name-only 484be13 1d7103b` limitado a aplicação/Compose, caminhos registados], [Nenhuma diferença de aplicação nesses caminhos. Quatro novos materiais preservados por SHA-256. Não foi arrancada stack nem consultado runtime/volumes.],
-    [EV-41], [Exploração histórica B14], [Índice de evidências, achados], [Ensaios Linux de 14/11: uploads/recursos, acessos com controlo, vídeo e uma interrupção. Há leitura de objeto verificada por hash no suplemento. Universo e limitações não se agregam ao B16 ARM.],
-    [EV-42], [Exploração histórica B16: upload], [Auditoria dos JSON, originais e scripts, métricas §2.2], [14 uploads válidos observados. 500 MiB premium: três sucessos, pós-envio 6704,0–7976,6 ms, gateway até 2049,6 MiB absolutos. Outro caso free-500 registou 502/OOM. São pilotos Mac/ARM com pequeno n, não BF nesta máquina.],
-    [EV-43], [Exploração histórica auditada: segurança], [Auditoria por caso, métricas §2.3], [G03/G04 verificam mutações no projeto da vítima, W01 recebeu evento sem token. G02/D06 têm asserções incompletas e G08/G09 serviço ausente/500: não os contar como efeito provado ou proteção. Não há taxa universal de bypass.],
-    [EV-44], [Decisões e âmbito], [Ideias/justificação, histórico, upload, WS], [Par QC-06+QC-05 acordado como comunicado pelo utilizador. Escolhas técnicas individuais de identidade/mTLS/WS/PKI e UP-C1/C2/C3 A. UP-C4–C9 continuam não selecionadas e não há implementação/refactoring iniciado.],
-    [EV-45], [Planeamento e recursos observados], [Plano, revisão, manifesto de host], [Host desta máquina/Luís selecionado, EVAL-B1/C1/R1/M1 A têm validação individual limitada, U25 é G. 60 dimensões de avaliação. BF/MF e calibração por executar, sem aprovação implícita dos 60 limiares.],
+    [EV-41], [Exploração histórica B14], [`memory-bank/intents/001-phase-2-quality-improvements/evidence/README.md` e `live-findings.md` no diretório pai], [Ensaios Linux de 14/11: uploads/recursos, acessos com controlo, vídeo e uma interrupção. Há leitura de objeto verificada por hash no suplemento. Universo e limitações não se agregam ao B16 ARM.],
+    [EV-42], [Exploração histórica B16: upload], [`memory-bank/intents/001-phase-2-quality-improvements/evidence/nfr-2026-11-16/README.md` e `docs/fase2-metricas-e-baseline.md` §2.2], [14 uploads válidos observados. 500 MiB premium: três sucessos, pós-envio 6704,0–7976,6 ms, gateway até 2049,6 MiB absolutos. Outro caso free-500 registou 502/OOM. São pilotos Mac/ARM com pequeno n, não BF nesta máquina.],
+    [EV-43], [Exploração histórica auditada: segurança], [Mesmo índice B16 de EV-42 e catálogo `docs/fase2-metricas-e-baseline.md` §2.3], [G03/G04 verificam mutações no projeto da vítima, W01 recebeu evento sem token. G02/D06 têm asserções incompletas e G08/G09 serviço ausente/500: não os contar como efeito provado ou proteção. Não há taxa universal de bypass.],
+    [EV-44], [Decisões e âmbito], [Ideias/justificação, histórico, upload, WS], [Par QC-06+QC-05 acordado como comunicado pelo utilizador. Escolhas técnicas individuais de identidade/mTLS/WS/PKI e UP-C1/C2/C3 A. Retrato de 18/11: UP-C4–C9 ainda não escolhidas e implementação não iniciada. Estado superado por EV-50 e EV-52, conservado como evidência histórica.],
+    [EV-45], [Planeamento e recursos observados], [Plano, revisão, manifesto de host], [Retrato de 18/11: seleção inicial de Luís/Linux, EVAL-B1/C1/R1/M1 A e U25 como guarda. A escolha do host mudou em 20/11 para Apple M4 Pro; as 21 métricas foram medidas na BF/MF. Ver EV-50/EV-54/EV-55. As 60 dimensões exploradas não são 60 critérios finais.],
     [EV-46], [Código/testes, releitura estática], [Testes do orquestrador, vídeo, schemas, caller, WS, frontend], [Suites existentes de processamento/áudio/extração/legendas simuladas. Caller decodifica JWT sem verificar assinatura e WS não autoriza salas como no contrato proposto, frontend envia multipart. Não há novos testes executados nesta continuação.],
     [EV-47], [Referências primárias complementares], [ISO 25010:2011, fichas/resumos SEI Deriving Architectural Tactics e Security and Survivability, consulta 18/11], [Edição ISO exigida e ligação entre cenários, táticas e decisões. Consultados os resumos oficiais, não o livro SAIP nem o texto integral desses relatórios. O catálogo concreto utilizado é o Anexo A de EV-39.],
     [EV-48], [Inventário dos materiais consultados], [Quatro novos ficheiros e `docs/lectures/`, índice Ex. 7], [Não foram fornecidos no workspace os slides 9 nem as quatro folhas `Apoio/Taticas` citadas no Ex. 7. Usa-se o Anexo A incluído no HTML 3.0 e as fontes disponíveis. Não se simula leitura dos materiais ausentes.],
@@ -224,22 +205,44 @@ As evidências (`EV-01` a `EV-55`) e hipóteses (`H-01` a `H-18`) citadas ao lon
     [ID], [Hipótese], [Como confirmar ou refutar], [Estado],
     [H-01], [ALT-1, materializando vídeo entre efeitos, tende a aumentar a latência de um vídeo face ao caminho ordinário atual. O ganho de modularidade tem custo de I/O e possíveis recodificações.], [Mesmo conjunto de vídeos/efeitos, hardware e limites. Medir latência por vídeo, I/O e equivalência de frames/áudio antes/depois. Incluir formatos intermédios sem perdas.], [Por confirmar],
     [H-02], [ALT-2 melhora débito e espera de lotes quando existem CPU/RAM suficientes. Mais réplicas no portátil saturado podem não melhorar.], [Ensaios com 1/2/4 consumidores e carga idêntica. Separar tempo em fila, execução, p95 de conclusão, CPU e RSS. Não escalar durante a baseline atual.], [Por confirmar],
-    [H-03], [Existem janelas de perda/repetição entre publicação, ack e persistência. Retentativas podem não produzir um único resultado coerente.], [Em ambiente de teste isolado, interromper worker/broker/orquestrador em pontos definidos. Verificar reentrega, ficheiros, Process, Result, token e quota. Testar exceção tratada e SIGKILL separadamente.], [Por confirmar],
+    [H-03], [Existem janelas de perda/repetição entre publicação, ack e persistência. Retentativas podem não produzir um único resultado coerente.], [Em ambiente de teste isolado, interromper worker/broker/orquestrador em pontos definidos. Verificar reentrega, ficheiros, Process, Result, token e quota. Testar exceção tratada e SIGKILL separadamente.], [Risco de ack mantido; B11 ensaia interrupção/quarentena/compensação, sem provar entrega exatamente uma vez.],
     [H-04], [ALT-1 reduz o alcance de implantação de uma alteração de efeito, mas aumenta contratos, ALT-2 mantém o esforço interno de alteração e a duplicação PIL.], [Tarefa de manutenção equivalente em ramos experimentais: medir módulos/serviços tocados, dependências, tempo e regressões, sem introduzir funcionalidade na entrega.], [Por confirmar],
-    [H-05], [Buffers integrais e ZIP em memória limitam uploads/exportação concorrentes de ficheiros grandes.], [Ensaiar cargas de 10/100/500 MB autorizadas pelo perfil. Medir RSS em gateway, projects e storage, falhas e tempo pós-envio, preservar geradores e limites.], [Por confirmar],
+    [H-05], [Buffers integrais e ZIP em memória limitam uploads/exportação concorrentes de ficheiros grandes.], [Ensaiar cargas de 10/100/500 MB autorizadas pelo perfil. Medir RSS em gateway, projects e storage, falhas e tempo pós-envio, preservar geradores e limites.], [Confirmada para uploads pela BF (U01/U20/U17); exportação em carga não medida.],
     [H-06], [Ocultação de ferramentas e erros tardios tornam a criação de pipelines menos compreensível. Mudar só os workers não resolve a operabilidade.], [Utilizadores com tarefas iguais em projetos só de imagem e mistos. Medir sucesso, erros, tempo e compreensão, comparar sem alterar catálogo funcional.], [Por confirmar],
-    [H-07], [As portas internas e a confiança da fachada permitem contornar algumas verificações do percurso normal.], [Testar acesso/autorização com duas contas de teste e por cada fronteira publicada, incluindo expiração dos URLs. Sem ler dados reais de terceiros.], [Por confirmar],
+    [H-07], [As portas internas e a confiança da fachada permitem contornar algumas verificações do percurso normal.], [Testar acesso/autorização com duas contas de teste e por cada fronteira publicada, incluindo expiração dos URLs. Sem ler dados reais de terceiros.], [Confirmada no corpus da BF (S01–S03/S16/S17); mitigada na MF oficial.],
     [H-08], [Whisper, estágios adicionais e preview de extração prejudicam tempo de resposta e espera de tarefas simples no consumidor único. Replicar pode aliviar espera, não o custo individual.], [Cargas separadas/mistas de efeitos comuns, fala/sem fala e extração, com modelo frio/quente. Medir execução/fila, CPU/RAM e bytes intermédios.], [Por confirmar],
     [H-09], [O reconhecimento real pode produzir erros e variação que os testes com recognizer simulado não revelam.], [Corpus de fala com transcrição de referência, idioma/duração fixos e modelo/versionamento registados, comparar texto e repetibilidade.], [Por confirmar],
     [H-10], [O intervalo entre eventos pode exceder 5 s em fila, reconhecimento e estágios lentos.], [Capturar timestamps dos eventos de uma sessão de teste, incluindo períodos sem avanço. Comparar maior intervalo observado com critérios MVP/produção.], [Por confirmar],
     [H-11], [A aprovação da suite não implica taxa de sucesso operacional ≥95% ou ≥99,5%.], [Definir corpus válido, distribuição de efeitos e falhas, repetições e denominador. Medir sucesso de ponta a ponta com intervalo de confiança.], [Por confirmar],
-    [H-12], [Com várias réplicas e Apply concorrentes no mesmo projeto, caminhos de trabalho comuns podem colidir. Tokens protegem o commit mas não isolam todos os ficheiros.], [Dois Apply sobre o mesmo projeto e sobre projetos distintos. Verificar escrita/limpeza de `src`/`out`, duplicados, tokens e integridade final, com diretórios isolados por execução no protótipo.], [Por confirmar],
+    [H-12], [Na base, com várias réplicas e Apply concorrentes, caminhos comuns podem colidir. Tokens protegem o commit mas não isolam todos os ficheiros.], [Dois Apply sobre o mesmo projeto e sobre projetos distintos. Verificar escrita/limpeza de `src`/`out`, duplicados, tokens e integridade final, com diretórios isolados por execução no protótipo.], [B11 introduz isolamento por execução/geração; várias réplicas de vídeo não foram avaliadas.],
     [H-13], [Os mecanismos herdados podem apoiar RNF de partilha, presets e IA, mas a inspeção estática e os testes de vídeo não demonstram os percentis, limites temporais, disponibilidade, retenção e invariantes sob concorrência exigidos nesses RNF.], [Ensaiar geração de links (99% $< 1$ s), sincronização entre dispositivos (≤5 s), presets (95% ≤2 s, 100 ciclos sem duplicação/perda), concorrência de edição/presença, retenção do assistente e carga/uptime de IA. Resolver o conflito 10 s/3 s de RNF54 antes de aceitar um limiar. Reutilizar corpus/ambiente fixos, não inventar novos alvos.], [Por confirmar],
     [H-14], [Autenticar/autorizar em cada fronteira e revalidar WS reduz os efeitos indevidos dos casos conhecidos, com custos de CPU/latência e indisponibilidade em falha.], [Repetir casos corrigidos com controlos positivos, TLS/peer/domínio e carga WS. Medir corte e overhead sem apresentar erro 500 como segurança.], [*Confirmada* no corpus de casos: S01–S04, S16 e S17 com 0 admitidos, S12 1125 ms, S05 100%. Custo de latência dentro do alvo (S21 Δ ≤ +1,9 ms). Indisponibilidade em falha observada nos contextos WS já admitidos e gerida pela decisão 53 (EV-55)],
-    [H-15], [Novo percurso nginx/S3 e streaming limitado no adaptador reduzem a dependência RSS Node/tamanho, sem deslocar um custo inaceitável para nginx/S3/disco.], [BF/MF no mesmo host/budget/corpus, C=1/C=3, memória agregada, temporários, bytes/CPU e tempos até ready/hash/cleanup, comparar cada transporte.], [*Confirmada em parte*: pico Node 1976 → 45,4 MiB e U20 3/3 sem OOM. Parte do custo passou para o SeaweedFS, com U04 e U01 só no mínimo (EV-55)],
-    [H-16], [Hash posterior pode reduzir t_ready, mas acrescenta atraso/leituras e exige cache/retoma coerentes.], [Medir t_ready/t_hash/t_complete, originais e previews antes/depois do hash. Injetar falhas só em fixtures autorizadas.], [*Confirmada*: U09 máx. 806 ms (BF: mediana 6171 ms) e U10 ≤0,89× BF. O custo do _hash_ continua em segundo plano. Exigiu tratar a _media_ apagada antes do _hash_ (decisão 51) (EV-52, EV-55)],
+    [H-15], [Novo percurso nginx/S3 e streaming limitado no adaptador reduzem a dependência RSS Node/tamanho, sem deslocar um custo inaceitável para nginx/S3/disco.], [BF/MF no mesmo host/budget/corpus, C=1/C=3, memória agregada, temporários, bytes/CPU e tempos até ready/hash/cleanup, comparar cada transporte.], [*Confirmada em parte*: pico Node 1976 → 45,4 MiB e U20 3/3 sem OOM. O SeaweedFS também reduziu o pico, mas U04 e U01 ficaram só no mínimo (EV-55)],
+    [H-16], [Hash posterior pode reduzir t_ready, mas acrescenta atraso/leituras e exige cache/retoma coerentes.], [Medir t_ready/t_hash/t_complete, originais e previews antes/depois do hash. Injetar falhas só em fixtures autorizadas.], [*Compatível com os resultados*: U09 máx. 806 ms (BF: mediana 6171 ms) e U10 ≤0,89× BF. O custo do _hash_ continua em segundo plano. Exigiu tratar a _media_ apagada antes do _hash_ (decisão 51) (EV-52, EV-55)],
     [H-17], [Adaptador, controlos de confiança e tentativas cabem no orçamento do host e no prazo académico sem reduzir cobertura.], [Calibrar por fase, inventariar disco/serviços e esforço da equipa, materializar instrumentos/corpus antes do congelamento.], [*Confirmada em parte*: todos os blocos foram feitos sem cortes, mas o disco do _host_ obrigou a quatro limpezas autorizadas (D-26, D-32, D-34, D-38) e os pilotos B10 não foram repetidos na verificação final (decisão 49)],
-    [H-18], [Benefícios conjuntos de segurança e upload mantêm U25 e os fluxos legítimos, apesar de mais TLS/queries/estados.], [Ensaios de coexistência/latência pareados e regressões de imagem/vídeo/partilha/quota/billing, conservando todos os erros.], [*Confirmada*: U25 com 0 erros e razão máx. 0,58, S05 100%, regressão 105/105 (EV-53, EV-55)],
+    [H-18], [Benefícios conjuntos de segurança e upload mantêm U25 e os fluxos legítimos, apesar de mais TLS/queries/estados.], [Ensaios de coexistência/latência pareados e regressões de imagem/vídeo/partilha/quota/billing, conservando todos os erros.], [*Confirmada no corpus*: U25 com 0 erros e razão máx. 0,58, S05 100%, regressão 105/105 (EV-53, EV-55)],
   )
 )
 ]
+
+#pagebreak()
+= Mapa de fontes e artefactos de entrega
+
+Os caminhos seguintes são relativos à raiz do repositório entregue. As revisões históricas podem ser consultadas com `git show <commit>:<caminho>`, evitando confrontar linhas da base com ficheiros refatorados. O relatório identifica as versões em que cada evidência é válida.
+
+#tab([Fontes primárias e localização dos resultados], tabela(
+  colunas: (3.3cm, 1fr), tamanho: 8.5pt,
+  [Âmbito], [Localização],
+  [Requisitos e orientação académica], [`docs/requirements/doc-ext-requisitos.pdf`; `docs/requirements/doc-ext-requisitos-2627.pdf`; `docs/architecture/doc-sol-arquitetural.pdf`; `docs/guidelines/fase-2-guidelines-1.pdf`; `docs/lectures/RAS-slidesEN-11-ARCH-Styles.pdf`.],
+  [Exercícios 6 e 7], [`docs/exercises/06-architectural-patterns/resolution.md` e `resolution-block-2.md`; `docs/exercises/07-architectural-tactics/resolution.md`; originais de enunciados/templates em `sources/` de cada exercício.],
+  [Decisões e execução], [`docs/refactor-plano.md`; `docs/refactor-handoff.md`; `docs/refactor-spikes.md`; `docs/refactor-matriz-rotas.md`; `docs/refactor-matriz-canais.md`.],
+  [Critérios e protocolo], [`docs/metricas.md`; `docs/planoMedicao.md`; `evaluation/criteria.yaml`; `evaluation/cases/security.yaml`; `evaluation/IMPLEMENTATION_NOTES.md`. Os documentos `docs/fase2-*.md` mantêm o histórico de decisões e preparação.],
+  [BF, MF1 e MF2], [`evaluation/results/BF-20261121T013224Z/`; `evaluation/results/MF-20261125T135356Z/`; `evaluation/results/MF-20261125T153646Z/`. Consultar `manifest.json`, `summary.json`, `raw/`, `matrix_check.json`, `report.md` e, nas MF, `compare.md`.],
+  [Conformidade e regressão], [`tests/conformance/run-b12.sh`; `tests/conformance/results/2026-11-25/B12-conf-index.txt` e os ficheiros de cada suíte. Pilotos/canais anteriores em `tests/conformance/results/2026-11-24/`.],
+  [Operação aplicada], [`docs/pki-operations.md`; `docs/refactor-piloto-pki.md`; `docs/reconciliation-operations.md`; scripts `ops/pki.sh`, `ops/maintenance.sh`, `ops/reconcile` e `ops/session-recovery.sh`.],
+  [Implementação do upload], [`apiGateway/routes/projects.js`; `projects/routes/videoUpload.js`; `projects/utils/videoUploadEngine.js`; `imageStorageService/route/videoObjects.js`; `frontend/lib/video-upload.ts`; `nginx/nginx.conf`.],
+  [Implementação de segurança], [`apiGateway/auth/`; `projects/utils/internalIdentity.js`; `projects/middleware/shareAuth.js`; `projects/routes/wsAuth.js`; `wsGateway/authorization.js`; `*/tls/pkiTls.js`; geração de credenciais em `ops/secrets.sh`.],
+  [Fontes e PDF do relatório], [`docs/src-doc-fase2-template/main.typ`, `template.typ`, `capitulos/`, `fonts/`, `images/gerar-vistas.py`, `images/gerar-diagnostico.py` e os cinco SVG usados nos capítulos 2/9; `relatorio-fase2-PL2-G4.pdf`; `verificacao-entrega.md`.],
+))
+
+O catálogo de padrões EIP, a ficha ISO/IEC 25010:2011, a documentação RabbitMQ e os resumos SEI foram consultados nos exercícios nas datas registadas em EV-30/31/32/47; as ligações originais estão nas resoluções. Não se afirma ter consultado os textos integrais de obras indisponíveis. A edição ISO usada na classificação é a de 2011, conforme as diretrizes da fase.

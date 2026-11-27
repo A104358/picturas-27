@@ -1,5 +1,13 @@
 # Fase 2 — Ciclo de vida dos uploads: proposta para revisão
 
+> **Leitura na entrega (27/11/2026):** este documento preserva o diagnóstico/planeamento
+> da data indicada. A implementação B0–B12 está concluída; estados «pendente» ou
+> «por executar» no texto não descrevem o fecho da fase. Consultar o
+> [relatório final](../src-doc-fase2-template/README.md), os
+> [resultados oficiais](../README.md#resultados-oficiais) e as decisões posteriores no
+> [handoff](../refactor-handoff.md). O original é mantido para rastreabilidade.
+
+
 **Equipa:** PL2-G4. **Preparado:** 18/11/2026. **Estado (21/11/2026):** UP-C4 A,
 UP-C5 A, UP-C6 A, UP-C7 A, UP-C8 A e UP-C9 A **selecionadas** individualmente pelo
 utilizador; ver [seleção de 21/11](#seleção-de-21112026). Continua a ser desenho, não

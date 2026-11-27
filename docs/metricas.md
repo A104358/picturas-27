@@ -17,13 +17,14 @@ valores. O procedimento de recolha está no [plano de medição](planoMedicao.md
 - **Seleção de 20/11/2026.** Os IDs (S.., U..) são os do [catálogo de 60 métricas](fase2-metricas-e-baseline.md).
   O catálogo continua a ser a decomposição completa; este documento escolhe as que
   contam para a avaliação e diz porquê. As restantes ficam como diagnóstico (§4).
-  A seleção ainda tem de ser confirmada pela equipa.
+  Este é o subconjunto usado nas campanhas oficiais BF/MF; o fecho e a revisão humana do relatório estão registados na documentação de entrega.
 - **Os valores "base" são os da baseline formal (BF)**, medida em 21/11/2026 com o
   `med.py` (campanha `BF-20261121T013224Z`, Apple M4 Pro, Docker Desktop com 12 CPU e
   7,7 GiB). O commit medido foi `d6b4497`, cujo código da aplicação é idêntico ao de
   `0523102` (só mudaram documentação e ferramentas de avaliação). Os resultados brutos
-  estão em `evaluation/results/BF-20261121T013224Z/`. A medição final (MF) repete-a
-  com o mesmo método, no mesmo host. Os valores exploratórios anteriores (B16, 16/11)
+  estão em `evaluation/results/BF-20261121T013224Z/`. A medição final oficial `MF-20261125T153646Z` repetiu-a
+  com o mesmo método, no mesmo host: 19 métricas no alvo e U01/U04 no mínimo.
+  Ver o [relatório final](src-doc-fase2-template/README.md) e o `compare.md` da campanha. Os valores exploratórios anteriores (B16, 16/11)
   ficam no [catálogo](fase2-metricas-e-baseline.md).
 - **Os mínimos e alvos são fixados antes da BF** e revistos uma única vez depois dela
   (calibração), com registo da alteração. **Nunca se ajustam para fazer passar a MF.**

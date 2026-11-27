@@ -2,35 +2,15 @@
 
 = Âmbito e Vista da Arquitetura
 
-#orientacao[
-  *Origem:* Exercício 6, Bloco 1, secções 0 e 1 do _template_ (preparação, fontes, vista global e sequência).
-
-  *Objetivo do capítulo:* situar o leitor. Mostra como a solução foi lançada, em que fontes se baseia a análise e como é
-  a arquitetura da solução de base, com o caminho do vídeo em destaque. É a base factual dos capítulos seguintes.
-
-  *Foco:* a *extensão de vídeo, enquadrada no padrão global* da solução. Não analisem o vídeo isoladamente: o que o vídeo
-  faz só se percebe à luz do que a solução faz como um todo.
-
-  *Rigor:* cada afirmação sobre o sistema atual cita uma evidência (`EV-nn`) ou é assumida como hipótese (`H-nn`). A
-  secção 2.4 explica como se escreve uma evidência.
-]
+Este capítulo e os capítulos 3–5 recuperam o *diagnóstico da solução de base* (`0523102`), realizado nos Exercícios 6 e 7. As portas expostas, a ausência de autorização WS e os _buffers_ integrais descritos nessa análise são propriedades da base. A implementação final e as alterações a essas propriedades encontram-se nos capítulos 8–10. As referências de linhas de EV-07–EV-27 e EV-37/EV-46 devem ser consultadas nessa revisão histórica, não no código final.
 
 == Preparação e ambiente
-
-#orientacao[
-  Registem como a solução foi lançada, para que outra pessoa a consiga repetir e obtenha o mesmo resultado. Indiquem
-  sempre o _commit_ de partida (o mesmo em todos os capítulos), os comandos exatos e o ambiente de execução. Se algum
-  passo falhou ou exigiu um ajuste, escrevam-no: é informação útil para quem repetir o processo.
-
-  A descrição do processamento em lote que se segue à tabela deve ser escrita pela equipa, com palavras próprias, e
-  mostrar que perceberam o fluxo completo, do _Apply_ ao resultado, para imagens e vídeos.
-]
 
 #tab([Preparação e ambiente],
   tabela-campos(
     [Commit de partida], [`052310226c51fa57a17101c7bd1ad795674aac95` (`0523102`)],
     [Comando(s) de arranque], [
-      - _Aplicação base:_ `docker compose up -d --build` na raiz. Acesso em `https://localhost:8080` aceitando o certificado local. Após reconstruir o frontend: `docker compose restart nginx`. Não usar `down -v` em instalações com dados a preservar. (EV-09, EV-33)
+      - _Aplicação base:_ arranque histórico com `docker compose up -d --build` na raiz, acesso em `https://localhost:8080`. A base usava um certificado autoassinado; esse comportamento histórico não é uma instrução para ultrapassar avisos. Na entrega final, gerar segredos/PKI e importar a CA verificada num perfil dedicado do navegador, conforme o Anexo A e `docs/pki-operations.md`. Após reconstruir o frontend: `docker compose restart nginx`. (EV-09, EV-33, EV-52)
       - _Instrumento formal de avaliação:_ `evaluation/med.py` (`med.py stack up`, depois `med.py run --campaign BF` ou `--campaign MF`) executado sobre a _stack_ isolada `picturas-nfr`, que o próprio `med.py` constrói e arranca (Anexo A.4), garantindo ausência de interferência com volumes ou portas da instalação de desenvolvimento.
     ],
     [Ambientes de execução], [
@@ -46,25 +26,19 @@ O comando _Apply_ envia `POST /api-gateway/projects/:user/:project/process`, com
 
 == Fontes consultadas
 
-#orientacao[
-  Listem os documentos e o código que sustentam a análise, com a versão ou a data de cada um (_commit_, número de versão,
-  data de acesso) e para que foram usados. Isto permite ao leitor perceber de onde vêm as afirmações e detetar
-  fontes desatualizadas. Incluam os documentos de apoio da unidade curricular que influenciaram a análise.
-]
-
 #tab([Fontes consultadas],
   tabela(
     colunas: (5.5cm, 3cm, 1fr),
     [Fonte], [Versão / data], [Usada para],
-    [`README.md`, `AGENTS.md`], [Commit `484be13`], [Arquitetura, execução, ferramentas de imagem/vídeo, regras posteriores ao MVP, tipos de _media_ e testes.],
+    [`README.md`, `AGENTS.md`], [Base `0523102`; entrega `e0a880a`], [Diagnóstico histórico e instruções atuais de arquitetura, execução, PKI, ferramentas e testes, distinguidos pela revisão consultada.],
     [`doc-ext-requisitos.pdf`], [Fase 1 2025/2026, novembro 2025, 39 pp.], [RNF43–RNF66 (§6.2, pp.19–25): requisitos de qualidade herdados, critérios e inconsistências.],
     [`doc-ext-requisitos-2627.pdf`], [PL1-G4, v2.0, 2026-10-23, 85 pp.], [Casos de uso, catálogo de requisitos, classificação de qualidade, rastreabilidade e decisões DA-01–DA-10.],
     [`doc-sol-arquitetural.pdf`], [Fase 2 2025/2026, janeiro 2026, 51 pp.], [Arquitetura herdada: táticas, vistas estrutural/runtime/_deployment_, limitações históricas.],
     [Slides da aula 11: Architectural Styles], [J. M. Fernandes, outubro 2021, 25 slides], [Estilo idealizado versus realizado, Pipes and Filters, Batch Sequential, Publish–Subscribe e níveis de vista.],
     [HTML de apoio: padrões arquiteturais], [Sem versão/data explícita], [Distinção dos três níveis (global, vídeo, interior), sete famílias de padrões, enquadramento de ALT-1/ALT-2.],
     [Diretrizes da Fase 2], [Versão 1, 2026-11-04, 3 pp.], [Preservação funcional, dois RNF distintos, ISO/IEC 25010:2011, _baseline_ e avaliação reprodutível.],
-    [Código e configuração da aplicação], [Commit `484be13`], [nginx, gateways, `projects`, `users`, `subscriptions`, armazenamento, ferramentas PIL/IA, worker de vídeo, filas, Compose, testes e backups.],
-    [Instrumento e critérios de avaliação (`evaluation/med.py`, `criteria.yaml`)], [Versão congelada `638516104ae9`, novembro 2026], [Instrumento automatizado de medição de RNF, critérios de aprovação/reprovação e registo de resultados brutos.],
+    [Código e configuração da aplicação], [Base `0523102`; final `9b4e87d` / `c8a5e3d`], [Diagnóstico da base e confronto das decisões com nginx, gateways, domínio, armazenamento, ferramentas, worker, filas, testes e operação final. O código da aplicação é igual nos dois commits finais.],
+    [Instrumento e critérios de avaliação (`evaluation/med.py`, `criteria.yaml`)], [_Hash_ final `12c60c7f7695`, 23/11/2026], [Instrumento de medição e critérios congelados. Evolução autorizada registada em `manifest.json` da BF (`instrumento_historico` e `instrumento_final`) e nas notas 24/25 de `evaluation/IMPLEMENTATION_NOTES.md`.],
     [Métricas e plano de medição (`docs/metricas.md`, `planoMedicao.md`)], [Novembro 2026], [Catálogo das 21 métricas selecionadas, protocolo de execução da baseline formal (BF) e campanha `BF-20261121T013224Z`.],
     [Hohpe & Woolf: Pipes and Filters e Competing Consumers], [Catálogo EIP, consulta 2026-11-09], [Fundamentação das alternativas ALT-1 e ALT-2.],
     [RabbitMQ: Consumer Acknowledgements], [Documentação oficial, consulta 2026-11-09], [Distinção entre confirmação de consumo, confirmação de publicação e reentrega.],
@@ -74,23 +48,16 @@ O comando _Apply_ envia `POST /api-gateway/projects/:user/:project/process`, com
   ),
 )
 
+#paisagem[
 == Vista da arquitetura global
 
-#orientacao[
-  A vista mostra o *padrão global* da solução (serviços, filas, armazenamento, fronteiras) com o *caminho do vídeo
-  destacado*, de modo a que se veja onde o vídeo segue o resto do sistema e onde se afasta dele.
-
-  Usem a notação e a ferramenta que preferirem (C4 de contentores, componentes UML, PlantUML, Mermaid, draw.io), mas
-  incluam sempre uma *legenda* e indiquem a ferramenta. O diagrama tem de ser legível no documento impresso e
-  consistente com o que foi observado na solução em execução, não apenas com a documentação.
+#figure(
+  image("../images/arquitetura-base-legivel.svg", width: 100%, height: 14cm, fit: "contain"),
+  caption: [Arquitetura global da solução de base; o caminho do vídeo está destacado a laranja],
+)
 ]
 
-#figure(
-  image("../images/arquitetura_global.png", width: 100%),
-  caption: [Vista da arquitetura global com o caminho do vídeo destacado],
-)
-
-*Ferramenta / notação:* PlantUML, vista de componentes/contentores, fonte editável em `docs/exercises/06-architectural-patterns/diagrams/arquitetura_global.puml`. (EV-06)
+*Ferramenta / notação:* vista de componentes/contentores em SVG, gerada por `images/gerar-diagnostico.py` da pasta do relatório. É uma síntese legível da fonte PlantUML histórica `docs/exercises/06-architectural-patterns/diagrams/arquitetura_global.puml` (EV-06). MongoDB aparece dentro do serviço proprietário por economia gráfica, não como base partilhada. A sincronização REST é distinta das filas assíncronas.
 
 #tab([Legenda da vista da arquitetura],
   tabela(
@@ -98,9 +65,9 @@ O comando _Apply_ envia `POST /api-gateway/projects/:user/:project/process`, com
     [Elemento (cor, forma ou estilo)], [Significado],
     [Setas laranja e worker de vídeo realçado], [Caminho específico do vídeo: uma mensagem por _pipeline_/vídeo.],
     [Setas cinzentas], [Relações globais e processamento de imagens.],
-    [Tracejado violeta], [Acesso ao volume de trabalho partilhado `image_data`.],
-    [Cilindros], [Persistência em MongoDB (por domínio) e SeaweedFS/S3.],
-    [Filas retangulares], [Transporte assíncrono por RabbitMQ (exchange direto).],
+    [Caixa violeta], [Volume de trabalho `image_data`, partilhado por projects e workers no mesmo host.],
+    [Nomes MongoDB dentro dos serviços], [Persistência separada por domínio; SeaweedFS/S3 armazena os ficheiros binários.],
+    [Caixa RabbitMQ e setas], [Transporte assíncrono com exchange direto na base; filas discriminadas na sequência e no texto.],
   ),
 )
 
@@ -116,34 +83,24 @@ O transporte de trabalho computacional assenta num _broker_ RabbitMQ durável co
 
 *Ressalvas técnicas observadas no diagrama:* A «entrada única» através do nginx representa o percurso aplicacional nominal, mas não constitui uma fronteira de segurança exclusiva na solução de base, uma vez que a configuração do `docker-compose.yaml` expõe diretamente portas de serviços internos e bases de dados no _host_ (EV-24, EV-33). Adicionalmente, o volume partilhado `image_data` é montado em simultâneo pelo orquestrador e pelos trabalhadores, impondo acoplamento de sistema de ficheiros local.
 
+#paisagem[
 == Sequência de um pedido completo
 
-#orientacao[
-  Descrevam, passo a passo, o que acontece num pedido completo para um projeto com vídeos: carregamento → definição do
-  _pipeline_ → _Apply_ → progresso → resultado. O diagrama de sequência mostra a ordem das interações; a tabela
-  identifica, para cada passo, quem fala com quem e através de que mensagem, _endpoint_ ou fila.
-
-  *O que é uma evidência (`EV-nn`).* Uma evidência é a referência *verificável* que sustenta uma afirmação sobre o
-  sistema atual. Deve permitir que outra pessoa, no _commit_ de partida, confirme o que afirmam sem ter de adivinhar.
-  Pode ser:
-  - *código*, com ficheiro e linhas (e.g., `video.py:8-9`);
-  - *configuração*, com ficheiro e linha (e.g., `docker-compose.yml`, definição de uma fila ou de um volume);
-  - *mensagem* observada (e.g., conteúdo de uma mensagem na fila, resposta de um _endpoint_);
-  - *medição* ou *registo de execução*, com o comando usado e o resultado;
-  - *documento*, com a secção (e.g., `doc-sol-arquitetural.pdf`, secção 3).
-
-  Regras: o ID é sequencial (`EV-01`, `EV-02`, …), único, e nunca se reutiliza. Como o relatório não tem um registo
-  separado, *descrevam a evidência no sítio onde a usam pela primeira vez* (formato: `EV-nn`: localização — o que
-  mostra); nas ocorrências seguintes basta o ID. Uma afirmação sem evidência não é um facto: marquem-na como
-  *hipótese* (`H-nn`) e indiquem como a confirmar ou refutar.
+#figure(
+  image("../images/sequencia-base-a.svg", width: 100%, height: 14cm, fit: "contain"),
+  caption: [Sequência na base: (a) upload, definição do pipeline e despacho de um vídeo],
+)
+]
+#paisagem[
+#figure(
+  image("../images/sequencia-base-b.svg", width: 100%),
+  caption: [Sequência na base: (b) progresso, resultados e descarga],
+)
 ]
 
 O catálogo completo de todas as evidências (`EV-01` a `EV-55`) e hipóteses (`H-01` a `H-18`), com a localização detalhada no repositório e o respetivo facto ou inferência técnica, encontra-se consolidado no Anexo C para consulta e rastreabilidade sistemática.
 
-#figure(
-  image("../images/sequencia_processamento.png", width: 95%),
-  caption: [Sequência do processamento em lote de um projeto com vídeos],
-)
+As sequências são vistas lógicas SVG geradas pela mesma fonte do diagrama global. Agrupam nginx/API e fachada/S3 para manter a legibilidade; não representam um salto de segurança omitido na implementação final. Todos os Process são registados localmente na projects antes de publicar no broker. As mensagens de imagem regressam à projects entre etapas; o vídeo mantém o pipeline completo dentro do worker. As respostas e os eventos para o browser passam pelo nginx.
 
 #tab([Passos do pedido completo],
   tabela(

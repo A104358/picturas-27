@@ -1,27 +1,10 @@
 #import "../template.typ": *
 
-= Padrões Arquiteturais Atuais
+= Padrões Arquiteturais da Solução de Base
 
-#orientacao[
-  *Origem:* Exercício 6, Bloco 1, secções 2.1 a 2.3 do _template_.
-
-  *Objetivo do capítulo:* identificar o estilo (ou a combinação de estilos) arquitetural que organiza o PictuRAS como um
-  todo, o padrão que o processamento de vídeo segue, e como os dois se relacionam. O padrão global é o *ponto de
-  partida*: define o contexto e as restrições a que qualquer alternativa terá de responder (capítulo 4).
-
-  *Rigor:* factos citam uma evidência (`EV-nn`, ver a explicação na secção 2.4); o que não tem evidência é uma hipótese
-  (`H-nn`). Nunca reutilizem um ID eliminado. Benefícios e desafios classificam-se segundo a ISO/IEC 25010
-  (característica e, quando aplicável, subcaracterística).
-]
+A análise seguinte descreve a realização dos padrões em `0523102`. Os riscos de segurança e de memória motivaram os dois RNF; a sua resolução na fase 2 é avaliada nos capítulos 8–10. A organização do processamento de vídeo mantém-se na entrega final.
 
 == Padrão global da solução
-
-#orientacao[
-  Nomeiem o estilo ou os estilos (e.g., microserviços, orientado a eventos, filas de mensagens) e descrevam-no em poucas
-  linhas, com as vossas palavras. Depois, indiquem as *decisões globais* que condicionam o vídeo (e.g., comunicação
-  assíncrona por filas, armazenamento partilhado) e o efeito que têm. Fechem com os benefícios e desafios do padrão,
-  cada um ligado a um atributo de qualidade.
-]
 
 #tabela-campos(
   [Nome(s) do padrão / estilo], [*Microservices com API Gateway*, comunicação *REST + Event-Driven*, orquestração centralizada em `projects` e *Pipes and Filters* como composição de transformações, realizada em parte como *Batch Sequential*. Organização interna parcialmente *Layered* e relações *Client–Server/N-Tier* na vista de _runtime_. (EV-03, EV-07–EV-10, EV-14, EV-15, EV-35, EV-36)],
@@ -59,12 +42,6 @@
 
 == Padrão do processamento de vídeo
 
-#orientacao[
-  Identifiquem o padrão que organiza o processamento de vídeo (que pode coincidir com o global ou ser diferente) e
-  contrastem-no com o caminho de imagens. Se o padrão do vídeo for diferente do global, expliquem porquê e que custos
-  isso traz. Indiquem benefícios e desafios, com o mesmo critério da secção anterior.
-]
-
 #tabela-campos(
   [Nome do padrão], [*Work Queue com consumidor único por implantação e _pipeline_ monolítico local*: um _Pipeline Monolith_ dentro dos microserviços. O caminho ordinário processa _frames_ incrementalmente. As fronteiras que materializam ficheiros completos entre estágios são *Batch Sequential*. Tem módulos internos, mas uma única unidade de implantação. (EV-03, EV-09, EV-16–EV-20, EV-36)],
   [Descrição], [`video_queue` entrega um vídeo e a sua sequência ao `video_tool`. `prefetch_count=1` e execução bloqueante limitam cada instância a um trabalho de cada vez. O worker lê ficheiros partilhados, processa estágios ordenados, publica progresso/resposta e só depois confirma o consumo. O Compose não configura réplicas nem _autoscaling_. (EV-09, EV-16)],
@@ -88,16 +65,6 @@
 )
 
 == Relação entre o padrão global e o padrão do vídeo
-
-#orientacao[
-  Esta secção responde a: em que pontos o vídeo *segue* o padrão global, em que pontos se *afasta* dele e com que
-  consequências? Cada linha da tabela é um aspeto concreto (e.g., comunicação entre serviços, gestão de estado,
-  tratamento de falhas, armazenamento). É aqui que costumam surgir as fragilidades que alimentam os cenários de
-  qualidade do capítulo 5, por isso escrevam as consequências com cuidado e com evidência.
-
-  Terminem com um parágrafo de síntese: o que o vídeo herda do padrão global, que restrições este lhe impõe e que
-  fragilidades resultam do desvio.
-]
 
 #tab([Relação entre o padrão global e o padrão do vídeo],
   tabela(

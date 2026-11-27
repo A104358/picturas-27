@@ -2,18 +2,6 @@
 
 = Alternativas e Matriz de Comparação
 
-#orientacao[
-  *Origem:* Exercício 6, Bloco 1, secção 3 do _template_.
-
-  *Objetivo do capítulo:* comparar o padrão atual com alternativas relevantes *para o processamento de vídeo*, de forma
-  fundamentada, e concluir se o padrão atual é adequado. Entre duas e três alternativas. O padrão global é o contexto da
-  comparação: indiquem sempre se cada alternativa o *mantém* ou o *altera*.
-
-  *Restrição da fase:* é de _refactoring_. As alternativas têm de preservar o comportamento funcional; por isso, o
-  custo e o risco de migração têm de ser analisados para cada uma. Consultem os slides da aula 11 e o documento de apoio
-  de padrões arquiteturais; se for relevante, incluam uma alternativa ao próprio padrão global como termo de comparação.
-]
-
 == Alternativas consideradas
 
 #tab([Alternativas consideradas],
@@ -27,12 +15,6 @@
 )
 
 == Análise de cada alternativa
-
-#orientacao[
-  Copiem o bloco abaixo para cada alternativa. Para cada uma, descrevam a coerência com o padrão global, o efeito nos
-  atributos de qualidade, as vantagens, as desvantagens ou riscos, e o custo e risco de migração. Evitem listas
-  genéricas: cada ponto deve referir algo concreto da solução do PictuRAS (e citar evidência `EV-nn` ou hipótese `H-nn`).
-]
 
 *ALT-1: Microserviços por efeito de vídeo / _Pipes and Filters_ distribuído*
 
@@ -55,16 +37,6 @@
 )
 
 == Matriz de comparação de padrões
-
-#orientacao[
-  Atribuam um nível a cada atributo para o padrão global (referência), para o padrão atual do vídeo e para cada
-  alternativa. A escala é à vossa escolha (e.g., Alto / Médio / Baixo) e deve ser a mesma em toda a matriz.
-
-  *Justifiquem cada célula* com evidência da solução (`EV-nn` ou `H-nn`) numa frase curta, logo na própria célula: as
-  avaliações sem fundamento não são valorizadas. A matriz inclui o padrão global como referência para se ver o que
-  cada alternativa ganha ou perde em relação a ele. Os atributos e subcaracterísticas seguem a ISO/IEC 25010; podem
-  acrescentar linhas para outros atributos relevantes.
-]
 
 #paisagem[
 #tab([Matriz de comparação de padrões],
@@ -91,4 +63,4 @@ O worker concentrado é uma escolha plausível para o MVP de vídeos curtos, por
 
 A ALT-1 interessa sobretudo à modularidade e ao isolamento de dependências, com risco elevado para latência e equivalência dos resultados. A ALT-2 é uma candidata mais próxima da organização atual para capacidade, mas exige demonstrar recursos disponíveis, concorrência segura e melhoria de espera/débito.  
 
-Nenhuma das duas resolve automaticamente os problemas de segurança, progresso persistente, _overlay_ ou cancelamento. A opção final depende dos dois RNF que a equipa quantificar e da _baseline_.
+Nenhuma das duas resolve automaticamente os problemas de segurança, progresso persistente, _overlay_ ou cancelamento. A equipa selecionou segurança ponta a ponta e recursos no _upload_ (capítulo 6), pelo que ALT-1 e ALT-2 permaneceram alternativas de evolução, sem implementação nesta fase.

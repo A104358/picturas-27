@@ -1,5 +1,13 @@
 # Fase 2 — Contrato de autorização WebSocket
 
+> **Leitura na entrega (27/11/2026):** este documento preserva o diagnóstico/planeamento
+> da data indicada. A implementação B0–B12 está concluída; estados «pendente» ou
+> «por executar» no texto não descrevem o fecho da fase. Consultar o
+> [relatório final](../src-doc-fase2-template/README.md), os
+> [resultados oficiais](../README.md#resultados-oficiais) e as decisões posteriores no
+> [handoff](../refactor-handoff.md). O original é mantido para rastreabilidade.
+
+
 **Equipa:** PL2-G4. **Estado:** WS-C1 A/WS-C2 A/WS-C3 A/WS-C4 A validadas individualmente;
 WS-C5 B selecionada individualmente e confirmada tecnicamente em 17/11/2026.
 Especificação de trabalho para implementação/testes, sem aprovação integral dos requisitos.

@@ -1,5 +1,13 @@
 # Fase 2 — Critérios operacionais de segurança
 
+> **Leitura na entrega (27/11/2026):** este documento preserva o diagnóstico/planeamento
+> da data indicada. A implementação B0–B12 está concluída; estados «pendente» ou
+> «por executar» no texto não descrevem o fecho da fase. Consultar o
+> [relatório final](../src-doc-fase2-template/README.md), os
+> [resultados oficiais](../README.md#resultados-oficiais) e as decisões posteriores no
+> [handoff](../refactor-handoff.md). O original é mantido para rastreabilidade.
+
+
 **Equipa:** PL2-G4. **Preparado:** 16/11/2026. **Fonte de código:** `3d31003`.
 **Estado:** PKI-C4 B, PKI-C5 A e OPS-C1 A validadas individualmente pelo
 utilizador, registadas em 2026-11-16T20:33:46Z, com as condições abaixo.

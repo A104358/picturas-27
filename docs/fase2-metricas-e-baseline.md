@@ -1,5 +1,13 @@
 # Fase 2 — Métricas, critérios de aceitação e baseline antes do código
 
+> **Leitura na entrega (27/11/2026):** este documento preserva o diagnóstico/planeamento
+> da data indicada. A implementação B0–B12 está concluída; estados «pendente» ou
+> «por executar» no texto não descrevem o fecho da fase. Consultar o
+> [relatório final](src-doc-fase2-template/README.md), os
+> [resultados oficiais](README.md#resultados-oficiais) e as decisões posteriores no
+> [handoff](refactor-handoff.md). O original é mantido para rastreabilidade.
+
+
 **Equipa:** PL2-G4. **Estado:** especificação proposta para revisão, 16/11/2026.
 **Entrega:** 27/11/2026, por correção explícita posterior do utilizador; substitui
 20/11 como prazo de planeamento. As diretrizes originais mantêm a data anterior.

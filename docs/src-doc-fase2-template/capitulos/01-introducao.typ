@@ -2,20 +2,6 @@
 
 = Introdução
 
-#orientacao[
-  Uma a duas páginas, no máximo. O leitor deve perceber, sem ler o resto, o que é este documento e em que se baseia.
-  Respondam a:
-  - *Propósito da fase*: que requisitos não funcionais do PictuRAS se pretende melhorar, por _refactoring_ e sem novas
-    funcionalidades, e porquê.
-  - *_Baseline_*: em que versão do sistema se basearam (_commit_ de partida), a mesma em todos os exercícios. Este
-    relatório *estende* os documentos de base; não os reescreve.
-  - *Âmbito do que é apresentado*: este relatório reúne os contributos dos Exercícios 6 (Blocos 1 e 2) e 7. Reutiliza
-    os respetivos _templates_: copiem o conteúdo já preenchido, *mantendo os IDs* (`EV`, `H`, `ALT`, `QS`, `CAND`,
-    `TAT`, `DA`), porque é através deles que os capítulos se encadeiam.
-  - *Organização do documento*: Partes II (diagnóstico), III (qualidade), IV (táticas, decisões, medição e resultados)
-    e V (síntese).
-]
-
 == Propósito e âmbito
 
 Este relatório documenta a Fase 2 do projeto PictuRAS para a equipa PL2-G4, cujo objetivo é a melhoria de dois requisitos não funcionais distintos da aplicação por _refactoring_, preservando integralmente o comportamento funcional existente: o processamento de imagens, o processamento de vídeo, as quotas, a partilha e todos os fluxos já entregues na Fase 1.
@@ -28,6 +14,12 @@ Os dois requisitos selecionados são:
 
 Ambas as melhorias incidem sobre a extensão de vídeo enquadrada no padrão global de microserviços, sem alterar os efeitos PIL/FFmpeg, o formato dos resultados, nem acrescentar novas funcionalidades.
 
+*Resultado final* 
+
+A implementação dos blocos B0–B12 ficou concluída e foi integrada. A campanha oficial `MF-20261125T153646Z`, comparada com a BF no mesmo Apple M4 Pro, cumpre as 21 métricas selecionadas: 19 no alvo e duas no mínimo (U01 e U04). As seis matrizes de segurança passaram a zero admissões indevidas; o limite superior observado do corte WS foi 1124,7 ms. O maior pico adicional Node caiu de 1975,7 para 45,4 MiB e as três rondas de três _uploads_ de 500 MiB terminaram sem OOM. Estes resultados aplicam-se ao corpus ensaiado; os limites e as ameaças à validade, incluindo a primeira MF com falha na guarda U10, são apresentados no capítulo 10.
+
+O trabalho preserva as operações legítimas verificadas pela guarda S05 (45/45), pela regressão de ponta a ponta (105/105) e pelos testes de imagem, vídeo e exportação. As restrições visíveis de acesso são o objeto da melhoria de segurança: por exemplo, apenas o dono elimina o projeto, mantendo o editor a possibilidade de editar e remover _media_. A recuperação assistida de sessões e as ferramentas administrativas apoiam essa preservação. Não se implementaram as alternativas de decomposição ou replicação do worker de vídeo.
+
 == _Baseline_ e repositório
 #tab([Artefactos de partida],
   tabela(
@@ -38,17 +30,11 @@ Ambas as melhorias incidem sobre a extensão de vídeo enquadrada no padrão glo
     [Documento de solução arquitetural de base], [doc-sol-arquitetural.pdf: Fase 2 2025/2026],
     [Repositório de partida], [`052310226c51fa57a17101c7bd1ad795674aac95` https://github.com/picturas-um/picturas-27],
     [Repositório entregue], [https://github.com/A104358/picturas-27],
-    [Diretrizes da Fase 2], [Versão 1, 2026-11-04],
+    [Diretrizes da Fase 2], [Versão 1, 2026-11-04; entrega atualizada para 27/11/2026 por indicação do utilizador],
   ),
 )
 
 == Exercícios e versões usadas
-
-#orientacao[
-  Indiquem, para cada exercício, a versão do enunciado e do _template_ que usaram, e a versão do vosso documento que
-  serviu de entrada ao exercício seguinte (Bloco 1 → Bloco 2 → Exercício 7). Isto garante que quem avalia consegue
-  perceber a que regras o trabalho respondeu, caso os enunciados tenham sido atualizados durante a fase.
-]
 
 #tab([Exercícios que alimentam este relatório],
   tabela(

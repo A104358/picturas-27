@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="755" viewBox="0 0 1200 755">
+<defs><marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto-start-reverse"><path d="M0,0 L8,4 L0,8 Z" fill="#506176"/></marker></defs>
+<rect width="1200" height="755" fill="white"/>
+<rect x="475" y="5" width="250" height="65" rx="8" fill="#f3f5f8" stroke="#526174" stroke-width="2"/>
+<text x="600.0" y="32" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#17212f">Browser</text>
+<text x="600.0" y="56" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#17212f">Projetos, pipeline e media</text>
+<rect x="475" y="125" width="250" height="75" rx="8" fill="#f3f5f8" stroke="#526174" stroke-width="2"/>
+<text x="600.0" y="152" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#17212f">nginx :8080</text>
+<text x="600.0" y="176" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#17212f">Entrada pública nominal</text>
+<rect x="20" y="275" width="220" height="75" rx="8" fill="#f3f5f8" stroke="#526174" stroke-width="2"/>
+<text x="130.0" y="302" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#17212f">frontend</text>
+<text x="130.0" y="326" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#17212f">Next.js / React</text>
+<rect x="300" y="275" width="260" height="75" rx="8" fill="#f3f5f8" stroke="#526174" stroke-width="2"/>
+<text x="430.0" y="302" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#17212f">api_gateway</text>
+<text x="430.0" y="326" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#17212f">JWT e encaminhamento</text>
+<rect x="650" y="275" width="240" height="75" rx="8" fill="#f3f5f8" stroke="#526174" stroke-width="2"/>
+<text x="770.0" y="302" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#17212f">ws_gateway</text>
+<text x="770.0" y="326" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#17212f">Socket.IO / progresso</text>
+<rect x="960" y="275" width="220" height="75" rx="8" fill="#f3f5f8" stroke="#526174" stroke-width="2"/>
+<text x="1070.0" y="302" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#17212f">SeaweedFS / S3</text>
+<text x="1070.0" y="326" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#17212f">Originais e resultados</text>
+<rect x="20" y="445" width="220" height="90" rx="8" fill="#f3f5f8" stroke="#526174" stroke-width="2"/>
+<text x="130.0" y="472" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#17212f">users</text>
+<text x="130.0" y="496" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#17212f">Perfis, presets e quota</text>
+<text x="130.0" y="517" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#17212f">MongoDB user</text>
+<rect x="300" y="445" width="260" height="90" rx="8" fill="#f3f5f8" stroke="#526174" stroke-width="2"/>
+<text x="430.0" y="472" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#17212f">projects</text>
+<text x="430.0" y="496" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#17212f">Projetos e orquestração</text>
+<text x="430.0" y="517" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#17212f">MongoDB project</text>
+<rect x="650" y="445" width="240" height="90" rx="8" fill="#f3f5f8" stroke="#526174" stroke-width="2"/>
+<text x="770.0" y="472" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#17212f">subscriptions</text>
+<text x="770.0" y="496" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#17212f">Planos / pagamentos</text>
+<text x="770.0" y="517" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#17212f">MongoDB subscription</text>
+<rect x="960" y="445" width="220" height="90" rx="8" fill="#f3f5f8" stroke="#526174" stroke-width="2"/>
+<text x="1070.0" y="472" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#17212f">img_storage</text>
+<text x="1070.0" y="496" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#17212f">Fachada de objetos S3</text>
+<rect x="20" y="645" width="220" height="80" rx="8" fill="#f3f5f8" stroke="#526174" stroke-width="2"/>
+<text x="130.0" y="672" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#17212f">Ferramentas de imagem</text>
+<text x="130.0" y="696" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#17212f">Uma etapa por mensagem</text>
+<rect x="300" y="645" width="260" height="80" rx="8" fill="#f3f5f8" stroke="#526174" stroke-width="2"/>
+<text x="430.0" y="672" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#17212f">RabbitMQ</text>
+<text x="430.0" y="696" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#17212f">Exchange direct picturas</text>
+<rect x="650" y="645" width="240" height="80" rx="8" fill="#fff2e4" stroke="#c76c1b" stroke-width="2"/>
+<text x="770.0" y="672" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#17212f">video_tool</text>
+<text x="770.0" y="696" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#17212f">Pipeline completo por vídeo</text>
+<rect x="960" y="645" width="220" height="80" rx="8" fill="#f5edfc" stroke="#8056a5" stroke-width="2"/>
+<text x="1070.0" y="672" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#17212f">image_data</text>
+<text x="1070.0" y="696" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#17212f">Volume partilhado</text>
+<text x="1070.0" y="717" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#17212f">projects + workers</text>
+<path d="M600 70 V125" fill="none" stroke="#506176" stroke-width="2" marker-end="url(#a)" marker-start="url(#a)"/>
+<rect x="546.15" y="87" width="107.69999999999999" height="22" fill="white"/>
+<text x="600" y="103" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#17212f">HTTPS / WSS</text>
+<path d="M475 160 H130 V275" fill="none" stroke="#506176" stroke-width="2" marker-end="url(#a)"/>
+<rect x="119.65" y="218" width="20.7" height="22" fill="white"/>
+<text x="130" y="234" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#17212f">/</text>
+<path d="M545 200 V230 H430 V275" fill="none" stroke="#506176" stroke-width="2" marker-end="url(#a)"/>
+<rect x="367.45" y="244" width="125.1" height="22" fill="white"/>
+<text x="430" y="260" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#17212f">/api-gateway/</text>
+<path d="M725 160 H770 V275" fill="none" stroke="#506176" stroke-width="2" marker-end="url(#a)" marker-start="url(#a)"/>
+<rect x="720.5" y="218" width="99.0" height="22" fill="white"/>
+<text x="770" y="234" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#17212f">/socket.io</text>
+<path d="M725 140 H1070 V275" fill="none" stroke="#506176" stroke-width="2" marker-end="url(#a)"/>
+<rect x="923.95" y="184" width="212.1" height="22" fill="white"/>
+<text x="1030" y="200" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#17212f">/s3/ (leitura assinada)</text>
+<path d="M300 315 H270 V490 H240" fill="none" stroke="#506176" stroke-width="2" marker-end="url(#a)"/>
+<path d="M430 350 V445" fill="none" stroke="#506176" stroke-width="2" marker-end="url(#a)"/>
+<rect x="406.6" y="389" width="46.8" height="22" fill="white"/>
+<text x="430" y="405" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#17212f">REST</text>
+<path d="M560 315 H610 V490 H650" fill="none" stroke="#506176" stroke-width="2" marker-end="url(#a)"/>
+<path d="M560 505 H590 V575 H1070 V535" fill="none" stroke="#506176" stroke-width="2" marker-end="url(#a)"/>
+<rect x="744.4" y="552" width="151.2" height="22" fill="white"/>
+<text x="820" y="568" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#17212f">Objetos por REST</text>
+<path d="M1070 445 V350" fill="none" stroke="#506176" stroke-width="2" marker-end="url(#a)"/>
+<rect x="1075.3" y="388" width="29.4" height="22" fill="white"/>
+<text x="1090" y="404" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#17212f">S3</text>
+<path d="M430 535 V645" fill="none" stroke="#506176" stroke-width="2" marker-end="url(#a)" marker-start="url(#a)"/>
+<rect x="337.0" y="588" width="186.0" height="22" fill="white"/>
+<text x="430" y="604" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#17212f">Pedidos / resultados</text>
+<path d="M300 680 H240" fill="none" stroke="#506176" stroke-width="2" marker-end="url(#a)" marker-start="url(#a)"/>
+<rect x="237.9" y="649" width="64.19999999999999" height="22" fill="white"/>
+<text x="270" y="665" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#17212f">Etapas</text>
+<path d="M560 680 H650" fill="none" stroke="#c76c1b" stroke-width="2" marker-end="url(#a)" marker-start="url(#a)"/>
+<rect x="577.25" y="649" width="55.5" height="22" fill="white"/>
+<text x="605" y="665" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#17212f">Vídeo</text>
+<path d="M560 705 H615 V390 H770 V350" fill="none" stroke="#506176" stroke-width="2" marker-end="url(#a)"/>
+<rect x="679.2" y="374" width="81.6" height="22" fill="white"/>
+<text x="720" y="390" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#17212f">ws_queue</text>
+<text x="610" y="750" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" fill="#17212f">Laranja: vídeo. Violeta: volume local. A base publica ainda portas internas no host.</text>
+</svg>

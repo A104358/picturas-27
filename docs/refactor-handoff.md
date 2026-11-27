@@ -21,14 +21,14 @@ estamos**.
 
 | Campo | Valor |
 |-------|-------|
-| Bloco em curso | **B12** (verificação final e MF). B0–B11 com commit; B7 FEITO (UL-10 fechado no passo 1) |
+| Bloco em curso | **Implementação B0–B12 concluída; relatório final consolidado em 27/11/2026.** Integração em `main` no merge `e0a880a` |
 | Passo do bloco | **B12 FEITO.** Passos 1–8 feitos. MF oficial: `MF-20261125T153646Z` (decisão 59), todas as métricas e guardas cumprem (alvo, exceto U01 e U04 no mínimo). A MF1 `MF-20261125T135356Z` fica reportada (U10 1,22, D-36). Tabela BF→MF1→MF2 e notas do relatório no diário de 25/11 16:35 |
-| Estado deixado | Todas as stacks do PictuRAS paradas sem `-v`: `picturas-nfr` com os volumes da MF2; `picturas-nfr-medprobe` parado (não removido); a rede `picturas-nfr_elk` ficou. Imagens `picturas-nfr-exp-*` removidas (decisão 61): a EXP tem de ser reconstruída para voltar a ser usada. `warracker-teste` intocada. 33 GiB livres |
-| **Próximo passo exato** | Push do utilizador (`git log origin/fase2-refactor..HEAD`); escrever o relatório a partir da tabela e das notas do diário de 25/11 16:35 |
-| Coisas meio feitas | Nenhuma |
+| Estado deixado | Registo operacional de 25/11, não revalidado nesta revisão documental: todas as stacks do PictuRAS paradas sem `-v`: `picturas-nfr` com os volumes da MF2; `picturas-nfr-medprobe` parado (não removido); a rede `picturas-nfr_elk` ficou. Imagens `picturas-nfr-exp-*` removidas (decisão 61): a EXP tem de ser reconstruída para voltar a ser usada. `warracker-teste` intocada. 33 GiB livres |
+| **Próximo passo exato** | Entregar `docs/src-doc-fase2-template/relatorio-fase2-PL2-G4.pdf` e as fontes/evidências do repositório; commit/push apenas pelo utilizador. Consultar `verificacao-entrega.md` nessa pasta |
+| Coisas meio feitas | Nenhuma na consolidação documental. Divergência de limpeza PUT e ausência de série quantitativa independente do PUT declaradas no relatório, sem modificar a versão medida |
 | Testes a falhar neste momento | Nenhum |
 | Último commit com o trabalho | o commit final `[B12] second MF official; BF→MF table and report notes` (ver `git log`); antes `c8a5e3d` |
-| Atualizado em | 2026-11-25 16:35 (B12 FEITO) |
+| Atualizado em | 2026-11-27 (relatório final e verificação documental; sem alterar aplicação ou instrumento) |
 
 ## 2. Contexto comum (o que já está decidido)
 
@@ -56,10 +56,8 @@ dúvida na §5 e pára esse ponto até haver resposta.
 ### 2.2 Medição
 
 - **BF oficial:** `evaluation/results/BF-20261121T013224Z`, medida a 21/11 no Mac
-  (Apple M4 Pro) de quem faz as medições. Todos os principais da BF falham, como era
-  esperado; a S05 e a U15 estão a 100%.
-- **Ferramenta `evaluation/med.py` congelada** (versão `638516104ae9`, registada na
-  BF com `med.py freeze`):
+  (Apple M4 Pro) de quem faz as medições. Na BF, os principais falham exceto U08, que já cumpre o mínimo; a S05 e a U15 estão a 100%.
+- **Ferramenta `evaluation/med.py` congelada** (hash final `12c60c7f7695`, registado em `instrumento_final` da BF; inicial `638516104ae9`, depois TLS `2dfe2a7ad06c`, histórico preservado com `med.py freeze`):
   - qualquer alteração ao `med.py`, ao `medlib/`, ao `criteria.yaml` ou aos `cases/`
     invalida o `compare`;
   - o plano §6 prevê só duas alterações: o formato do join WS (§2.6, decisão 3) e as
@@ -214,6 +212,7 @@ decidiu (pessoa ou "equipa").
 | 59 | 25/11 | D-36 B, regra fixada **antes** de correr: repete-se a MF completa (`stack up` da `picturas-nfr`, que faz `down -v` só desse projeto; preflight a 60 GiB à letra; `run --campaign MF` com `MED_WS_JOIN_FORMAT=v2`; `compare` com `BF-20261121T013224Z`). **A segunda MF completa é a oficial para TODAS as métricas**, seja qual for o resultado. A primeira (`MF-20261125T135356Z`) fica no repositório e é reportada no relatório com o diagnóstico da U10. Critérios inalterados; mesmo código de aplicação (sem alterações desde o congelamento `9b4e87d`); host em repouso durante a corrida | Aprovada pelo utilizador. Regra com commit local antes de arrancar a segunda MF | B12 |
 | 61 | 25/11 | D-38 A: `docker image rm` só das 27 imagens `picturas-nfr-exp-*` (listadas antes; nenhum contentor as usava), sem prune. Libertaram menos do que o estimado (camadas partilhadas com as `picturas-nfr-*`); o Docker Desktop devolveu o espaço ao macOS em ~1 min | Aprovada pelo utilizador. Preflight MF2 todo OK com **60,4 GiB** (mínimo 60 à letra). A EXP tem de ser reconstruída se for preciso usá-la | B12 |
 | 42 | 24/11 | D-33: piloto B10 com job real do worker e fixture técnica, sem débito/Process de domínio; o harness põe só a mensagem/output da fixture em quarentena antes de reabrir. Operação normal após compromisso bloqueada até reconciliação B11, sem replay ou compensações no B10 | Medir corte/substituição sem antecipar reconciliação de domínio nem perder o job obrigatório do piloto | Utilizador |
+| 62 | 27/11 | Consolidação documental de entrega autorizada pelo utilizador: relatório final e PDF em `docs/src-doc-fase2-template/`; métricas/evidências preservadas. Registar o comportamento real da limpeza PUT (`deadline + 1020 s`, cerca de 1920 s da reserva), o risco de escritor posterior à segunda limpeza e a ausência de série pública de recursos/tempos exclusiva do PUT, sem alterar o código medido | Revisão do código final contra os textos; não inventar garantia de limpeza nem medições inexistentes | Agente, no âmbito do pedido de relatório final do utilizador |
 
 ## 3. Estado dos blocos
 
@@ -244,6 +243,8 @@ dependências estiverem `FEITO`.
 **Revisão documental de 23/11:** vista antes corrigida, renderizada e inspecionada;
 [registo](exercises/07-architectural-tactics/evidence/before-view-review-2026-11-23.md).
 Não altera o estado dos blocos, as decisões ou o instrumento congelado.
+
+**Fecho documental (27/11):** relatório/PDF concluídos; ambos os `compare.md` reproduzidos em cópias temporárias sem diferenças, instrumento local igual ao hash final da BF/MF, aplicação igual ao congelamento `9b4e87d`. Último estado arquivado das 45 suítes B12: exit 0. As notas de cada bloco acima reportam a respetiva aceitação histórica; o fecho conjunto é B12.
 
 ## 4. Diário (só se acrescenta; nunca se apaga)
 
@@ -636,6 +637,15 @@ U16 e U21–U24 (verificação, sem base): adaptador (leitor, quota 0/5, anónim
 - Nenhum corte da §7 do plano foi aplicado (K1–K4).
 - Os limites da §10 do plano mantêm-se como estão escritos (D1, histórico Git, links, JWT-C1, SESS-C1, OPS-C1, PKI-C2 B, U08 a 100 ms, mTLS só na matriz D4, custo do hash).
 
+
+### 2026-11-27 — Relatório final — FEITO (sem commit)
+- Pedido: analisar o código e a documentação finais, conferir métricas e completar o relatório para entrega. Código da aplicação igual ao congelamento `9b4e87d` e ao medido na MF oficial; nenhuma alteração de aplicação, de `evaluation/` ou de resultados. Nenhuma stack arrancada, parada ou removida nesta revisão.
+- Relatório consolidado em `docs/src-doc-fase2-template/`: histórico, enquadramento, diagnóstico explicitamente histórico, táticas/DA implementadas, duas MF reportadas, 21 métricas (19 alvos/2 mínimos), memória por serviço, limitações de U10/U04/U08/hash, piloto PKI, regressão e IA. Revisão humana em 26/11 por um elemento do grupo confirmada pelo utilizador; nome e modelos por bloco não inventados.
+- Correções factuais: hash final `12c60c7f7695`, com histórico autorizado das duas extensões; os 18 estratos comparáveis de U10; U04 da BF com 5 válidas em 38 tentativas; limpeza PUT no código `deadline <= now - 1020000` (prazo +1020 s, cerca de 1920 s da reserva), em vez dos 1020 s totais de notas anteriores. Não há garantia para um escritor que termine depois da última limpeza. As EXP arquivadas do med.py usam o POST; o PUT tem conformidade funcional, sem série quantitativa pública independente. Estes pontos são limitações declaradas, não correções de código nem alteração dos critérios.
+- Fontes históricas preservadas com aviso de âmbito; índice `docs/README.md` atualizado. Diagramas SVG do diagnóstico e antes/depois legíveis, fontes Python de biblioteca padrão incluídas. Orientações e marcadores de preenchimento retirados dos capítulos. Instruções de arranque exigem confiança na CA verificada, sem ultrapassar avisos.
+- Verificação: comparações BF/MF1 e BF/MF2 regeneradas em `/tmp`, idênticas aos ficheiros arquivados; hash de cada ficheiro do instrumento igual ao manifesto final; última execução das 45 suítes de conformidade com exit 0. Compilação Typst sem avisos e inspeção visual de capa, diagramas e tabelas. Detalhes e SHA-256 do PDF em `docs/src-doc-fase2-template/verificacao-entrega.md`.
+- Próximo passo: entrega pelo utilizador. Nenhum commit/push/PR criado pelo agente.
+
 ## 5. Dúvidas surgidas durante a implementação
 
 As dúvidas D-01 a D-15 estão no [plano, §8](refactor-plano.md#8-dúvidas-para-resolver-em-conjunto).
@@ -776,7 +786,7 @@ para a §2.6 (e para o plano, se mudar um bloco).
 | Verificação rápida | `cd evaluation && .venv/bin/python med.py stack up && .venv/bin/python med.py run --campaign EXP --quick --metrics <métricas do bloco>,S05` (com `picturas-nfr-exp`). O `stack up` apaga e reconstrói a stack de verificação inteira, o que pode levar 15–30 min. **Depois do B1**, antes do `stack up`: `export PICTURAS_SECRETS_DIR=…` e gerar os segredos e certificados dessa stack (`ops/secrets.sh init`, `ops/pki.sh`); sem isso o `docker compose config` do `med.py` falha. O `evaluation/.env.med` da stack de verificação vai recebendo as mesmas variáveis da MF à medida que os blocos ficam feitos (plano §6, ponto 1) |
 | Regressão existente | `cd Tools/video && python3 -m venv .venv && .venv/bin/pip install -r requirements-dev.txt && .venv/bin/python -m pytest -q tests` (precisa de `ffmpeg`), e os testes Node de cada serviço |
 | Conformidade | `tests/conformance/`, com resultados em `tests/conformance/results/` (ver plano §5) |
-| Ferramenta de medição | **Congelada** (versão `638516104ae9`). Não alterar `evaluation/med.py`, `medlib/`, `criteria.yaml` nem `cases/`, exceto o previsto no plano §6 |
+| Ferramenta de medição | **Congelada** (hash final `12c60c7f7695`; histórico na BF). Não alterar `evaluation/med.py`, `medlib/`, `criteria.yaml` nem `cases/`, exceto o previsto no plano §6 |
 | BF e MF oficiais | Só no Mac onde foi feita a BF, com `--campaign BF/MF`. Noutros computadores usar sempre `EXP` |
 
 ## 8. Armadilhas conhecidas

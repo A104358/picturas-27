@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="686" viewBox="0 0 1200 686">
+<defs><marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto-start-reverse"><path d="M0,0 L8,4 L0,8 Z" fill="#506176"/></marker></defs>
+<rect width="1200" height="686" fill="white"/>
+<rect x="4" y="8" width="136" height="67" rx="8" fill="#f3f5f8" stroke="#526174" stroke-width="2"/>
+<text x="72.0" y="35" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#17212f">Browser</text>
+<path d="M72 75 V633" stroke="#b9c0c9" stroke-dasharray="5 5" fill="none"/>
+<rect x="154" y="8" width="136" height="67" rx="8" fill="#f3f5f8" stroke="#526174" stroke-width="2"/>
+<text x="222.0" y="35" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#17212f">nginx / API</text>
+<text x="222.0" y="59" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="13" font-weight="400" fill="#17212f">entrada agrupada</text>
+<path d="M222 75 V633" stroke="#b9c0c9" stroke-dasharray="5 5" fill="none"/>
+<rect x="304" y="8" width="136" height="67" rx="8" fill="#f3f5f8" stroke="#526174" stroke-width="2"/>
+<text x="372.0" y="35" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#17212f">projects</text>
+<path d="M372 75 V633" stroke="#b9c0c9" stroke-dasharray="5 5" fill="none"/>
+<rect x="454" y="8" width="136" height="67" rx="8" fill="#f3f5f8" stroke="#526174" stroke-width="2"/>
+<text x="522.0" y="35" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#17212f">users</text>
+<path d="M522 75 V633" stroke="#b9c0c9" stroke-dasharray="5 5" fill="none"/>
+<rect x="604" y="8" width="136" height="67" rx="8" fill="#f3f5f8" stroke="#526174" stroke-width="2"/>
+<text x="672.0" y="35" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#17212f">Storage / S3</text>
+<text x="672.0" y="59" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="13" font-weight="400" fill="#17212f">agrupados</text>
+<path d="M672 75 V633" stroke="#b9c0c9" stroke-dasharray="5 5" fill="none"/>
+<rect x="754" y="8" width="136" height="67" rx="8" fill="#f3f5f8" stroke="#526174" stroke-width="2"/>
+<text x="822.0" y="35" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#17212f">RabbitMQ</text>
+<path d="M822 75 V633" stroke="#b9c0c9" stroke-dasharray="5 5" fill="none"/>
+<rect x="904" y="8" width="136" height="67" rx="8" fill="#fff2e4" stroke="#c76c1b" stroke-width="2"/>
+<text x="972.0" y="35" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#17212f">video_tool</text>
+<path d="M972 75 V633" stroke="#b9c0c9" stroke-dasharray="5 5" fill="none"/>
+<rect x="1054" y="8" width="136" height="67" rx="8" fill="#f3f5f8" stroke="#526174" stroke-width="2"/>
+<text x="1122.0" y="35" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#17212f">wsGateway</text>
+<path d="M1122 75 V633" stroke="#b9c0c9" stroke-dasharray="5 5" fill="none"/>
+<path d="M972 112 H822" fill="none" stroke="#c76c1b" stroke-width="2" marker-end="url(#a)"/>
+<rect x="769.2" y="88" width="255.59999999999997" height="22" fill="white"/>
+<text x="897.0" y="104" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#17212f">13. ws_queue: video-progress</text>
+<path d="M822 155 H1122" fill="none" stroke="#c76c1b" stroke-width="2" marker-end="url(#a)"/>
+<rect x="909.45" y="131" width="125.1" height="22" fill="white"/>
+<text x="972.0" y="147" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#17212f">14. Progresso</text>
+<path d="M1122 198 H72" fill="none" stroke="#c76c1b" stroke-width="2" marker-end="url(#a)"/>
+<rect x="456.15" y="174" width="281.7" height="22" fill="white"/>
+<text x="597.0" y="190" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#17212f">15. Evento Socket.IO pelo nginx</text>
+<path d="M972 241 H822" fill="none" stroke="#c76c1b" stroke-width="2" marker-end="url(#a)"/>
+<rect x="747.45" y="217" width="299.09999999999997" height="22" fill="white"/>
+<text x="897.0" y="233" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#17212f">16. project_queue: resposta final</text>
+<path d="M822 284 H372" fill="none" stroke="#506176" stroke-width="2" marker-end="url(#a)"/>
+<rect x="434.4" y="260" width="325.2" height="22" fill="white"/>
+<text x="597.0" y="276" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#17212f">17. Entregar resposta correlacionada</text>
+<path d="M372 327 H672" fill="none" stroke="#506176" stroke-width="2" marker-end="url(#a)"/>
+<rect x="402.9" y="303" width="238.2" height="22" fill="white"/>
+<text x="522.0" y="319" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#17212f">18. Persistir resultado(s)</text>
+<path d="M372 370 H822" fill="none" stroke="#506176" stroke-width="2" marker-end="url(#a)"/>
+<rect x="430.05" y="346" width="333.9" height="22" fill="white"/>
+<text x="597.0" y="362" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#17212f">19. Commit e notificação de conclusão</text>
+<path d="M822 413 H1122" fill="none" stroke="#506176" stroke-width="2" marker-end="url(#a)"/>
+<rect x="913.8" y="389" width="116.39999999999999" height="22" fill="white"/>
+<text x="972.0" y="405" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#17212f">20. ws_queue</text>
+<path d="M1122 456 H72" fill="none" stroke="#506176" stroke-width="2" marker-end="url(#a)"/>
+<rect x="430.05" y="432" width="333.9" height="22" fill="white"/>
+<text x="597.0" y="448" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#17212f">21. Resultado disponível (pelo nginx)</text>
+<path d="M72 499 H222" fill="none" stroke="#506176" stroke-width="2" marker-end="url(#a)"/>
+<rect x="58.35000000000001" y="475" width="177.29999999999998" height="22" fill="white"/>
+<text x="147.0" y="491" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#17212f">22. Pedir URL / ZIP</text>
+<path d="M222 542 H372" fill="none" stroke="#506176" stroke-width="2" marker-end="url(#a)"/>
+<rect x="134.4" y="518" width="325.2" height="22" fill="white"/>
+<text x="297.0" y="534" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#17212f">23. Consultar resultados confirmados</text>
+<path d="M372 585 H72" fill="none" stroke="#506176" stroke-width="2" marker-end="url(#a)"/>
+<rect x="72.45000000000002" y="561" width="299.09999999999997" height="22" fill="white"/>
+<text x="222.0" y="577" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#17212f">24. Resposta pela entrada pública</text>
+<text x="600" y="668" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#17212f">Workers leem/escrevem image_data. Nas imagens, os passos por ferramenta regressam a projects entre etapas.</text>
+</svg>

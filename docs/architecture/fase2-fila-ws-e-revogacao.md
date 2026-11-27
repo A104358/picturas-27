@@ -1,5 +1,13 @@
 # Fase 2 — Fila WS, revogação e ligações persistentes
 
+> **Leitura na entrega (27/11/2026):** este documento preserva o diagnóstico/planeamento
+> da data indicada. A implementação B0–B12 está concluída; estados «pendente» ou
+> «por executar» no texto não descrevem o fecho da fase. Consultar o
+> [relatório final](../src-doc-fase2-template/README.md), os
+> [resultados oficiais](../README.md#resultados-oficiais) e as decisões posteriores no
+> [handoff](../refactor-handoff.md). O original é mantido para rastreabilidade.
+
+
 **Equipa:** PL2-G4. **Preparado:** 16/11/2026. **Revisão de origem:** `3d31003`.
 **Estado:** WS-C4 A, PKI-C2 B e PKI-C3 A validadas individualmente pelo utilizador,
 registadas em 2026-11-16T20:14:36Z. O restante detalhe concretiza essas condições;

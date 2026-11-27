@@ -4,17 +4,6 @@
 #paisagem[
 = Cenários de Entrada e Táticas Candidatas
 
-#orientacao[
-  *Origem:* Exercício 7, secções 1 e 2 do _template_.
-
-  *Objetivo do capítulo:* partir dos dois cenários já caracterizados e identificar as táticas arquiteturais que os podem
-  melhorar. Os cenários vêm do capítulo 5 e os candidatos do capítulo 6 (`QS-nn`, `CAND-n`) e *não são reescritos*: o
-  capítulo 5 é o único sítio onde os cenários se caracterizam. Se tiverem de corrigir uma medida da resposta, corrijam-na
-  no capítulo 5 e registem a alteração na secção 7.2.
-
-  Nas tabelas seguintes, `QS-01` e `QS-02` designam os cenários de `CAND-1` e `CAND-2`: substituam-nos pelos IDs reais.
-]
-
 == Candidatos e cenários de entrada
 
 #tab([Candidatos e cenários de entrada],
@@ -22,8 +11,8 @@
     colunas: (1.8cm, 2.2cm, 3cm, 1.8cm, 2.8cm, 3cm, 3.4cm, 3.4cm),
     tamanho: 8pt,
     [Candidato], [Cenário (`QS-nn`)], [Característica / subcaracterística (ISO/IEC 25010)], [Evidência], [Origem (padrão global / vídeo / interação)], [Estímulo a que a tática reage], [Resposta e medida (resumo)], [Escala e método (cap. 6)],
-    [CAND-1], [QS-01, QS-07 complementar], [Segurança: confidencialidade, integridade e autenticidade], [EV-24/EV-43, H-14], [Padrão global, herdado pelas operações de vídeo], [Apresentar pedido de acesso/operação sobre recurso de projeto sem autorização efetiva, incluindo entrada numa sala de projeto], [Verificar identidade e autorização, recusar acesso/efeito/entrada indevidos e preservar a operação legítima: por caso: tentativas, admissões e efeitos verificados, fração de efeitos indevidos e sucessos legítimos. EV-24/EV-43, H-14], [Bloco 2 §5.1, concretizado em §5.3 do Ex. 7],
-    [CAND-2], [QS-02], [Eficiência de desempenho: utilização de recursos, comportamento temporal como guarda], [EV-08/EV-11/EV-42, H-15/H-17/H-18], [Interação entrada global/tamanho do vídeo], [Enviar vídeo válido de tamanho crescente, isolado ou com outros _uploads_], [Aceitar e disponibilizar apenas o ficheiro validado/associado corretamente, limitando recursos e mantendo pedidos leves utilizáveis: por serviço/janela: RSS/cgroup/pico, CPU/rede/disco, OOM/reinícios, $t_"ready"$, $t_"hash"$, _cleanup_, SHA-256 e respostas corretas. EV-08/EV-11/EV-42, H-15/H-17/H-18], [Bloco 2 §5.1, concretizado em §5.3 do Ex. 7],
+    [CAND-1], [QS-01, QS-07 complementar], [Segurança: confidencialidade, integridade e autenticidade], [EV-24/EV-43, H-14], [Padrão global, herdado pelas operações de vídeo], [Apresentar pedido de acesso/operação sobre recurso de projeto sem autorização efetiva, incluindo entrada numa sala de projeto], [Verificar identidade e autorização, recusar acesso/efeito/entrada indevidos e preservar a operação legítima: por caso: tentativas, admissões e efeitos verificados, fração de efeitos indevidos e sucessos legítimos. EV-24/EV-43, H-14], [Capítulo 6 (quantificação) e capítulo 10 (protocolo e resultados)],
+    [CAND-2], [QS-02], [Eficiência de desempenho: utilização de recursos, comportamento temporal como guarda], [EV-08/EV-11/EV-42, H-15/H-17/H-18], [Interação entrada global/tamanho do vídeo], [Enviar vídeo válido de tamanho crescente, isolado ou com outros _uploads_], [Aceitar e disponibilizar apenas o ficheiro validado/associado corretamente, limitando recursos e mantendo pedidos leves utilizáveis: por serviço/janela: RSS/cgroup/pico, CPU/rede/disco, OOM/reinícios, $t_"ready"$, $t_"hash"$, _cleanup_, SHA-256 e respostas corretas. EV-08/EV-11/EV-42, H-15/H-17/H-18], [Capítulo 6 (quantificação) e capítulo 10 (protocolo e resultados)],
   ),
 )
 
@@ -33,21 +22,12 @@
   tabela(
     colunas: (2cm, 1fr, 4cm),
     [Cenário], [O que mudou e porquê], [Onde foi atualizado],
-    [QS-01 → QS-01 + QS-07 complementar], [Revisão 1.1 em 20/11 separa tentativa de acesso de revogação de uma autorização existente, porque têm fontes/estímulos/relógios distintos. QS-01 mantém o ID para admissão, QS-07 é novo ID, sem reutilizar qualquer eliminado. CAND-1 permanece a mesma.], [Bloco 2 §4.2/§5.1, priorização e âmbito de CAND-1, TAT-04 referencia o complemento. EV-49],
-    [QS-02], [Texto canónico inalterado, não se altera o cenário para o adequar à tática escolhida.], [Bloco 2 §4.2],
+    [QS-01 → QS-01 + QS-07 complementar], [Revisão 1.1 em 20/11 separa tentativa de acesso de revogação de uma autorização existente, porque têm fontes/estímulos/relógios distintos. QS-01 mantém o ID para admissão, QS-07 é novo ID, sem reutilizar qualquer eliminado. CAND-1 permanece a mesma.], [Capítulos 5–6, priorização e âmbito de CAND-1; TAT-04 referencia o complemento. EV-49],
+    [QS-02], [Texto canónico inalterado, não se altera o cenário para o adequar à tática escolhida.], [Capítulo 5, cenário QS-02],
   ),
 )
 
 == Táticas candidatas
-
-#orientacao[
-  Identifiquem *pelo menos três táticas por cenário*, de categorias de atributo adequadas (e.g., Desempenho → gerir
-  recursos; Disponibilidade → recuperar de falhas). Para cada tática, expliquem como produz a resposta pretendida
-  (estímulo → tática → resposta) e se já existe, total ou parcialmente, na base (com evidência).
-
-  Classifiquem cada tática: *A* = _refactoring_ puro; *B* = alteração visível que é o objeto da melhoria; *C* =
-  funcionalidade nova, a *rejeitar* nesta fase. Táticas de classe C podem constar da lista, mas não podem ser escolhidas.
-]
 
 #tab([Táticas candidatas],
   tabela(
@@ -61,9 +41,9 @@
     [TAT-05], [QS-01 / CAND-1], [Segurança → resistir], [Limitar exposição apenas no perímetro], [Pedido externo → filtro da fachada/rede → bloquear parte das entradas], [Parcial: `checkToken` já existe, mas acessos internos e efeitos verificados mostram cobertura insuficiente. EV-08/EV-24/EV-43], [A, alternativa insuficiente para o cenário completo],
     [TAT-06], [QS-01 / CAND-1], [Segurança → resistir], [Autorizar entrada WS por credencial de sala localmente verificada], [_Join_ → bilhete assinado/contextual → verificação local sem consulta por entrada], [Não, era alternativa D6.2 A, substituída pela consulta B. Continua a exigir revogação/invalidação. EV-44, H-14], [A, não selecionada],
     [TAT-07], [QS-01 / CAND-1], [Segurança → resistir], [Separar entidades através de nova biblioteca/pastas privadas no produto], [Utilizador organiza vídeos em capacidade nova → dados separados pela nova interface], [Não, a biblioteca do requisito histórico não está implementada. EV-04/EV-10/EV-23], [*C: rejeitada*, separar internamente permissões não exige criar biblioteca],
-    [TAT-08], [QS-02 / CAND-2], [Desempenho → controlar procura], [Reduzir a sobrecarga do transporte do corpo, separando-o do controlo], [Corpo grande → nginx encaminha bytes autorizados para S3, Node mantém controlo → menor _buffer_/cópia nos Node], [Não no percurso novo. Corpo hoje passa pelos três Node. EV-08/EV-11/EV-12/EV-42, H-15], [A],
+    [TAT-08], [QS-02 / CAND-2], [Desempenho → controlar procura], [Reduzir a sobrecarga do transporte do corpo, separando-o do controlo], [Corpo grande → nginx encaminha bytes autorizados para S3, Node mantém controlo → menor _buffer_/cópia nos Node], [Não no percurso novo. Na base, o corpo passa pelos três Node. EV-08/EV-11/EV-12/EV-42, H-15], [A],
     [TAT-09], [QS-02 / CAND-2], [Desempenho → controlar procura/gerir recursos], [Aumentar eficiência por _streaming_/contrapressão e temporários limitados], [Produtor rápido/ficheiro grande → consumo limitado e _backpressure_ → não acumular corpo integral em RAM], [Parcial: S3/worker têm processamento incremental, mas _multer_ usa memória no _upload_. EV-11/EV-12/EV-17/EV-46, H-15], [A, obrigatória também no adaptador selecionado],
-    [TAT-10], [QS-02 / CAND-2], [Desempenho → gerir recursos], [Escalonar cálculo do _hash_ depois de _ready_, com estado/_cache_ coerentes], [Validação concluída → adiar leitura integral e controlar execução → reduzir caminho até _ready_ sem fingir reduzir custo total], [Não: _hash_ atual é síncrono e _required_. Mecanismo selecionado a 21/11 (UP-C7 A: _hash_ depois do _ready_, em segundo plano, _cache_ desligada enquanto falta). EV-12/EV-26/EV-44/EV-50, H-16], [A, selecionada como realização de DA-2],
+    [TAT-10], [QS-02 / CAND-2], [Desempenho → gerir recursos], [Escalonar cálculo do _hash_ depois de _ready_, com estado/_cache_ coerentes], [Validação concluída → adiar leitura integral e controlar execução → reduzir caminho até _ready_ sem fingir reduzir custo total], [Não: na base, o _hash_ é síncrono e _required_. Mecanismo selecionado a 21/11 (UP-C7 A: _hash_ depois do _ready_, em segundo plano, _cache_ desligada enquanto falta). EV-12/EV-26/EV-44/EV-50, H-16], [A, selecionada como realização de DA-2],
     [TAT-11], [QS-02 / CAND-2], [Desempenho → gerir recursos], [Aumentar recursos sem alterar _buffering_], [_Upload_ → mais RAM disponível → adiar OOM], [Compose original não fixa limites de RAM. Estratégia não elimina a dependência do tamanho observada. EV-09/EV-42], [A, mas não escolhida como solução principal],
     [TAT-12], [QS-02 / CAND-2], [Desempenho → gerir recursos], [Limitar filas e arbitrar recursos de _upload_/validação/_hash_], [Concorrência → admissão/filas finitas → limitar estado e espera, recusando excesso], [Parcial noutros percursos, sem limites de _upload_ na base. Limites fixados a 21/11 (UP-C5 A: 3 vagas globais, 16 pendentes, 4096 registos, UP-C9 A). EV-16/EV-44/EV-45/EV-50, H-17], [A, selecionada como realização de DA-2],
     [TAT-13], [QS-02 / CAND-2], [Usabilidade/desempenho → iniciativa do utilizador], [Adicionar pausa/retoma por partes como capacidade visível], [Interrupção → guardar partes e permitir retoma na interface → nova operação de utilizador], [Não na base nem na seleção UP-C1/C2/C3. É evolução distinta, não requisito para corrigir RAM. EV-23/EV-44], [*C: rejeitada para este exercício/entrega*],

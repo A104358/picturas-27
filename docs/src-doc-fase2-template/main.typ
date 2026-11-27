@@ -9,7 +9,7 @@
 #show: project
 
 // Antes de entregar: `false` esconde todas as caixas de orientação.
-#mostrar-orientacoes.update(true)
+#mostrar-orientacoes.update(false)
 
 #cover(
   title: "Fase 2 — Melhoria de Requisitos Não Funcionais",
@@ -29,11 +29,15 @@
 #counter(page).update(1)
 
 #include "capitulos/00-historico-versoes.typ"
+#pagebreak()
 
 #outline(title: [Índice], indent: auto, depth: 3)
 #pagebreak()
-#outline(title: [Lista de Figuras], target: figure.where(kind: image))
-#outline(title: [Lista de Tabelas], target: figure.where(kind: table))
+#block(breakable: true)[
+  #set text(size: 9pt)
+  #outline(title: [Lista de Figuras], target: figure.where(kind: image))
+  #outline(title: [Lista de Tabelas], target: figure.where(kind: table))
+]
 
 // --- Corpo do relatório -------------------------------------------------------
 #set page(numbering: "1", number-align: center)

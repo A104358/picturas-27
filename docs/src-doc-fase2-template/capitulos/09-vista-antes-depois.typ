@@ -2,23 +2,14 @@
 
 = Vista Arquitetural Antes e Depois
 
-#orientacao[
-  *Origem:* Exercício 7, secção 4 do _template_.
-
-  Duas vistas do mesmo diagrama: *antes* e *depois* das decisões. Usem o tipo de diagrama que melhor mostrar a alteração
-  (componentes, implantação ou sequência). Destaquem os elementos ou as interações introduzidos ou alterados pelas
-  táticas (com um estereótipo `«tática: …»` ou uma cor) e incluam uma *legenda*.
-
-  As duas vistas devem ser comparáveis: mesma notação, mesma escala e os mesmos elementos de contexto, de modo a que a
-  diferença se perceba a olho. A legenda e as notas explicam o que mudou entre elas e porquê.
-]
-
 == Antes
 
 #figure(kind: image,
-  image("../images/vista_antes.png", width: 100%),
+  image("../images/vista-antes-final.svg", width: 100%),
   caption: [Vista arquitetural da base, antes das decisões DA-1 e DA-2],
 )
+
+As setas indicam relações lógicas; pedidos/respostas e notificações Socket.IO regressam através do nginx.
 
 Vista parcial dos percursos de _upload_, identidade e mensagens da base. O gateway recebe o ficheiro inteiro antes de verificar o JWT. `projects` e `img_storage` também usam _buffers_ integrais. O nginx pode usar disco para o corpo do pedido, e o `ffprobe` da `projects` usa um temporário. HTTPS interno sem validar servidor significa certificado remoto não verificado, mantendo a cifra. A quota é debitada no _Apply_, não no _upload_.
 
@@ -27,11 +18,11 @@ O RabbitMQ está separado dos workers: encaminha pedidos pelas filas de imagem/`
 == Depois
 
 #figure(kind: image,
-  image("../images/vista_depois.png", width: 100%),
-  caption: [Vista arquitetural depois das decisões DA-1 e DA-2, tal como implementada (Mermaid, `diagrams/after.mmd`, EV-52, EV-55)],
+  image("../images/vista-depois-final.svg", width: 100%),
+  caption: [Vista arquitetural depois das decisões DA-1 e DA-2, tal como implementada (SVG, EV-52, EV-55)],
 )
 
-A vista «depois» representa o que foi *implementado* e medido na MF (capítulo 10), e não apenas o desenho selecionado a 21/11. Os elementos a verde foram introduzidos ou alterados pelas táticas e estão em execução. O elemento a cinzento/tracejado é o estado do _upload_ (UP-C4–C9, opção A), que não é um serviço mas uma coleção e um motor dentro da `projects`. Face ao desenho selecionado, a vista acrescenta o que a implementação concretizou ou alterou (capítulo 8, desvios): o PUT direto passa pelo nginx com `auth_request` e URL assinado, sem corpo em nenhum serviço Node. O adaptador do POST antigo grava diretamente uma chave de candidato nova (D-16). A `projects` lê o objeto em janelas de 4 MiB para o `ffprobe` e o _hash_ (D-17, D-24). O _master_, o _volume_ e o _filer_ do SeaweedFS ficam só em _loopback_ (D-19). O exchange passa a `topic` com permissões por _routing key_ (D-18), e os eventos em `ws_queue` levam o `projectId` (D-25), o que permite ao `ws_gateway` autorizar cada emissão.
+A vista «depois» representa o que foi *implementado* e medido na MF (capítulo 10), e não apenas o desenho selecionado a 21/11. Os elementos a verde foram introduzidos ou alterados pelas táticas e pertencem à versão medida. Os elementos cinzentos mantêm a função principal; o tracejado representa a consulta WS → `projects`. O estado do _upload_ (UP-C4–C9, opção A) é uma coleção e um motor dentro da `projects`, não um serviço novo. Face ao desenho selecionado, a vista acrescenta o que a implementação concretizou ou alterou (capítulo 8, desvios): o PUT direto passa pelo nginx com `auth_request` e URL assinado, sem corpo em nenhum serviço Node. O adaptador do POST antigo grava diretamente uma chave de candidato nova (D-16). A `projects` lê o objeto em janelas de 4 MiB para o `ffprobe` e o _hash_ (D-17, D-24). O _master_, o _volume_ e o _filer_ do SeaweedFS ficam só em _loopback_ (D-19). O exchange passa a `topic` com permissões por _routing key_ (D-18), e os eventos em `ws_queue` levam o `projectId` (D-25), o que permite ao `ws_gateway` autorizar cada emissão.
 
 == Legenda e notas
 
@@ -41,8 +32,8 @@ A vista «depois» representa o que foi *implementado* e medido na MF (capítulo
     [Cor / estilo], [Significado],
     [Vermelho (vista antes)], [Fragilidade do percurso: _buffer_ integral/temporários, certificado interno não validado, storage sem autenticação e WS com JWT opcional e sem autorização/permanência de projeto. Não significa falha de cada pedido.],
     [Verde sólido (vista depois)], [Elementos introduzidos ou alterados pelas táticas TAT-01–04 (fronteiras/WS) e TAT-08/09 (percurso de bytes/adaptador). Implementados (EV-52) e medidos na MF (EV-55).],
-    [Cinzento/tracejado (vista depois)], [Estado do _upload_ (UP-C4–C9, opção A): tentativas, 3 vagas globais, candidato imutável, _hash_ depois do _ready_ e limpeza ativa, implementado dentro da `projects` (TAT-10/TAT-12).],
+    [Cinzento / seta tracejada], [Cinza: contexto funcional preservado; tracejado: autorização WS por consulta à `projects`. As tentativas, as vagas, o hash posterior e a limpeza pertencem ao motor dentro da `projects` (TAT-10/TAT-12).],
   ),
 )
 
-As duas vistas usam Mermaid para os percursos de _upload_, controlo e mensagens. A vista antes tem disposição vertical para manter a legibilidade no relatório e explicita separadamente o broker e os workers. A comparação mostra: (1) substituição do _buffer_ integral por _proxy_ nginx/S3 com adaptador de compatibilidade (TAT-08/09). (2) autenticação mTLS/RS256 nas APIs internas e TLS validado nos restantes canais (TAT-01/03). (3) autorização de domínio em `projects` e consulta de _join_/revalidação no WS (TAT-02/04), com os eventos a levar o contexto do projeto. Só o nginx publica uma porta. Certificados e identidade não substituem a autorização de operação ou objeto, que continua na `projects`. Ficam declaradas as limitações do capítulo 8: o PUT direto sem corte absoluto de 600 s (decisão 39) e os tetos WS, que são configurados e não capacidade demonstrada. EV-52/EV-55, H-14–H-18.
+As duas vistas são SVG vetoriais com a mesma escala, disposição e elementos de contexto. Explicitam separadamente broker e workers. O caminho novo do corpo é nginx → S3; o POST legado segue nginx → gateway → projects → storage → S3 em fluxo. Os acessos a users/subscriptions desenhados são um resumo das integrações do gateway e da projects. A comparação mostra: (1) substituição do _buffer_ integral por _proxy_ nginx/S3 com adaptador de compatibilidade (TAT-08/09). (2) autenticação mTLS/RS256 nas APIs internas e TLS validado nos restantes canais (TAT-01/03). (3) autorização de domínio em `projects` e consulta de _join_/revalidação no WS (TAT-02/04), com os eventos a levar o contexto do projeto. Só o nginx publica uma porta. Certificados e identidade não substituem a autorização de operação ou objeto, que continua na `projects`. Ficam declaradas as limitações do capítulo 8: o PUT direto sem corte absoluto de 600 s (decisão 39) e os tetos WS, que são configurados e não capacidade demonstrada. EV-52/EV-55, H-14–H-18.

@@ -1,5 +1,13 @@
 # Fase 2 — Inventário para a transição das sessões
 
+> **Leitura na entrega (27/11/2026):** este documento preserva o diagnóstico/planeamento
+> da data indicada. A implementação B0–B12 está concluída; estados «pendente» ou
+> «por executar» no texto não descrevem o fecho da fase. Consultar o
+> [relatório final](../src-doc-fase2-template/README.md), os
+> [resultados oficiais](../README.md#resultados-oficiais) e as decisões posteriores no
+> [handoff](../refactor-handoff.md). O original é mantido para rastreabilidade.
+
+
 **Equipa:** PL2-G4. **Preparado em:** 16/11/2026.
 **Estado:** âmbito e retenção declarados; metadados Docker e contagens agregadas
 de contas/projetos recolhidos numa máquina. Browsers e restantes computadores por levantar.

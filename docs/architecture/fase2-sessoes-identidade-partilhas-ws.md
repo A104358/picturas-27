@@ -1,5 +1,13 @@
 # Fase 2 — Sessões, identidade interna, partilhas e contrato WS
 
+> **Leitura na entrega (27/11/2026):** este documento preserva o diagnóstico/planeamento
+> da data indicada. A implementação B0–B12 está concluída; estados «pendente» ou
+> «por executar» no texto não descrevem o fecho da fase. Consultar o
+> [relatório final](../src-doc-fase2-template/README.md), os
+> [resultados oficiais](../README.md#resultados-oficiais) e as decisões posteriores no
+> [handoff](../refactor-handoff.md). O original é mantido para rastreabilidade.
+
+
 **Equipa:** PL2-G4. **Preparado:** 17/11/2026. **Código observado:** `089acc5`.
 **Estado:** SESS-C1 A, JWT-C1 A, LINK-C1 A e WS-C5 B selecionadas individualmente
 pelo utilizador e confirmadas tecnicamente pelo assistente, em

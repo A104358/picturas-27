@@ -1,38 +1,11 @@
 #import "../template.typ": *
 
+#paisagem[
 = Trade-offs, Cenários de Qualidade e Prioridades
-
-#orientacao[
-  *Origem:* Exercício 6, Bloco 2, secção 4 do _template_ (sem a justificação detalhada da matriz, que não faz parte
-  deste relatório).
-
-  *Objetivo do capítulo:* transformar o diagnóstico dos capítulos 2 a 4 em cenários de qualidade concretos e
-  verificáveis, priorizá-los e perceber como os atributos se afetam uns aos outros.
-
-  *Princípio central:* a caracterização dos cenários de qualidade *deve basear-se na identificação de fragilidades do
-  sistema atual*. Cada cenário parte de uma fragilidade concreta, com evidência (`EV-nn`), observada na solução de
-  base (e.g., uma falha sem recuperação, um ponto de contenção, uma dependência rígida). Um cenário sem fragilidade
-  identificada é uma preferência, não uma necessidade. Reutilizem os `EV`, `H` e `ALT` já usados, sem os alterar.
-
-  *Este é o único sítio onde os cenários de qualidade se caracterizam:* os capítulos 6 a 10 usam-nos sem os reescrever.
-]
 
 == Cenários de qualidade para a extensão de vídeo
 
-#orientacao[
-  Para cada fragilidade relevante, escrevam um cenário com os *seis elementos*:
-  - *fonte do estímulo*: quem ou o que o origina (utilizador, serviço, falha de infraestrutura);
-  - *estímulo*: o evento a que o sistema tem de reagir;
-  - *artefacto*: a parte do sistema afetada;
-  - *ambiente*: em que condições (carga normal, pico, degradado);
-  - *resposta*: o que o sistema deve fazer;
-  - *medida da resposta*: como se verifica, com métrica e escala. Definem-na vocês e tem de ser *verificável*.
 
-  A coluna *Fragilidade* liga o cenário à evidência que o justifica. Não inventem valores de _baseline_, alvo ou
-  mínimo: esses fixam-se após a medição inicial. A medida da resposta indica o que se mede, não o valor a atingir.
-]
-
-#paisagem[
 #tab([Cenários de qualidade],
   tabela(
     colunas: (1.2cm, 3.4cm, 2.6cm, 2.2cm, 2.2cm, 2.4cm, 2.2cm, 2.6cm, 3cm),
@@ -47,13 +20,6 @@
     [QS-07], [Permanência WS não segue o contrato de revogação proposto (EV-22, EV-44, EV-46, H-14, H-18)], [Segurança: confidencialidade e integridade], [Proprietário autorizado do projeto], [Revogar a última via de partilha que autoriza um membro já ligado a receber eventos do projeto], [Autorização de domínio em `projects` e emissão de eventos no `wsGateway`], [Instalação isolada, membro previamente admitido com JWT ainda válido, fluxo de eventos sequenciados], [Retirar receção protegida do projeto afetado quando a autorização efetiva cessar], [Intervalo em ms entre ACK da revogação e corte verificado. Eventos protegidos entregues após o limite aplicável. Novas entradas indevidas e controlos preservados.],
   ),
 )
-]
-
-#orientacao[
-  *Priorização.* Avaliem cada cenário em duas dimensões: a *importância para os stakeholders* (quem sofre com a
-  fragilidade e quanto) e a *dificuldade ou risco técnico* de a resolver. Justifiquem cada avaliação em poucas palavras
-  e atribuam uma ordem de prioridade (1 = mais prioritário). Os dois cenários mais prioritários, e que dão origem aos
-  candidatos a RNF do capítulo 6, são os mais importantes e viáveis, não necessariamente os mais fáceis.
 ]
 
 #tab([Priorização dos cenários],
@@ -72,12 +38,6 @@
 
 == Atributos de qualidade por ordem de prioridade
 
-#orientacao[
-  Com base nos cenários mais importantes, ordenem os atributos de qualidade (ISO/IEC 25010) do mais para o menos
-  prioritário, indicando os cenários que justificam cada posição. A ordem tem de ser coerente com a tabela de
-  priorização acima.
-]
-
 + *Segurança*: QS-01 e complemento QS-07, CAND-1: proteger acesso e permanência no domínio existente, prioridade do par comunicado.
 + *Eficiência de desempenho*: QS-02, CAND-2: utilização de recursos no _upload_, QS-03 é contexto de capacidade, não requisito incluído na entrega.
 + *Fiabilidade*: QS-04: preservar resultados/quota e tratar falhas dos percursos alterados.
@@ -85,12 +45,6 @@
 + *Manutenibilidade/testabilidade*: QS-05: limitar duplicação de regras e tornar as mudanças auditáveis.
 
 == Pré-requisitos e efeitos colaterais entre atributos
-
-#orientacao[
-  Os atributos não são independentes. Identifiquem os pares em que melhorar um é *pré-requisito* do outro (e.g.,
-  observabilidade antes de otimizar desempenho), em que há *sinergia*, ou em que há *conflito* (melhorar um degrada
-  o outro). Expliquem a razão e, se possível, citem evidência.
-]
 
 #tab([Pré-requisitos e efeitos colaterais entre atributos],
   tabela(
@@ -108,11 +62,7 @@
 
 == Recomendações de melhoria à solução atual
 
-#orientacao[
-  Recomendações concretas que respondem às fragilidades identificadas, indicando o atributo que melhoram, o padrão
-  (global ou vídeo) a que se aplicam, o esforço estimado e o risco de regressão. Esta fase é de _refactoring_: as
-  recomendações têm de poder ser aplicadas sem acrescentar funcionalidades.
-]
+
 
 #tab([Recomendações de melhoria],
   tabela(

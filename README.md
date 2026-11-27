@@ -2,6 +2,10 @@
 
 **Your personal, intuitive and powerful image and video editor.**
 
+Phase 2 (PL2-G4): [final report and sources](docs/src-doc-fase2-template/README.md) ·
+[official BF/MF results](evaluation/results/MF-20261125T153646Z/compare.md).
+The final assessment meets all 21 selected metrics: 19 targets and two minimums.
+
 PictuRAS is a web-based image and video editing platform that combines traditional image processing with AI-powered tools. It is built as a **microservices architecture** orchestrated with Docker Compose, and it is the code base for the group project of the curricular unit _Requisitos e Arquitetura de Software_ (RAS), University of Minho.
 
 Academic requirements, architecture reports, course material and exercise deliverables

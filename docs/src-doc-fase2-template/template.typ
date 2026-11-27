@@ -86,7 +86,7 @@
 
 // Páginas na horizontal (para tabelas largas):  #paisagem[ ...conteúdo... ]
 #let quebra-capitulo = state("quebra-capitulo", true)
-#let paisagem(corpo) = page(flipped: true)[
+#let paisagem(corpo) = page(flipped: true, margin: (top: 1.7cm, bottom: 1.7cm, left: 1.8cm, right: 1.8cm))[
   #quebra-capitulo.update(false)
   #corpo
   #quebra-capitulo.update(true)
@@ -121,7 +121,9 @@
   show link: underline.with(evade: false)
 
   show figure.where(kind: table): set figure.caption(position: top)
+  show figure.caption: set block(sticky: true)
   show figure: set block(breakable: true)
+  show figure.where(kind: image): set block(breakable: false)
 
   body
 }

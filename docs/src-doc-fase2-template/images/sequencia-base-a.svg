@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="686" viewBox="0 0 1200 686">
+<defs><marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto-start-reverse"><path d="M0,0 L8,4 L0,8 Z" fill="#506176"/></marker></defs>
+<rect width="1200" height="686" fill="white"/>
+<rect x="4" y="8" width="136" height="67" rx="8" fill="#f3f5f8" stroke="#526174" stroke-width="2"/>
+<text x="72.0" y="35" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#17212f">Browser</text>
+<path d="M72 75 V633" stroke="#b9c0c9" stroke-dasharray="5 5" fill="none"/>
+<rect x="154" y="8" width="136" height="67" rx="8" fill="#f3f5f8" stroke="#526174" stroke-width="2"/>
+<text x="222.0" y="35" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#17212f">nginx / API</text>
+<text x="222.0" y="59" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="13" font-weight="400" fill="#17212f">entrada agrupada</text>
+<path d="M222 75 V633" stroke="#b9c0c9" stroke-dasharray="5 5" fill="none"/>
+<rect x="304" y="8" width="136" height="67" rx="8" fill="#f3f5f8" stroke="#526174" stroke-width="2"/>
+<text x="372.0" y="35" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#17212f">projects</text>
+<path d="M372 75 V633" stroke="#b9c0c9" stroke-dasharray="5 5" fill="none"/>
+<rect x="454" y="8" width="136" height="67" rx="8" fill="#f3f5f8" stroke="#526174" stroke-width="2"/>
+<text x="522.0" y="35" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#17212f">users</text>
+<path d="M522 75 V633" stroke="#b9c0c9" stroke-dasharray="5 5" fill="none"/>
+<rect x="604" y="8" width="136" height="67" rx="8" fill="#f3f5f8" stroke="#526174" stroke-width="2"/>
+<text x="672.0" y="35" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#17212f">Storage / S3</text>
+<text x="672.0" y="59" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="13" font-weight="400" fill="#17212f">agrupados</text>
+<path d="M672 75 V633" stroke="#b9c0c9" stroke-dasharray="5 5" fill="none"/>
+<rect x="754" y="8" width="136" height="67" rx="8" fill="#f3f5f8" stroke="#526174" stroke-width="2"/>
+<text x="822.0" y="35" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#17212f">RabbitMQ</text>
+<path d="M822 75 V633" stroke="#b9c0c9" stroke-dasharray="5 5" fill="none"/>
+<rect x="904" y="8" width="136" height="67" rx="8" fill="#fff2e4" stroke="#c76c1b" stroke-width="2"/>
+<text x="972.0" y="35" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#17212f">video_tool</text>
+<path d="M972 75 V633" stroke="#b9c0c9" stroke-dasharray="5 5" fill="none"/>
+<rect x="1054" y="8" width="136" height="67" rx="8" fill="#f3f5f8" stroke="#526174" stroke-width="2"/>
+<text x="1122.0" y="35" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#17212f">wsGateway</text>
+<path d="M1122 75 V633" stroke="#b9c0c9" stroke-dasharray="5 5" fill="none"/>
+<path d="M72 112 H222" fill="none" stroke="#506176" stroke-width="2" marker-end="url(#a)"/>
+<rect x="32.250000000000014" y="88" width="229.49999999999997" height="22" fill="white"/>
+<text x="147.0" y="104" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#17212f">1. POST vídeo (multipart)</text>
+<path d="M222 155 H372" fill="none" stroke="#506176" stroke-width="2" marker-end="url(#a)"/>
+<rect x="169.20000000000002" y="131" width="255.59999999999997" height="22" fill="white"/>
+<text x="297.0" y="147" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#17212f">2. Encaminhar corpo completo</text>
+<path d="M372 198 H672" fill="none" stroke="#506176" stroke-width="2" marker-end="url(#a)"/>
+<rect x="324.6" y="174" width="394.79999999999995" height="22" fill="white"/>
+<text x="522.0" y="190" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#17212f">3. Validar, calcular hash e guardar original</text>
+<path d="M72 241 H222" fill="none" stroke="#506176" stroke-width="2" marker-end="url(#a)"/>
+<rect x="14.850000000000023" y="217" width="264.29999999999995" height="22" fill="white"/>
+<text x="147.0" y="233" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#17212f">4. Definir efeitos do projeto</text>
+<path d="M222 284 H372" fill="none" stroke="#506176" stroke-width="2" marker-end="url(#a)"/>
+<rect x="125.70000000000002" y="260" width="342.59999999999997" height="22" fill="white"/>
+<text x="297.0" y="276" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#17212f">5. Validar e guardar pipeline / versão</text>
+<path d="M72 327 H222" fill="none" stroke="#506176" stroke-width="2" marker-end="url(#a)"/>
+<rect x="106.2" y="303" width="81.6" height="22" fill="white"/>
+<text x="147.0" y="319" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#17212f">6. Apply</text>
+<path d="M222 370 H372" fill="none" stroke="#506176" stroke-width="2" marker-end="url(#a)"/>
+<rect x="225.75" y="346" width="142.5" height="22" fill="white"/>
+<text x="297.0" y="362" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#17212f">7. POST process</text>
+<path d="M372 413 H522" fill="none" stroke="#506176" stroke-width="2" marker-end="url(#a)"/>
+<rect x="349.65" y="389" width="194.7" height="22" fill="white"/>
+<text x="447.0" y="405" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#17212f">8. Reservar operações</text>
+<path d="M372 456 H672" fill="none" stroke="#506176" stroke-width="2" marker-end="url(#a)"/>
+<rect x="368.1" y="432" width="307.79999999999995" height="22" fill="white"/>
+<text x="522.0" y="448" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#17212f">9. Obter originais para image_data</text>
+<path d="M372 499 H447 V511 H372" fill="none" stroke="#506176" stroke-width="2" marker-end="url(#a)"/>
+<rect x="205.05" y="475" width="333.9" height="22" fill="white"/>
+<text x="372.0" y="491" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#17212f">10. Registar todos os Process (local)</text>
+<path d="M372 542 H822" fill="none" stroke="#c76c1b" stroke-width="2" marker-end="url(#a)"/>
+<rect x="408.3" y="518" width="377.4" height="22" fill="white"/>
+<text x="597.0" y="534" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#17212f">11. video_queue: pipeline completo / vídeo</text>
+<path d="M822 585 H972" fill="none" stroke="#c76c1b" stroke-width="2" marker-end="url(#a)"/>
+<rect x="786.6" y="561" width="220.79999999999998" height="22" fill="white"/>
+<text x="897.0" y="577" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#17212f">12. Consumir um trabalho</text>
+<text x="600" y="668" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="#17212f">Base 0523102; interações agrupadas. No passo 10, o registo é local em projects, antes da publicação.</text>
+</svg>

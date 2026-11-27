@@ -1,5 +1,13 @@
 # Fase 2 — Revisão do orçamento, cargas, mínimos e metas
 
+> **Leitura na entrega (27/11/2026):** este documento preserva o diagnóstico/planeamento
+> da data indicada. A implementação B0–B12 está concluída; estados «pendente» ou
+> «por executar» no texto não descrevem o fecho da fase. Consultar o
+> [relatório final](src-doc-fase2-template/README.md), os
+> [resultados oficiais](README.md#resultados-oficiais) e as decisões posteriores no
+> [handoff](refactor-handoff.md). O original é mantido para rastreabilidade.
+
+
 **Equipa:** PL2-G4. **Data:** 18/11/2026. **Estado:** A/A/A/A selecionadas
 individualmente, com confirmação técnica e condições; não acordo dos quatro nem
 campanha executada. O utilizador pediu a revisão e depois comunicou que a proposta
